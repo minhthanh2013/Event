@@ -1,0 +1,110 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  UserID     String  @id
+  UserName   String  @unique
+  Password   String
+  FirstName  String?
+  LastName   String?
+  CreateAt DateTime @default(now())
+  Email      String  @unique
+  ImageUrl   String?
+  Role     Role @default(NORMALUSER)
+
+  Conference Conference? @relation(fields: [ConferenceID], references: [ConferenceID])
+  ConferenceID Int?
+
+  UserCreate_Conference UserCreate_Conference[]
+
+  UserBuy_Conference UserBuy_Conference[]
+}
+
+enum Role{
+  NORMALUSER
+  ADMIN
+  HOST
+}
+
+model Conference{
+  ConferenceID Int  @id @default(autoincrement())
+  ConferenceName String  @unique
+  TicketPrice Float
+  Description String?
+  Address String?
+  DateStart DateTime
+  DateEnd DateTime
+  RecordURL String?
+  CreateAt DateTime @default(now())
+
+  Speakers User[]
+
+  Category ConferenceCategory @relation(fields: [CategoryID], references: [CategoryID])
+  CategoryID Int
+
+  ConferenceType ConferenceType @relation(fields: [TypeID], references: [TypeID])
+  TypeID Int
+
+  paymentMethod paymentMethod @relation(fields: [MethodID], references: [MethodID])
+  MethodID Int
+
+  Analytics Analytics?
+
+  UserCreate_Conference UserCreate_Conference?
+
+  UserBuy_Conference UserBuy_Conference[]
+}
+
+model ConferenceCategory{
+  CategoryID Int @id
+  CategoryName String  @unique
+  Conferences Conference[]
+}
+
+model paymentMethod{
+  MethodID Int @id
+  MethodName String  @unique
+  Conferences Conference[]
+}
+
+model ConferenceType{
+  TypeID Int @id
+  TypeName String  @unique
+  Conferences Conference[]
+}
+
+model Analytics{
+  AnalyticID Int @id
+
+  Conference Conference @relation(fields: [ConferenceID], references: [ConferenceID])
+  ConferenceID Int 
+  NumberofTicketBought Int?
+}
+
+model UserCreate_Conference{
+  ID Int @id @default(autoincrement())
+
+  User User @relation(fields: [UserID], references: [UserID])
+  UserID String
+  Conference Conference @relation(fields: [ConferenceID], references: [ConferenceID])
+  ConferenceID Int
+}
+
+model UserBuy_Conference{
+  ID Int @id @default(autoincrement())
+
+  User User @relation(fields: [UserID], references: [UserID])
+  UserID String
+  Conference Conference @relation(fields: [ConferenceID], references: [ConferenceID])
+  ConferenceID Int
+  DateBuy DateTime @default(now())
+}
