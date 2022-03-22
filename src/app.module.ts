@@ -6,6 +6,9 @@ import { UserModule } from './user/user.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { ZoomModule } from './zoom/zoom.module';
 import { RedisCacheModule } from './redis/redis.module';
+import { ApiModule } from './api/api.module';
+import { ConferenceModule } from './conference/conference.module';
+import { CategoryModule } from './category/category.module';
 
 
 @Module({
@@ -16,6 +19,9 @@ import { RedisCacheModule } from './redis/redis.module';
     UserModule,
     PrismaModule,
     ZoomModule,
-    RedisCacheModule],
+    RedisCacheModule,
+    ApiModule,
+    ConferenceModule,
+    CategoryModule],
 })
 export class AppModule {}

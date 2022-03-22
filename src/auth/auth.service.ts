@@ -6,7 +6,7 @@ import { PrismaClientKnownRequestError } from "@prisma/client/runtime";
 import { JwtService } from "@nestjs/jwt";
 import { ConfigService } from "@nestjs/config";
 import { CreateAuthDto } from "./dto/create.dto";
-import { Role } from "@prisma/client";
+import { role } from "@prisma/client";
 
 @Injectable()
 export class AuthService{
@@ -20,7 +20,7 @@ export class AuthService{
         // find the user by email
         const user = await this.prisma.user.findUnique({
             where: {
-                UserName: dto.UserName,
+                username: dto.username,
             },
         });
         // if user does not exist throw exception
@@ -30,8 +30,8 @@ export class AuthService{
             );
         // compare password
         const pwMatches = await argon.verify(
-            user.Password,
-            dto.Password,
+            user.password,
+            dto.password,
         );
         // if password incorrect throw exception
         if(!pwMatches) 
@@ -39,24 +39,23 @@ export class AuthService{
                 'Creadentials incorrect',
             );
 
-        return this.signToken(user.UserID, user.Email);
+        return this.signToken(user.userID, user.username);
     }
 
     async signup(dto: CreateAuthDto) {
         // generate the password hash
-        const hash = await argon.hash(dto.Password);
+        const hash = await argon.hash(dto.password);
         // save the new user in the db
         try{
             const user = await this.prisma.user.create({
                 data: {
-                    UserID: "1",
-                    UserName: dto.UserName,
-                    Password: hash,
-                    Email: "123@gmail.com",
-                    Role: Role["ADMIN"],
+                    username: dto.username,
+                    password: hash,
+                    email: dto.email,
+                    role: role.ADMIN,
                 }
             });
-            return this.signToken(user.UserID, user.Email);
+            return this.signToken(user.userID, user.email);
         } catch(error) {
             if(error instanceof PrismaClientKnownRequestError) {
                 if(error.code === 'P2002') {
@@ -67,10 +66,10 @@ export class AuthService{
         }
     }
 
-    async signToken(userId: string, email: string): Promise<{access_token: string}> {
+    async signToken(userId: number, username: string): Promise<{access_token: string}> {
         const payload = {
             sub: userId,
-            email
+            username
         }
 
         

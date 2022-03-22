@@ -17,15 +17,15 @@ export class JwtStrategy extends PassportStrategy(
 
     async validate(payload: {
         sub: string,
-        email: string,
+        username: string,
     }) {
         const user = 
             await this.prisma.user.findUnique({
                 where: {
-                    UserID: payload.sub,
+                    userID: payload.sub,
                 }
             });
-        delete user.Password;
+        delete user.password;
         return user;
     }
 }

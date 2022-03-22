@@ -9,39 +9,39 @@ export class UserService {
         private prisma: PrismaService,
         private redis: RedisCacheService) {}
 
-    async editUser(userId: string, dto: EditUserDto) {
+    async editUser(userId: number, dto: EditUserDto) {
         const user = await this.prisma.user.update({
             where: {
-                UserID: userId,
+                userID: userId,
             },
             data: {
                 ...dto,
             },
         });
-        delete user.Password;
+        delete user.password;
         return user;
     }
 
     getAll() {
         const users = this.prisma.user.findMany({
             select:{
-                UserID:true,
-                UserName: true,
-                FirstName: true,
-                LastName: true,
-                Email: true,
-                CreateAt: true,
-                Role: true,
+                userID:true,
+                username: true,
+                firstName: true,
+                lastName: true,
+                email: true,
+                createAt: true,
+                role: true,
             }
         });
         return users;
     }
 
-    findOne(id: string) {
+    findOne(userID: number) {
         const user = this.prisma.user.findUnique({
             where: {
-                UserID: id,
-            },
+                userID: userID,
+            }
         });
         return user;
     }

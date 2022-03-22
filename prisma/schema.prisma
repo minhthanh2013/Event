@@ -11,100 +11,105 @@ datasource db {
 }
 
 model User {
-  UserID     String  @id
-  UserName   String  @unique
-  Password   String
-  FirstName  String?
-  LastName   String?
-  CreateAt DateTime @default(now())
-  Email      String  @unique
-  ImageUrl   String?
-  Role     Role @default(NORMALUSER)
+  userID     Int  @id @default(autoincrement())
+  username   String  @unique
+  password   String
+  firstName  String?
+  lastName   String?
+  createAt DateTime @default(now())
+  email      String  @unique
+  imageUrl   String?
+  role     role @default(NORMALUSER)
 
-  Conference Conference? @relation(fields: [ConferenceID], references: [ConferenceID])
-  ConferenceID Int?
+  // Conference Conference @relation(fields: [conferenceID], references: [conferenceID])
+  // conferenceID Int
+  conferences Conference[]
+  userCreate_Conference UserCreate_Conference[]
 
-  UserCreate_Conference UserCreate_Conference[]
-
-  UserBuy_Conference UserBuy_Conference[]
+  userBuy_Conference UserBuy_Conference[]
+  
 }
 
-enum Role{
+enum role{
   NORMALUSER
   ADMIN
   HOST
+  SPEAKER
 }
 
 model Conference{
-  ConferenceID Int  @id @default(autoincrement())
-  ConferenceName String  @unique
-  TicketPrice Float
-  Description String?
-  Address String?
-  DateStart DateTime
-  DateEnd DateTime
-  RecordURL String?
-  CreateAt DateTime @default(now())
+  conferenceID Int  @id @default(autoincrement())
+  conferenceName String  @unique
+  ticketPrice Float
+  description String?
+  address String?
+  dateStart DateTime
+  dateEnd DateTime
+  recordURL String?
+  createAt DateTime @default(now())
 
-  Speakers User[]
+  user User @relation(fields: [userID], references: [userID])
+  userID Int
 
-  Category ConferenceCategory @relation(fields: [CategoryID], references: [CategoryID])
-  CategoryID Int
+  category ConferenceCategory @relation(fields: [categoryID], references: [categoryID])
+  categoryID Int
 
-  ConferenceType ConferenceType @relation(fields: [TypeID], references: [TypeID])
-  TypeID Int
+  conferenceType ConferenceType @relation(fields: [typeID], references: [typeID])
+  typeID Int
 
-  paymentMethod paymentMethod @relation(fields: [MethodID], references: [MethodID])
-  MethodID Int
+  paymentMethod paymentMethod @relation(fields: [methodID], references: [methodID])
+  methodID Int
 
-  Analytics Analytics?
+  analytics Analytics?
 
-  UserCreate_Conference UserCreate_Conference?
+  userCreate_Conference UserCreate_Conference?
 
-  UserBuy_Conference UserBuy_Conference[]
+  userBuy_Conference UserBuy_Conference[]
+  
 }
 
+
 model ConferenceCategory{
-  CategoryID Int @id
-  CategoryName String  @unique
-  Conferences Conference[]
+  categoryID Int @id
+  categoryName String  @unique
+  conferences Conference[]
 }
 
 model paymentMethod{
-  MethodID Int @id
-  MethodName String  @unique
-  Conferences Conference[]
+  methodID Int @id
+  methodName String  @unique
+  conferences Conference[]
 }
 
 model ConferenceType{
-  TypeID Int @id
-  TypeName String  @unique
-  Conferences Conference[]
+  typeID Int @id
+  typeName String  @unique
+  conferences Conference[]
 }
 
 model Analytics{
-  AnalyticID Int @id
+  analyticID Int @id
 
-  Conference Conference @relation(fields: [ConferenceID], references: [ConferenceID])
-  ConferenceID Int 
-  NumberofTicketBought Int?
+  conference Conference @relation(fields: [conferenceID], references: [conferenceID])
+  conferenceID Int 
+  numberofTicketBought Int?
 }
 
 model UserCreate_Conference{
-  ID Int @id @default(autoincrement())
+  id Int @id @default(autoincrement())
 
-  User User @relation(fields: [UserID], references: [UserID])
-  UserID String
-  Conference Conference @relation(fields: [ConferenceID], references: [ConferenceID])
-  ConferenceID Int
+  user User @relation(fields: [userID], references: [userID])
+  userID Int
+  conference Conference @relation(fields: [conferenceID], references: [conferenceID])
+  conferenceID Int
 }
 
 model UserBuy_Conference{
   ID Int @id @default(autoincrement())
 
-  User User @relation(fields: [UserID], references: [UserID])
-  UserID String
-  Conference Conference @relation(fields: [ConferenceID], references: [ConferenceID])
-  ConferenceID Int
-  DateBuy DateTime @default(now())
+  User User @relation(fields: [userID], references: [userID])
+  userID Int
+  Conference Conference @relation(fields: [conferenceID], references: [conferenceID])
+  conferenceID Int
+  dateBuy DateTime @default(now())
 }
