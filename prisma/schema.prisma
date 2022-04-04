@@ -12,104 +12,188 @@ datasource db {
 
 model User {
   userID     Int  @id @default(autoincrement())
-  username   String  @unique
+  userName   String  @unique
   password   String
   firstName  String?
   lastName   String?
   createAt DateTime @default(now())
+  updateAt DateTime?
   email      String  @unique
-  imageUrl   String?
-  role     role @default(NORMALUSER)
-
-  // Conference Conference @relation(fields: [conferenceID], references: [conferenceID])
-  // conferenceID Int
-  conferences Conference[]
-  userCreate_Conference UserCreate_Conference[]
-
-  userBuy_Conference UserBuy_Conference[]
-  
+  // One to many with ticket
+  tickets Ticket[]
+  // One to one with Speaker
+  speaker Speaker?
+  // One to many with InvitationQueue
+  invitationQueues InvitationQueue[]
 }
 
-enum role{
-  NORMALUSER
-  ADMIN
-  HOST
-  SPEAKER
+model Admin {
+  adminID Int @id @default(autoincrement())
+  userName   String  @unique
+  password   String
+  email      String  @unique
+}
+ 
+model Host {
+  hostID     Int  @id @default(autoincrement())
+  userName   String  @unique
+  password   String
+  firstName  String?
+  lastName   String?
+  createAt DateTime @default(now())
+  updateAt DateTime?
+  email      String  @unique
+  // One to one with conference
+  conference  Conference @relation(fields: [conferenceID], references: [conferenceID])
+  conferenceID Int
+  // One to many with Subscription
+  subscriptions Subscription[]
+
+}
+
+model Speaker {
+  speakerID    Int  @id @default(autoincrement())
+  dateJoin DateTime @default(now())
+  // One to one with User
+  user  User @relation(fields: [userID], references: [userID])
+  userID Int
+  // Many to one Conference
+  conference  Conference @relation(fields: [conferenceID], references: [conferenceID])
+  conferenceID Int
+}
+
+model Ticket {
+  ticketID Int @id @default(autoincrement())
+  dateBuy  DateTime @default(now())
+ // Many to one with user
+  user   User @relation(fields: [userID], references: [userID])
+  userID Int
+  // One to many with TicketPlan
+  ticketPlans TicketPlan[]
+  // One to many with PaymentMethod
+  paymentMethods PaymentMethod[]
+  // Many to one with Conference
+  conference Conference @relation(fields: [conferenceID], references: [conferenceID])
+  conferenceID Int
+}
+
+model TicketPlan {
+  planID Int @id @default(autoincrement())
+  planPrice Float
+  planName String
+  // Many to one with Ticket
+  ticket   Ticket @relation(fields: [ticketID], references: [ticketID])
+  ticketID Int
+}
+
+model PaymentMethod {
+  methodID Int @id @default(autoincrement())
+  methodName String
+  // Many to one with Ticket
+  ticket   Ticket @relation(fields: [ticketID], references: [ticketID])
+  ticketID Int
+  // Many to one with Subscription
+  subscription Subscription @relation(fields: [subscriptionID], references: [subscriptionID])
+  subscriptionID Int
+}
+
+model Subscription {
+  subscriptionID Int @id @default(autoincrement())
+  subscriptionStartDate DateTime @default(now())
+  duration Int
+  // Many to one with Host
+  host   Host @relation(fields: [hostID], references: [hostID])
+  hostID Int
+  // One to many with SubcriptionPlan
+  subscriptionPlans SubscriptionPlan[]
+  // One to many with PaymentMethod
+  paymentMethods PaymentMethod[]
+
+}
+
+model SubscriptionPlan {
+  planID Int @id @default(autoincrement())
+  planName String
+  pricePerMonth Float
+  // Many to one with Subscription
+  subscription   Subscription @relation(fields: [subscriptionID], references: [subscriptionID])
+  subscriptionID Int
 }
 
 model Conference{
   conferenceID Int  @id @default(autoincrement())
   conferenceName String  @unique
-  ticketPrice Float
   description String?
   address String?
-  dateStart DateTime
-  dateEnd DateTime
-  recordURL String?
+  dateStartConference DateTime
+  dateStartSell DateTime
+  dateEndSell DateTime
+  isConferenceEnd Boolean
+
   createAt DateTime @default(now())
+  updateAt DateTime?
+  hostID Int
+  isValidated Boolean
 
-  user User @relation(fields: [userID], references: [userID])
-  userID Int
-
-  category ConferenceCategory @relation(fields: [categoryID], references: [categoryID])
-  categoryID Int
-
-  conferenceType ConferenceType @relation(fields: [typeID], references: [typeID])
-  typeID Int
-
-  paymentMethod paymentMethod @relation(fields: [methodID], references: [methodID])
-  methodID Int
-
+  // One to one with Record:
+  record Record?
+  // One to one with Analytics:
   analytics Analytics?
-
-  userCreate_Conference UserCreate_Conference?
-
-  userBuy_Conference UserBuy_Conference[]
-  
+  // One to many with ConferenceType
+  conferenceTypes ConferenceType[]
+  // One to many with ConferenceCategory
+  conferenceCategories ConferenceCategory[]
+  // One to many with Ticket
+  tickets Ticket[]
+  // One to one with Host
+  host Host?
+  // One to many with Speaker
+  speakers Speaker[]
+  // One to many with InvitationQueue
+  invitationQueues InvitationQueue[]
 }
 
+model InvitationQueue {
+  invitationQueueID Int @id @default(autoincrement())
+  isAgreeByUser Boolean
+  // Many to one User
+  user   User @relation(fields: [userID], references: [userID])
+  userID Int
+  // Many to one Conference
+  conference   Conference @relation(fields: [conferenceID], references: [conferenceID])
+  conferenceID Int
+}
+
+model Record {
+  recordID Int  @id @default(autoincrement())
+  recordURL String
+  // One to one with Conference
+  conference  Conference @relation(fields: [conferenceID], references: [conferenceID])
+  conferenceID Int
+}
 
 model ConferenceCategory{
   categoryID Int @id
   categoryName String  @unique
-  conferences Conference[]
-}
-
-model paymentMethod{
-  methodID Int @id
-  methodName String  @unique
-  conferences Conference[]
+  // Many to one with Conference
+  conference   Conference @relation(fields: [conferenceID], references: [conferenceID])
+  conferenceID Int
 }
 
 model ConferenceType{
   typeID Int @id
   typeName String  @unique
-  conferences Conference[]
+  // Many to one with Conference
+  conference   Conference @relation(fields: [conferenceID], references: [conferenceID])
+  conferenceID Int
+ 
 }
 
 model Analytics{
-  analyticID Int @id
-
-  conference Conference @relation(fields: [conferenceID], references: [conferenceID])
-  conferenceID Int 
-  numberofTicketBought Int?
-}
-
-model UserCreate_Conference{
-  id Int @id @default(autoincrement())
-
-  user User @relation(fields: [userID], references: [userID])
-  userID Int
-  conference Conference @relation(fields: [conferenceID], references: [conferenceID])
+  analyticID Int @id @default(autoincrement())
+  numberTicketBougt Int
+  numberOfAttendee Int
+  // One to one with Conference
+  conference  Conference @relation(fields: [conferenceID], references: [conferenceID])
   conferenceID Int
-}
-
-model UserBuy_Conference{
-  ID Int @id @default(autoincrement())
-
-  User User @relation(fields: [userID], references: [userID])
-  userID Int
-  Conference Conference @relation(fields: [conferenceID], references: [conferenceID])
-  conferenceID Int
-  dateBuy DateTime @default(now())
 }

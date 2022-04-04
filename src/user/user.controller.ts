@@ -1,5 +1,5 @@
 import { Body, Controller, Get, Patch, Req, UseGuards } from '@nestjs/common';
-import { role, User } from '@prisma/client';
+import { User } from '@prisma/client';
 import { hasRoles } from 'src/auth/decorator/roles.decorator';
 import { RolesGuard } from 'src/auth/guard/roles.guard';
 import { GetUser } from '../auth/decorator';
@@ -24,7 +24,6 @@ export class UserController {
             return this.userService.editUser(userId, dto);
     }
 
-    @hasRoles(role.ADMIN)
     @UseGuards(JwtGuard, RolesGuard)
     @Get()
     findAll() {

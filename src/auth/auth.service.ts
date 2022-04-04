@@ -6,7 +6,6 @@ import { PrismaClientKnownRequestError } from "@prisma/client/runtime";
 import { JwtService } from "@nestjs/jwt";
 import { ConfigService } from "@nestjs/config";
 import { CreateAuthDto } from "./dto/create.dto";
-import { role } from "@prisma/client";
 
 @Injectable()
 export class AuthService{
@@ -20,7 +19,7 @@ export class AuthService{
         // find the user by email
         const user = await this.prisma.user.findUnique({
             where: {
-                username: dto.username,
+                userName: dto.username,
             },
         });
         // if user does not exist throw exception
@@ -39,7 +38,7 @@ export class AuthService{
                 'Creadentials incorrect',
             );
 
-        return this.signToken(user.userID, user.username);
+        return this.signToken(user.userID, user.userName);
     }
 
     async signup(dto: CreateAuthDto) {
@@ -49,10 +48,9 @@ export class AuthService{
         try{
             const user = await this.prisma.user.create({
                 data: {
-                    username: dto.username,
+                    userName: dto.username,
                     password: hash,
                     email: dto.email,
-                    role: role.ADMIN,
                 }
             });
             return this.signToken(user.userID, user.email);

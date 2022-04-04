@@ -22,6 +22,6 @@ import { CategoryModule } from './category/category.module';
     RedisCacheModule,
     ApiModule,
     ConferenceModule,
-    CategoryModule],
+    CategoryModule,],
 })
 export class AppModule {}

@@ -26,12 +26,11 @@ export class UserService {
         const users = this.prisma.user.findMany({
             select:{
                 userID:true,
-                username: true,
+                userName: true,
                 firstName: true,
                 lastName: true,
                 email: true,
                 createAt: true,
-                role: true,
             }
         });
         return users;

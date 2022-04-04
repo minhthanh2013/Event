@@ -13,28 +13,28 @@ export class ConferenceService {
     } 
 
     async createConference(dto: CreateConferenceDTO) {
-        const user = this.userService.findOne(1);
-        try{
-           const conference = await this.prisma.conference.create({
-                data: {
-                    userID: (await user).userID,
-                    categoryID: 1,
-                    typeID: 1,
-                    methodID: 1,  
-                    conferenceName: dto.conferenceName,
-                    ticketPrice: ,
-                    dateStart: dto.dateStart,
-                    dateEnd: dto.dateEnd,
-                }
-           })
-            return conference;
-        } catch(error) {
-            if(error instanceof PrismaClientKnownRequestError) {
-                if(error.code === 'P2002') {
-                    throw new ForbiddenException('Creadential taken');
-                }
-            }
-            throw error;
-        }
+        // const user = await this.userService.findOne(1);
+        // try{
+        //    const conference = await this.prisma.conference.create({
+        //         data: {
+        //             userID: user.userID,
+        //             categoryID: 1,
+        //             typeID: 1,
+        //             methodID: 1,  
+        //             conferenceName: dto.conferenceName,
+        //             ticketPrice: 100000,
+        //             dateStart: dto.dateStart,
+        //             dateEnd: dto.dateEnd,
+        //         }
+        //    })
+        //     return conference;
+        // } catch(error) {
+        //     if(error instanceof PrismaClientKnownRequestError) {
+        //         if(error.code === 'P2002') {
+        //             throw new ForbiddenException('Creadential taken');
+        //         }
+        //     }
+        //     throw error;
+        // }
     }
 }
