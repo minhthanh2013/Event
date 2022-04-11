@@ -44,8 +44,8 @@ model Host {
   updateAt DateTime?
   email      String  @unique
   // One to one with conference
-  conference  Conference @relation(fields: [conferenceID], references: [conferenceID])
-  conferenceID Int
+  conference  Conference? @relation(fields: [conferenceID], references: [conferenceID])
+  conferenceID Int?
   // One to many with Subscription
   subscriptions Subscription[]
 
@@ -90,11 +90,11 @@ model PaymentMethod {
   methodID Int @id @default(autoincrement())
   methodName String
   // Many to one with Ticket
-  ticket   Ticket @relation(fields: [ticketID], references: [ticketID])
-  ticketID Int
+  ticket   Ticket? @relation(fields: [ticketID], references: [ticketID])
+  ticketID Int?
   // Many to one with Subscription
-  subscription Subscription @relation(fields: [subscriptionID], references: [subscriptionID])
-  subscriptionID Int
+  subscription Subscription? @relation(fields: [subscriptionID], references: [subscriptionID])
+  subscriptionID Int?
 }
 
 model Subscription {
@@ -176,16 +176,16 @@ model ConferenceCategory{
   categoryID Int @id
   categoryName String  @unique
   // Many to one with Conference
-  conference   Conference @relation(fields: [conferenceID], references: [conferenceID])
-  conferenceID Int
+  conference   Conference? @relation(fields: [conferenceID], references: [conferenceID])
+  conferenceID Int?
 }
 
 model ConferenceType{
   typeID Int @id
   typeName String  @unique
   // Many to one with Conference
-  conference   Conference @relation(fields: [conferenceID], references: [conferenceID])
-  conferenceID Int
+  conference   Conference? @relation(fields: [conferenceID], references: [conferenceID])
+  conferenceID Int?
  
 }
 
