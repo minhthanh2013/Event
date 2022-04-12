@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
-import { UserAuthModule } from 'src/user-auth/user.auth.module';
+
 import { RedisCacheModule } from '../redis/redis.module';
+import { UserAuthModule } from '../user-auth/user.auth.module';
 import { UserController } from '../user/user.controller';
 import { UserService } from '../user/user.service';
 

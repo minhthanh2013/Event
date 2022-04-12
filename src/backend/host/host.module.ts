@@ -1,7 +1,8 @@
 import { Module } from '@nestjs/common';
 import { HostService } from './host.service';
 import { HostController } from './host.controller';
-import { HostAuthModule } from 'src/host-auth/host.auth.module';
+import { HostAuthModule } from '../host-auth/host.auth.module';
+
 
 @Module({
   imports: [HostAuthModule],

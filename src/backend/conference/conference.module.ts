@@ -1,7 +1,8 @@
 import { Module } from '@nestjs/common';
 import { ConferenceService } from './conference.service';
 import { ConferenceController } from './conference.controller';
-import { UserModule } from 'src/user/user.module';
+import { UserModule } from '../user/user.module';
+
 
 @Module({
   imports: [UserModule],

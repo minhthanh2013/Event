@@ -2,7 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@n
 import { HostService } from './host.service';
 import { CreateHostDto } from './dto/create-host.dto';
 import { UpdateHostDto } from './dto/update-host.dto';
-import { HostJwtGuard } from 'src/host-auth/guard';
+import { HostJwtGuard } from '../host-auth/guard/host.jwt.guard';
 
 @Controller('host')
 @UseGuards(HostJwtGuard)

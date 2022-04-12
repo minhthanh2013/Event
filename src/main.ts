@@ -1,12 +1,14 @@
 import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
 
+import * as Next from 'next';
+import { AppModule } from './backend/app.module';
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
-  app.useGlobalPipes(new ValidationPipe({
+
+  const server = await NestFactory.create(AppModule);
+  server.useGlobalPipes(new ValidationPipe({
     whitelist: true,
   }));
-  await app.listen(3333);
+  await server.listen(3333);
 }
 bootstrap();
