@@ -1,14 +1,14 @@
-import Head from 'next/head';
-import * as React from 'react';
+import type { NextPage } from 'next'
+import Head from 'next/head'
+import Image from 'next/image'
+import styles from '../styles/Home.module.css'
 
-const Home = props => {
-    console.log(props)
-    const { title } = props;
-    return (
-        <><Head>
-            <title>{title}</title>
-        </Head><h1>Home {title}</h1></>
-    );
-};
+const Home: NextPage = () => {
+  return (
+    <div className={styles.container}>
+      chao moi nguoi nhe
+    </div>
+  )
+}
 
-export default Home;
+export default Home
