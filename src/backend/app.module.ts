@@ -10,6 +10,8 @@ import { ConferenceModule } from './conference/conference.module';
 import { HostModule } from './host/host.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { RedisCacheModule } from './redis/redis.module';
+import { SpeakerModule } from './speaker/speaker.module';
+import { TicketModule } from './ticket/ticket.module';
 import { UserModule } from './user/user.module';
 import { ZoomModule } from './zoom/zoom.module';
 
@@ -21,7 +23,6 @@ import { ZoomModule } from './zoom/zoom.module';
   }), 
   RenderModule.forRootAsync(Next({dev : true}),
   { viewsDir: null }),
-  
     UserModule,
     PrismaModule,
     ZoomModule,
@@ -29,7 +30,9 @@ import { ZoomModule } from './zoom/zoom.module';
     ConferenceModule,
     CategoryModule,
     HostModule,
-    AdminModule,],
+    AdminModule,
+    SpeakerModule,
+    TicketModule,],
     controllers: [AppController],
 })
 export class AppModule {}
