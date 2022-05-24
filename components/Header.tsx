@@ -13,7 +13,7 @@ const Header = (props: HeaderProps) => {
     <Box sx={{flexGrow: 1}} >
       <AppBar position="static" elevation={0} color="transparent">
         <Toolbar >
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1,  '-webkit-user-select':'none', 'user-select': 'none'}}>
+          <Typography variant="h6" component="div" sx={{ flexGrow: 1,  '-webkit-user-select':'none', 'user-select': 'none', fontWeight:"700", letterSpacing:"3px"}}>
             Evenity
           </Typography>
           <Button variant='text' sx={{color:"#000000"}}>Login</Button>

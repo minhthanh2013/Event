@@ -42,15 +42,15 @@ const CarouselSlide = (props: CarouselSlideProps) => {
       {lists.map(list => (
           <SwiperSlide key={list.id} >
               <Box>
-                <Typography sx={{fontWeight:"600", fontSize: '3.1rem', '-webkit-user-select':'none', 'user-select': 'none'}} >Traders Fair and Gala Night 2022</Typography>
+                <Typography sx={{fontWeight:"500", fontSize: '3.1rem', '-webkit-user-select':'none', 'user-select': 'none'}} >Traders Fair and Gala Night 2022</Typography>
 
-                <Typography sx={{background:"linear-gradient(90deg, #C64EFF 55.78%, rgba(184, 64, 233, 0.665587) 88.26%, rgba(207, 77, 247, 0) 125.43%)", '-webkit-background-clip': 'text', '-webkit-text-fill-color': 'transparent',fontSize:"3.1rem",fontWeight:"600",'-webkit-user-select':'none', 'user-select': 'none'
+                <Typography sx={{background:"linear-gradient(90deg, #C64EFF 55.78%, rgba(184, 64, 233, 0.665587) 88.26%, rgba(207, 77, 247, 0) 125.43%)", '-webkit-background-clip': 'text', '-webkit-text-fill-color': 'transparent',fontSize:"3.1rem",fontWeight:"500",'-webkit-user-select':'none', 'user-select': 'none'
                 }}>Vietnam</Typography>
 
-                <Typography sx={{ fontSize:"1.1rem", fontWeight:"500", my:"44px", '-webkit-user-select':'none', 'user-select': 'none'}}
+                <Typography sx={{ fontSize:"1.1rem", fontWeight:"400", my:"44px", '-webkit-user-select':'none', 'user-select': 'none'}}
                 >Series of Fantastic Traders Fairs is going to take place in Asia attracting the world of traders to one place during in one day and has yet again come to Vietnam, HCMC.</Typography>
 
-                <Button sx={{fontSize:"1.1rem", fontWeight:"400",background:"linear-gradient(90deg, #C64EFF 55.78%, rgba(184, 64, 233, 0.665587) 88.26%, rgba(207, 77, 247, 0) 125.43%)",'-webkit-background-clip': 'text','-webkit-text-fill-color': 'transparent',border: "1px solid rgba(184, 64, 233, 0.665587)",
+                <Button sx={{fontSize:"1.1rem", fontWeight:"500",background:"linear-gradient(90deg, #C64EFF 55.78%, rgba(184, 64, 233, 0.665587) 88.26%, rgba(207, 77, 247, 0) 125.43%)",'-webkit-background-clip': 'text','-webkit-text-fill-color': 'transparent',border: "1px solid rgba(184, 64, 233, 0.665587)",
                 '&:hover' : {
                 borderColor: "rgba(184, 64, 233, 0.2)"
                 }}} variant="outlined">
@@ -59,9 +59,9 @@ const CarouselSlide = (props: CarouselSlideProps) => {
               </Box>
               <Box>
                 <Box>
-                  <Typography sx={{mt:"45px", fontWeight:"700", fontSize:"1.8rem", '-webkit-user-select':'none', 'user-select': 'none'}}>Date & Location</Typography>
-                  <Typography sx={{my:"40px", mr:"22px",display:"flex",textAlign:"left", alignItems:"center", fontWeight:"500", fontSize:"1.1rem", '-webkit-user-select':'none', 'user-select': 'none'}}><AccessAlarmIcon sx={{ml:"22px", mr:"38px"}}/>10:00 AM – 9:00 PM – Saturday, Dec 10, </Typography>
-                  <Typography sx={{mb: "40px", mr:"22px",display:"flex",textAlign:"left", alignItems:"center", fontWeight:"500", fontSize:"1.1rem", '-webkit-user-select':'none', 'user-select': 'none'}}><LocationOnIcon sx={{ml:"22px", mr:"38px"}}/>Windsor Plaza Hotel – 18 An Duong Vuong Street, District 5, Ho Chi Minh City</Typography>
+                  <Typography sx={{mt:"45px", fontWeight:"500", fontSize:"1.8rem", '-webkit-user-select':'none', 'user-select': 'none'}}>Date & Location</Typography>
+                  <Typography sx={{my:"40px", mr:"22px",display:"flex",textAlign:"left", alignItems:"center", fontWeight:"400", fontSize:"1.1rem", '-webkit-user-select':'none', 'user-select': 'none'}}><AccessAlarmIcon sx={{ml:"22px", mr:"38px"}}/>10:00 AM – 9:00 PM – Saturday, Dec 10, </Typography>
+                  <Typography sx={{mb: "40px", mr:"22px",display:"flex",textAlign:"left", alignItems:"center", fontWeight:"400", fontSize:"1.1rem", '-webkit-user-select':'none', 'user-select': 'none'}}><LocationOnIcon sx={{ml:"22px", mr:"38px"}}/>Windsor Plaza Hotel – 18 An Duong Vuong Street, District 5, Ho Chi Minh City</Typography>
 
                   <Button sx={{mb:"45px", fontSize:"1.1rem", fontWeight:"500",color:"white",border: "1px solid white",minWidth:"70%",
                   '&:hover' : {

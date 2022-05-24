@@ -6,7 +6,8 @@ import Header from './Header'
 import Box from '@mui/material/Box'
 import CarouselSlide from './CarouselSlide'
 import SearchBar from './SearchBar'
-
+import HomePageControl from "./HomePageControl";
+import ProductList from './ProductList'
 
 interface BackgroundProps {}
 
@@ -48,9 +49,10 @@ const Background = (props: BackgroundProps) => {
         background: 'radial-gradient(50% 50% at 50% 50%, rgba(106, 53, 242, 0.77) 0%, rgba(151, 125, 219, 0.385) 50%, rgba(151, 125, 219, 0.385) 50.01%, rgba(196, 196, 196, 0) 100%)',
         borderRadius: '50%',}}></Box>
        <Header/>
-       
        <CarouselSlide/>
        <SearchBar/>
+       <HomePageControl/>
+       <ProductList/>
     </Box>
    
   </>

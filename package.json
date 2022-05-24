@@ -26,6 +26,7 @@
     "react-dom": "18.0.0",
     "react-material-ui-carousel": "^2.3.11",
     "react-slick": "^0.29.0",
+    "sass": "^1.52.1",
     "swiper": "^8.1.4"
   },
   "devDependencies": {
