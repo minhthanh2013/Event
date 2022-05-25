@@ -8,6 +8,8 @@ import CarouselSlide from './CarouselSlide'
 import SearchBar from './SearchBar'
 import HomePageControl from "./HomePageControl";
 import ProductList from './ProductList'
+import Ticket from './Ticket'
+import TicketSession from './TicketSession'
 
 interface BackgroundProps {}
 
@@ -53,6 +55,8 @@ const Background = (props: BackgroundProps) => {
        <SearchBar/>
        <HomePageControl/>
        <ProductList/>
+       <Ticket/>
+       <TicketSession/>
     </Box>
    
   </>

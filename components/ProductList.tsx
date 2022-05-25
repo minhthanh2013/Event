@@ -1,5 +1,6 @@
 import React from "react";
-import styles from "../styles/ProductList.module.css";
+import styles from "../styles/ProductList.module.scss";
+import Ticket from "./Ticket";
 interface ProductListProps {}
 const products = [
   {
@@ -25,7 +26,9 @@ const ProductList = (props: ProductListProps) => {
     <>
       <div className={styles.productWrap}>
         <div className={styles.productContainer}>
-
+          <Ticket/>
+          <Ticket/>
+          <Ticket/>
         </div>
       </div>
     </>
