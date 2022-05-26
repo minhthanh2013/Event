@@ -8,10 +8,9 @@
 .ticketWrap:hover{
     .ticketContent{
         div:nth-child(3){
-            background-color: hwb(257 70% 5%);
-            transition-duration: 1.5s;
-            transition-property: background-color;
-            transition-timing-function: ease-in-out;
+            background-color: hwb(257 30% 5%);
+            transition-duration: 1s;
+            transition-timing-function: ease;
         }
     }
 }

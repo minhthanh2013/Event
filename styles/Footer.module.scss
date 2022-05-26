@@ -45,5 +45,11 @@
             align-items: center;
             gap: 15px;
         }
+        a:hover{
+            color: #6A35F2;
+            transition-duration: 1s;
+            font-size: 1.1rem;
+        }
     }
 }
+
