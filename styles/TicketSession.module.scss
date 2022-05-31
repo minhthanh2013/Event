@@ -1,9 +1,6 @@
 .ticketWrap {
-    max-width: 480px;
     border-radius: 20px !important;
-    
 }
-
 .ticketWrap:hover {
     .ticketContent {
         div:nth-child(2) {
@@ -18,16 +15,20 @@
 .ticketContent {
     display: flex;
     flex-direction: row;
-    padding: 16px 24px;
-    justify-content: center;
-    background-color: #ffffff;
+    justify-content: left;
+    background-color: white;
     div:nth-child(1) {
         display: flex;
         flex-direction: column;
         h2 {
             font-weight: 700;
             font-size: 1.2rem;
+        }
+        h3 {
             margin-bottom: 50px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            font-style: italic;
         }
         p {
             font-weight: 500;

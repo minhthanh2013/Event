@@ -7,7 +7,7 @@ import { CacheProvider, EmotionCache } from "@emotion/react";
 import { createEmotionCache } from "../utils";
 import { theme } from "../utils";
 import "../styles/globals.css";
-import "../styles/carouselSlide.css";
+
 
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache();

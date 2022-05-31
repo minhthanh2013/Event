@@ -5,7 +5,7 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 
-interface TicketListProps {}
+interface ControlFieldProps {}
 
 const options = [
 	{ label: "Current", id: 1 },
@@ -19,7 +19,7 @@ const currentOptions = [
 	{ label: "Future Event", id: 3 },
 ];
 
-const TicketList = (props: TicketListProps) => {
+const ControlField = (props: ControlFieldProps) => {
 	const [dateOption, setDateOption] = React.useState("");
 	const [typeOption, setTypeOption] = React.useState("");
 	const [categoryOption, setCategoryOption] = React.useState("");
@@ -172,4 +172,4 @@ const TicketList = (props: TicketListProps) => {
 	);
 };
 
-export default TicketList;
+export default ControlField;

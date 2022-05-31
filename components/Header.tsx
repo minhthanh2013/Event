@@ -36,8 +36,8 @@ function stringAvatar(name:any) {
 
   return (
     <Box sx={{my:"20px"}} >
-      <AppBar position="static" elevation={0} color="transparent">
-        <Toolbar sx={{dislay: "flex", gap:"20px"}}>
+      <AppBar position="static" color="transparent" elevation={0}>
+        <Toolbar sx={{display: "flex", gap:"20px"}}>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1,  '-webkit-user-select':'none', 'user-select': 'none', fontWeight:"700", letterSpacing:"3px"}}>
             Evenity
           </Typography>
