@@ -30,7 +30,7 @@ function stringAvatar(name:any) {
 		sx: {
 			bgcolor: stringToColor(name),
 		},
-		children: `${name.split(" ")[0][0]}${name.split(" ")[1][0]}`,
+    children: `${name.split(" ")[0][0]}`.toUpperCase(),
 	};
 }
 
@@ -55,7 +55,7 @@ function stringAvatar(name:any) {
             </Badge>
           </IconButton>
           <IconButton>
-            <Avatar {...stringAvatar('Vinh Duong Quang')} />
+            <Avatar {...stringAvatar('duongquangvinh6@gmail.com')} />
           </IconButton>
         </Toolbar>
       </AppBar>

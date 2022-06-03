@@ -9,6 +9,7 @@ import { theme } from "../utils";
 import "../styles/globals.css";
 
 
+
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache();
 
@@ -33,3 +34,5 @@ export default function MyApp(props: MyAppProps) {
     </CacheProvider>
   );
 }
+
+

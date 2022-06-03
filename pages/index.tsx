@@ -13,7 +13,7 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import CarouselSlide from '../components/CarouselSlide'
 import SessionList from '../components/SessionList'
-
+export { default as buildStore } from '../shared/redux/buildStore';
 
 const Home: NextPage = () => {
   return (
@@ -22,11 +22,14 @@ const Home: NextPage = () => {
         <Box className={styles.dot__1}></Box>
         <Box className={styles.dot__2}></Box>
         <Box className={styles.dot__3}></Box>
+
+
         <Header/>
         <CarouselSlide/>
         <SearchBar/>
         <SessionList/>
         <TicketList/>
+        
       </Box>
       <Footer/>
       
