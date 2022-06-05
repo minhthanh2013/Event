@@ -5,8 +5,7 @@ import { UserJwtStrategy } from "./strategy";
 import { UserAuthController } from "./user.auth.controller";
 import { JwtModule } from "@nestjs/jwt";
 import { UserModule } from "../user/user.module";
-
-
+import { ClientsModule, Transport } from "@nestjs/microservices";
 
 @Module({
     imports: [
@@ -18,8 +17,21 @@ import { UserModule } from "../user/user.module";
                 secret: configService.get('JWT_SECRET'),
                 signOptions: {expiresIn: '10000s'}
             })
-        })
-    ],
+        }),
+        ClientsModule.register([
+            {
+              name: 'REDIS',
+              transport: Transport.TCP,
+            },
+            {
+              name: 'ZOOM',
+              transport: Transport.TCP,
+              options: {
+                port: 3001,
+              }
+            }
+          ])
+        ],
     controllers: [UserAuthController],
     providers: [UserAuthService, UserJwtStrategy],
 }) 

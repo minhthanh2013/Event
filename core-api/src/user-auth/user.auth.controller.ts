@@ -8,9 +8,9 @@ import { EventPattern } from "@nestjs/microservices";
 export class UserAuthController{
     constructor(private userAuthService: UserAuthService) {}
 
-    @EventPattern('user_created')
     @Post('users/signup')
     signupUser(@Body() dto: CreateAuthDto) {
+        console.log('here in core-api')
         return this.userAuthService.signupUser(dto);
     }
 

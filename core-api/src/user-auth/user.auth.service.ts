@@ -1,16 +1,18 @@
-import { ForbiddenException, Injectable } from "@nestjs/common";
+import { ForbiddenException, Inject, Injectable } from "@nestjs/common";
 import { PrismaService } from "../prisma/prisma.service";
 import { AuthDto } from "./dto";
 import * as argon from 'argon2';
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime";
 import { JwtService } from "@nestjs/jwt";
 import { CreateAuthDto } from "./dto/create.dto";
-
+import { ClientProxy } from "@nestjs/microservices";
 @Injectable()
 export class UserAuthService{
     constructor(
         private prisma: PrismaService,
-        private jwt: JwtService,) {}
+        private jwt: JwtService,
+        @Inject('REDIS') private readonly redisClient: ClientProxy,
+        @Inject('ZOOM') private readonly zoomClient: ClientProxy,) {}
     async signinUser(dto: AuthDto) {
         // find the user by email
         const user = await this.prisma.user.findUnique({
@@ -42,6 +44,14 @@ export class UserAuthService{
         // generate the password hash
         const hash = await argon.hash(dto.password);
         // save the new user in the db
+        this.redisClient.emit(
+            'user_created',
+            dto,
+          );
+          this.zoomClient.emit(
+            'user_created',
+            dto,
+          );
         try{
             const user = await this.prisma.user.create({
                 data: {
