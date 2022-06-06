@@ -4,7 +4,6 @@
 /payment/node_modules
 /redis/node_modules
 /zoom/node_modules
-
 # Logs
 logs
 *.log
@@ -36,3 +35,5 @@ lerna-debug.log*
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
+
+.env
