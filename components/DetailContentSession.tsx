@@ -3,7 +3,7 @@ import { Box, Typography } from "@mui/material"
 import styles from "../styles/DetailContentSession.module.scss"
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import Grid from '@mui/material/Grid';
-import Ticket from "./Ticket"
+import Ticket__2 from "./Ticket__2"
 const DetailContentSession = () => {
 
     return (
@@ -22,7 +22,7 @@ const DetailContentSession = () => {
                         <Grid container rowSpacing={8}  marginTop={0}>
                             {Array.from(Array(6)).map((_, index) => (
                                 <Grid item sm={12} key={index}>
-                                    <Ticket />
+                                    <Ticket__2 />
                                 </Grid>
                             ))}
                         </Grid>

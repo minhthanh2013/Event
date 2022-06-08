@@ -26,6 +26,7 @@
     "next-redux-wrapper": "^7.0.5",
     "react": "18.0.0",
     "react-dom": "18.0.0",
+    "react-icons": "^4.4.0",
     "react-material-ui-carousel": "^2.3.11",
     "react-redux": "^8.0.2",
     "react-simple-maps": "^2.3.0",
