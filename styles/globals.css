@@ -14,3 +14,7 @@ a {
   box-sizing: border-box;
   font-family: 'Inter', sans-serif !important;
 }
+
+.MuiDataGrid {
+  border: 'none',
+}

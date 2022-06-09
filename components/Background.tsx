@@ -10,7 +10,7 @@ import HomePageControl from "./HomePageControl";
 import ProductList from './ProductList'
 import Ticket from './Ticket'
 import TicketSession from './TicketSession'
-
+import Footer from './Footer'
 interface BackgroundProps {}
 
 const Background = (props: BackgroundProps) => {
@@ -58,7 +58,7 @@ const Background = (props: BackgroundProps) => {
        <Ticket/>
        <TicketSession/>
     </Box>
-   
+    <Footer />
   </>
     
   )

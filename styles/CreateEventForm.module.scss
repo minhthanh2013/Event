@@ -1,0 +1,55 @@
+.eventFields {
+  width: 100%;
+  margin: 2rem 0;
+}
+
+.select {
+  width: 45%;
+  margin: 2rem 0;
+  margin-right: 3.5rem;
+}
+
+.nextBtn {
+  margin: 0;
+  position: relative;
+  left: 45%;
+}
+
+.inviteBtn {
+  margin-top: 2rem;
+  align-items: center;
+}
+
+.popup {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 300;
+  background-color: #ffffff;
+  border-radius: 0.75rem;
+  box-shadow: 24;
+  padding: 3rem;
+}
+
+.speakersIcon {
+  margin-top: 10rem;
+  margin-bottom: 2rem;
+}
+
+.infoBox {
+  background-color: rgba(151, 125, 219, 0.385) !important;
+  margin-top: 1rem;
+}
+
+.speakersInfo {
+  margin: 0.5rem 0 0.5rem 10rem;
+}
+
+.closeBtn {
+  margin-top: 0.75rem;
+}
+
+.dateFields {
+  margin: 1.5rem 0 1.5rem 0 !important;
+}

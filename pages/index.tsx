@@ -11,13 +11,13 @@ import Link from 'next/link'
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-
+import EventDashboard from '../components/EventDashboard'
 
 const Home: NextPage = () => {
   return (
     <>
-      <Background/>
-      
+      {/* <Background/> */}
+      <EventDashboard/>
       <Footer/>
       
     </>
