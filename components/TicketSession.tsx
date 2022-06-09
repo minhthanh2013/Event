@@ -13,7 +13,7 @@ const TicketSession = (props: TicketSesstionProps) => {
   return (
     <>
       <div>
-        <Card elevation={3} sx={{my:"100px"}} className={styles.ticketWrap}>
+        <Card elevation={3} className={styles.ticketWrap}>
           <CardActionArea>
             <CardMedia
               component="img"
@@ -26,6 +26,7 @@ const TicketSession = (props: TicketSesstionProps) => {
                 <Typography gutterBottom component="h2">
                   Vietnam Talent Trends 2022
                 </Typography>
+                <Typography gutterBottom component="h3">by FINEXPO PTE LTD.</Typography>
                 <Typography gutterBottom component="p">
                   6 events
                 </Typography>

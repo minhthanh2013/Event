@@ -10,8 +10,6 @@ import "swiper/css/pagination";
 import AccessAlarmIcon from '@mui/icons-material/AccessAlarm';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import { Pagination, Navigation } from "swiper";
-
-import Background from './Background';
 import Box from '@material-ui/core/Box';
 
 
@@ -28,7 +26,7 @@ const CarouselSlide = (props: CarouselSlideProps) => {
     
   return (
 		<>
-			<Box sx={{boxShadow:"0px 4px 5px -2px rgb(0 0 0 / 20%), 0px 7px 10px 1px rgb(0 0 0 / 14%), 0px 2px 16px 1px rgb(0 0 0 / 12%)"}}>
+			<Box>
 				<Swiper
 					slidesPerView={1}
 					spaceBetween={30}

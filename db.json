@@ -1,0 +1,906 @@
+{
+  "countries": [
+    {
+      "ISO3": "USA",
+      "name": "United States",
+      "region": "US",
+      "population_density": "1234923"
+    },
+    {
+      "ISO3": "ALB",
+      "name": "Albania",
+      "region": "EMEA",
+      "population_density": "1234923"
+    },
+    {
+      "ISO3": "DZA",
+      "name": "Algeria",
+      "region": "EMEA",
+      "population_density": "2234923"
+    },
+    {
+      "ISO3": "AND",
+      "name": "Andorra",
+      "region": "EMEA",
+      "population_density": "2234923"
+    },
+    {
+      "ISO3": "AGO",
+      "name": "Angola",
+      "region": "EMEA",
+      "population_density": "5234923"
+    },
+    {
+      "ISO3": "AUT",
+      "name": "Austria",
+      "region": "EMEA",
+      "population_density": "3234923"
+    },
+    {
+      "ISO3": "BHR",
+      "name": "Bahrain",
+      "region": "EMEA",
+      "population_density": "3234923"
+    },
+    {
+      "ISO3": "BLR",
+      "name": "Belarus",
+      "region": "EMEA",
+      "population_density": "1234923"
+    },
+    {
+      "ISO3": "BEL",
+      "name": "Belgium",
+      "region": "EMEA",
+      "population_density": "2234923"
+    },
+    {
+      "ISO3": "BEN",
+      "name": "Benin",
+      "region": "EMEA",
+      "population_density": "4234923"
+    },
+    {
+      "ISO3": "BIH",
+      "name": "Bosnia and Herzegovina",
+      "region": "EMEA",
+      "population_density": "1234923"
+    },
+    {
+      "ISO3": "BWA",
+      "name": "Botswana",
+      "region": "EMEA",
+      "population_density": "4234923"
+    },
+    {
+      "ISO3": "BGR",
+      "name": "Bulgaria",
+      "region": "EMEA",
+      "population_density": "3234923"
+    },
+    {
+      "ISO3": "BFA",
+      "name": "Burkina Faso",
+      "region": "EMEA",
+      "population_density": "1234923"
+    },
+    {
+      "ISO3": "BDI",
+      "name": "Burundi",
+      "region": "EMEA",
+      "population_density": "2234923"
+    },
+    {
+      "ISO3": "CMR",
+      "name": "Cameroon",
+      "region": "EMEA",
+      "population_density": "2234923"
+    },
+    {
+      "ISO3": "CPV",
+      "name": "Cape Verde",
+      "region": "EMEA",
+      "population_density": "2234923"
+    },
+    {
+      "ISO3": "CAF",
+      "name": "Central African Republic",
+      "region": "EMEA",
+      "population_density": "4234923"
+    },
+    {
+      "ISO3": "TCD",
+      "name": "Chad",
+      "region": "EMEA",
+      "population_density": "6234923"
+    },
+    {
+      "ISO3": "COM",
+      "name": "Comoros",
+      "region": "EMEA",
+      "population_density": "4234923"
+    },
+    {
+      "ISO3": "HRV",
+      "name": "Croatia",
+      "region": "EMEA",
+      "population_density": "1234923"
+    },
+    {
+      "ISO3": "CYP",
+      "name": "Cyprus",
+      "region": "EMEA",
+      "population_density": "3234923"
+    },
+    {
+      "ISO3": "CZE",
+      "name": "Czechia",
+      "region": "EMEA",
+      "population_density": "6234923"
+    },
+    {
+      "ISO3": "COD",
+      "name": "Democratic Republic of Congo",
+      "region": "EMEA",
+      "population_density": "5234923"
+    },
+    {
+      "ISO3": "DNK",
+      "name": "Denmark",
+      "region": "EMEA",
+      "population_density": "3234923"
+    },
+    {
+      "ISO3": "DJI",
+      "name": "Djibouti",
+      "region": "EMEA",
+      "population_density": "4234923"
+    },
+    {
+      "ISO3": "EGY",
+      "name": "Egypt",
+      "region": "EMEA",
+      "population_density": "4234923"
+    },
+    {
+      "ISO3": "GNQ",
+      "name": "Equatorial Guinea",
+      "region": "EMEA",
+      "population_density": "4234923"
+    },
+    {
+      "ISO3": "ERI",
+      "name": "Eritrea",
+      "region": "EMEA",
+      "population_density": "5234923"
+    },
+    {
+      "ISO3": "EST",
+      "name": "Estonia",
+      "region": "EMEA",
+      "population_density": "2234923"
+    },
+    {
+      "ISO3": "ETH",
+      "name": "Ethiopia",
+      "region": "EMEA",
+      "population_density": "5234923"
+    },
+    {
+      "ISO3": "FRO",
+      "name": "Faroe Islands",
+      "region": "EMEA",
+      "population_density": "5234923"
+    },
+    {
+      "ISO3": "FIN",
+      "name": "Finland",
+      "region": "EMEA",
+      "population_density": "1234923"
+    },
+    {
+      "ISO3": "FRA",
+      "name": "France",
+      "region": "EMEA",
+      "population_density": "2234923"
+    },
+    {
+      "ISO3": "GAB",
+      "name": "Gabon",
+      "region": "EMEA",
+      "population_density": "4234923"
+    },
+    {
+      "ISO3": "GMB",
+      "name": "Gambia",
+      "region": "EMEA",
+      "population_density": "3234923"
+    },
+    {
+      "ISO3": "GEO",
+      "name": "Georgia",
+      "region": "EMEA",
+      "population_density": "4234923"
+    },
+    {
+      "ISO3": "DEU",
+      "name": "Germany",
+      "region": "EMEA",
+      "population_density": "5234923"
+    },
+    {
+      "ISO3": "GHA",
+      "name": "Ghana",
+      "region": "EMEA",
+      "population_density": "4234923"
+    },
+    {
+      "ISO3": "GIB",
+      "name": "Gibraltar",
+      "region": "EMEA",
+      "population_density": "3234923"
+    },
+    {
+      "ISO3": "GRC",
+      "name": "Greece",
+      "region": "EMEA",
+      "population_density": "1234923"
+    },
+    {
+      "ISO3": "GGY",
+      "name": "Guernsey",
+      "region": "EMEA",
+      "population_density": "0234923"
+    },
+    {
+      "ISO3": "GIN",
+      "name": "Guinea",
+      "region": "EMEA",
+      "population_density": "5234923"
+    },
+    {
+      "ISO3": "GNB",
+      "name": "Guinea-Bissau",
+      "region": "EMEA",
+      "population_density": "6234923"
+    },
+    {
+      "ISO3": "HUN",
+      "name": "Hungary",
+      "region": "EMEA",
+      "population_density": "1234923"
+    },
+    {
+      "ISO3": "ISL",
+      "name": "Iceland",
+      "region": "EMEA",
+      "population_density": "1234923"
+    },
+    {
+      "ISO3": "IRN",
+      "name": "Iran",
+      "region": "EMEA",
+      "population_density": "3234923"
+    },
+    {
+      "ISO3": "IRQ",
+      "name": "Iraq",
+      "region": "EMEA",
+      "population_density": "4234923"
+    },
+    {
+      "ISO3": "IRL",
+      "name": "Ireland",
+      "region": "EMEA",
+      "population_density": "1234923"
+    },
+    {
+      "ISO3": "IMN",
+      "name": "Isle of Man",
+      "region": "EMEA",
+      "population_density": "2234923"
+    },
+    {
+      "ISO3": "ISR",
+      "name": "Israel",
+      "region": "EMEA",
+      "population_density": "3234923"
+    },
+    {
+      "ISO3": "ITA",
+      "name": "Italy",
+      "region": "EMEA",
+      "population_density": "4234923"
+    },
+    {
+      "ISO3": "CIV",
+      "name": "Cote d'Ivoire",
+      "region": "EMEA",
+      "population_density": "4234923"
+    },
+    {
+      "ISO3": "JEY",
+      "name": "Jersey",
+      "region": "EMEA",
+      "population_density": "4234923"
+    },
+    {
+      "ISO3": "JOR",
+      "name": "Jordan",
+      "region": "EMEA",
+      "population_density": "3234923"
+    },
+    {
+      "ISO3": "KEN",
+      "name": "Kenya",
+      "region": "EMEA",
+      "population_density": "5234923"
+    },
+    {
+      "ISO3": "KWT",
+      "name": "Kuwait",
+      "region": "EMEA",
+      "population_density": "4234923"
+    },
+    {
+      "ISO3": "LVA",
+      "name": "Latvia",
+      "region": "EMEA",
+      "population_density": "2234923"
+    },
+    {
+      "ISO3": "LBN",
+      "name": "Lebanon",
+      "region": "EMEA",
+      "population_density": "4234923"
+    },
+    {
+      "ISO3": "LSO",
+      "name": "Lesotho",
+      "region": "EMEA",
+      "population_density": "5234923"
+    },
+    {
+      "ISO3": "LBR",
+      "name": "Liberia",
+      "region": "EMEA",
+      "population_density": "6234923"
+    },
+    {
+      "ISO3": "LBY",
+      "name": "Libya",
+      "region": "EMEA",
+      "population_density": "3234923"
+    },
+    {
+      "ISO3": "LIE",
+      "name": "Liechtenstein",
+      "region": "EMEA",
+      "population_density": "2234923"
+    },
+    {
+      "ISO3": "LTU",
+      "name": "Lithuania",
+      "region": "EMEA",
+      "population_density": "1234923"
+    },
+    {
+      "ISO3": "LUX",
+      "name": "Luxembourg",
+      "region": "EMEA",
+      "population_density": "1234923"
+    },
+    {
+      "ISO3": "MKD",
+      "name": "Macedonia",
+      "region": "EMEA",
+      "population_density": "3234923"
+    },
+    {
+      "ISO3": "MDG",
+      "name": "Madagascar",
+      "region": "EMEA",
+      "population_density": "5234923"
+    },
+    {
+      "ISO3": "MWI",
+      "name": "Malawi",
+      "region": "EMEA",
+      "population_density": "5234923"
+    },
+    {
+      "ISO3": "MLI",
+      "name": "Mali",
+      "region": "EMEA",
+      "population_density": "6234923"
+    },
+    {
+      "ISO3": "MLT",
+      "name": "Malta",
+      "region": "EMEA",
+      "population_density": "1234923"
+    },
+    {
+      "ISO3": "MRT",
+      "name": "Mauritania",
+      "region": "EMEA",
+      "population_density": "5234923"
+    },
+    {
+      "ISO3": "MUS",
+      "name": "Mauritius",
+      "region": "EMEA",
+      "population_density": "4234923"
+    },
+    {
+      "ISO3": "MDA",
+      "name": "Moldova",
+      "region": "EMEA",
+      "population_density": "4234923"
+    },
+    {
+      "ISO3": "MCO",
+      "name": "Monaco",
+      "region": "EMEA",
+      "population_density": "4234923"
+    },
+    {
+      "ISO3": "MNE",
+      "name": "Montenegro",
+      "region": "EMEA",
+      "population_density": "3234923"
+    },
+    {
+      "ISO3": "MAR",
+      "name": "Morocco",
+      "region": "EMEA",
+      "population_density": "3234923"
+    },
+    {
+      "ISO3": "MOZ",
+      "name": "Mozambique",
+      "region": "EMEA",
+      "population_density": "5234923"
+    },
+    {
+      "ISO3": "NAM",
+      "name": "Namibia",
+      "region": "EMEA",
+      "population_density": "4234923"
+    },
+    {
+      "ISO3": "NLD",
+      "name": "Netherlands",
+      "region": "EMEA",
+      "population_density": "3234923"
+    },
+    {
+      "ISO3": "NER",
+      "name": "Niger",
+      "region": "EMEA",
+      "population_density": "6234923"
+    },
+    {
+      "ISO3": "NGA",
+      "name": "Nigeria",
+      "region": "EMEA",
+      "population_density": "4234923"
+    },
+    {
+      "ISO3": "NOR",
+      "name": "Norway",
+      "region": "EMEA",
+      "population_density": "2234923"
+    },
+    {
+      "ISO3": "OMN",
+      "name": "Oman",
+      "region": "EMEA",
+      "population_density": "4234923"
+    },
+    {
+      "ISO3": "PSE",
+      "name": "Palestine",
+      "region": "EMEA",
+      "population_density": "4234923"
+    },
+    {
+      "ISO3": "POL",
+      "name": "Poland",
+      "region": "EMEA",
+      "population_density": "3234923"
+    },
+    {
+      "ISO3": "PRT",
+      "name": "Portugal",
+      "region": "EMEA",
+      "population_density": "3234923"
+    },
+    {
+      "ISO3": "QAT",
+      "name": "Qatar",
+      "region": "EMEA",
+      "population_density": "3234923"
+    },
+    {
+      "ISO3": "ROU",
+      "name": "Romania",
+      "region": "EMEA",
+      "population_density": "4234923"
+    },
+    {
+      "ISO3": "RWA",
+      "name": "Rwanda",
+      "region": "EMEA",
+      "population_density": "5234923"
+    },
+    {
+      "ISO3": "SMR",
+      "name": "San Marino",
+      "region": "EMEA",
+      "population_density": "3234923"
+    },
+    {
+      "ISO3": "STP",
+      "name": "Sao Tome and Principe",
+      "region": "EMEA",
+      "population_density": "4234923"
+    },
+    {
+      "ISO3": "SAU",
+      "name": "Saudi Arabia",
+      "region": "EMEA",
+      "population_density": "3234923"
+    },
+    {
+      "ISO3": "SEN",
+      "name": "Senegal",
+      "region": "EMEA",
+      "population_density": "5234923"
+    },
+    {
+      "ISO3": "SRB",
+      "name": "Serbia",
+      "region": "EMEA",
+      "population_density": "4234923"
+    },
+    {
+      "ISO3": "SVK",
+      "name": "Slovakia",
+      "region": "EMEA",
+      "population_density": "3234923"
+    },
+    {
+      "ISO3": "SVN",
+      "name": "Slovenia",
+      "region": "EMEA",
+      "population_density": "3234923"
+    },
+    {
+      "ISO3": "SOM",
+      "name": "Somalia",
+      "region": "EMEA",
+      "population_density": "6234923"
+    },
+    {
+      "ISO3": "ZAF",
+      "name": "South Africa",
+      "region": "EMEA",
+      "population_density": "3234923"
+    },
+    {
+      "ISO3": "ESP",
+      "name": "Spain",
+      "region": "EMEA",
+      "population_density": "3234923"
+    },
+    {
+      "ISO3": "SDN",
+      "name": "Sudan",
+      "region": "EMEA",
+      "population_density": "6234923"
+    },
+    {
+      "ISO3": "SWZ",
+      "name": "Swaziland",
+      "region": "EMEA",
+      "population_density": "5234923"
+    },
+    {
+      "ISO3": "SWE",
+      "name": "Sweden",
+      "region": "EMEA",
+      "population_density": "3234923"
+    },
+    {
+      "ISO3": "CHE",
+      "name": "Switzerland",
+      "region": "EMEA",
+      "population_density": "2234923"
+    },
+    {
+      "ISO3": "SYR",
+      "name": "Syria",
+      "region": "EMEA",
+      "population_density": "4234923"
+    },
+    {
+      "ISO3": "TZA",
+      "name": "Tanzania",
+      "region": "EMEA",
+      "population_density": "5234923"
+    },
+    {
+      "ISO3": "TGO",
+      "name": "Togo",
+      "region": "EMEA",
+      "population_density": "5234923"
+    },
+    {
+      "ISO3": "TUN",
+      "name": "Tunisia",
+      "region": "EMEA",
+      "population_density": "3234923"
+    },
+    {
+      "ISO3": "TUR",
+      "name": "Turkey",
+      "region": "EMEA",
+      "population_density": "3234923"
+    },
+    {
+      "ISO3": "UGA",
+      "name": "Uganda",
+      "region": "EMEA",
+      "population_density": "5234923"
+    },
+    {
+      "ISO3": "UKR",
+      "name": "Ukraine",
+      "region": "EMEA",
+      "population_density": "3234923"
+    },
+    {
+      "ISO3": "ARE",
+      "name": "United Arab Emirates",
+      "region": "EMEA",
+      "population_density": "3234923"
+    },
+    {
+      "ISO3": "GBR",
+      "name": "United Kingdom",
+      "region": "EMEA",
+      "population_density": "2234923"
+    },
+    {
+      "ISO3": "VAT",
+      "name": "Vatican City",
+      "region": "EMEA",
+      "population_density": "2234923"
+    },
+    {
+      "ISO3": "ESH",
+      "name": "Western Sahara",
+      "region": "EMEA",
+      "population_density": "2234923"
+    },
+    {
+      "ISO3": "YEM",
+      "name": "Yemen",
+      "region": "EMEA",
+      "population_density": "5234923"
+    },
+    {
+      "ISO3": "ZMB",
+      "name": "Zambia",
+      "region": "EMEA",
+      "population_density": "5234923"
+    },
+    {
+      "ISO3": "ZWE",
+      "name": "Zimbabwe",
+      "region": "EMEA",
+      "population_density": "5234923"
+    },
+    {
+      "ISO3": "BLZ",
+      "name": "Belize",
+      "region": "LATAM",
+      "population_density": "4234923"
+    },
+    {
+      "ISO3": "CRI",
+      "name": "Costa Rica",
+      "region": "LATAM",
+      "population_density": "3234923"
+    },
+    {
+      "ISO3": "SLV",
+      "name": "El Salvador",
+      "region": "LATAM",
+      "population_density": "4234923"
+    },
+    {
+      "ISO3": "GTM",
+      "name": "Guatemala",
+      "region": "LATAM",
+      "population_density": "4234923"
+    },
+    {
+      "ISO3": "HND",
+      "name": "Honduras",
+      "region": "LATAM",
+      "population_density": "4234923"
+    },
+    {
+      "ISO3": "MEX",
+      "name": "Mexico",
+      "region": "LATAM",
+      "population_density": "3234923"
+    },
+    {
+      "ISO3": "NIC",
+      "name": "Nicaragua",
+      "region": "LATAM",
+      "population_density": "4234923"
+    },
+    {
+      "ISO3": "PAN",
+      "name": "Panama",
+      "region": "LATAM",
+      "population_density": "4234923"
+    },
+    {
+      "ISO3": "ARG",
+      "name": "Argentina",
+      "region": "LATAM",
+      "population_density": "3234923"
+    },
+    {
+      "ISO3": "BOL",
+      "name": "Bolivia",
+      "region": "LATAM",
+      "population_density": "4234923"
+    },
+    {
+      "ISO3": "BRA",
+      "name": "Brazil",
+      "region": "LATAM",
+      "population_density": "3234923"
+    },
+    {
+      "ISO3": "CHL",
+      "name": "Chile",
+      "region": "LATAM",
+      "population_density": "3234923"
+    },
+    {
+      "ISO3": "COL",
+      "name": "Colombia",
+      "region": "LATAM",
+      "population_density": "3234923"
+    },
+    {
+      "ISO3": "ECU",
+      "name": "Ecuador",
+      "region": "LATAM",
+      "population_density": "4234923"
+    },
+    {
+      "ISO3": "GUF",
+      "name": "French Guiana",
+      "region": "LATAM",
+      "population_density": "4234923"
+    },
+    {
+      "ISO3": "GUY",
+      "name": "Guyana",
+      "region": "LATAM",
+      "population_density": "4234923"
+    },
+    {
+      "ISO3": "PRY",
+      "name": "Paraguay",
+      "region": "LATAM",
+      "population_density": "3234923"
+    },
+    {
+      "ISO3": "PER",
+      "name": "Peru",
+      "region": "LATAM",
+      "population_density": "4234923"
+    },
+    {
+      "ISO3": "SUR",
+      "name": "Suriname",
+      "region": "LATAM",
+      "population_density": "4234923"
+    },
+    {
+      "ISO3": "URY",
+      "name": "Uruguay",
+      "region": "LATAM",
+      "population_density": "3234923"
+    },
+    {
+      "ISO3": "VEN",
+      "name": "Venezuela",
+      "region": "LATAM",
+      "population_density": "3234923"
+    },
+    {
+      "ISO3": "BHS",
+      "name": "Bahamas",
+      "region": "LATAM",
+      "population_density": "3234923"
+    },
+    {
+      "ISO3": "CUB",
+      "name": "Cuba",
+      "region": "LATAM",
+      "population_density": "4234923"
+    },
+    {
+      "ISO3": "MTQ",
+      "name": "Martinique",
+      "region": "LATAM",
+      "population_density": "4234923"
+    },
+    {
+      "ISO3": "JAM",
+      "name": "Jamaica",
+      "region": "LATAM",
+      "population_density": "4234923"
+    },
+    {
+      "ISO3": "HTI",
+      "name": "Haiti",
+      "region": "LATAM",
+      "population_density": "5234923"
+    },
+    {
+      "ISO3": "DOM",
+      "name": "Dominican Republic",
+      "region": "LATAM",
+      "population_density": "4234923"
+    },
+    {
+      "ISO3": "PRI",
+      "name": "Puerto Rico",
+      "region": "LATAM",
+      "population_density": "4234923"
+    },
+    {
+      "ISO3": "BL",
+      "name": "Saint-Barthélemy",
+      "region": "LATAM",
+      "population_density": "4234923"
+    },
+    {
+      "ISO3": "MAF",
+      "name": "Saint Martin",
+      "region": "LATAM",
+      "population_density": "4234923"
+    },
+    {
+      "ISO3": "FLK",
+      "name": "Falkland Islands (Malvinas)",
+      "region": "LATAM",
+      "population_density": "4234923"
+    }
+  ],
+  "continent": [
+    {
+      "continent": "US",
+      "average": "12"
+    },
+    {
+      "continent": "EMEA",
+      "average": "24"
+    },
+    {
+      "continent": "LATAM",
+      "average": "18"
+    }
+  ]
+}

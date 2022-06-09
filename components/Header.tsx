@@ -30,14 +30,14 @@ function stringAvatar(name:any) {
 		sx: {
 			bgcolor: stringToColor(name),
 		},
-		children: `${name.split(" ")[0][0]}${name.split(" ")[1][0]}`,
+    children: `${name.split(" ")[0][0]}`.toUpperCase(),
 	};
 }
 
   return (
     <Box sx={{my:"20px"}} >
-      <AppBar position="static" elevation={0} color="transparent">
-        <Toolbar sx={{dislay: "flex", gap:"20px"}}>
+      <AppBar position="static" color="transparent" elevation={0}>
+        <Toolbar sx={{display: "flex", gap:"20px"}}>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1,  '-webkit-user-select':'none', 'user-select': 'none', fontWeight:"700", letterSpacing:"3px"}}>
             Evenity
           </Typography>
@@ -55,7 +55,7 @@ function stringAvatar(name:any) {
             </Badge>
           </IconButton>
           <IconButton>
-            <Avatar {...stringAvatar('Vinh Duong Quang')} />
+            <Avatar {...stringAvatar('duongquangvinh6@gmail.com')} />
           </IconButton>
         </Toolbar>
       </AppBar>

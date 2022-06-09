@@ -1,13 +1,19 @@
 .ticketWrap {
     border-radius: 20px !important;
+    max-height: 200px;
+}
+
+.ticketImage{
+    max-height: 200px;
+    width: 50%;
+    border-radius: 20px !important;
 }
 .ticketWrap:hover {
     .ticketContent {
-        div:nth-child(2) {
+        div:nth-child(3) {
             background-color: hwb(257 30% 5%);
             transition-duration: 1s;
-            transition-property: background-color;
-            transition-timing-function: ease-in-out;
+            transition-timing-function: ease;
         }
     }
 }
@@ -15,28 +21,62 @@
 .ticketContent {
     display: flex;
     flex-direction: row;
-    justify-content: left;
-    background-color: white;
+    height: 200px;
+    padding: 0;
+    padding-left: 2rem;
     div:nth-child(1) {
         display: flex;
         flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        margin-right: 28px;
+
         h2 {
-            font-weight: 700;
-            font-size: 1.2rem;
-        }
-        h3 {
-            margin-bottom: 50px;
-            font-size: 0.9rem;
             font-weight: 500;
-            font-style: italic;
+            font-size: 1.1rem;
+            color: #6A35F2;
         }
+
         p {
-            font-weight: 500;
-            font-size: 0.9rem;
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: #000000;
         }
     }
 
     div:nth-child(2) {
+        flex-direction: column;
+        display: flex;
+        justify-content: center;
+        * {
+            margin-bottom: 10px;
+        }
+
+        h2 {
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+
+        h3 {
+            font-weight: 500;
+            font-size: 0.9rem;
+            color: #C50606;
+        }
+
+        h4 {
+            font-weight: 500;
+            font-size: 1rem;
+            color: #969696;
+        }
+
+        h5 {
+            font-weight: 500;
+            font-size: 0.9rem;
+            font-style: italic;
+        }
+    }
+
+    div:nth-child(3) {
         display: flex;
         height: 35px;
         background-color: #ffffff;
@@ -47,11 +87,13 @@
         justify-content: center;
         align-items: center;
         padding: 20px 14px;
+
         svg {
             font-size: 1.4rem;
             font-weight: 500;
             display: block;
         }
+
         p {
             font-size: 1.2rem;
             font-weight: 500;
