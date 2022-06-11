@@ -1,7 +1,6 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
 import { EventPattern } from '@nestjs/microservices';
 import { AppService } from './app.service';
-import { CreateAuthDto } from './user-auth/dto/create.dto';
 
 @Controller()
 export class AppController {
@@ -13,7 +12,7 @@ export class AppController {
   }
 
   // @Post()
-  // handleCreateUser(@Body() dto: CreateAuthDto) { 
+  // handleCreateUser(@Body() dto: CreateAuthDto) {
   //   this.appService.handleCreateUser(dto);
   // }
 

@@ -1,29 +1,19 @@
-import { Body, Controller, Delete, Get, Param, Patch, UseGuards } from '@nestjs/common';
-import { UpdateHostDto } from '../host/dto/update-host.dto';
-import { UserJwtGuard } from '../user-auth/guard';
+import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Observable } from 'rxjs';
+import { Speaker } from './models/speaker.interface';
 import { SpeakerService } from './speaker.service';
 
-@UseGuards(UserJwtGuard)
 @Controller('speaker')
 export class SpeakerController {
-    constructor(private speakerService: SpeakerService) {}
-    @Get()
-  findAll() {
-    return this.speakerService.findAll();
+  constructor(private speakerService: SpeakerService) {}
+
+  @Get()
+  findAll(): Observable<Speaker[]> {
+    return this.speakerService.findAllSpeakers();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.speakerService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateHostDto: UpdateHostDto) {
-    return this.speakerService.update(+id, updateHostDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.speakerService.remove(+id);
+  @Post()
+  create(@Body() speaker: Speaker): Observable<Speaker> {
+    return this.speakerService.createSpeaker(speaker);
   }
 }

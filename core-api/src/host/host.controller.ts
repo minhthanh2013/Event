@@ -1,31 +1,19 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Observable } from 'rxjs';
 import { HostService } from './host.service';
-import { CreateHostDto } from './dto/create-host.dto';
-import { UpdateHostDto } from './dto/update-host.dto';
-import { HostJwtGuard } from '../host-auth/guard/host.jwt.guard';
+import { Host } from './models/host.interface';
 
 @Controller('host')
-@UseGuards(HostJwtGuard)
 export class HostController {
-  constructor(private readonly hostService: HostService) {}
-  
+  constructor(private hostService: HostService) {}
+
   @Get()
-  findAll() {
-    return this.hostService.findAll();
+  findAll(): Observable<Host[]> {
+    return this.hostService.findAllHosts();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.hostService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateHostDto: UpdateHostDto) {
-    return this.hostService.update(+id, updateHostDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.hostService.remove(+id);
+  @Post()
+  create(@Body() host: Host): Observable<Host> {
+    return this.hostService.createHost(host);
   }
 }

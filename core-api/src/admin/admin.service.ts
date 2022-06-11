@@ -1,26 +1,22 @@
 import { Injectable } from '@nestjs/common';
-import { CreateAdminDto } from './dto/create-admin.dto';
-import { UpdateAdminDto } from './dto/update-admin.dto';
-
+import { InjectRepository } from '@nestjs/typeorm';
+import { Observable } from 'rxjs/internal/Observable';
+import { from } from 'rxjs/internal/observable/from';
+import { Repository } from 'typeorm';
+import { AdminEntity } from './models/admin.entity';
+import { Admin } from './models/admin.interface';
 @Injectable()
 export class AdminService {
-  create(createAdminDto: CreateAdminDto) {
-    return 'This action adds a new admin';
+  constructor(
+    @InjectRepository(AdminEntity)
+    private readonly adminRepository: Repository<AdminEntity>,
+  ) {}
+
+  findAllAdmins(): Observable<Admin[]> {
+    return from(this.adminRepository.find());
   }
 
-  findAll() {
-    return `This action returns all admin`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} admin`;
-  }
-
-  update(id: number, updateAdminDto: UpdateAdminDto) {
-    return `This action updates a #${id} admin`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} admin`;
+  createAdmin(admin: Admin): Observable<Admin> {
+    return from(this.adminRepository.save(admin));
   }
 }

@@ -1,13 +1,12 @@
 import { Module } from '@nestjs/common';
 import { HostService } from './host.service';
 import { HostController } from './host.controller';
-import { HostAuthModule } from '../host-auth/host.auth.module';
-
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { HostEntity } from './models/host.entity';
 
 @Module({
-  imports: [HostAuthModule],
-  controllers: [HostController],
+  imports: [TypeOrmModule.forFeature([HostEntity])],
   providers: [HostService],
-  exports: [HostService],
+  controllers: [HostController],
 })
 export class HostModule {}

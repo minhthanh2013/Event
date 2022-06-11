@@ -1,12 +1,12 @@
 import { Module } from '@nestjs/common';
 import { ConferenceService } from './conference.service';
 import { ConferenceController } from './conference.controller';
-import { UserModule } from '../user/user.module';
-
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { ConferenceEntity } from './models/conference.entity';
 
 @Module({
-  imports: [UserModule],
+  imports: [TypeOrmModule.forFeature([ConferenceEntity])],
   providers: [ConferenceService],
-  controllers: [ConferenceController]
+  controllers: [ConferenceController],
 })
 export class ConferenceModule {}
