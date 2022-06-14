@@ -1,0 +1,39 @@
+.productWrap {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin-top: 160px;
+}
+
+.productContainer {
+    width: 80%;
+    display: flex;
+    margin: 0px auto;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.list__title {
+    font-size: 3.1rem;
+    font-weight: 600;
+    user-select: none;
+}
+
+.see__all {
+    font-size: 1.1rem;
+    text-decoration: underline;
+    font-weight: 600;
+    user-select: none;
+    cursor: pointer;
+
+    &:hover {
+        color: #6A35F2;
+        transition-duration: 1s;
+    }
+}
+
+.control__wrap {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+}

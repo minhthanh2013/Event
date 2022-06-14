@@ -1,0 +1,134 @@
+.container {
+    width: 100vw;
+    margin-top: 80px;
+    position: relative;
+
+    img {
+        position: absolute;
+        bottom: -10%;
+        left: 0;
+        z-index: 1;
+    }
+}
+
+.banner__wrap {
+    width: 90vw;
+
+    overflow: hidden;
+    margin: 0 auto;
+    background:
+        linear-gradient(0deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)),
+        linear-gradient(0deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)),
+        linear-gradient(180deg, #4F3398 0%, rgba(32, 21, 62, 0.40625) 74.75%, rgba(0, 0, 0, 0) 100%),
+        rgba(106, 53, 242, 0.6);
+    padding-top: 68px;
+    border-radius: 20px;
+
+    >div {
+        width: 75vw;
+        margin: 0 auto;
+
+        button {
+            color: white;
+            display: flex;
+            gap: 25px;
+        }
+
+        >div {
+            margin-top: 54px;
+            display: flex;
+            height: 410px;
+            margin-bottom: 162px;
+
+            div:nth-child(1) {
+                //left div
+                width: 68%;
+                min-width: 680px;
+                color: white;
+
+                display: flex;
+                flex-shrink: 0;
+                flex-direction: column;
+                justify-content: center;
+
+                padding-right: 12rem;
+
+                h2 {
+                    font-size: 2.4rem;
+                    font-weight: 600;
+                    line-height: 48px;
+                }
+
+                h3 {
+                    font-size: 1.1rem;
+                    font-weight: 500;
+                    font-style: italic;
+                    margin: 20px 0px;
+                }
+
+                h4 {
+                    font-size: 1.2rem;
+                    font-weight: 500;
+                    line-height: 30px;
+                }
+            }
+
+            div:nth-child(2) {
+                // right div
+                width: 32%;
+                min-width: 415px;
+                height: 100%;
+                border-radius: 20px;
+                background-color: white;
+                padding: 2.7% 3.5%;
+
+                >* {
+                    margin-bottom: 25px;
+                }
+
+                h2 {
+                    font-size: 1.8rem;
+                    font-weight: 600;
+                    line-height: 34px;
+                }
+
+                h3 {
+                    font-size: 1.1rem;
+                    font-weight: 500;
+                    color: #969696;
+                }
+
+                .button__1 {
+                    color: #6A35F2;
+                }
+
+                .button__2 {
+                    color: white;
+                    background-color: #6A35F2;
+                    width: 100%;
+                    height: 65px;
+                    border-radius: 20px;
+
+                    &:disabled {
+                        background-color: #C4C4C4;
+                        color: black
+                    }
+                }
+
+                .button__3 {
+                    width: 100%;
+                    height: 65px;
+                    color: white;
+                    background-color: #6A35F2;
+                    border-radius: 20px;
+
+                    &:disabled {
+                        background-color: #C4C4C4;
+                        color: black
+                    }
+                }
+            }
+        }
+    }
+
+}

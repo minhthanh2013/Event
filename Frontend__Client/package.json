@@ -1,0 +1,49 @@
+{
+  "name": "frontend",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev -p 3000",
+    "build": "next build",
+    "start": "next start -p 3000",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@emotion/cache": "^11.7.1",
+    "@emotion/css": "^11.9.0",
+    "@emotion/react": "^11.9.0",
+    "@emotion/server": "^11.4.0",
+    "@emotion/styled": "^11.8.1",
+    "@fontsource/roboto": "^4.5.7",
+    "@material-ui/core": "^4.12.4",
+    "@material-ui/icons": "^4.11.3",
+    "@mui/icons-material": "^5.6.1",
+    "@mui/material": "^5.6.4",
+    "@mui/styles": "^5.6.2",
+    "google-map-react": "^2.1.10",
+    "nest-next": "^9.6.0",
+    "next": "12.1.4",
+    "next-redux-wrapper": "^7.0.5",
+    "react": "18.0.0",
+    "react-dom": "18.0.0",
+    "react-icons": "^4.4.0",
+    "react-material-ui-carousel": "^2.3.11",
+    "react-redux": "^8.0.2",
+    "react-simple-maps": "^2.3.0",
+    "react-slick": "^0.29.0",
+    "redux": "^4.2.0",
+    "redux-devtools-extension": "^2.13.9",
+    "redux-thunk": "^2.4.1",
+    "sass": "^1.52.1",
+    "swiper": "^8.1.4"
+  },
+  "devDependencies": {
+    "@types/node": "17.0.23",
+    "@types/react": "18.0.1",
+    "@types/react-dom": "18.0.0",
+    "babel-plugin-styled-components": "^2.0.7",
+    "eslint": "8.13.0",
+    "eslint-config-next": "12.1.4",
+    "typescript": "4.6.3"
+  }
+}
