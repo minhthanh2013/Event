@@ -1,6 +1,12 @@
 # compiled output
 /core-api/dist
 /core-api/node_modules
+/payment/node_modules
+/payment/dist
+/redis/node_modules
+/redis/dist
+/zoom/node_modules
+/zoom/dist
 
 # Logs
 logs
