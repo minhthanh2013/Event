@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { AnalyticEntity } from 'src/analytic/models/analytic.entity';
 import { ComboSessionEntity } from 'src/combosession/models/combo_session.entiy';
 import { ConferenceCategoryEntity } from 'src/conferencecategory/models/conference_category.entity';

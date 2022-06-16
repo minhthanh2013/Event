@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ClientsModule, Transport } from '@nestjs/microservices';
@@ -43,7 +44,12 @@ import { TicketModule } from './ticket/ticket.module';
         password: configService.get('POSTGRES_PASS'),
         database: configService.get('POSTGRES_DATABASE'),
         autoLoadEntities: true,
+        migrations: ['src/migrations/**/*{.ts,.js}'],
         synchronize: false,
+        // migrations: [
+        //   'dist/src/evenity/migrations/*.js'
+        // ], 
+      migrationsTableName: "custom_migration_table",
       }),
       inject: [ConfigService],
     }),
