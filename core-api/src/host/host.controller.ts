@@ -15,7 +15,7 @@ import { HostService } from './host.service';
 import { Host } from './models/host.interface';
 
 @Controller('host')
-// @UseGuards(HostJwtGuard)
+@UseGuards(HostJwtGuard)
 export class HostController {
   constructor(private hostService: HostService) {}
 
