@@ -44,7 +44,7 @@ export class ConferenceEntity {
     default: () => 'CURRENT_TIMESTAMP',
   })
   update_at: Date;
-  @ManyToOne(() => HostEntity, (host) => host.conferences)
+  @ManyToOne(() => HostEntity, host => host.conferences)
   host: HostEntity;
   @Column({ default: false })
   isValidated: boolean;

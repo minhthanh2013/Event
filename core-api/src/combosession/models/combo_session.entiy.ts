@@ -11,6 +11,6 @@ export class ComboSessionEntity {
   host: HostEntity;
   @Column()
   total_ticket: number;
-  @OneToMany(() => ConferenceEntity, (conference) => conference.host)
+  @OneToMany(() => ConferenceEntity, (conference) => conference.comboSession)
   conferences: ConferenceEntity[];
 }

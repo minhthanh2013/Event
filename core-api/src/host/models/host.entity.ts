@@ -20,8 +20,8 @@ export class HostEntity {
   create_at: Date;
   @CreateDateColumn({ type: 'timestamp without time zone', default: () => 'NOW()' })
   update_at: Date;
-  @OneToMany(() => ConferenceEntity, (conference) => conference.host)
+  @OneToMany(() => ConferenceEntity, conference => conference.host)
   conferences: ConferenceEntity[]
-  @OneToMany(() => ConferenceEntity, (subscription) => subscription.host)
+  @OneToMany(() => SubscriptionEntity, (subscription) => subscription.host)
   subscriptions: SubscriptionEntity[]
 }
