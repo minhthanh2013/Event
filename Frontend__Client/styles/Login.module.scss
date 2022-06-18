@@ -41,7 +41,6 @@ $--txt-size--s: 1.125rem;
         display: flex;
         user-select: none;
         align-items: center;
-        width: 60%;
         margin: 0 auto;
         color: $--txt-color--secondary;
         p{
@@ -60,8 +59,11 @@ $--txt-size--s: 1.125rem;
         flex-direction: column;
         margin-top: 3rem;
     }
-
-}
+    .container__left{
+        width: 60%;
+        margin: 0 auto;
+    }
+}   
 
 
 

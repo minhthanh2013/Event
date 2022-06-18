@@ -15,35 +15,37 @@ const login = (props: Props) => {
 
 
                 <Box className={styles.left}>
-                    <Typography component="h2">
-                        Sign in to Evenity
-                    </Typography>
-                    <Box className={styles.iconLogin__section}>
-                        <IconButton>
-                            <FcGoogle />
-                        </IconButton>
-                        <IconButton style={{ color: "#3C5A99" }}>
-                            <BsFacebook />
-                        </IconButton>
-                    </Box>
-                    <Box className={styles.or__section}>
-                        <hr />
-                        <p>or</p>
-                        <hr />
-                    </Box>
-                    <Box className={styles.form__section}>
-                        <form>
-                            <Box className={styles.form__group}>
-                                <label>Username</label>
-                                <input type="text" placeholder="Username" />
-                                <div></div>
-                            </Box>
-                            <Box className={styles.form__group}>
-                                <label>Username</label>
-                                <input type="text" placeholder="Username" />
-                                <div></div>
-                            </Box>
-                        </form>
+                    <Box className={styles.container__left}>
+                        <Typography component="h2">
+                            Sign in to Evenity
+                        </Typography>
+                        <Box className={styles.iconLogin__section}>
+                            <IconButton>
+                                <FcGoogle />
+                            </IconButton>
+                            <IconButton style={{ color: "#3C5A99" }}>
+                                <BsFacebook />
+                            </IconButton>
+                        </Box>
+                        <Box className={styles.or__section}>
+                            <hr />
+                            <p>or</p>
+                            <hr />
+                        </Box>
+                        <Box className={styles.form__section}>
+                            <form>
+                                <Box className={styles.form__group}>
+                                    <label>Username</label>
+                                    <input type="text" placeholder="Username" />
+                                    <div></div>
+                                </Box>
+                                <Box className={styles.form__group}>
+                                    <label>Username</label>
+                                    <input type="text" placeholder="Username" />
+                                    <div></div>
+                                </Box>
+                            </form>
+                        </Box>
                     </Box>
                 </Box>
                 <Box className={styles.right}>
