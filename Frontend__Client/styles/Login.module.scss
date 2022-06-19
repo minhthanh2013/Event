@@ -58,11 +58,25 @@ $--txt-size--s: 1.125rem;
         display: flex;
         flex-direction: column;
         margin-top: 3rem;
+        width: 100%;
+        form{
+            div{
+                display: flex;
+                flex-direction: column;
+                gap: 1rem;
+                input{
+                    padding: 1rem 10px;
+                    outline: none;
+                }
+            }
+        }
     }
     .container__left{
         width: 60%;
         margin: 0 auto;
     }
+
+
 }   
 
 

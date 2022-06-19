@@ -22,6 +22,7 @@
     "@mui/styles": "^5.6.2",
     "@mui/x-date-pickers": "^5.0.0-alpha.6",
     "@zoomus/websdk": "^2.4.5",
+    "formik": "^2.2.9",
     "google-map-react": "^2.1.10",
     "nest-next": "^9.6.0",
     "next": "12.1.4",
@@ -39,7 +40,8 @@
     "redux-devtools-extension": "^2.13.9",
     "redux-thunk": "^2.4.1",
     "sass": "^1.52.1",
-    "swiper": "^8.1.4"
+    "swiper": "^8.1.4",
+    "yup": "^0.32.11"
   },
   "devDependencies": {
     "@types/node": "17.0.23",

@@ -6,6 +6,9 @@ import { FcGoogle } from 'react-icons/fc'
 import { BsFacebook } from 'react-icons/bs'
 import React from 'react'
 import styles from '../../styles/Login.module.scss'
+import { Formik } from "formik";
+import * as Yup from "yup";
+
 type Props = {}
 
 const login = (props: Props) => {
@@ -40,10 +43,11 @@ const login = (props: Props) => {
                                     <div></div>
                                 </Box>
                                 <Box className={styles.form__group}>
-                                    <label>Username</label>
-                                    <input type="text" placeholder="Username" />
+                                    <label>Password</label>
+                                    <input type="text" placeholder="Password" />
                                     <div></div>
                                 </Box>
+
                             </form>
                         </Box>
                     </Box>
