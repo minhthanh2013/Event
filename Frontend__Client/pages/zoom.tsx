@@ -8,7 +8,9 @@ const DynamicComponentWithNoSSR = dynamic(
 
 const Zoom = () => {
     return (
-        <>
+        <>          
+        <link type="text/css" rel="stylesheet" href="https://source.zoom.us/2.4.5/css/bootstrap.css" />
+        <link type="text/css" rel="stylesheet" href="https://source.zoom.us/2.4.5/css/react-select.css" />
             <DynamicComponentWithNoSSR />
         </>
     )

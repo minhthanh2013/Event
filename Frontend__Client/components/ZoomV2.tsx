@@ -14,13 +14,13 @@ ZoomMtg.i18n.reload('en-US');
 const ZoomV2 = () => {
 
   useEffect(() => {
-
-  }, []);
+    getSignature();
+  }, [getSignature]);
   // setup your signature endpoint here: https://github.com/zoom/meetingsdk-sample-signature-node.js
   var signatureEndpoint = 'http://localhost:4000'
   // This Sample App has been updated to use SDK App type credentials https://marketplace.zoom.us/docs/guides/build/sdk-app
   var sdkKey = 'OWYLmd5UiEI0RchfL8tCFQapDQ7lqOzjNAi6'
-  var meetingNumber = '123456789'
+  var meetingNumber = '82670694562'
   var role = 0
   var leaveUrl = 'http://localhost:3000'
   var userName = 'React'
@@ -31,9 +31,8 @@ const ZoomV2 = () => {
   // Webinars: https://marketplace.zoom.us/docs/sdk/native-sdks/web/client-view/webinars#join-registered
   var registrantToken = ''
 
-  function getSignature(e: any) {
-    e.preventDefault();
-
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  function getSignature() {
     fetch(signatureEndpoint, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -42,19 +41,18 @@ const ZoomV2 = () => {
         role: role
       })
     }).then(res => res.json())
-      .then(response => {
-        startMeeting(response.signature)
-      }).catch(error => {
-        console.error(error)
-      })
+    .then(response => {
+      startMeeting(response.signature)
+    }).catch(error => {
+      console.error(error)
+    })
   }
 
   function startMeeting(signature: any) {
+    console.log(signature)
     ZoomMtg.init({
       leaveUrl: leaveUrl,
       success: (success: any) => {
-        console.log(success)
-
         ZoomMtg.join({
           signature: signature,
           meetingNumber: meetingNumber,
@@ -82,14 +80,14 @@ const ZoomV2 = () => {
     <div>
       <main>
         <h1>Zoom Meeting SDK Sample React</h1>
-        <button onClick={() => getSignature}>Join Meeting</button>
+        {/* <button onClick={() => getSignature}>Join Meeting</button> */}
       </main>
 
-      <style global jsx>{`
+      {/* <style global jsx>{`
         .zmmtg-root{
           display: none !important;
         }
-      `}</style>
+      `}</style> */}
     </div>
   );
 }
