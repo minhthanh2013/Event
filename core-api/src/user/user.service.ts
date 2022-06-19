@@ -21,6 +21,9 @@ export class UserService {
     return from(this.userRepository.find());
   }
 
+  findOne(id: number): Observable<User> {
+    return from(this.userRepository.findOne({where: {user_id: id}}));
+  }
 
   async signinUser(dto: UserAuthDto) {
     // find the user by email

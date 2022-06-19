@@ -5,6 +5,7 @@ import {
   Get,
   HttpCode,
   HttpStatus,
+  Param,
   Post,
   UseGuards,
 } from '@nestjs/common';
@@ -23,7 +24,10 @@ export class HostController {
   findAll(): Observable<Host[]> {
     return this.hostService.findAllHosts();
   }
-
+  @Get(':id')
+  findOne(@Param('id') id: string): Observable<Host> {
+    return this.hostService.findOne(+id);
+  }
   @Post('signup')
   create(@Body() host: Host) {
     return this.hostService.createHost(host);

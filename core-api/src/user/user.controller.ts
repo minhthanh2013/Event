@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { Body, Controller, Get, HttpCode, HttpStatus, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, HttpStatus, Param, Post, UseGuards } from '@nestjs/common';
 import { Observable } from 'rxjs/internal/Observable';
 import { HostAuthDto } from 'src/host/dto/host.auth';
 import { UserJwtGuard } from './guard/user.jwt.guard';
@@ -16,7 +16,11 @@ export class UserController {
   findAll(): Observable<User[]> {
     return this.userService.findAllUsers();
   }
-
+  @Get(':id')
+  @UseGuards(UserJwtGuard)
+  findOne(@Param('id') id: string): Observable<User> {
+    return this.userService.findOne(+id);
+  }
   @Post("signup")
   createUser(@Body() user: User) {
     return this.userService.signupUser(user);

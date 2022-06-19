@@ -20,7 +20,9 @@ export class HostService {
   findAllHosts(): Observable<Host[]> {
     return from(this.hostRepository.find());
   }
-
+  findOne(id: number): Observable<Host> {
+    return from(this.hostRepository.findOne({where: {host_id: id}}));
+  }
   async signinHost(dto: HostAuthDto) {
        // find the user by email
        const host = await this.hostRepository.findOne({
