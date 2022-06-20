@@ -17,7 +17,7 @@ const ZoomV2 = () => {
     getSignature();
   }, [getSignature]);
   // setup your signature endpoint here: https://github.com/zoom/meetingsdk-sample-signature-node.js
-  var signatureEndpoint = 'http://localhost:4000'
+  var signatureEndpoint = 'http://localhost:3001/zoom'
   // This Sample App has been updated to use SDK App type credentials https://marketplace.zoom.us/docs/guides/build/sdk-app
   var sdkKey = 'OWYLmd5UiEI0RchfL8tCFQapDQ7lqOzjNAi6'
   var meetingNumber = '82670694562'
@@ -33,15 +33,20 @@ const ZoomV2 = () => {
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   function getSignature() {
+    const myHeaders = new Headers();
+    myHeaders.append('Content-Type', 'application/json');
+    myHeaders.append('Access-Control-Allow-Origin', '*');
     fetch(signatureEndpoint, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: myHeaders,
       body: JSON.stringify({
         meetingNumber: meetingNumber,
         role: role
       })
-    }).then(res => res.json())
+    })
+    .then(res => res.json())
     .then(response => {
+      console.log(response)
       startMeeting(response.signature)
     }).catch(error => {
       console.error(error)
