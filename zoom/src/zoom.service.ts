@@ -29,6 +29,7 @@ export class ZoomService {
   
     const sHeader = JSON.stringify(oHeader)
     const sPayload = JSON.stringify(oPayload)
-    return KJUR.jws.JWS.sign('HS256', sHeader, sPayload, this.config.get('ZOOM_SDK_SECRET'))
+    const signature = KJUR.jws.JWS.sign('HS256', sHeader, sPayload, this.config.get('ZOOM_SDK_SECRET'));
+    return JSON.stringify({signature: signature});
   }
 }

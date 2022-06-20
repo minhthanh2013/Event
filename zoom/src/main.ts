@@ -4,6 +4,7 @@ import {  ZoomModule } from './zoom.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(ZoomModule);
+  app.enableCors();
   app.connectMicroservice({
     transport: Transport.TCP,
     options: {
