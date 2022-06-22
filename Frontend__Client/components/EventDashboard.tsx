@@ -85,43 +85,9 @@ const EventDashboard = (props: EventDashboard) => {
           position: "relative",
         }}
       >
-        <Box
-          sx={{
-            position: "absolute",
-            top: "-360px",
-            left: "-220px",
-            width: "500px",
-            height: "700px",
-            background:
-              "radial-gradient(50% 50% at 50% 50%, rgba(106, 53, 242, 0.77) 0%, rgba(151, 125, 219, 0.385) 50%, rgba(151, 125, 219, 0.385) 50.01%, rgba(196, 196, 196, 0) 100%)",
-            borderRadius: "50%",
-          }}
-        ></Box>
-
-        <Box
-          sx={{
-            position: "absolute",
-            top: "40%",
-            right: "-320px",
-            width: "500px",
-            height: "700px",
-            background:
-              "radial-gradient(50% 50% at 50% 50%, rgba(106, 53, 242, 0.77) 0%, rgba(151, 125, 219, 0.385) 50%, rgba(151, 125, 219, 0.385) 50.01%, rgba(196, 196, 196, 0) 100%)",
-            borderRadius: "50%",
-          }}
-        ></Box>
-        <Box
-          sx={{
-            position: "absolute",
-            left: "-340px",
-            width: "833px",
-            bottom: "-220px",
-            height: "700px",
-            background:
-              "radial-gradient(50% 50% at 50% 50%, rgba(106, 53, 242, 0.77) 0%, rgba(151, 125, 219, 0.385) 50%, rgba(151, 125, 219, 0.385) 50.01%, rgba(196, 196, 196, 0) 100%)",
-            borderRadius: "50%",
-          }}
-        ></Box>
+        <Box className={styles.dot__1}></Box>
+        <Box className={styles.dot__2}></Box>
+        <Box className={styles.dot__3}></Box>
         <Header />
 
         <Typography variant="h3" component="div" className={styles.header}>

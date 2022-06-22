@@ -8,6 +8,7 @@ import Badge from "@mui/material/Badge";
 import MailOutlineIcon from "@mui/icons-material/MailOutline";
 import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
 import Avatar from "@mui/material/Avatar";
+import Link from 'next/link'
 
 interface HeaderProps {}
 const Header = (props: HeaderProps) => {
@@ -43,7 +44,10 @@ function stringAvatar(name:any) {
           </Typography>
           <Button variant='text' sx={{color:"#000000"}} >Login</Button>
           <Button variant='text' sx={{color:"#000000"}}>Sign up</Button>
+          <Link href="/EventDashboard" passHref>
           <Button variant='text' sx={{color:"#6A35F2"}}>create an event</Button>
+          </Link>
+          
           <IconButton>
             <Badge badgeContent={2} sx={{color:"#6A35F2", "&  span":{backgroundColor: "#6A35F2", color:"#ffffff"}}}>
               <MailOutlineIcon />

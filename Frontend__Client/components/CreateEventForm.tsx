@@ -134,6 +134,9 @@ export const Speakers = () => {
     setOpen(false);
   };
 
+  const onFinish = () => {
+    console.log(speakers);
+  }
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
 
@@ -197,14 +200,12 @@ export const Speakers = () => {
     let arr: Speaker[] = [];
     speakers?.forEach((speaker) => temp.push(Object.assign({}, speaker)));
     speakers !== undefined ? (arr = temp.splice(index, 1)) : (temp = []);
-    console.log(temp);
-    console.log(index);
     setSpeakers(temp);
   };
 
   return (
     <>
-      {speakers?.length === undefined ? (
+      {speakers?.length === undefined || speakers?.length < 1 ? (
         <Grid container spacing={0} direction="column" alignItems="center">
           <InterpreterModeIcon
             className={styles.speakersIcon}
@@ -231,7 +232,7 @@ export const Speakers = () => {
               <Alert
                 key={index}
                 severity="success"
-                icon={false}
+                icon={false}  
                 className={styles.infoBox}
                 action={
                   <IconButton
@@ -257,13 +258,22 @@ export const Speakers = () => {
               </Alert>
             </>
           ))}
-          <Button
-            className={styles.inviteBtn}
-            variant="outlined"
-            onClick={handleOpen}
-          >
-            Add Spreakers
-          </Button>
+          <Box sx={{marginTop: "2px", width: "80%", alignSelf: "center"}}>
+            <Button
+              sx={{ width:"12rem" }}
+              variant="outlined"
+              onClick={handleOpen}
+            >
+              Add Spreakers
+            </Button>
+            <Button
+              sx={{ width:"12rem", float:"right" }}
+              variant="contained"
+              onClick={onFinish}
+            >
+              Next
+            </Button>
+          </Box>
           <Popup />
         </Stack>
       )}
@@ -279,9 +289,9 @@ export const Date = () => {
     formState: { errors },
   } = useForm();
 
-  const [value, setValue] = useState<Date | null>(null);
-  const [value2, setValue2] = useState<Date | null>(null);
-  const [value3, setValue3] = useState<Date | null>(null);
+  const [eventStart, setEventStart] = useState<Date | null>(null);
+  const [ticketStart, setTicketStart] = useState<Date | null>(null);
+  const [ticketEnd, setTicketEnd] = useState<Date | null>(null);
   const onSubmit = (data: any) => console.log(data);
 
   return (
@@ -299,10 +309,10 @@ export const Date = () => {
               <DatePicker
                 label="Event start date"
                 inputFormat="dd/MM/yyyy"
-                value={value}
+                value={eventStart}
                 disablePast
                 onChange={(newValue: Date | null) => {
-                  setValue(newValue);
+                  setEventStart(newValue);
                 }}
                 renderInput={(params) => (
                   <TextField
@@ -316,10 +326,10 @@ export const Date = () => {
               <DatePicker
                 label="Ticket sales start"
                 inputFormat="dd/MM/yyyy"
-                value={value2}
+                value={ticketStart}
                 disablePast
                 onChange={(newValue: Date | null) => {
-                  setValue2(newValue);
+                  setTicketStart(newValue);
                 }}
                 renderInput={(params) => (
                   <TextField
@@ -333,17 +343,18 @@ export const Date = () => {
               <DatePicker
                 label="Ticket sales end"
                 inputFormat="dd/MM/yyyy"
-                value={value3}
+                value={ticketEnd}
+                minDate={ticketStart === null? undefined: ticketStart}
                 disablePast
                 onChange={(newValue: Date | null) => {
-                  setValue3(newValue);
+                  setTicketEnd(newValue);
                 }}
                 renderInput={(params) => (
                   <TextField
                     className={styles.dateFields}
                     required
                     {...params}
-                    value={value3}
+                    value={ticketEnd}
                     {...register("ticketEnd")}
                   />
                 )}
