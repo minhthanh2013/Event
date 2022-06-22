@@ -156,7 +156,7 @@ const EventDashboard = (props: EventDashboard) => {
                 <BasicInfo />
               </TabPanel>
               <TabPanel value={value} index={1}>
-                <Speakers/>
+                <Speakers />
               </TabPanel>
               <TabPanel value={value} index={2}>
                 <Date />
