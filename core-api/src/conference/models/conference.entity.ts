@@ -64,4 +64,6 @@ export class ConferenceEntity {
   comboSession: ComboSessionEntity;
   @ManyToOne(() => SpeakerEntity, (speaker) => speaker.conferences)
   speaker: SpeakerEntity;
+  @Column('float')
+  price: number;
 }
