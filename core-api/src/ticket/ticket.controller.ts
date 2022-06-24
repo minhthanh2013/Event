@@ -1,5 +1,7 @@
 /* eslint-disable prettier/prettier */
+import { InjectQueue } from '@nestjs/bull';
 import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
+import { Queue } from 'bull';
 import { Observable } from 'rxjs';
 import { UpdateResult, DeleteResult } from 'typeorm';
 import { Ticket } from './models/ticket.interface';
@@ -7,7 +9,9 @@ import { TicketService } from './ticket.service';
 
 @Controller('ticket')
 export class TicketController {
-  constructor(private ticketService: TicketService) {}
+  constructor(
+    private ticketService: TicketService,
+    @InjectQueue('ticket') private ticketQueue: Queue) {}
 
   @Get()
   findAll(): Observable<Ticket[]> {
@@ -18,8 +22,12 @@ export class TicketController {
     return this.ticketService.findOne(+id);
   }
   @Post()
-  create(@Body() ticket: Ticket): Observable<Ticket> {
-    return this.ticketService.create(ticket);
+  async create(@Body() ticket: Ticket) {
+    console.log('Added to queue')
+    await this.ticketQueue.add('create', {
+      ticketBody: ticket
+    })
+    // return this.ticketService.create(ticket);
   }
   @Patch(':id')
   update(@Param('id') id: number, @Body() ticket: Ticket): Observable<UpdateResult> {
