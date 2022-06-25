@@ -1,4 +1,5 @@
-import { OnQueueActive, Process, Processor } from '@nestjs/bull';
+/* eslint-disable prettier/prettier */
+import { Process, Processor } from '@nestjs/bull';
 import { Job } from 'bull';
 import { TicketService } from './ticket.service';
 
@@ -11,6 +12,4 @@ export class TicketProcessor {
     console.log('create ticket');
     await this.ticketService.create(job.data);
   }
-
-  
 }

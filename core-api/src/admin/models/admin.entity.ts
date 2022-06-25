@@ -1,13 +1,19 @@
+/* eslint-disable prettier/prettier */
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
-
 @Entity('Admin')
 export class AdminEntity {
-  @PrimaryGeneratedColumn()
-  admin_id: number;
-  @Column()
+  @PrimaryGeneratedColumn('increment')
+  admin_id: string;
+  @Column({
+    name: 'user_name',
+  })
   user_name: string;
-  @Column()
+  @Column({
+    name: 'password',
+  })
   password: string;
-  @Column()
+  @Column({
+    name: 'email',
+  })
   email: string;
 }

@@ -31,7 +31,7 @@ export class AdminController {
   @Get(':id')
   @UseGuards(AdminJwtGuard)
   findOne(@Param('id') id: string): Observable<Admin>  {
-    return this.adminService.findOne(+id);
+    return this.adminService.findOne(id);
   }
 
   @Patch(':id')

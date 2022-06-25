@@ -1,6 +1,7 @@
+/* eslint-disable prettier/prettier */
 import { IsEmail } from 'class-validator';
 import { TicketEntity } from 'src/ticket/models/ticket.entity';
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('User')
 export class UserEntity {
@@ -22,5 +23,9 @@ export class UserEntity {
   @Column()
   update_at: Date;
   @OneToMany(() => TicketEntity, (ticket) => ticket.buyer)
+  @JoinColumn({
+    name: 'user_id',
+    referencedColumnName: 'buyer_id',
+  })
   tickets: TicketEntity[];
 }

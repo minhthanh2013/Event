@@ -17,17 +17,19 @@ export class TicketController {
   findAll(): Observable<Ticket[]> {
     return this.ticketService.findAll();
   }
+  
   @Get(':id')
   findOne(@Param('id') id: string): Observable<Ticket> {
     return this.ticketService.findOne(+id);
   }
+
   @Post()
+  // async create(@Body() ticket: Ticket) {
   async create(@Body() ticket: Ticket) {
     console.log('Added to queue')
     await this.ticketQueue.add('create', {
       ticketBody: ticket
     })
-    // return this.ticketService.create(ticket);
   }
   @Patch(':id')
   update(@Param('id') id: number, @Body() ticket: Ticket): Observable<UpdateResult> {
