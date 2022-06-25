@@ -28,11 +28,23 @@ import { SpeakerModule } from './speaker/speaker.module';
 import { SubscriptionModule } from './subscription/subscription.module';
 import { SubscriptionplanModule } from './subscriptionplan/subscriptionplan.module';
 import { TicketModule } from './ticket/ticket.module';
+import { BullModule } from '@nestjs/bull';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
+    }),
+    // Bull config
+    BullModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: (configService: ConfigService) => ({
+        redis: {
+          host: configService.get('REDIS_HOST'),
+          port: configService.get('REDIS_PORT'),
+        }
+      }),
+      inject: [ConfigService]
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
@@ -46,6 +58,8 @@ import { TicketModule } from './ticket/ticket.module';
         autoLoadEntities: true,
         migrations: ['src/migrations/**/*{.ts,.js}'],
         synchronize: false,
+        // Turn logging to true to see all the SQL queries
+        logging: true,
         // migrations: [
         //   'dist/src/evenity/migrations/*.js'
         // ], 

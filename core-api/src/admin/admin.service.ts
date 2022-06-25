@@ -21,7 +21,7 @@ export class AdminService {
     return from(this.adminRepository.find());
   }
 
-  findOne(id: number): Observable<Admin> {
+  findOne(id: string): Observable<Admin> {
     return from(this.adminRepository.findOne({where: {admin_id: id}}));
   }
 
@@ -64,15 +64,19 @@ export class AdminService {
     // save the new user in the db
     try{
       dto.password = hash;
-        const admin = await this.adminRepository.save({
-          ...dto,
-        });
-        return this.signToken(admin.admin_id, admin.email, 'admin');
+      const newAdmin = new AdminEntity();
+      newAdmin.user_name = dto.user_name;
+      newAdmin.password = dto.password;
+      newAdmin.admin_id = dto.admin_id;
+      newAdmin.email = dto.email;
+      console.log(newAdmin)
+      const admin = await this.adminRepository.save(newAdmin);
+      return this.signToken(admin.admin_id, admin.email, 'admin');
     } catch(error) {
         throw error;
     }
   }
-  async signToken(userId: number, username: string, role: string): Promise<{access_token: string}> {
+  async signToken(userId: string, username: string, role: string): Promise<{access_token: string}> {
     const payload = {
         sub: userId,
         username,

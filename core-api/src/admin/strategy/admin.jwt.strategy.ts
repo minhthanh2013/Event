@@ -24,7 +24,7 @@ export class AdminJwtStrategy extends PassportStrategy(Strategy, 'admin-jwt') {
     });
   }
 
-  async validate(payload: { sub: number; username: string; role: string }) {
+  async validate(payload: { sub: string; username: string; role: string }) {
     if (payload.role != null && payload.role != 'admin') {
       throw new UnauthorizedException('Unauthorized');
     }

@@ -20,7 +20,10 @@ export class ConferenceService {
     return from(this.conferenceRepository.findOne({where: {conference_id: id}}));
   }
   createConference(conference: Conference): Observable<Conference> {
-    return from(this.conferenceRepository.save(conference));
+    return from(this.conferenceRepository.save({
+      isValidated: true,
+      ...conference,
+    }));
   }
   update(id: number, conference: Conference): Observable<UpdateResult> {
     return from(this.conferenceRepository.update(id, conference));

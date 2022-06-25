@@ -1,4 +1,5 @@
 /* eslint-disable prettier/prettier */
+import { AdminEntity } from 'src/admin/models/admin.entity';
 import { AnalyticEntity } from 'src/analytic/models/analytic.entity';
 import { ComboSessionEntity } from 'src/combosession/models/combo_session.entiy';
 import { ConferenceCategoryEntity } from 'src/conferencecategory/models/conference_category.entity';
@@ -9,6 +10,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
   ManyToOne,
   OneToOne,
   PrimaryGeneratedColumn,
@@ -44,26 +46,52 @@ export class ConferenceEntity {
     default: () => 'CURRENT_TIMESTAMP',
   })
   update_at: Date;
-  @ManyToOne(() => HostEntity, host => host.conferences)
-  host: HostEntity;
   @Column({ default: false })
   isValidated: boolean;
   @OneToOne(
     () => ConferenceTypeEntity,
     (conferenceType) => conferenceType.type_id,
   )
+  @JoinColumn({
+    name: 'conference_type',
+    referencedColumnName: 'type_id',
+  })
   conference_type: ConferenceTypeEntity;
   @OneToOne(
     () => ConferenceCategoryEntity,
     (conferenceCategory) => conferenceCategory.category_id,
   )
+  @JoinColumn({
+    name: 'conference_category',
+    referencedColumnName: 'category_id',
+  })
   conference_category: ConferenceCategoryEntity;
   @OneToOne(() => AnalyticEntity, (analytic) => analytic.analytic_id)
   analytic_detail: AnalyticEntity;
+  @OneToOne(() => AdminEntity, (admin) => admin.admin_id)
+  @JoinColumn({
+    name: 'admin_id',
+    referencedColumnName: 'admin_id',
+  })
+  admin_id: AdminEntity;
   @ManyToOne(() => ComboSessionEntity, (session) => session.conferences)
+  @JoinColumn({
+    name: "combo_id",
+    referencedColumnName: "combo_id"
+  })
   comboSession: ComboSessionEntity;
   @ManyToOne(() => SpeakerEntity, (speaker) => speaker.conferences)
+  @JoinColumn({
+    name: "speaker_id",
+    referencedColumnName: "user_id"
+  })
   speaker: SpeakerEntity;
-  @Column('float')
+  @ManyToOne(() => HostEntity, host => host.conferences)
+  @JoinColumn({
+    name: "host_id",
+    referencedColumnName: "host_id"
+  })
+  host: HostEntity;
+  @Column({type: 'float', default: 0})
   price: number;
 }
