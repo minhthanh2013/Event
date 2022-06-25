@@ -1,4 +1,5 @@
 /* eslint-disable prettier/prettier */
+import { type } from 'os';
 import { AdminEntity } from 'src/admin/models/admin.entity';
 import { AnalyticEntity } from 'src/analytic/models/analytic.entity';
 import { ComboSessionEntity } from 'src/combosession/models/combo_session.entiy';
@@ -94,4 +95,8 @@ export class ConferenceEntity {
   host: HostEntity;
   @Column({type: 'float', default: 0})
   price: number;
+  @Column({type: 'int'})
+  ticket_quantity: number;
+  @Column({type: 'int'})
+  current_quantity: number;
 }
