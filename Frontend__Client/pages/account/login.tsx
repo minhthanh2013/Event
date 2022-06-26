@@ -1,17 +1,32 @@
 
 import { Box } from '@material-ui/core'
-import { Typography } from '@mui/material'
+import { Button, TextField, Typography } from '@mui/material'
 import { IconButton } from '@material-ui/core'
 import { FcGoogle } from 'react-icons/fc'
 import { BsFacebook } from 'react-icons/bs'
 import React from 'react'
 import styles from '../../styles/Login.module.scss'
-import { Formik } from "formik";
-import * as Yup from "yup";
+import * as yup from 'yup';
+import { withFormik, FormikProps, FormikErrors, Form, Field, useFormik } from 'formik';
+import { margin, padding } from '@mui/system'
+import Firework from '../../components/Firework'
 
-type Props = {}
+const validationSchema = yup.object({
+    email: yup.string('Enter your email').email('Enter a valid email').required('Email is required'),
+    password: yup.string('Enter your password').required('Password is required')
+})
 
-const login = (props: Props) => {
+const Login = (props: Props) => {
+    const formik = useFormik({
+        initialValues: {
+            email: '',
+            password: '',
+        },
+        validationSchema: validationSchema,
+        obSubmit: (values: any) => {
+            alert(JSON.stringify(values, null, 2));
+        },
+    })
     return (
         <>
             <Box className={styles.container}>
@@ -36,29 +51,45 @@ const login = (props: Props) => {
                             <hr />
                         </Box>
                         <Box className={styles.form__section}>
-                            <form>
-                                <Box className={styles.form__group}>
-                                    <label>Username</label>
-                                    <input type="text" placeholder="Username" />
-                                    <div></div>
-                                </Box>
-                                <Box className={styles.form__group}>
-                                    <label>Password</label>
-                                    <input type="text" placeholder="Password" />
-                                    <div></div>
-                                </Box>
-
+                            <form onSubmit={formik.handleSubmit} className={styles.mainForm}>
+                                <TextField
+                                    fullWidth
+                                    id="email"
+                                    name="email"
+                                    label="Email"
+                                    value={formik.values.email}
+                                    onChange={formik.handleChange}
+                                    error={formik.touched.email && Boolean(formik.errors.email)}
+                                    helperText={formik.touched.email && formik.errors.email} />
+                                <TextField
+                                    fullWidth
+                                    id="password"
+                                    name="password"
+                                    label="Password"
+                                    value={formik.values.password}
+                                    onChange={formik.handleChange}
+                                    error={formik.touched.password && Boolean(formik.errors.password)}
+                                    helperText={formik.touched.password && formik.errors.email} 
+                                    sx={{ my: "2rem", "& .MuiInputBase-input": {paddingLeft:"1rem"}}}
+                                    />
+                                <Button variant="contained" size='medium' type="submit">Sign in</Button>
                             </form>
                         </Box>
                     </Box>
                 </Box>
                 <Box className={styles.right}>
-
+                    <Firework/>
+                    <Box className={styles.redirect}>
+                        <Typography component="h3">Hello, Friend!</Typography>
+                        <Typography component="h4">Enter your personal details and start your journey with us.</Typography>
+                        <Button variant='contained' size='medium' type="button">Sign up</Button>
+                    </Box>
                 </Box>
             </Box>
+
         </>
     )
 }
 
-export default login
+export default Login
 
