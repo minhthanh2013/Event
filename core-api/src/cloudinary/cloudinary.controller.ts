@@ -23,5 +23,4 @@ export class CloudinaryController {
     getImage() {
         return this.cloudinaryService.getImage();
     }
-    
 }

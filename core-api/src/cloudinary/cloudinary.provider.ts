@@ -1,14 +1,17 @@
 /* eslint-disable prettier/prettier */
+import { ConfigService } from '@nestjs/config';
 import { v2 } from 'cloudinary';
 import { CLOUDINARY } from '../constants';
 
 export const CloudinaryProvider = {
+
   provide: CLOUDINARY,
-  useFactory: () => {
+  inject: [ConfigService],
+  useFactory: (configService: ConfigService) => {
     return v2.config({
-      cloud_name: 'dv7air4el',
-      api_key: '384989763159426',
-      api_secret: 'z2xLVIJCsKcU_-RNq4fYNeZYyiU',
+      cloud_name: configService.get('CLOUDINARY_CLOUD_NAME'),
+      api_key: configService.get('CLOUDINARY_API_KEY'),
+      api_secret: configService.get('CLOUDINARY_API_SECRET'),
     });
   },
 };

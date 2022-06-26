@@ -42,6 +42,6 @@ export class CloudinaryService {
   }
 
   getImage() {
-    return v2.image("vn.png")
+    return v2.image("vn")
   }
 }
