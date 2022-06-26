@@ -1,19 +1,9 @@
 /* eslint-disable prettier/prettier */
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { ClientsModule, Transport } from '@nestjs/microservices';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { type } from 'os';
-// import { AdminModule } from "./admin/admin.module";
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-// import { CategoryModule } from "./category/category.module";
-// import { ConferenceModule } from "./conference/conference.module";
-// import { HostModule } from "./host/host.module";
-// import { PrismaModule } from "./prisma/prisma.module";
-// import { SpeakerModule } from "./speaker/speaker.module";
-// import { TicketModule } from "./ticket/ticket.module";
-// import { UserModule } from "./user/user.module";
 import { AdminModule } from './admin/admin.module';
 import { UserModule } from './user/user.module';
 import { ConferenceModule } from './conference/conference.module';
@@ -29,6 +19,7 @@ import { SubscriptionModule } from './subscription/subscription.module';
 import { SubscriptionplanModule } from './subscriptionplan/subscriptionplan.module';
 import { TicketModule } from './ticket/ticket.module';
 import { BullModule } from '@nestjs/bull';
+import { CloudinaryModule } from './cloudinary/cloudinary.module';
 
 @Module({
   imports: [
@@ -81,14 +72,7 @@ import { BullModule } from '@nestjs/bull';
     SubscriptionModule,
     SubscriptionplanModule,
     TicketModule,
-    // UserModule,
-    // PrismaModule,
-    // ConferenceModule,
-    // CategoryModule,
-    // HostModule,
-    // AdminModule,
-    // SpeakerModule,
-    // TicketModule,
+    CloudinaryModule,
     // ClientsModule.register([
     //   {
     //     name: 'REDIS',
