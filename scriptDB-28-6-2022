@@ -5,7 +5,7 @@
 -- Dumped from database version 13.6 (Debian 13.6-1.pgdg110+1)
 -- Dumped by pg_dump version 13.7
 
--- Started on 2022-06-25 19:33:43
+-- Started on 2022-06-28 07:59:46
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -136,7 +136,9 @@ CREATE TABLE public."Conference" (
     host_id bigint,
     combo_id bigint,
     speaker_id bigint,
-    price bigint
+    price bigint,
+    ticket_quantity bigint,
+    current_quantity bigint
 );
 
 
@@ -731,7 +733,7 @@ ALTER TABLE ONLY public."Speaker"
     ADD CONSTRAINT speaker_to_user_id FOREIGN KEY (user_id) REFERENCES public."User"(user_id);
 
 
--- Completed on 2022-06-25 19:33:43
+-- Completed on 2022-06-28 07:59:46
 
 --
 -- PostgreSQL database dump complete

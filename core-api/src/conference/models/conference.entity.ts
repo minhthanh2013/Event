@@ -94,4 +94,8 @@ export class ConferenceEntity {
   host: HostEntity;
   @Column({type: 'float', default: 0})
   price: number;
+  @Column({type: 'bigint', default: 0})
+  ticket_quantity: number;
+  @Column({type: 'bigint', default: 0})
+  current_quantity: number;
 }
