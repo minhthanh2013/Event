@@ -13,24 +13,4 @@ export class SpeakerService {
     @InjectRepository(SpeakerEntity)
     private readonly speakerRepository: Repository<SpeakerEntity>,
   ) {}
-
-  findAllSpeakers(): Observable<Speaker[]> {
-    return from(this.speakerRepository.find());
-  }
-
-  findOne(id: string): Observable<Speaker> {
-    return from(this.speakerRepository.findOne({where: {user_id: id}}));
-  }
-
-  createSpeaker(speaker: Speaker): Observable<Speaker> {
-    return from(this.speakerRepository.save(speaker));
-  }
-
-  update(id: number, speaker: Speaker): Observable<UpdateResult> {
-    return from(this.speakerRepository.update(id, speaker));
-  }
-
-  remove(id: number): Observable<DeleteResult> {
-    return from(this.speakerRepository.delete(id));
-  }
 }
