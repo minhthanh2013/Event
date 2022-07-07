@@ -20,6 +20,7 @@ import SubscriptionsIcon from "@mui/icons-material/ShopTwo";
 import { BasicInfo, Speakers, Date } from "./CreateEventForm";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Subcriptions } from "./Subcriptions";
+import { EventList } from "./EventList";
 
 interface EventCreate {}
 
@@ -158,10 +159,7 @@ const EventCreate = (props: EventCreate) => {
           <Grid xs={10} md={10}>
             <TabPanel value={value} index={0}>
               <Box sx={{ marginLeft: "3rem" }}>
-                <Typography variant="h3" component="div">
-                  Events
-                </Typography>
-                <BasicInfo />
+                <EventList />
               </Box>
             </TabPanel>
             <TabPanel value={value} index={1}>
