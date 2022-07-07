@@ -14,9 +14,8 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import styles from "../styles/CreateEventForm.module.scss";
 
-export const EventList = () => {
+export const Sessions = () => {
   const types = {
     lastest: 'Latest',
     sold: 'Sold',
@@ -49,17 +48,17 @@ export const EventList = () => {
   }
 
   const rows = [
-    createData('Concert: Ensemble of Nature', 56, 3.7, '7/7/2022','draft'),
-    createData('Music Show: Son Tung MTP Live Show', 305, 5, '15/7/2022','pending'),
-    createData('Workshop: How to use pencil', 88, 3.565, '22/7/2022','published'),
-    createData('Concert: ABCD', 45, 3.612, '5/7/2022','ended'),
+    createData('Concert: Ensemble of Nature', 56, 3.7, '7/7/2022', 'draft'),
+    createData('Music Show: Son Tung MTP Live Show', 305, 5, '15/7/2022', 'pending'),
+    createData('Workshop: How to use pencil', 88, 3.565, '22/7/2022', 'published'),
+    createData('Concert: ABCD', 45, 3.612, '5/7/2022', 'ended'),
   ];
 
   return (
     <>
       <Box sx={{ marginLeft: "0" }}>
         <Typography variant="h3" component="div" sx={{ fontWeight: "bold" }}>
-          Events
+          Sessions
         </Typography>
         <Box sx={{ marginRight: "5rem", float: "right" }}>
           <FormControl sx={{ width: "15rem" }}>
@@ -82,9 +81,9 @@ export const EventList = () => {
             Create an event
           </Button>
         </Box>
-        <TableContainer component={Paper} sx={{ marginTop: "5rem", marginLeft: "5rem", width: "90%"}}>
+        <TableContainer component={Paper} sx={{ marginTop: "5rem", marginLeft: "5rem", width: "90%" }}>
           <Table >
-            <TableHead sx={{ backgroundColor: "#4F3398"}}>
+            <TableHead sx={{ backgroundColor: "#4F3398" }}>
               <TableRow>
                 <TableCell sx={{ color: "#ffffff" }}>Events</TableCell>
                 <TableCell align="right" sx={{ color: "#ffffff" }}>Sold</TableCell>
@@ -97,7 +96,7 @@ export const EventList = () => {
               {rows.map((row) => (
                 <TableRow key={row.name} sx={{ width: "100%" }}>
                   <TableCell component="th" scope="row">
-                    <Typography sx={{fontWeight: "bold"}}>{row.name}</Typography>
+                    <Typography sx={{ fontWeight: "bold" }}>{row.name}</Typography>
                     online event <br />
                     {row.date}
                   </TableCell>

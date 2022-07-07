@@ -21,8 +21,9 @@ import { BasicInfo, Speakers, Date } from "./CreateEventForm";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Subcriptions } from "./Subcriptions";
 import { EventList } from "./EventList";
+import { Sessions } from "./CreSessions";
 
-interface EventCreate {}
+interface EventCreate { }
 
 const outerTheme = createTheme({
   palette: {
@@ -164,14 +165,13 @@ const EventCreate = (props: EventCreate) => {
             </TabPanel>
             <TabPanel value={value} index={1}>
               <Box sx={{ marginLeft: "3rem" }}>
-                <Typography variant="h3" component="div">
-                  Sessions
-                </Typography>
-                <Speakers />
+                <Sessions />
               </Box>
             </TabPanel>
             <TabPanel value={value} index={2}>
-              <Subcriptions/>
+              <Box sx={{ marginLeft: "3rem" }}>
+                 <Subcriptions />
+              </Box>
             </TabPanel>
           </Grid>
         </Grid>
