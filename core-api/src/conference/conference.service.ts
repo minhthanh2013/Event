@@ -1,16 +1,14 @@
 /* eslint-disable prettier/prettier */
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
+import { ClientProxy } from '@nestjs/microservices';
 import { InjectRepository } from '@nestjs/typeorm';
-import { from, Observable, of } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { ConferenceCategoryEntity } from 'src/conferencecategory/models/conference_category.entity';
 import { ConferenceTypeEntity } from 'src/conferencetype/models/conference_type.entity';
-import { ConferenceType } from 'src/conferencetype/models/conference_type.interface';
-import { SpeakerEntity } from 'src/speaker/models/speaker.entity';
 import { UserEntity } from 'src/user/models/user.entity';
-import { DeleteResult, Repository, UpdateResult } from 'typeorm';
+import { Repository } from 'typeorm';
 import { ConferenceRequestDto, ConferenceResponseDto } from './models/conference.dto';
 import { ConferenceEntity } from './models/conference.entity';
-import { Conference } from './models/conference.interface';
 
 @Injectable()
 export class ConferenceService {
@@ -47,6 +45,7 @@ export class ConferenceService {
     })
     return of(result);
   }
+
   update(id: number, conference: ConferenceRequestDto): Observable<Boolean> {
     var result: Boolean = false
     this.conferenceRepository.update(id, this.convertDtoToEntity(conference)).then(value => {

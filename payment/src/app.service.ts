@@ -1,6 +1,10 @@
 import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { Console } from 'console';
 import { InjectStripe } from 'nestjs-stripe';
+import { from, Observable, of } from 'rxjs';
 import Stripe from 'stripe';
+import { PaymentDto } from './payment/payment.dto';
 
 @Injectable()
 export class AppService {
@@ -9,25 +13,26 @@ export class AppService {
     return 'Hello World!';
   }
 
-  demoPayment() {
+  async paymentTicket(paymentDto: PaymentDto): Promise<String> {
     const param: Stripe.Checkout.SessionCreateParams = {
       mode: 'payment',
       payment_method_types: ['card'],
       line_items: [
         {
-          name: 'MOCK TICKET',
-          amount: 10000,
+          name: paymentDto.ticketName,
+          amount: paymentDto.ticketPrice,
           currency: "vnd",
-          quantity: 10
+          quantity: paymentDto.ticketQuantity
         }
       ],
       success_url: `${process.env.MOCK_URL}/success`,
       cancel_url: `${process.env.MOCK_URL}/cancel`,
     }
-    return this.stripeClient.checkout.sessions.create(param)
+    const result = await this.stripeClient.checkout.sessions.create(param)
+    return result.url
   }
 
-  newSubscription() {
+  async demoNewSubscription(): Promise<String> {
     const param: Stripe.Checkout.SessionCreateParams = {
       mode: 'subscription',
       payment_method_types: ['card'],
@@ -40,6 +45,7 @@ export class AppService {
       success_url: `${process.env.MOCK_URL}/success`,
       cancel_url: `${process.env.MOCK_URL}/cancel`,
     }
-    return this.stripeClient.checkout.sessions.create(param)
+    const result = await this.stripeClient.checkout.sessions.create(param)
+    return result.url
   }
 }
