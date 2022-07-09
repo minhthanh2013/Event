@@ -5,7 +5,7 @@ import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 @Entity('Speaker')
 export class SpeakerEntity {
   @PrimaryGeneratedColumn()
-  user_id: string;
+  user_id: number;
   @OneToMany(() => ConferenceEntity, (conference) => conference.speaker)
   conferences: ConferenceEntity[];
   @Column()

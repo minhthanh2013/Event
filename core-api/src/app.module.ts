@@ -49,6 +49,7 @@ import { ZoomModule } from './zoom/zoom.module';
         password: configService.get('POSTGRES_PASS'),
         database: configService.get('POSTGRES_DATABASE'),
         autoLoadEntities: true,
+        schema: 'public',
         migrations: ['src/migrations/**/*{.ts,.js}'],
         synchronize: false,
         // Turn logging to true to see all the SQL queries
