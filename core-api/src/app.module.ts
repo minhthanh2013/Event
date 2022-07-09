@@ -1,6 +1,7 @@
 /* eslint-disable prettier/prettier */
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ClientsModule, Transport } from '@nestjs/microservices';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -8,19 +9,18 @@ import { AdminModule } from './admin/admin.module';
 import { UserModule } from './user/user.module';
 import { ConferenceModule } from './conference/conference.module';
 import { HostModule } from './host/host.module';
+import { AnalyticModule } from './analytic/analytic.module';
+import { SpeakerModule } from './speaker/speaker.module';
+import { TicketModule } from './ticket/ticket.module';
+import { BullModule } from '@nestjs/bull';
 import { ConferencetypeModule } from './conferencetype/conferencetype.module';
 import { ConferencecategoryModule } from './conferencecategory/conferencecategory.module';
-import { AnalyticModule } from './analytic/analytic.module';
+import { SubscriptionModule } from './subscription/subscription.module';
+import { SubscriptionplanModule } from './subscriptionplan/subscriptionplan.module';
 import { CombosessionModule } from './combosession/combosession.module';
 import { PaymentModule } from './payment/payment.module';
 import { RecordModule } from './record/record.module';
-import { SpeakerModule } from './speaker/speaker.module';
-import { SubscriptionModule } from './subscription/subscription.module';
-import { SubscriptionplanModule } from './subscriptionplan/subscriptionplan.module';
-import { TicketModule } from './ticket/ticket.module';
-import { BullModule } from '@nestjs/bull';
 import { CloudinaryModule } from './cloudinary/cloudinary.module';
-import { ClientsModule, Transport } from '@nestjs/microservices';
 import { ZoomModule } from './zoom/zoom.module';
 
 @Module({
@@ -74,6 +74,12 @@ import { ZoomModule } from './zoom/zoom.module';
     SubscriptionModule,
     SubscriptionplanModule,
     TicketModule,
+    UserModule,
+    ConferenceModule,
+    HostModule,
+    AdminModule,
+    SpeakerModule,
+    TicketModule,
     CloudinaryModule,
     ZoomModule,
     ClientsModule.register([
@@ -86,6 +92,13 @@ import { ZoomModule } from './zoom/zoom.module';
         transport: Transport.TCP,
         options: {
           port: 3001,
+        }
+      },
+      {
+        name: 'PAYMENT',
+        transport: Transport.TCP,
+        options: {
+          port: 3002,
         }
       }
     ])
