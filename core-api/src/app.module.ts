@@ -3,32 +3,23 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { type } from 'os';
-// import { AdminModule } from "./admin/admin.module";
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-// import { CategoryModule } from "./category/category.module";
-// import { ConferenceModule } from "./conference/conference.module";
-// import { HostModule } from "./host/host.module";
-// import { PrismaModule } from "./prisma/prisma.module";
-// import { SpeakerModule } from "./speaker/speaker.module";
-// import { TicketModule } from "./ticket/ticket.module";
-// import { UserModule } from "./user/user.module";
 import { AdminModule } from './admin/admin.module';
 import { UserModule } from './user/user.module';
 import { ConferenceModule } from './conference/conference.module';
 import { HostModule } from './host/host.module';
+import { AnalyticModule } from './analytic/analytic.module';
+import { SpeakerModule } from './speaker/speaker.module';
+import { TicketModule } from './ticket/ticket.module';
+import { BullModule } from '@nestjs/bull';
 import { ConferencetypeModule } from './conferencetype/conferencetype.module';
 import { ConferencecategoryModule } from './conferencecategory/conferencecategory.module';
-import { AnalyticModule } from './analytic/analytic.module';
+import { SubscriptionModule } from './subscription/subscription.module';
+import { SubscriptionplanModule } from './subscriptionplan/subscriptionplan.module';
 import { CombosessionModule } from './combosession/combosession.module';
 import { PaymentModule } from './payment/payment.module';
 import { RecordModule } from './record/record.module';
-import { SpeakerModule } from './speaker/speaker.module';
-import { SubscriptionModule } from './subscription/subscription.module';
-import { SubscriptionplanModule } from './subscriptionplan/subscriptionplan.module';
-import { TicketModule } from './ticket/ticket.module';
-import { BullModule } from '@nestjs/bull';
 
 @Module({
   imports: [
@@ -56,6 +47,7 @@ import { BullModule } from '@nestjs/bull';
         password: configService.get('POSTGRES_PASS'),
         database: configService.get('POSTGRES_DATABASE'),
         autoLoadEntities: true,
+        schema: 'public',
         migrations: ['src/migrations/**/*{.ts,.js}'],
         synchronize: false,
         // Turn logging to true to see all the SQL queries
@@ -81,27 +73,32 @@ import { BullModule } from '@nestjs/bull';
     SubscriptionModule,
     SubscriptionplanModule,
     TicketModule,
-    // UserModule,
-    // PrismaModule,
-    // ConferenceModule,
-    // CategoryModule,
-    // HostModule,
-    // AdminModule,
-    // SpeakerModule,
-    // TicketModule,
-    // ClientsModule.register([
-    //   {
-    //     name: 'REDIS',
-    //     transport: Transport.TCP,
-    //   },
-    //   {
-    //     name: 'ZOOM',
-    //     transport: Transport.TCP,
-    //     options: {
-    //       port: 3001,
-    //     }
-    //   }
-    // ])
+    UserModule,
+    ConferenceModule,
+    HostModule,
+    AdminModule,
+    SpeakerModule,
+    TicketModule,
+    ClientsModule.register([
+      {
+        name: 'REDIS',
+        transport: Transport.TCP,
+      },
+      {
+        name: 'ZOOM',
+        transport: Transport.TCP,
+        options: {
+          port: 3001,
+        }
+      },
+      {
+        name: 'PAYMENT',
+        transport: Transport.TCP,
+        options: {
+          port: 3002,
+        }
+      }
+    ])
   ],
   controllers: [AppController],
   providers: [AppService],
