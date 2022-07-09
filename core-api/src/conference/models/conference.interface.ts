@@ -14,4 +14,6 @@ export interface Conference {
   date_end_conference: Date;
   isValidated: boolean;
   price: number;
+  ticket_quantity: number;
+  current_quantity: number;
 }

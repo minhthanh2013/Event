@@ -1,3 +1,8 @@
+#mp4,jpg,png files
+*.mp4
+*.jpg
+*.png
+
 # compiled output
 /core-api/dist
 /core-api/node_modules

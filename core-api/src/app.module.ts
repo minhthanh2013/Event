@@ -20,6 +20,8 @@ import { SubscriptionplanModule } from './subscriptionplan/subscriptionplan.modu
 import { CombosessionModule } from './combosession/combosession.module';
 import { PaymentModule } from './payment/payment.module';
 import { RecordModule } from './record/record.module';
+import { CloudinaryModule } from './cloudinary/cloudinary.module';
+import { ZoomModule } from './zoom/zoom.module';
 
 @Module({
   imports: [
@@ -79,6 +81,8 @@ import { RecordModule } from './record/record.module';
     AdminModule,
     SpeakerModule,
     TicketModule,
+    CloudinaryModule,
+    ZoomModule,
     ClientsModule.register([
       {
         name: 'REDIS',
