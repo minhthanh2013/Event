@@ -27,6 +27,7 @@
     "@nestjs/core": "^8.0.0",
     "@nestjs/microservices": "^8.4.6",
     "@nestjs/platform-express": "^8.0.0",
+    "axios": "^0.27.2",
     "class-validator": "^0.13.2",
     "jsrsasign": "^10.5.24",
     "reflect-metadata": "^0.1.13",

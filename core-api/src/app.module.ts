@@ -20,6 +20,8 @@ import { SubscriptionplanModule } from './subscriptionplan/subscriptionplan.modu
 import { TicketModule } from './ticket/ticket.module';
 import { BullModule } from '@nestjs/bull';
 import { CloudinaryModule } from './cloudinary/cloudinary.module';
+import { ClientsModule, Transport } from '@nestjs/microservices';
+import { ZoomModule } from './zoom/zoom.module';
 
 @Module({
   imports: [
@@ -73,19 +75,20 @@ import { CloudinaryModule } from './cloudinary/cloudinary.module';
     SubscriptionplanModule,
     TicketModule,
     CloudinaryModule,
-    // ClientsModule.register([
-    //   {
-    //     name: 'REDIS',
-    //     transport: Transport.TCP,
-    //   },
-    //   {
-    //     name: 'ZOOM',
-    //     transport: Transport.TCP,
-    //     options: {
-    //       port: 3001,
-    //     }
-    //   }
-    // ])
+    ZoomModule,
+    ClientsModule.register([
+      {
+        name: 'REDIS',
+        transport: Transport.TCP,
+      },
+      {
+        name: 'ZOOM',
+        transport: Transport.TCP,
+        options: {
+          port: 3001,
+        }
+      }
+    ])
   ],
   controllers: [AppController],
   providers: [AppService],
