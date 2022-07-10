@@ -5,6 +5,7 @@ import Grid from '@mui/material/Grid'
 import { Typography, Box } from '@mui/material'
 import Link from '@mui/material/Link'
 interface TicketListProps {}
+
 const products = [
 	{
 		title: 've cha 1',
@@ -38,22 +39,34 @@ const TicketList = (props: TicketListProps) => {
 							</Grid>
 						))} */}
 						<Grid item lg={4} md={6} sm={12}>
-							<Ticket imageProps='https://images.unsplash.com/photo-1657311277098-e5fb0b95d28e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80' />
+							<Link href='/event/2'>
+								<Ticket imageProps='https://images.unsplash.com/photo-1657311277098-e5fb0b95d28e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80' />
+							</Link>
 						</Grid>
 						<Grid item lg={4} md={6} sm={12}>
-							<Ticket imageProps='https://images.unsplash.com/photo-1618758993113-2447833402d6?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80' />
+							<Link href='/event/2'>
+								<Ticket imageProps='https://images.unsplash.com/photo-1618758993113-2447833402d6?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80' />
+							</Link>
 						</Grid>
 						<Grid item lg={4} md={6} sm={12}>
-							<Ticket imageProps='https://images.unsplash.com/photo-1459499362902-55a20553e082?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1169&q=80' />
+							<Link href='/event/2'>
+								<Ticket imageProps='https://images.unsplash.com/photo-1459499362902-55a20553e082?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1169&q=80' />
+							</Link>
 						</Grid>
 						<Grid item lg={4} md={6} sm={12}>
-							<Ticket imageProps='https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80' />
+							<Link href='/event/2'>
+								<Ticket imageProps='https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80' />
+							</Link>
 						</Grid>
 						<Grid item lg={4} md={6} sm={12}>
-							<Ticket imageProps='https://images.unsplash.com/photo-1527689368864-3a821dbccc34?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80' />
+							<Link href='/event/2'>
+								<Ticket imageProps='https://images.unsplash.com/photo-1527689368864-3a821dbccc34?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80' />
+							</Link>
 						</Grid>
 						<Grid item lg={4} md={6} sm={12}>
-							<Ticket imageProps='https://images.unsplash.com/photo-1499750310107-5fef28a66643?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80' />
+							<Link href='/event/2'>
+								<Ticket imageProps='https://images.unsplash.com/photo-1499750310107-5fef28a66643?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80' />
+							</Link>
 						</Grid>
 					</Grid>
 				</div>

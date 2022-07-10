@@ -31,7 +31,7 @@ const Header = (props: HeaderProps) => {
 			children: `${name.split(' ')[0][0]}`.toUpperCase(),
 		}
 	}
-	let isLogin = false
+	let isLogin = true
 	return (
 		<Box sx={{ my: '20px' }}>
 			<AppBar position='static' color='transparent' elevation={0}>

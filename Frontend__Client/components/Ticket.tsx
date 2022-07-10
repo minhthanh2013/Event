@@ -9,6 +9,7 @@ import Box from "@mui/material/Box";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 interface TicketProps {
 	imageProps: string;
+	
 }
 
 const Ticket = (props: TicketProps) => {
@@ -16,7 +17,7 @@ const Ticket = (props: TicketProps) => {
 		<>
 			<div>
 				<Card elevation={7} className={styles.ticketWrap}>
-					<CardActionArea>
+					<CardActionArea >
 						<CardMedia
 							component="img" 
 							height="250"
