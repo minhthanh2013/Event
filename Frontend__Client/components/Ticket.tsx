@@ -7,7 +7,9 @@ import { CardActionArea } from "@mui/material";
 import styles from "../styles/Ticket.module.scss";
 import Box from "@mui/material/Box";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
-interface TicketProps {}
+interface TicketProps {
+	imageProps: string;
+}
 
 const Ticket = (props: TicketProps) => {
 	return (
@@ -16,9 +18,9 @@ const Ticket = (props: TicketProps) => {
 				<Card elevation={7} className={styles.ticketWrap}>
 					<CardActionArea>
 						<CardMedia
-							component="img"
+							component="img" 
 							height="250"
-							src="https://images.pexels.com/photos/2306281/pexels-photo-2306281.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+							src={ props.imageProps ||"https://images.pexels.com/photos/2306281/pexels-photo-2306281.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"}  
 							alt="Event"
 						/>
 						<CardContent className={styles.ticketContent}>
