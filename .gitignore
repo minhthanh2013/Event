@@ -12,6 +12,7 @@
 /redis/dist
 /zoom/node_modules
 /zoom/dist
+/Frontend_Client/node_modules
 
 # Logs
 logs
