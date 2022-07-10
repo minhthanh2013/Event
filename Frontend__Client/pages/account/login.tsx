@@ -10,12 +10,13 @@ import * as yup from 'yup';
 import { withFormik, FormikProps, FormikErrors, Form, Field, useFormik } from 'formik';
 import { margin, padding } from '@mui/system'
 import Firework from '../../components/Firework'
-
+import Link from 'next/link'
+import Image from 'next/image'
+import { Props } from 'next/script'
 const validationSchema = yup.object({
-    email: yup.string('Enter your email').email('Enter a valid email').required('Email is required'),
-    password: yup.string('Enter your password').required('Password is required')
+    email: yup.string().email('Enter a valid email').required('Email is required'),
+    password: yup.string().required('Password is required')
 })
-
 const Login = (props: Props) => {
     const formik = useFormik({
         initialValues: {
@@ -23,15 +24,13 @@ const Login = (props: Props) => {
             password: '',
         },
         validationSchema: validationSchema,
-        obSubmit: (values: any) => {
+        onSubmit: (values: any) => {
             alert(JSON.stringify(values, null, 2));
         },
     })
     return (
         <>
             <Box className={styles.container}>
-
-
                 <Box className={styles.left}>
                     <Box className={styles.container__left}>
                         <Typography component="h2">
@@ -69,20 +68,22 @@ const Login = (props: Props) => {
                                     value={formik.values.password}
                                     onChange={formik.handleChange}
                                     error={formik.touched.password && Boolean(formik.errors.password)}
-                                    helperText={formik.touched.password && formik.errors.email} 
-                                    sx={{ my: "2rem", "& .MuiInputBase-input": {paddingLeft:"1rem"}}}
-                                    />
+                                    helperText={formik.touched.password && formik.errors.email}
+                                    sx={{ my: "1.5rem", "& .MuiInputBase-input": { paddingLeft: "1rem" } }}
+                                />
                                 <Button variant="contained" size='medium' type="submit">Sign in</Button>
                             </form>
                         </Box>
                     </Box>
                 </Box>
                 <Box className={styles.right}>
-                    <Firework/>
+                    <Firework />
                     <Box className={styles.redirect}>
-                        <Typography component="h3">Hello, Friend!</Typography>
-                        <Typography component="h4">Enter your personal details and start your journey with us.</Typography>
-                        <Button variant='contained' size='medium' type="button">Sign up</Button>
+                        <Typography component="h3">Welcome Back!</Typography>
+                        <Typography component="h4">To keep connected with us please log in with your personal info.</Typography>
+                        <Link href="register">
+                            <Button variant='contained' size='medium' type="button">Create New Account</Button>
+                        </Link>
                     </Box>
                 </Box>
             </Box>
