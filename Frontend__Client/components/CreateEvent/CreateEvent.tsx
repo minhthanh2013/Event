@@ -1,9 +1,9 @@
 import React, { useState, ChangeEvent } from "react";
 import { AppBar } from "@material-ui/core";
 import { makeStyles } from "@mui/styles";
-import Header from "./Header";
+import Header from "../Header";
 import Box from "@mui/material/Box";
-import Footer from "./Footer";
+import Footer from "../Footer";
 import Typography from "@mui/material/Typography";
 import styles from "../styles/EventDashboard.module.scss";
 import Card from "@mui/material/Card";
@@ -19,9 +19,9 @@ import SessionsIcon from "@mui/icons-material/EmojiEvents";
 import SubscriptionsIcon from "@mui/icons-material/ShopTwo";
 import { BasicInfo, Speakers, Date } from "./CreateEventForm";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { Subcriptions } from "./Subcriptions";
-import { EventList } from "./EventList";
-import { Sessions } from "./CreSessions";
+import { Subcriptions } from "../Subcriptions";
+import { EventList } from "../EventList";
+import { Sessions } from "../CreSessions";
 
 interface EventCreate { }
 
