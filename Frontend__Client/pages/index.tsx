@@ -14,6 +14,7 @@ import Box from '@mui/material/Box';
 import CarouselSlide from '../components/CarouselSlide'
 import SessionList from '../components/SessionList'
 import EventDashboard from '../components/EventDashboard'
+import CreateEvent from '../components/CreateEvent'
 export { default as buildStore } from '../shared/redux/buildStore';
 
 const Home: NextPage = () => {
@@ -33,7 +34,7 @@ const Home: NextPage = () => {
         
       </Box>
       <Footer/> */}
-      <EventDashboard />
+      <CreateEvent />
     </>
   )
 }
