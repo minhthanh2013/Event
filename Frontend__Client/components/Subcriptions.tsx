@@ -1,4 +1,4 @@
-import React, { useState, ChangeEvent } from "react";
+import React from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Grid from "@material-ui/core/Grid";
@@ -8,45 +8,59 @@ import Tick from "@mui/icons-material/Done";
 export const Subcriptions = () => {
   return (
     <>
-      <Box sx={{ marginLeft: "3rem" }}>
-        <Typography variant="h3" component="div">
+      <Box>
+        <Typography variant="h3" component="div" sx={{ fontWeight: "bold" }}>
           Subscription
         </Typography>
         <Box sx={{ marginTop: "3rem" }}>
           <Grid container spacing={8}>
-            <Grid item={true} xs={5}>
-              <Typography variant="h6">Basic</Typography>
-              <Typography
-                variant="h4"
-                sx={{ fontWeight: "bold", margin: "2rem 0 1.5rem 0" }}
-              >
-                Free
-              </Typography>
-              <Typography sx={{ margin: "1rem 0", fontWeight: "lighter" }}>
-                The perfect way to get started and get used to our tool.
-              </Typography>
-              <Button
-                variant="outlined"
-                sx={{ width: "100%", padding: "1rem", margin: "1rem 0" }}
-              >
-                Get started
-              </Button>
+            <Grid item={true} xs={4}>
               <Box
                 sx={{
+                  borderRadius: "10px",
+                  border: "2px solid #E5E5E5",
+                  boxShadow: "5px 5px 7px #B5ACCC",
                   display: "flex",
-                  alignItems: "center",
-                  flexDirection: "row",
+                  flexDirection: "column",
+                  padding: "1rem",
+                  height: "35rem",
+                  width: "30rem",
+                  paddingLeft: "1.5rem",
                 }}
               >
-                <Tick color="success" />
+                <Typography variant="h6">Basic</Typography>
                 <Typography
-                  sx={{ margin: "1rem 0 1rem 0.5rem", fontStyle: "italic" }}
+                  variant="h4"
+                  sx={{ fontWeight: "bold", margin: "2rem 0 1.5rem 0" }}
                 >
-                  Create 20 events
+                  Free
                 </Typography>
+                <Typography sx={{ margin: "1rem 0", fontWeight: "lighter" }}>
+                  The perfect way to get started and get used to our tool.
+                </Typography>
+                <Button
+                  variant="outlined"
+                  sx={{ width: "100%", padding: "1rem", margin: "1rem 0" }}
+                >
+                  Get started
+                </Button>
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    flexDirection: "row",
+                  }}
+                >
+                  <Tick color="success" />
+                  <Typography
+                    sx={{ margin: "1rem 0 1rem 0.5rem", fontStyle: "italic" }}
+                  >
+                    Create 20 events
+                  </Typography>
+                </Box>
               </Box>
             </Grid>
-            <Grid item={true} xs={5}>
+            <Grid item={true} xs={4}>
               <Box
                 sx={{
                   borderRadius: "10px",
@@ -55,6 +69,9 @@ export const Subcriptions = () => {
                   display: "flex",
                   flexDirection: "column",
                   padding: "1rem",
+                  height: "35rem",
+                  width: "30rem",
+                  paddingLeft: "1.5rem",
                 }}
               >
                 <Typography variant="h6">Premium</Typography>
@@ -78,12 +95,12 @@ export const Subcriptions = () => {
                     yearly
                   </Typography>
                 </Box>
-                <Typography sx={{ margin: "1rem 0", fontWeight: "lighter" }}>
+                <Typography sx={{ margin: "1.3rem 0", fontWeight: "lighter" }}>
                   Ideal for both individuals and organizations.
                 </Typography>
                 <Button
                   variant="contained"
-                  sx={{ width: "100%", padding: "1rem", margin: "1rem 0" }}
+                  sx={{ width: "100%", padding: "1rem", margin: "1.2rem 0" }}
                 >
                   Get started
                 </Button>

@@ -1,9 +1,9 @@
 import React, { useState, ChangeEvent } from "react";
 import { AppBar } from "@material-ui/core";
 import { makeStyles } from "@mui/styles";
-import Header from "./Header";
+import Header from "../Header";
 import Box from "@mui/material/Box";
-import Footer from "./Footer";
+import Footer from "../Footer";
 import Typography from "@mui/material/Typography";
 import styles from "../styles/EventDashboard.module.scss";
 import Card from "@mui/material/Card";
@@ -19,9 +19,11 @@ import SessionsIcon from "@mui/icons-material/EmojiEvents";
 import SubscriptionsIcon from "@mui/icons-material/ShopTwo";
 import { BasicInfo, Speakers, Date } from "./CreateEventForm";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { Subcriptions } from "./Subcriptions";
+import { Subcriptions } from "../Subcriptions";
+import { EventList } from "../EventList";
+import { Sessions } from "../CreSessions";
 
-interface EventCreate {}
+interface EventCreate { }
 
 const outerTheme = createTheme({
   palette: {
@@ -158,22 +160,18 @@ const EventCreate = (props: EventCreate) => {
           <Grid xs={10} md={10}>
             <TabPanel value={value} index={0}>
               <Box sx={{ marginLeft: "3rem" }}>
-                <Typography variant="h3" component="div">
-                  Events
-                </Typography>
-                <BasicInfo />
+                <EventList />
               </Box>
             </TabPanel>
             <TabPanel value={value} index={1}>
               <Box sx={{ marginLeft: "3rem" }}>
-                <Typography variant="h3" component="div">
-                  Sessions
-                </Typography>
-                <Speakers />
+                <Sessions />
               </Box>
             </TabPanel>
             <TabPanel value={value} index={2}>
-              <Subcriptions/>
+              <Box sx={{ marginLeft: "3rem" }}>
+                 <Subcriptions />
+              </Box>
             </TabPanel>
           </Grid>
         </Grid>
