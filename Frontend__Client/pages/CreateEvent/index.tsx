@@ -56,7 +56,7 @@ function a11yProps(index: number) {
 
 const CreateEvent = (props: CreateEvent) => {
   const [image, setImage] = useState<string | ArrayBuffer | null>();
-
+  
   const onImageChange = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
       let reader = new FileReader();

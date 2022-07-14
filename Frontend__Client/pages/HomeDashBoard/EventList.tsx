@@ -58,7 +58,6 @@ export const EventList = () => {
     createData('Workshop: How to use pencil', 88, 3.565, '22/7/2022', 'published'),
     createData('Concert: ABCD', 45, 3.612, '5/7/2022', 'ended'),
   ];
-
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -68,6 +67,7 @@ export const EventList = () => {
     setAnchorEl(null);
   };
 
+  const onClick = () => { console.log('clicked'); }
   return (
     <>
       <Box sx={{ marginLeft: "0" }}>
@@ -90,6 +90,7 @@ export const EventList = () => {
           </FormControl>
 
           <Button
+            onClick={onClick}
             variant="outlined"
             sx={{ width: "15rem", height: "3.5rem", marginLeft: "5rem", color: "black", borderColor: "black" }}
           >

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import styles from "../../styles/CreateEventForm.module.scss";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import Grid from "@material-ui/core/Grid";
@@ -232,7 +232,7 @@ export const Speakers = () => {
               <Alert
                 key={index}
                 severity="success"
-                icon={false}  
+                icon={false}
                 className={styles.infoBox}
                 action={
                   <IconButton
@@ -258,16 +258,16 @@ export const Speakers = () => {
               </Alert>
             </>
           ))}
-          <Box sx={{marginTop: "2px", width: "80%", alignSelf: "center"}}>
+          <Box sx={{ marginTop: "2px", width: "80%", alignSelf: "center" }}>
             <Button
-              sx={{ width:"12rem" }}
+              sx={{ width: "12rem" }}
               variant="outlined"
               onClick={handleOpen}
             >
               Add Spreakers
             </Button>
             <Button
-              sx={{ width:"12rem", float:"right" }}
+              sx={{ width: "12rem", float: "right" }}
               variant="contained"
               onClick={onFinish}
             >
@@ -287,6 +287,7 @@ export const Date = () => {
     handleSubmit,
     watch,
     formState: { errors },
+    control
   } = useForm();
 
   const [eventStart, setEventStart] = useState<Date | null>(null);
@@ -306,20 +307,27 @@ export const Date = () => {
         <form onSubmit={handleSubmit(onSubmit)}>
           <LocalizationProvider dateAdapter={AdapterDateFns}>
             <Stack spacing={3}>
-              <DatePicker
-                label="Event start date"
-                inputFormat="dd/MM/yyyy"
-                value={eventStart}
-                disablePast
-                onChange={(newValue: Date | null) => {
-                  setEventStart(newValue);
-                }}
-                renderInput={(params) => (
-                  <TextField
-                    className={styles.dateFields}
-                    required
-                    {...params}
-                    {...register("eventStart")}
+              <Controller
+                name="eventStart"
+                control={control}
+                render={({ field: { ref, ...rest } }) => (
+                  <DatePicker
+                    label="Event start date"
+                    inputFormat="dd/MM/yyyy"
+                    value={eventStart}
+                    disablePast
+                    inputRef={ref}
+                    onChange={(newValue: Date | null) => {
+                      setEventStart(newValue);
+                    }}
+                    renderInput={(params) => (
+                      <TextField
+                        className={styles.dateFields}
+                        required
+                        {...params}
+                      />
+                    )}
+                    {...rest}
                   />
                 )}
               />
@@ -344,7 +352,7 @@ export const Date = () => {
                 label="Ticket sales end"
                 inputFormat="dd/MM/yyyy"
                 value={ticketEnd}
-                minDate={ticketStart === null? undefined: ticketStart}
+                minDate={ticketStart === null ? undefined : ticketStart}
                 disablePast
                 onChange={(newValue: Date | null) => {
                   setTicketEnd(newValue);
