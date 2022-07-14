@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import styles from "../styles/CreateEventForm.module.scss";
+import styles from "../../styles/CreateEventForm.module.scss";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import { useForm } from "react-hook-form";

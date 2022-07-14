@@ -6,7 +6,6 @@ import Button from "@mui/material/Button";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
-import MenuItem from "@mui/material/MenuItem";
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
@@ -14,9 +13,13 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import styles from "../styles/CreateEventForm.module.scss";
+import Link from 'next/link'
+import IconButton from '@mui/material/IconButton';
+import MenuIcon from '@mui/icons-material/MoreVertOutlined';
+import Menu from '@mui/material/Menu';
+import MenuItem from "@mui/material/MenuItem";
 
-export const EventList = () => {
+export const Sessions = () => {
   const types = {
     lastest: 'Latest',
     sold: 'Sold',
@@ -28,38 +31,44 @@ export const EventList = () => {
     name: string;
     sold: number;
     gross: number;
-    date: string;
-    status: string;
+    numOfEvent: number;
   }
 
   function createData(
     name: string,
     sold: number,
     gross: number,
-    date: string,
-    status: string,
+    numOfEvent: number,
   ): Data {
     return {
       name,
       sold,
       gross,
-      date,
-      status
+      numOfEvent,
     };
   }
 
   const rows = [
-    createData('Concert: Ensemble of Nature', 56, 3.7, '7/7/2022','draft'),
-    createData('Music Show: Son Tung MTP Live Show', 305, 5, '15/7/2022','pending'),
-    createData('Workshop: How to use pencil', 88, 3.565, '22/7/2022','published'),
-    createData('Concert: ABCD', 45, 3.612, '5/7/2022','ended'),
+    createData('Concert: Ensemble of Nature', 56, 3.7, 2),
+    createData('Music Show: Son Tung MTP Live Show', 305, 5, 3),
+    createData('Workshop: How to use pencil', 88, 3.565, 1),
+    createData('Concert: ABCD', 45, 3.612, 8),
   ];
+
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
   return (
     <>
       <Box sx={{ marginLeft: "0" }}>
         <Typography variant="h3" component="div" sx={{ fontWeight: "bold" }}>
-          Events
+          Sessions
         </Typography>
         <Box sx={{ marginRight: "5rem", float: "right" }}>
           <FormControl sx={{ width: "15rem" }}>
@@ -79,32 +88,48 @@ export const EventList = () => {
             variant="outlined"
             sx={{ width: "15rem", height: "3.5rem", marginLeft: "5rem", color: "black", borderColor: "black" }}
           >
-            Create an event
+            <Link href="/CreateSession">
+              <a>
+                Create a session
+              </a>
+            </Link>
           </Button>
         </Box>
-        <TableContainer component={Paper} sx={{ marginTop: "5rem", marginLeft: "5rem", width: "90%"}}>
+        <TableContainer component={Paper} sx={{ marginTop: "5rem", marginLeft: "5rem", width: "90%" }}>
           <Table >
-            <TableHead sx={{ backgroundColor: "#4F3398"}}>
+            <TableHead sx={{ backgroundColor: "#4F3398" }}>
               <TableRow>
                 <TableCell sx={{ color: "#ffffff" }}>Events</TableCell>
                 <TableCell align="right" sx={{ color: "#ffffff" }}>Sold</TableCell>
                 <TableCell align="right" sx={{ color: "#ffffff" }}>Gross</TableCell>
-                <TableCell align="right" sx={{ color: "#ffffff" }}>Status</TableCell>
-                <TableCell align="right"></TableCell>
+                <TableCell align="right" sx={{ color: "#ffffff", paddingRight: "3rem" }}>Number of Event</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {rows.map((row) => (
                 <TableRow key={row.name} sx={{ width: "100%" }}>
                   <TableCell component="th" scope="row">
-                    <Typography sx={{fontWeight: "bold"}}>{row.name}</Typography>
-                    online event <br />
-                    {row.date}
+                    <Typography sx={{ fontWeight: "bold" }}>{row.name}</Typography>
                   </TableCell>
                   <TableCell align="right">{row.sold}/100</TableCell>
                   <TableCell align="right">${row.gross}</TableCell>
-                  <TableCell align="right">{row.status}</TableCell>
-                  <TableCell align="right"></TableCell>
+                  <TableCell align="right" sx={{ width: "15rem" }}>
+                    {row.numOfEvent}
+                    <IconButton sx={{ color: "rgba(106, 53, 242, 0.77)", marginLeft: "2rem"}} onClick={handleClick}>
+                      <MenuIcon />
+                    </IconButton>
+                    <Menu
+                      id="basic-menu"
+                      anchorEl={anchorEl}
+                      open={open}
+                      onClose={handleClose}
+                    >
+                      <MenuItem onClick={handleClose}>View</MenuItem>
+                      <MenuItem onClick={handleClose}>Edit</MenuItem>
+                      <MenuItem onClick={handleClose}>Publish</MenuItem>
+                      <MenuItem onClick={handleClose}>Delete</MenuItem>
+                    </Menu>
+                    </TableCell>
                 </TableRow>
               ))}
             </TableBody>

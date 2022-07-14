@@ -1,27 +1,24 @@
 import React, { useState, ChangeEvent } from "react";
-import { AppBar } from "@material-ui/core";
-import { makeStyles } from "@mui/styles";
-import Header from "../Header";
+import Header from "../../components/Header";
 import Box from "@mui/material/Box";
-import Footer from "../Footer";
+import Footer from "../../components/Footer";
 import Typography from "@mui/material/Typography";
-import styles from "../styles/EventDashboard.module.scss";
+import styles from "../../styles/EventDashboard.module.scss";
 import Card from "@mui/material/Card";
 import CardActionArea from "@mui/material/CardActionArea";
 import CardContent from "@mui/material/CardContent";
 import Grid from "@material-ui/core/Grid";
 import Button from "@mui/material/Button";
-import Image from "next/image";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import EventIcon from "@mui/icons-material/Event";
 import SessionsIcon from "@mui/icons-material/EmojiEvents";
 import SubscriptionsIcon from "@mui/icons-material/ShopTwo";
-import { BasicInfo, Speakers, Date } from "./CreateEventForm";
+import { BasicInfo, Speakers, Date } from "../CreateEvent/CreateEventForm";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { Subcriptions } from "../Subcriptions";
-import { EventList } from "../EventList";
-import { Sessions } from "../CreSessions";
+import { Subcriptions } from "./Subcriptions";
+import { EventList } from "./EventList";
+import { Sessions } from "./SessionList";
 
 interface EventCreate { }
 
@@ -170,7 +167,7 @@ const EventCreate = (props: EventCreate) => {
             </TabPanel>
             <TabPanel value={value} index={2}>
               <Box sx={{ marginLeft: "3rem" }}>
-                 <Subcriptions />
+                <Subcriptions />
               </Box>
             </TabPanel>
           </Grid>

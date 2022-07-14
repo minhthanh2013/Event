@@ -6,7 +6,6 @@ import Button from "@mui/material/Button";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
-import MenuItem from "@mui/material/MenuItem";
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
@@ -14,8 +13,14 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import styles from "../styles/CreateEventForm.module.scss";
+import Link from 'next/link'
+import IconButton from '@mui/material/IconButton';
+import MenuIcon from '@mui/icons-material/MoreVertOutlined';
+import Menu from '@mui/material/Menu';
+import MenuItem from "@mui/material/MenuItem";
 
-export const Sessions = () => {
+export const EventList = () => {
   const types = {
     lastest: 'Latest',
     sold: 'Sold',
@@ -54,11 +59,20 @@ export const Sessions = () => {
     createData('Concert: ABCD', 45, 3.612, '5/7/2022', 'ended'),
   ];
 
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
   return (
     <>
       <Box sx={{ marginLeft: "0" }}>
         <Typography variant="h3" component="div" sx={{ fontWeight: "bold" }}>
-          Sessions
+          Events
         </Typography>
         <Box sx={{ marginRight: "5rem", float: "right" }}>
           <FormControl sx={{ width: "15rem" }}>
@@ -74,11 +88,16 @@ export const Sessions = () => {
               <MenuItem value="published">Published</MenuItem>
             </Select>
           </FormControl>
+
           <Button
             variant="outlined"
             sx={{ width: "15rem", height: "3.5rem", marginLeft: "5rem", color: "black", borderColor: "black" }}
           >
-            Create an event
+            <Link href="/CreateEvent">
+              <a>
+                Create an event
+              </a>
+            </Link>
           </Button>
         </Box>
         <TableContainer component={Paper} sx={{ marginTop: "5rem", marginLeft: "5rem", width: "90%" }}>
@@ -103,7 +122,22 @@ export const Sessions = () => {
                   <TableCell align="right">{row.sold}/100</TableCell>
                   <TableCell align="right">${row.gross}</TableCell>
                   <TableCell align="right">{row.status}</TableCell>
-                  <TableCell align="right"></TableCell>
+                  <TableCell sx={{ width: "2rem" }}>
+                    <IconButton sx={{ color: "rgba(106, 53, 242, 0.77)" }} onClick={handleClick}>
+                      <MenuIcon />
+                    </IconButton>
+                    <Menu
+                      id="basic-menu"
+                      anchorEl={anchorEl}
+                      open={open}
+                      onClose={handleClose}
+                    >
+                      <MenuItem onClick={handleClose}>View</MenuItem>
+                      <MenuItem onClick={handleClose}>Edit</MenuItem>
+                      <MenuItem onClick={handleClose}>Publish</MenuItem>
+                      <MenuItem onClick={handleClose}>Delete</MenuItem>
+                    </Menu>
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>

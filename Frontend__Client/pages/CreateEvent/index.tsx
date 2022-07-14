@@ -1,11 +1,9 @@
 import React, { useState, ChangeEvent } from "react";
-import { AppBar } from "@material-ui/core";
-import { makeStyles } from "@mui/styles";
-import Header from "../Header";
+import Header from "../../components/Header";
 import Box from "@mui/material/Box";
-import Footer from "../Footer";
+import Footer from "../../components/Footer";
 import Typography from "@mui/material/Typography";
-import styles from "../styles/EventDashboard.module.scss";
+import styles from "../../styles/EventDashboard.module.scss";
 import Card from "@mui/material/Card";
 import CardActionArea from "@mui/material/CardActionArea";
 import CardContent from "@mui/material/CardContent";
@@ -17,7 +15,7 @@ import Tab from "@mui/material/Tab";
 import { BasicInfo, Speakers, Date } from "./CreateEventForm";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 
-interface EventDashboard {}
+interface CreateEvent {}
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -56,7 +54,7 @@ function a11yProps(index: number) {
   };
 }
 
-const EventDashboard = (props: EventDashboard) => {
+const CreateEvent = (props: CreateEvent) => {
   const [image, setImage] = useState<string | ArrayBuffer | null>();
 
   const onImageChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -171,4 +169,4 @@ const EventDashboard = (props: EventDashboard) => {
   );
 };
 
-export default EventDashboard;
+export default CreateEvent;
