@@ -21,3 +21,32 @@ export class ConferenceRequestDto {
     ticketQuantity: number;
     conferencePrice: number;
 }
+
+export class HostCreatedConferenceResponseDto {
+    conferenceId: number;
+    conferenceName: string;
+    conferenceDescription: string;
+    dateStartConference: Date;
+    ticketQuantity: number;
+    currentTicket: number;
+    ticketPrice: number;
+    statusTicket: string;
+}
+
+export class HostCreatedConferenceRequestDto {
+    conferenceName: string;
+    conferenceType: string;
+    conferenceCategory: string;
+    conferenceDescription: string;
+    listSpeaker: SpeakerRequestDto[];
+    eventStart: Date;
+    ticketSaleStart: Date;
+    ticketSaleEnd: Date;
+    ticketPrice: Date;
+    ticketQuantity: number;
+}
+
+export class SpeakerRequestDto {
+    emailSpeaker: string;
+    nameSpeaker: string;
+}
