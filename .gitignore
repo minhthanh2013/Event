@@ -12,8 +12,8 @@
 /redis/dist
 /zoom/node_modules
 /zoom/dist
-/Frontend_Client/node_modules
-
+/Frontend__Client/node_modules
+/Frontend__Client/.next
 # Logs
 logs
 *.log

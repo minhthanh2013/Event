@@ -99,4 +99,6 @@ export class ConferenceEntity {
   ticket_quantity: number;
   @Column({type: 'int'})
   current_quantity: number;
+  @Column()
+  status_ticket: string;
 }
