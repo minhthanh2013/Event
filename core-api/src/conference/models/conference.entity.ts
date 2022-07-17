@@ -1,5 +1,4 @@
 /* eslint-disable prettier/prettier */
-import { type } from 'os';
 import { AdminEntity } from 'src/admin/models/admin.entity';
 import { AnalyticEntity } from 'src/analytic/models/analytic.entity';
 import { ComboSessionEntity } from 'src/combosession/models/combo_session.entiy';
@@ -101,4 +100,6 @@ export class ConferenceEntity {
   current_quantity: number;
   @Column()
   status_ticket: string;
+  @Column()
+  zoom_meeting_id: string;
 }
