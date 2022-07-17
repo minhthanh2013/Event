@@ -19,9 +19,13 @@ import IconButton from "@mui/material/IconButton";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import moment from 'moment';
 
+type Data = {
+  [key: string]: any;
+}
 interface CreateEventProps {
-  data: object;
+  data: Data;
   setData: (data: object) => void;
   setValue: (value: number) => void;
 }
@@ -64,6 +68,7 @@ export const BasicInfo: React.FC<CreateEventProps> = ({ data, setData, setValue 
             required
             id="standard-required"
             label="Event Name"
+            defaultValue={data ? data.eventName : undefined}
             variant="standard"
             {...register("eventName")}
           />
@@ -71,6 +76,7 @@ export const BasicInfo: React.FC<CreateEventProps> = ({ data, setData, setValue 
             className={styles.eventFields}
             id="standard-required"
             label="Organizer Name"
+            defaultValue={data ? data.organizerName : undefined}
             variant="standard"
             {...register("organizerName")}
           />
@@ -81,14 +87,13 @@ export const BasicInfo: React.FC<CreateEventProps> = ({ data, setData, setValue 
               className={styles.selectType}
               required
               labelId="select-type"
-              value={type}
+              defaultValue={data ? data.type : type}
               label="Type"
               {...register("type")}
               onChange={handleChangeType}
             >
-              <MenuItem value={10}>Ten</MenuItem>
-              <MenuItem value={20}>Twenty</MenuItem>
-              <MenuItem value={30}>Thirty</MenuItem>
+              <MenuItem value={"Offline"}>Offline</MenuItem>
+              <MenuItem value={"Online"}>Online</MenuItem>
             </Select>
           </FormControl>
 
@@ -97,20 +102,21 @@ export const BasicInfo: React.FC<CreateEventProps> = ({ data, setData, setValue 
             <Select
               required
               labelId="select-category"
-              value={category}
+              defaultValue={data ? data.category : category}
               label="Category"
               {...register("category")}
               onChange={handleChangeCategory}
             >
-              <MenuItem value={"music"}>Music</MenuItem>
-              <MenuItem value={"talkShow"}>Talk Show</MenuItem>
-              <MenuItem value={"event"}>Event</MenuItem>
+              <MenuItem value={"Khoa học"}>Khoa học</MenuItem>
+              <MenuItem value={"Việc làm"}>Việc làm</MenuItem>
+              <MenuItem value={"Y Tế"}>Y Tế</MenuItem>
             </Select>
           </FormControl>
 
           <TextField
             className={styles.eventFields}
             label="Description"
+            defaultValue={data ? data.description : undefined}
             multiline
             {...register("description")}
           />
@@ -136,17 +142,15 @@ export const Speakers: React.FC<CreateEventProps> = ({ data, setData, setValue }
     watch,
     formState: { errors },
   } = useForm();
-  const [speakers, setSpeakers] = useState<Speaker[]>();
 
   const onSubmit = (value: any) => {
-    let temp = [...(speakers ?? [])];
+    let temp = [...(data.speakers ?? [])];
     temp.push(value);
-    setSpeakers(temp);
+    setData({ ...data, speakers: temp })
     setOpen(false);
   };
 
   const onFinish = () => {
-    setData({ ...data, speakers: speakers })
     setValue(2)
   }
   const [open, setOpen] = useState(false);
@@ -210,14 +214,14 @@ export const Speakers: React.FC<CreateEventProps> = ({ data, setData, setValue }
   const handleDelete = (index: number) => {
     let temp: Speaker[] = [];
     let arr: Speaker[] = [];
-    speakers?.forEach((speaker) => temp.push(Object.assign({}, speaker)));
-    speakers !== undefined ? (arr = temp.splice(index, 1)) : (temp = []);
-    setSpeakers(temp);
+    data.speakers?.forEach((speaker) => temp.push(Object.assign({}, speaker)));
+    data.speakers !== undefined ? (arr = temp.splice(index, 1)) : (temp = []);
+    setData({ ...data, speakers: temp })
   };
 
   return (
     <>
-      {speakers?.length === undefined || speakers?.length < 1 ? (
+      {data.speakers?.length === undefined || data.speakers?.length < 1 ? (
         <Grid container spacing={0} direction="column" alignItems="center">
           <InterpreterModeIcon
             className={styles.speakersIcon}
@@ -239,7 +243,7 @@ export const Speakers: React.FC<CreateEventProps> = ({ data, setData, setValue }
         </Grid>
       ) : (
         <Stack sx={{ width: "100%" }} spacing={2}>
-          {speakers?.map((speaker, index) => (
+          {data.speakers?.map((speaker, index) => (
             <>
               <Alert
                 key={index}
@@ -293,7 +297,7 @@ export const Speakers: React.FC<CreateEventProps> = ({ data, setData, setValue }
   );
 };
 
-export const Date: React.FC<CreateEventProps> = ({ data, setData }) => {
+export const Date: React.FC<CreateEventProps> = ({ data, setData, setValue }) => {
   const {
     register,
     handleSubmit,
@@ -308,8 +312,9 @@ export const Date: React.FC<CreateEventProps> = ({ data, setData }) => {
   const onSubmit = (value: any) => {
     setData({
       ...data, eventStart: value.eventStart, ticketStart: value.ticketStart,
-      eventEnd: value.ticketEnd, price: value.price, quantity: value.quantity
-    })
+      ticketEnd: value.ticketEnd, price: value.price, quantity: value.quantity
+    });
+    setValue(0);
   };
   return (
     <>
@@ -326,12 +331,12 @@ export const Date: React.FC<CreateEventProps> = ({ data, setData }) => {
               <Controller
                 name="eventStart"
                 control={control}
-                defaultValue={eventStart}
+                defaultValue={data.eventStart}
                 render={({ field: { ref, ...rest } }) => (
                   <DatePicker
                     label="Event start date"
                     inputFormat="dd/MM/yyyy"
-                    value={eventStart}
+                    value={data.eventStart}
                     disablePast
                     inputRef={ref}
                     onChange={(newValue: Date | null) => {
@@ -351,12 +356,12 @@ export const Date: React.FC<CreateEventProps> = ({ data, setData }) => {
               <Controller
                 name="ticketStart"
                 control={control}
-                defaultValue={ticketStart}
+                defaultValue={data.ticketStart}
                 render={({ field: { ref, ...rest } }) => (
                   <DatePicker
                     label="Ticket sales start"
                     inputFormat="dd/MM/yyyy"
-                    value={ticketStart}
+                    value={data.ticketStart}
                     disablePast
                     inputRef={ref}
                     onChange={(newValue: Date | null) => {
@@ -376,13 +381,13 @@ export const Date: React.FC<CreateEventProps> = ({ data, setData }) => {
               <Controller
                 name="ticketEnd"
                 control={control}
-                defaultValue={ticketEnd}
                 render={({ field: { ref, ...rest } }) => (
                   <DatePicker
                     label="Ticket sales end"
                     inputFormat="dd/MM/yyyy"
-                    value={ticketEnd}
+                    value={data.ticketEnd}
                     disablePast
+                    minDate={data.ticketStart}
                     inputRef={ref}
                     onChange={(newValue: Date | null) => {
                       setTicketEnd(newValue);
@@ -407,16 +412,19 @@ export const Date: React.FC<CreateEventProps> = ({ data, setData }) => {
             id="standard-required"
             label="Ticket price"
             variant="standard"
+            defaultValue={data.price}
             type="number"
             {...register("price")}
           />
           <TextField
             className={styles.eventFields}
-            disabled
+            required
             id="standard-required"
             label="Ticket quantity"
             variant="standard"
-            value="100"
+            type="number"
+            defaultValue={data.quantity}
+            {...register("quantity")}
           />
           <Button className={styles.nextBtn} variant="contained" type="submit">
             Submit
