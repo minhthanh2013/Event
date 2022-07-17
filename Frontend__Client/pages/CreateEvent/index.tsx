@@ -15,8 +15,6 @@ import Tab from "@mui/material/Tab";
 import { BasicInfo, Speakers, Date } from "./CreateEventForm";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 
-interface CreateEvent {}
-
 interface TabPanelProps {
   children?: React.ReactNode;
   index: number;
@@ -54,9 +52,10 @@ function a11yProps(index: number) {
   };
 }
 
-const CreateEvent = (props: CreateEvent) => {
+const CreateEvent = () => {
+  const [data, setData] = useState({})
   const [image, setImage] = useState<string | ArrayBuffer | null>();
-  
+
   const onImageChange = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
       let reader = new FileReader();
@@ -150,14 +149,14 @@ const CreateEvent = (props: CreateEvent) => {
                 <Tab label="Speakers" {...a11yProps(1)} />
                 <Tab label="Date and time" {...a11yProps(2)} />
               </Tabs>
-              <TabPanel value={value} index={0}>
-                <BasicInfo />
+              <TabPanel value={value}  index={0}>
+                <BasicInfo data={data} setData={setData} setValue={setValue} />
               </TabPanel>
               <TabPanel value={value} index={1}>
-                <Speakers />
+                <Speakers data={data} setData={setData} setValue={setValue} />
               </TabPanel>
               <TabPanel value={value} index={2}>
-                <Date />
+                <Date data={data} setData={setData} setValue={setValue} />
               </TabPanel>
             </ThemeProvider>
           </Box>

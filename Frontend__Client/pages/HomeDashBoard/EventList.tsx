@@ -67,7 +67,6 @@ export const EventList = () => {
     setAnchorEl(null);
   };
 
-  const onClick = () => { console.log('clicked'); }
   return (
     <>
       <Box sx={{ marginLeft: "0" }}>
@@ -90,7 +89,6 @@ export const EventList = () => {
           </FormControl>
 
           <Button
-            onClick={onClick}
             variant="outlined"
             sx={{ width: "15rem", height: "3.5rem", marginLeft: "5rem", color: "black", borderColor: "black" }}
           >

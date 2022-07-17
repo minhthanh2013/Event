@@ -154,7 +154,7 @@ const EventCreate = (props: EventCreate) => {
               </Tabs>
             </ThemeProvider>
           </Grid>
-          <Grid xs={10} md={10}>
+          <Grid item xs={10} md={10}>
             <TabPanel value={value} index={0}>
               <Box sx={{ marginLeft: "3rem" }}>
                 <EventList />

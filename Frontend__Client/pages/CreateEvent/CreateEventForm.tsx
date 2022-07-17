@@ -20,7 +20,13 @@ import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
-export const BasicInfo = () => {
+interface CreateEventProps {
+  data: object;
+  setData: (data: object) => void;
+  setValue: (value: number) => void;
+}
+
+export const BasicInfo: React.FC<CreateEventProps> = ({ data, setData, setValue }) => {
   const [type, setType] = useState("");
   const [category, setCategory] = useState("");
   const {
@@ -36,8 +42,13 @@ export const BasicInfo = () => {
   const handleChangeCategory = (event: SelectChangeEvent) => {
     setCategory(event.target.value as string);
   };
-  const onSubmit = (data: any) => console.log(data);
-
+  const onSubmit = (value: any) => {
+    setData({
+      ...data, eventName: value.eventName, organizerName: value.organizerName,
+      eventType: value.type, eventCategory: value.category, description: value.description
+    });
+    setValue(1);
+  };
   return (
     <>
       <Grid
@@ -101,7 +112,7 @@ export const BasicInfo = () => {
             className={styles.eventFields}
             label="Description"
             multiline
-            {...register("Description")}
+            {...register("description")}
           />
           <Button className={styles.nextBtn} variant="contained" type="submit">
             Next
@@ -117,7 +128,7 @@ interface Speaker {
   name: string;
 }
 
-export const Speakers = () => {
+export const Speakers: React.FC<CreateEventProps> = ({ data, setData, setValue }) => {
   const {
     register,
     handleSubmit,
@@ -127,15 +138,16 @@ export const Speakers = () => {
   } = useForm();
   const [speakers, setSpeakers] = useState<Speaker[]>();
 
-  const onSubmit = (data: any) => {
+  const onSubmit = (value: any) => {
     let temp = [...(speakers ?? [])];
-    temp.push(data);
+    temp.push(value);
     setSpeakers(temp);
     setOpen(false);
   };
 
   const onFinish = () => {
-    console.log(speakers);
+    setData({ ...data, speakers: speakers })
+    setValue(2)
   }
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
@@ -281,7 +293,7 @@ export const Speakers = () => {
   );
 };
 
-export const Date = () => {
+export const Date: React.FC<CreateEventProps> = ({ data, setData }) => {
   const {
     register,
     handleSubmit,
@@ -293,8 +305,12 @@ export const Date = () => {
   const [eventStart, setEventStart] = useState<Date | null>(null);
   const [ticketStart, setTicketStart] = useState<Date | null>(null);
   const [ticketEnd, setTicketEnd] = useState<Date | null>(null);
-  const onSubmit = (data: any) => console.log(data);
-
+  const onSubmit = (value: any) => {
+    setData({
+      ...data, eventStart: value.eventStart, ticketStart: value.ticketStart,
+      eventEnd: value.ticketEnd, price: value.price, quantity: value.quantity
+    })
+  };
   return (
     <>
       <Grid
@@ -310,6 +326,7 @@ export const Date = () => {
               <Controller
                 name="eventStart"
                 control={control}
+                defaultValue={eventStart}
                 render={({ field: { ref, ...rest } }) => (
                   <DatePicker
                     label="Event start date"
@@ -331,39 +348,53 @@ export const Date = () => {
                   />
                 )}
               />
-              <DatePicker
-                label="Ticket sales start"
-                inputFormat="dd/MM/yyyy"
-                value={ticketStart}
-                disablePast
-                onChange={(newValue: Date | null) => {
-                  setTicketStart(newValue);
-                }}
-                renderInput={(params) => (
-                  <TextField
-                    className={styles.dateFields}
-                    required
-                    {...params}
-                    {...register("ticketStart")}
+              <Controller
+                name="ticketStart"
+                control={control}
+                defaultValue={ticketStart}
+                render={({ field: { ref, ...rest } }) => (
+                  <DatePicker
+                    label="Ticket sales start"
+                    inputFormat="dd/MM/yyyy"
+                    value={ticketStart}
+                    disablePast
+                    inputRef={ref}
+                    onChange={(newValue: Date | null) => {
+                      setTicketStart(newValue);
+                    }}
+                    renderInput={(params) => (
+                      <TextField
+                        className={styles.dateFields}
+                        required
+                        {...params}
+                      />
+                    )}
+                    {...rest}
                   />
                 )}
               />
-              <DatePicker
-                label="Ticket sales end"
-                inputFormat="dd/MM/yyyy"
-                value={ticketEnd}
-                minDate={ticketStart === null ? undefined : ticketStart}
-                disablePast
-                onChange={(newValue: Date | null) => {
-                  setTicketEnd(newValue);
-                }}
-                renderInput={(params) => (
-                  <TextField
-                    className={styles.dateFields}
-                    required
-                    {...params}
+              <Controller
+                name="ticketEnd"
+                control={control}
+                defaultValue={ticketEnd}
+                render={({ field: { ref, ...rest } }) => (
+                  <DatePicker
+                    label="Ticket sales end"
+                    inputFormat="dd/MM/yyyy"
                     value={ticketEnd}
-                    {...register("ticketEnd")}
+                    disablePast
+                    inputRef={ref}
+                    onChange={(newValue: Date | null) => {
+                      setTicketEnd(newValue);
+                    }}
+                    renderInput={(params) => (
+                      <TextField
+                        className={styles.dateFields}
+                        required
+                        {...params}
+                      />
+                    )}
+                    {...rest}
                   />
                 )}
               />
