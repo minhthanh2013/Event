@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "../../styles/CreateEventForm.module.scss";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
@@ -19,8 +19,6 @@ import IconButton from "@mui/material/IconButton";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import moment from 'moment';
-
 type Data = {
   [key: string]: any;
 }
@@ -29,16 +27,44 @@ interface CreateEventProps {
   setData: (data: object) => void;
   setValue: (value: number) => void;
 }
-
+interface PropsArray {
+  id: number,
+  name: string,
+}
+interface Props {
+  status: boolean,
+  data: PropsArray[],
+}
 export const BasicInfo: React.FC<CreateEventProps> = ({ data, setData, setValue }) => {
   const [type, setType] = useState("");
   const [category, setCategory] = useState("");
+  const [categoryList, setCategoryList] = useState<Props>()
+  const [typeList, setTypeList] = useState<Props>()
   const {
     register,
     handleSubmit,
     watch,
     formState: { errors },
   } = useForm();
+
+  useEffect(() => {
+    getDataCategory();
+  }, []);
+
+  useEffect(() => {
+    getDataType();
+  }, []);
+
+  const getDataCategory = async () => {
+    let res = await fetch("http://localhost:3000/conferencecategory/get-all")
+    let categoryData = await res.json()
+    setCategoryList(categoryData)
+  }
+  const getDataType = async () => {
+    let res = await fetch("http://localhost:3000/conferencetype/get-all")
+    let typeData = await res.json()
+    setTypeList(typeData)
+  }
 
   const handleChangeType = (event: SelectChangeEvent) => {
     setType(event.target.value as string);
@@ -87,13 +113,14 @@ export const BasicInfo: React.FC<CreateEventProps> = ({ data, setData, setValue 
               className={styles.selectType}
               required
               labelId="select-type"
-              defaultValue={data ? data.type : type}
+              defaultValue={data.type}
               label="Type"
               {...register("type")}
               onChange={handleChangeType}
             >
-              <MenuItem value={"Offline"}>Offline</MenuItem>
-              <MenuItem value={"Online"}>Online</MenuItem>
+              {typeList?.data.map((typeItem) => (
+                <MenuItem value={typeItem.name} key={typeItem.id}>aiusfhaisufh: + {typeItem.name}</MenuItem>
+              ))}
             </Select>
           </FormControl>
 
@@ -107,9 +134,9 @@ export const BasicInfo: React.FC<CreateEventProps> = ({ data, setData, setValue 
               {...register("category")}
               onChange={handleChangeCategory}
             >
-              <MenuItem value={"Khoa học"}>Khoa học</MenuItem>
-              <MenuItem value={"Việc làm"}>Việc làm</MenuItem>
-              <MenuItem value={"Y Tế"}>Y Tế</MenuItem>
+              {categoryList?.data.map(cateItem => (
+                <MenuItem value={cateItem.name}>{cateItem.name}</MenuItem>
+              ))}
             </Select>
           </FormControl>
 
