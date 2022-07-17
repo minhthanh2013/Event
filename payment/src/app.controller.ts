@@ -1,8 +1,8 @@
-import { Controller, Get, Inject, Post } from '@nestjs/common';
-import { EventPattern, MessagePattern, Transport } from '@nestjs/microservices';
-import { from, Observable, of } from 'rxjs';
+import { Controller, Get } from '@nestjs/common';
+import { MessagePattern } from '@nestjs/microservices';
+import { from, Observable } from 'rxjs';
 import { AppService } from './app.service';
-import { PaymentDto } from './payment/payment.dto';
+import { PaymentDto, ResponseData } from './payment/payment.dto';
 
 @Controller()
 export class AppController {
@@ -14,12 +14,12 @@ export class AppController {
   }
 
   @MessagePattern({cmd: 'CHECKOUT'})
-  ticketPayment(dataPayment: PaymentDto): Observable<String> {
+  ticketPayment(dataPayment: PaymentDto): Observable<ResponseData> {
     return from(this.appService.paymentTicket(dataPayment));
   }
 
   @MessagePattern({cmd: 'SUBSCRIPTION'})
-  subscriptNewPlan(): Observable<String> {
+  subscriptNewPlan(): Observable<string> {
     return from(this.appService.demoNewSubscription())
   }
 }
