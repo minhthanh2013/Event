@@ -8,7 +8,7 @@
 /core-api/node_modules
 /payment/node_modules
 /payment/dist
-/redis/node_modules
+/redis/node_modules 
 /redis/dist
 /zoom/node_modules
 /zoom/dist

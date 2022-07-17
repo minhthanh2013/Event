@@ -1,12 +1,11 @@
 import { AppBar } from '@material-ui/core'
 import { Box, Button, Toolbar, Typography } from '@mui/material'
 import IconButton from '@mui/material/IconButton'
-import MenuIcon from '@mui/icons-material/Menu'
 import React from 'react'
-import Badge from '@mui/material/Badge'
-import MailOutlineIcon from '@mui/icons-material/MailOutline'
-import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone'
-import Avatar from '@mui/material/Avatar'
+import Badge from "@mui/material/Badge";
+import MailOutlineIcon from "@mui/icons-material/MailOutline";
+import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
+import Avatar from "@mui/material/Avatar";
 
 interface HeaderProps {}
 const Header = (props: HeaderProps) => {
