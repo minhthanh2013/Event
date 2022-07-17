@@ -13,11 +13,15 @@ export class ConferenceRequestDto {
     conferenceType: string;
     conferenceCategory: string;
     conferenceDescription: string;
-    speakerEmail: string;
-    speakerName: string;
+    speakerList: SpeakerList[];
     dateStartConference: Date;
     dateStartSell: Date;
     dateEndSell: Date;
     ticketQuantity: number;
     conferencePrice: number;
+}
+
+export class SpeakerList {
+    emailSpeaker: string;
+    nameSpeaker: string;
 }

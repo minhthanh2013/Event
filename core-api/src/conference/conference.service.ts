@@ -1,10 +1,9 @@
 /* eslint-disable prettier/prettier */
-import { Inject, Injectable } from '@nestjs/common';
-import { ClientProxy } from '@nestjs/microservices';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Observable, of } from 'rxjs';
 import { ConferenceCategoryEntity } from 'src/conferencecategory/models/conference_category.entity';
 import { ConferenceTypeEntity } from 'src/conferencetype/models/conference_type.entity';
+import { ResponseData } from 'src/responsedata/response-data.dto';
 import { UserEntity } from 'src/user/models/user.entity';
 import { Repository } from 'typeorm';
 import { ConferenceRequestDto, ConferenceResponseDto } from './models/conference.dto';
@@ -23,58 +22,60 @@ export class ConferenceService {
     private readonly speakerRepository: Repository<UserEntity>
   ) { }
 
-  findAllConferences(): Observable<ConferenceResponseDto[]> {
-    var result: Array<ConferenceResponseDto> = []
-    this.conferenceRepository.find().then(value => {
-      value.forEach(element => result.push(this.convertEntityToDto(element)))
-    })
-    return of(result);
+  async findAllConferences(): Promise<ResponseData> {
+    let result = new ResponseData()
+    const data = await this.conferenceRepository.find()
+    if (data.length >= 1) {
+      result.data = data
+    }
+    else {
+      result.status = false
+    }
+    return result;
   }
-  findOne(id: number): Observable<ConferenceResponseDto> {
-    var result = new ConferenceResponseDto()
-    this.conferenceRepository.findOne({ where: { conference_id: id } }).then(value => {
-      result = this.convertEntityToDto(value)
-    })
-    return of(result);
+  async findOne(id: number): Promise<ResponseData> {
+    let result = new ResponseData()
+    const data = await this.conferenceRepository.findOne({ where: { conference_id: id } })
+      result.status = data !== undefined
+    return result;
   }
-  createConference(conference: ConferenceRequestDto): Observable<ConferenceResponseDto> {
-    var result = new ConferenceResponseDto()
+  async createConference(conference: ConferenceRequestDto): Promise<ResponseData> {
+    let result = new ResponseData()
     this.convertDtoToEntity(conference)
-    this.conferenceRepository.save(this.convertDtoToEntity(conference)).then(value => {
-      result = this.convertEntityToDto(value)
-    })
-    return of(result);
+    const data = await this.conferenceRepository.save(this.convertDtoToEntity(conference))
+    result.status = data !== undefined
+    return result;
   }
 
-  update(id: number, conference: ConferenceRequestDto): Observable<Boolean> {
-    var result: Boolean = false
-    this.conferenceRepository.update(id, this.convertDtoToEntity(conference)).then(value => {
-      result = value.affected == 1
-    })
-    return of(result);
+  async update(id: number, conference: ConferenceRequestDto): Promise<ResponseData> {
+    let result = new ResponseData()
+    const data = await this.conferenceRepository.update(id, this.convertDtoToEntity(conference))
+      result.status = data.affected == 1
+    return result;
   }
-  remove(id: number): Observable<Boolean> {
-    var result: Boolean = false
-    this.conferenceRepository.delete(id).then(value => {
-      result = value.affected == 1
-    })
-    return of(result);
+  async remove(id: number): Promise<ResponseData> {
+    let result = new ResponseData()
+    const data = await this.conferenceRepository.delete(id)
+    result.status = data.affected == 1
+    return result;
   }
-  getNumberOfConference(limit: number): Observable<ConferenceResponseDto[]> {
-    var result: Array<ConferenceResponseDto> = []
-    this.conferenceRepository.createQueryBuilder()
+  async getNumberOfConference(limit: number): Promise<ResponseData> {
+    let result = new ResponseData()
+    const data = await this.conferenceRepository.createQueryBuilder()
       .select("conferences")
       .from(ConferenceEntity, "conferences")
       .limit(limit)
-      .getMany().then(value => {
-        value.forEach(element => {
-          result.push(this.convertEntityToDto(element))
-        })
-      })
-    return of(result)
+      .getMany()
+      if (data.length >= 1) {
+        result.data = data
+      }
+      else {
+        result.status = false
+      }
+    return result;
   }
   convertEntityToDto(entity: ConferenceEntity): ConferenceResponseDto {
-    var dto = new ConferenceResponseDto()
+    let dto = new ConferenceResponseDto()
     dto.conferenceAddress = entity.address
     dto.conferenceDateStart = entity.date_start_conference
     dto.conferencePrice = entity.price
@@ -83,7 +84,7 @@ export class ConferenceService {
   }
   
   convertDtoToEntity(dto: ConferenceRequestDto): ConferenceEntity {
-    var entity = new ConferenceEntity()
+    let entity = new ConferenceEntity()
     entity.conference_name = dto.conferenceName
     entity.host.user_name = dto.hostName
     entity.date_start_conference = dto.dateStartConference
@@ -104,14 +105,14 @@ export class ConferenceService {
       value => entity.conference_type.type_id = value.type_id
     )
     
-    this.speakerRepository.findOne({
-      where : { 
-        email: dto.speakerEmail,
-        user_name: dto.speakerName,
-       }
-    }).then(
-      value => entity.speaker.user_id = value.user_id
-    )
+    // this.speakerRepository.findOne({
+    //   where : { 
+    //     email: dto.speakerEmail,
+    //     user_name: dto.speakerName,
+    //    }
+    // }).then(
+    //   value => entity.speaker.user_id = value.user_id
+    // )
     return entity
   }
 }

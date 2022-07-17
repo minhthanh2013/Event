@@ -1,11 +1,10 @@
 /* eslint-disable prettier/prettier */
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { from } from 'rxjs';
-import { Observable } from 'rxjs';
-import { DeleteResult, Repository, UpdateResult } from 'typeorm';
+import { ResponseData } from 'src/responsedata/response-data.dto';
+import { Repository } from 'typeorm';
+import { ConferenceCategoryDto } from './models/conference_category.dto';
 import { ConferenceCategoryEntity } from './models/conference_category.entity';
-import { ConferenceCategory } from './models/conference_category.interface';
 
 @Injectable()
 export class ConferencecategoryService {
@@ -14,21 +13,21 @@ export class ConferencecategoryService {
     private readonly conferenceCategoryRepository: Repository<ConferenceCategoryEntity>,
   ) {}
 
-  findAllConferenceCategories(): Observable<ConferenceCategory[]> {
-    return from(this.conferenceCategoryRepository.find());
+  async findAllConferenceCategories(): Promise<ResponseData> {
+    const result = new ResponseData()
+    const data = await this.conferenceCategoryRepository.find()
+    if (data.length >= 1) {
+      result.data = data
+    } else {
+      result.status = false
+    }
+    console.log(result)
+    return result;
   }
-  findOne(id: number): Observable<ConferenceCategory> {
-    return from(this.conferenceCategoryRepository.findOne({where: {category_id: id}}));
-  }
-  createConferenceCategory(
-    conferenceCategory: ConferenceCategory,
-  ): Observable<ConferenceCategory> {
-    return from(this.conferenceCategoryRepository.save(conferenceCategory));
-  }
-  update(id: number, conferenceCategory: ConferenceCategory): Observable<UpdateResult> {
-    return from(this.conferenceCategoryRepository.update(id, conferenceCategory));
-  }
-  remove(id: number): Observable<DeleteResult> {
-    return from(this.conferenceCategoryRepository.delete(id));
+  convertEntityToDto(entity: ConferenceCategoryEntity): ConferenceCategoryDto {
+    let resultDto = new ConferenceCategoryDto()
+    resultDto.categoryId = entity.category_id
+    resultDto.categoryName = entity.category_name
+    return resultDto
   }
 }

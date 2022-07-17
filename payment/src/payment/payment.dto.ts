@@ -4,3 +4,7 @@ export class PaymentDto {
     ticketName: string;
     ticketQuantity: number;
 }
+export class ResponseData {
+    status: boolean = true;
+    data: any = null;
+}

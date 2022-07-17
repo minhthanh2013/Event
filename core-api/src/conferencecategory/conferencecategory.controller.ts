@@ -1,39 +1,15 @@
 /* eslint-disable prettier/prettier */
-import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
-import { Observable } from 'rxjs';
-import { UpdateResult, DeleteResult } from 'typeorm';
+import { Controller, Get } from '@nestjs/common';
+import { from, Observable } from 'rxjs';
+import { ResponseData } from 'src/responsedata/response-data.dto';
 import { ConferencecategoryService } from './conferencecategory.service';
-import { ConferenceCategory } from './models/conference_category.interface';
 
 @Controller('conferencecategory')
 export class ConferencecategoryController {
   constructor(private conferenceCategoryService: ConferencecategoryService) {}
 
-  @Get()
-  findAll(): Observable<ConferenceCategory[]> {
-    return this.conferenceCategoryService.findAllConferenceCategories();
-  }
-  @Get(':id')
-  findOne(@Param('id') id: string): Observable<ConferenceCategory> {
-    return this.conferenceCategoryService.findOne(+id);
-  }
-  @Post()
-  create(
-    @Body() conferenceCategory: ConferenceCategory,
-  ): Observable<ConferenceCategory> {
-    return this.conferenceCategoryService.createConferenceCategory(
-      conferenceCategory,
-    );
-  }
-  @Patch(':id')
-  update(
-    @Param('id') id: number,
-    @Body() conferenceCategory: ConferenceCategory,
-  ): Observable<UpdateResult> {
-    return this.conferenceCategoryService.update(+id, conferenceCategory);
-  }
-  @Delete(':id')
-  remove(@Param('id') id: number): Observable<DeleteResult> {
-    return this.conferenceCategoryService.remove(+id);
+  @Get('/get-all')
+  findAll(): Observable<ResponseData> {
+    return from(this.conferenceCategoryService.findAllConferenceCategories());
   }
 }

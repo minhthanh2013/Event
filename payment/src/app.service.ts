@@ -1,10 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import { Console } from 'console';
 import { InjectStripe } from 'nestjs-stripe';
-import { from, Observable, of } from 'rxjs';
 import Stripe from 'stripe';
-import { PaymentDto } from './payment/payment.dto';
+import { PaymentDto, ResponseData } from './payment/payment.dto';
 
 @Injectable()
 export class AppService {
@@ -13,7 +10,8 @@ export class AppService {
     return 'Hello World!';
   }
 
-  async paymentTicket(paymentDto: PaymentDto): Promise<String> {
+  async paymentTicket(paymentDto: PaymentDto): Promise<ResponseData> {
+    const responseData = new ResponseData()
     const param: Stripe.Checkout.SessionCreateParams = {
       mode: 'payment',
       payment_method_types: ['card'],
@@ -28,11 +26,17 @@ export class AppService {
       success_url: `${process.env.MOCK_URL}/success`,
       cancel_url: `${process.env.MOCK_URL}/cancel`,
     }
-    const result = await this.stripeClient.checkout.sessions.create(param)
-    return result.url
+    try {
+      const result = await this.stripeClient.checkout.sessions.create(param)
+      responseData.data = result.url
+    } catch(err) {
+      responseData.status = false
+      console.log(err)
+    }
+    return responseData
   }
 
-  async demoNewSubscription(): Promise<String> {
+  async demoNewSubscription(): Promise<string> {
     const param: Stripe.Checkout.SessionCreateParams = {
       mode: 'subscription',
       payment_method_types: ['card'],
