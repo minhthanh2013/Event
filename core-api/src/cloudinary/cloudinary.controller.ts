@@ -26,13 +26,4 @@ export class CloudinaryController {
         return this.cloudinaryService.uploadVideoToCloudinary(file);
     }
 
-    @Get('get-image')
-    getImage() {
-        return this.cloudinaryService.getImage();
-    }
-
-    @Get('get-video')
-    getVideo() {
-        return this.cloudinaryService.getVideo();
-    }
 }

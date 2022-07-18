@@ -43,11 +43,7 @@ import { ZoomModule } from './zoom/zoom.module';
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({
         type: 'postgres',
-        host: configService.get('POSTGRES_HOST'),
-        port: +configService.get('POSTGRES_PORT'),
-        username: configService.get('POSTGRES_USER'),
-        password: configService.get('POSTGRES_PASS'),
-        database: configService.get('POSTGRES_DATABASE'),
+        url: configService.get("DATABASE_URL"),
         autoLoadEntities: true,
         schema: 'public',
         migrations: ['src/migrations/**/*{.ts,.js}'],
@@ -92,6 +88,7 @@ import { ZoomModule } from './zoom/zoom.module';
         name: 'ZOOM',
         transport: Transport.TCP,
         options: {
+          host: 'zoom',
           port: 3001,
         }
       },

@@ -62,6 +62,8 @@ export class ZoomService {
         writer.on('close', () => {
           if (!error) {
             resolve(true);
+          } else {
+            resolve(false);
           }
           //no need to call the reject here, as it will have been called in the
           //'error' stream;
