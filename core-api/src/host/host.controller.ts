@@ -16,15 +16,16 @@ import { HostService } from './host.service';
 import { Host } from './models/host.interface';
 
 @Controller('host')
-@UseGuards(HostJwtGuard)
 export class HostController {
   constructor(private hostService: HostService) {}
 
   @Get()
+  @UseGuards(HostJwtGuard)
   findAll(): Observable<Host[]> {
     return this.hostService.findAllHosts();
   }
   @Get(':id')
+  @UseGuards(HostJwtGuard)
   findOne(@Param('id') id: string): Observable<Host> {
     return this.hostService.findOne(+id);
   }

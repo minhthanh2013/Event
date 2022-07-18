@@ -7,9 +7,6 @@ async function bootstrap() {
     RedisCacheModule,
     {
       transport: Transport.TCP,
-      // options: {
-      //   port: 3001,
-      // }
     },
   );
   app.listen();

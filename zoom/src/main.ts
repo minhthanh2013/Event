@@ -8,10 +8,11 @@ async function bootstrap() {
   app.connectMicroservice({
     transport: Transport.TCP,
     options: {
+      host: 'zoom',
       port: 3001,
     },
   });
   await app.startAllMicroservices();
-  await app.listen(3001);
+  await app.listen(4001);
 }
 bootstrap();
