@@ -10,7 +10,6 @@ import Avatar from '@mui/material/Avatar'
 
 interface HeaderProps {}
 const Header = (props: HeaderProps) => {
-	console.log('data')
 	function stringToColor(string: any) {
 		let hash = 0
 		let i
