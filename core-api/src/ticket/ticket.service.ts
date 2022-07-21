@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { from, Observable } from 'rxjs';
 import { ConferenceEntity } from 'src/conference/models/conference.entity';
@@ -48,6 +48,20 @@ export class TicketService {
     });
     newTicket.date_buy = new Date();
     newTicket.ticket_id = ticket.ticket_id;
+    const conferenceEntity = await this.conferenceRepository.findOne({
+      where: {
+        conference_id: ticket.conference_id,
+      },
+    })
+    if (!conferenceEntity) {
+      throw new NotFoundException('Conference not found');
+    }
+    conferenceEntity.current_quantity -= 1;
+    try {
+      this.conferenceRepository.save(conferenceEntity);
+    } catch (error) {
+      throw error;
+    }
     return this.ticketRepository.save(newTicket);
   }
   update(id: number, ticket: Ticket): Observable<UpdateResult> {
