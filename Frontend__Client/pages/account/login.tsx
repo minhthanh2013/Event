@@ -21,6 +21,8 @@ const validationSchema = yup.object({
     password: yup.string().required('Password is required')
 })
 const Login = (props: Props) => {
+    const [errorMessage, setErrorMessage] = useState<string>('');
+
     const router = useRouter();
     
     const formik = useFormik({
@@ -30,13 +32,20 @@ const Login = (props: Props) => {
         },
         validationSchema: validationSchema,
         onSubmit: async (values: any) => {
-            const user = await axios.post("/api/auth/login", values);
+            let user = null;
+            try {
+                user = await axios.post("/api/auth/login", values);
+            } catch (error) {
+                console.log(error)
+            }
             // const user = await axios.post("http://"+"localhost"+":"+"3000"+"/user/signin", values);
-            if(user.status === 200) {
+            
+            if(user !== null && user.status === 200) {
                 router.push('/');
             } else {
-            
+                setErrorMessage("Invalid username or password");
             }
+            // console.log(errorMessage);
         },
     })
 
@@ -61,6 +70,7 @@ const Login = (props: Props) => {
                             <p>or</p>
                             <hr />
                         </Box>
+                        {(errorMessage !=='') && <Typography component='h4'>{errorMessage}</Typography>}
                         <Box className={styles.form__section}>
                             <form onSubmit={formik.handleSubmit} className={styles.mainForm}>
                                 <TextField

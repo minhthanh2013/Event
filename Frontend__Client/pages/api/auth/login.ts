@@ -4,8 +4,13 @@ import { NextApiResponse, NextApiRequest } from "next";
 import axios from 'axios';
 
 export default async function (req: NextApiRequest, res: NextApiResponse) {
-  const user = await axios.post("http://"+"localhost"+":"+"3000"+"/user/signin", req.body);
-  if (user) {
+  let user = null;
+  try {
+    user = await axios.post("http://"+"localhost"+":"+"3000"+"/user/signin", req.body);
+  } catch (error) {
+    // console.log(error);
+  }
+  if (user !== null) {
     const token = user.data.access_token;
 
     const serialised = serialize("OursiteJWT", token, {
@@ -20,6 +25,6 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
 
     res.status(200).json({ message: "Success!" });
   } else {
-    res.json({ message: "Invalid credentials!" });
+    res.status(403).json({ message: "Invalid credentials!" });
   }
 }
