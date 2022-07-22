@@ -105,7 +105,7 @@ const Login = (props: Props) => {
                     <Box className={styles.redirect}>
                         <Typography component="h3">Welcome Back!</Typography>
                         <Typography component="h4">To keep connected with us please log in with your personal info.</Typography>
-                        <Link href="register">
+                        <Link href="register" passHref>
                             <Button variant='contained' size='medium' type="button">Create New Account</Button>
                         </Link>
                     </Box>

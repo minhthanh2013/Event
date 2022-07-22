@@ -14,7 +14,7 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
     const token = user.data.access_token;
 
     const serialised = serialize("OursiteJWT", token, {
-      httpOnly: true,
+      httpOnly: false,
       secure: process.env.NODE_ENV !== "development",
       sameSite: "strict",
       maxAge: 60 * 60 * 24 * 30,

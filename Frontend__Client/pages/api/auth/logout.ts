@@ -10,7 +10,7 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
   if (!jwt) {
     return res.json({ message: "Bro you are already not logged in..." });
   } else {
-    const serialised = serialize("OursiteJWT", null, {
+    const serialised = serialize("OursiteJWT", "", {
       httpOnly: true,
       secure: process.env.NODE_ENV !== "development",
       sameSite: "strict",

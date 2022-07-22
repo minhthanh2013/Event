@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse} from 'next/server';
 import {verify} from 'jsonwebtoken';
 
-const hostSecret = process.env.HOST_JWT_SECRET
-const adminSecret = process.env.ADMIN_JWT_SECRET
-const userSecret = process.env.USER_JWT_SECRET
+const hostSecret = process.env.HOST_JWT_SECRET as string;
+const adminSecret = process.env.ADMIN_JWT_SECRET as string;
+const userSecret = process.env.USER_JWT_SECRET as string;
 
 export default function middleware(req: NextRequest) {
     const { pathname, origin } = req.nextUrl
@@ -27,18 +27,18 @@ export default function middleware(req: NextRequest) {
          }
     }
 
-    if(url === `${origin}/`) {
-         if (jwt === undefined) {
-            return NextResponse.redirect(`${origin}/account/login`);
-         }
+    // if(url === `${origin}/`) {
+    //      if (jwt === undefined) {
+    //         return NextResponse.redirect(`${origin}/account/login`);
+    //      }
 
-         try {
-            verify(jwt, userSecret);
-            return NextResponse.next();
-        } catch (error) {
-            return NextResponse.redirect(`${origin}/account/login`);
-         }
-    }
+    //      try {
+    //         verify(jwt, userSecret);
+    //         return NextResponse.next();
+    //     } catch (error) {
+    //         return NextResponse.redirect(`${origin}/account/login`);
+    //      }
+    // }
 
     if(url.includes("/host")) {
         if (jwt === undefined) {

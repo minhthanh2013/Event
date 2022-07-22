@@ -37,7 +37,7 @@ const Register = (props: Props) => {
 					<Box className={styles.redirect}>
 						<Typography component='h3'>Hello, Friend!</Typography>
 						<Typography component='h4'>Enter your personal details and start your journey with us.</Typography>
-						<Link href='login'>
+						<Link href='/account/login' passHref>
 							<Button variant='contained' size='medium' type='button'>
 								Go To Sign in
 							</Button>
