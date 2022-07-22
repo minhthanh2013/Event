@@ -4,7 +4,7 @@ import { Button, TextField, Typography } from '@mui/material'
 import { IconButton } from '@material-ui/core'
 import { FcGoogle } from 'react-icons/fc'
 import { BsFacebook } from 'react-icons/bs'
-import React from 'react'
+import React, { useState } from 'react'
 import styles from '../../styles/Login.module.scss'
 import * as yup from 'yup';
 import { withFormik, FormikProps, FormikErrors, Form, Field, useFormik } from 'formik';
@@ -12,22 +12,34 @@ import { margin, padding } from '@mui/system'
 import Firework from '../../components/Firework'
 import Link from 'next/link'
 import Image from 'next/image'
+import axios from 'axios';
 import { Props } from 'next/script'
+import { useRouter } from 'next/router'
+
 const validationSchema = yup.object({
-    email: yup.string().email('Enter a valid email').required('Email is required'),
+    username: yup.string().required('Username is required'),
     password: yup.string().required('Password is required')
 })
 const Login = (props: Props) => {
+    const router = useRouter();
+    
     const formik = useFormik({
         initialValues: {
-            email: '',
+            username: '',
             password: '',
         },
         validationSchema: validationSchema,
-        onSubmit: (values: any) => {
-            alert(JSON.stringify(values, null, 2));
+        onSubmit: async (values: any) => {
+            const user = await axios.post("/api/auth/login", values);
+            // const user = await axios.post("http://"+"localhost"+":"+"3000"+"/user/signin", values);
+            if(user.status === 200) {
+                router.push('/');
+            } else {
+            
+            }
         },
     })
+
     return (
         <>
             <Box className={styles.container}>
@@ -53,23 +65,25 @@ const Login = (props: Props) => {
                             <form onSubmit={formik.handleSubmit} className={styles.mainForm}>
                                 <TextField
                                     fullWidth
-                                    id="email"
-                                    name="email"
-                                    label="Email"
-                                    value={formik.values.email}
+                                    sx={{"& div > input": {marginLeft: "30px"}}}
+                                    id="username"
+                                    name="username"
+                                    label="username"
+                                    value={formik.values.username}
                                     onChange={formik.handleChange}
-                                    error={formik.touched.email && Boolean(formik.errors.email)}
-                                    helperText={formik.touched.email && formik.errors.email} />
+                                    error={formik.touched.username && Boolean(formik.errors.username)}
+                                    helperText={formik.touched.username && formik.errors.username} />
                                 <TextField
                                     fullWidth
                                     id="password"
                                     name="password"
                                     label="Password"
+                                    type="password"
                                     value={formik.values.password}
                                     onChange={formik.handleChange}
                                     error={formik.touched.password && Boolean(formik.errors.password)}
-                                    helperText={formik.touched.password && formik.errors.email}
-                                    sx={{ my: "1.5rem", "& .MuiInputBase-input": { paddingLeft: "1rem" } }}
+                                    helperText={formik.touched.password && formik.errors.username}
+                                    sx={{ my: '1.5rem', "& div > input": {marginLeft: "30px"} }}
                                 />
                                 <Button variant="contained" size='medium' type="submit">Sign in</Button>
                             </form>
