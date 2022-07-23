@@ -4,13 +4,14 @@ import { ZoomService } from './zoom.service';
 import { ConfigService } from '@nestjs/config';
 import { CreateSignature } from './dto/create.signature';
 import { ZoomDto } from './dto/zoom.dto';
+import { ScheduleZoomDto } from './dto/create.zoom.dto';
 
 @Controller('zoom')
 export class ZoomController {
   constructor(private readonly zoomService: ZoomService, private readonly config: ConfigService) {}
   
-  @Post()
-  createSignature(@Body() createSignature: CreateSignature) {
+  @MessagePattern({ cmd: 'GET_SIGNATURE' })
+  createSignature(createSignature: CreateSignature) {
       return this.zoomService.generateSignature(createSignature);
   }
 
@@ -18,5 +19,10 @@ export class ZoomController {
   downloadFile(zoomDto: ZoomDto) {
     const url = zoomDto.downloadUrl;
     return this.zoomService.downloadFile(url, "/usr/src/app/resources/conference-"+zoomDto.zoomMeetingId+"-record.mp4");
+  } 
+
+  @MessagePattern({ cmd: 'CREATE_CONFERENCE' })
+  createConference(scheduleZoomDto: ScheduleZoomDto) {
+    return this.zoomService.scheduleMeeting(scheduleZoomDto);
   } 
 }

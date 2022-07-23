@@ -4,13 +4,16 @@ import { BullModule } from '@nestjs/bull';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { ClientsModule, Transport } from '@nestjs/microservices';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
+import { ConferenceEntity } from 'src/conference/models/conference.entity';
 import { ZoomController } from './zoom.controller';
 import { ZoomProcessor } from './zoom.processor';
 import { ZoomService } from './zoom.service';
 
 @Module({
   imports: [
+    TypeOrmModule.forFeature([ConferenceEntity]),
     BullModule.registerQueue({
       name: 'zoom',
     }),

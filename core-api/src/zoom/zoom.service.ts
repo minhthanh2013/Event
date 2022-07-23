@@ -7,6 +7,11 @@ import { ZoomDto } from "./dto/zoom.dto";
 import { HttpService } from '@nestjs/axios';
 import { ConfigService } from '@nestjs/config';
 import { Observable } from "rxjs";
+import { ScheduleZoomDto } from "./dto/create.zoom.dto";
+import { InjectRepository } from "@nestjs/typeorm";
+import { ConferenceEntity } from "src/conference/models/conference.entity";
+import { Repository } from "typeorm";
+import { CreateSignature } from "./dto/create.signature";
 
 @Injectable()
 export class ZoomService {
@@ -14,7 +19,11 @@ export class ZoomService {
         @Inject('ZOOM') private readonly zoomClient: ClientProxy,
         private readonly cloudinaryService: CloudinaryService,
         private readonly httpService: HttpService,
-        private readonly config: ConfigService,) 
+        private readonly config: ConfigService,
+        @InjectRepository(ConferenceEntity)
+        private readonly conferenceRepository: Repository<ConferenceEntity>,
+        
+        ) 
         {}
 
         async uploadRecord(zoomDto: ZoomDto): Promise<any> {
@@ -49,5 +58,25 @@ export class ZoomService {
                     // return obj.recording_files[0].download_url;
                 })
             })
+        }
+
+        async createConference(scheduleZoomDto: ScheduleZoomDto): Promise<any> {
+            const conference: ConferenceEntity = await this.conferenceRepository.findOne({ where: { conference_id: scheduleZoomDto.conferenceId } });
+            return new Promise(async (resolve) => {
+                this.zoomClient.send({ cmd: 'CREATE_CONFERENCE' }, scheduleZoomDto).subscribe(async (res) => {
+                    conference.zoom_meeting_id = res.id;
+                    resolve(this.conferenceRepository.save(conference));
+                }
+            )}
+            )
+        };
+
+        async createSignature(createSignature: CreateSignature): Promise<any> {
+            return new Promise(async (resolve, reject) => {
+                this.zoomClient.send({ cmd: 'GET_SIGNATURE' }, createSignature).subscribe(async (res) => {
+                    resolve(res);
+                }
+                )}
+            )
         }
 }

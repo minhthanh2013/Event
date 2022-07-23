@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 export class ConferenceResponseDto {
     conferenceId: number;
     conferenceName: string;

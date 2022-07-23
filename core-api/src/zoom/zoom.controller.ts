@@ -5,6 +5,8 @@ import { Queue } from "bull";
 import { ZoomDto } from "./dto/zoom.dto";
 import { ZoomService } from "./zoom.service";
 import fs from 'fs';
+import { ScheduleZoomDto } from "./dto/create.zoom.dto";
+import { CreateSignature } from "./dto/create.signature";
 
 @Controller('zoom')
 export class ZoomController {
@@ -44,5 +46,15 @@ export class ZoomController {
             console.error(err)
           }
     
+        }
+
+        @Post('schedule-meeting')
+        async scheduleMeeting(@Body() scheduleZoomDto: ScheduleZoomDto) {
+            return this.zoomService.createConference(scheduleZoomDto);
+        }
+
+        @Post('create-signature')
+        async createSignature(@Body() createSignature: CreateSignature) {
+            return this.zoomService.createSignature(createSignature);
         }
 }

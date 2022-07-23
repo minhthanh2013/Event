@@ -3425,10 +3425,10 @@ jsonfile@^6.0.1:
   optionalDependencies:
     graceful-fs "^4.1.6"
 
-jsrsasign@^10.5.24:
-  version "10.5.24"
-  resolved "https://registry.yarnpkg.com/jsrsasign/-/jsrsasign-10.5.24.tgz#2d159e1756b2268682c6eb5e147184e33e946b1c"
-  integrity sha512-0i/UHRgJZifp/YmoXHyNQXUY4eKWiSd7YxuD7oKEw9mlqgr51hg9lZQw2nlEDvwHDh7pyj6ZjYlxldlW27xb/Q==
+jsrsasign@^10.5.26:
+  version "10.5.26"
+  resolved "https://registry.yarnpkg.com/jsrsasign/-/jsrsasign-10.5.26.tgz#bc36d4c4019c83f144066725ea0ca6ab306702fc"
+  integrity sha512-TjEu1yPdI+8whpe6CA/6XNb7U1sm9+PUItOUfSThOLvx7JCfYHIfuvZK2Egz2DWUKioafn98LPuk+geLGckxMg==
 
 kleur@^3.0.3:
   version "3.0.3"
