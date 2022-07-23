@@ -14,7 +14,7 @@ import { Props } from 'next/script'
 const validationSchema = yup.object({
 	email: yup.string().email('Enter a valid email').required('Email is required'),
 	password: yup.string().required('Password is required'),
-	fullname: yup.string().required('Fullname is required'),
+	firstname: yup.string().required('firstname is required'),
 })
 
 const Register = (props: Props) => {
@@ -75,6 +75,7 @@ const Register = (props: Props) => {
 									onChange={formik.handleChange}
 									error={formik.touched.fullname && Boolean(formik.errors.fullname)}
 									helperText={formik.touched.fullname && formik.errors.fullname}
+									sx={{}}
 								/>
 								<TextField
 									fullWidth
