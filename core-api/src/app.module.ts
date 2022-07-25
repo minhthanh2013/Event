@@ -22,6 +22,7 @@ import { PaymentModule } from './payment/payment.module';
 import { RecordModule } from './record/record.module';
 import { CloudinaryModule } from './cloudinary/cloudinary.module';
 import { ZoomModule } from './zoom/zoom.module';
+import { EmailModule } from './email/email.module';
 
 @Module({
   imports: [
@@ -79,6 +80,7 @@ import { ZoomModule } from './zoom/zoom.module';
     TicketModule,
     CloudinaryModule,
     ZoomModule,
+    EmailModule,
     ClientsModule.register([
       {
         name: 'REDIS',
