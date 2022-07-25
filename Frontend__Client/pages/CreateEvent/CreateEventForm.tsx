@@ -19,7 +19,6 @@ import IconButton from "@mui/material/IconButton";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import moment from 'moment';
 
 type Data = {
   [key: string]: any;
@@ -28,6 +27,24 @@ interface CreateEventProps {
   data: Data;
   setData: (data: object) => void;
   setValue: (value: number) => void;
+}
+
+const categoryList = {
+  status: 'success',
+  data: [
+    { id: 1, name: 'foo' },
+    { id: 2, name: 'bar' },
+    { id: 3, name: 'baz' },
+  ],
+}
+
+const typeList = {
+  status: 'success',
+  data: [
+    { id: 1, name: 'foo' },
+    { id: 2, name: 'bar' },
+    { id: 3, name: 'baz' },
+  ],
 }
 
 export const BasicInfo: React.FC<CreateEventProps> = ({ data, setData, setValue }) => {
@@ -87,13 +104,14 @@ export const BasicInfo: React.FC<CreateEventProps> = ({ data, setData, setValue 
               className={styles.selectType}
               required
               labelId="select-type"
-              defaultValue={data ? data.type : type}
+              defaultValue={data.eventType}
               label="Type"
               {...register("type")}
               onChange={handleChangeType}
             >
-              <MenuItem value={"Offline"}>Offline</MenuItem>
-              <MenuItem value={"Online"}>Online</MenuItem>
+              {typeList.data?.map((dataItem) => (
+                <MenuItem key={dataItem.id} value={dataItem.id}>{dataItem.name}</MenuItem>
+              ))}
             </Select>
           </FormControl>
 
@@ -102,14 +120,15 @@ export const BasicInfo: React.FC<CreateEventProps> = ({ data, setData, setValue 
             <Select
               required
               labelId="select-category"
-              defaultValue={data ? data.category : category}
+              defaultValue=""
+              value={data.eventCategory}
               label="Category"
               {...register("category")}
               onChange={handleChangeCategory}
             >
-              <MenuItem value={"Khoa học"}>Khoa học</MenuItem>
-              <MenuItem value={"Việc làm"}>Việc làm</MenuItem>
-              <MenuItem value={"Y Tế"}>Y Tế</MenuItem>
+              {categoryList.data?.map((dataItem) => (
+                <MenuItem key={dataItem.id} value={dataItem.id}>{dataItem.name}</MenuItem>
+              ))}
             </Select>
           </FormControl>
 
