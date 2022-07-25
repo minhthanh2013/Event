@@ -56,13 +56,6 @@ export const BasicInfo: React.FC<CreateEventProps> = ({ data, setData, setValue 
     watch,
     formState: { errors },
   } = useForm();
-
-  const handleChangeType = (event: SelectChangeEvent) => {
-    setType(event.target.value as string);
-  };
-  const handleChangeCategory = (event: SelectChangeEvent) => {
-    setCategory(event.target.value as string);
-  };
   const onSubmit = (value: any) => {
     setData({
       ...data, eventName: value.eventName, organizerName: value.organizerName,
@@ -107,7 +100,6 @@ export const BasicInfo: React.FC<CreateEventProps> = ({ data, setData, setValue 
               defaultValue={data.eventType}
               label="Type"
               {...register("type")}
-              onChange={handleChangeType}
             >
               {typeList.data?.map((dataItem) => (
                 <MenuItem key={dataItem.id} value={dataItem.id}>{dataItem.name}</MenuItem>
@@ -120,11 +112,9 @@ export const BasicInfo: React.FC<CreateEventProps> = ({ data, setData, setValue 
             <Select
               required
               labelId="select-category"
-              defaultValue=""
-              value={data.eventCategory}
+              defaultValue={data.eventType}
               label="Category"
               {...register("category")}
-              onChange={handleChangeCategory}
             >
               {categoryList.data?.map((dataItem) => (
                 <MenuItem key={dataItem.id} value={dataItem.id}>{dataItem.name}</MenuItem>

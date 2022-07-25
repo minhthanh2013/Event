@@ -61,6 +61,7 @@ const CreateEvent = () => {
       let reader = new FileReader();
       reader.onload = (e) => {
         setImage(e?.target?.result);
+        setData({ ...data, image: e?.target?.result })
       };
       reader.readAsDataURL(event.target.files[0]);
     }
@@ -68,6 +69,7 @@ const CreateEvent = () => {
 
   const [value, setValue] = React.useState(0);
   console.log(data)
+  //change tabs, value = tabs value
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
@@ -149,7 +151,7 @@ const CreateEvent = () => {
                 <Tab label="Speakers" {...a11yProps(1)} />
                 <Tab label="Date and time" {...a11yProps(2)} />
               </Tabs>
-              <TabPanel value={value}  index={0}>
+              <TabPanel value={value} index={0}>
                 <BasicInfo data={data} setData={setData} setValue={setValue} />
               </TabPanel>
               <TabPanel value={value} index={1}>
