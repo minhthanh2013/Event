@@ -24,9 +24,7 @@ const PurchaseModal = () => {
 						</Typography>
 					</Box>
 				</Box>
-				<Box className={styles.rightWrap}>
-					
-				</Box>
+				<Box className={styles.rightWrap}></Box>
 			</Box>
 		</>
 	)
