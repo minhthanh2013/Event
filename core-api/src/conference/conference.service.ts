@@ -5,7 +5,7 @@ import { ConferenceCategoryEntity } from 'src/conferencecategory/models/conferen
 import { ConferenceTypeEntity } from 'src/conferencetype/models/conference_type.entity';
 import { ResponseData } from 'src/responsedata/response-data.dto';
 import { UserEntity } from 'src/user/models/user.entity';
-import { Repository } from 'typeorm';
+import { FindOptionsUtils, Repository } from 'typeorm';
 import { ConferenceRequestDto, ConferenceResponseDto } from './models/conference.dto';
 import { ConferenceEntity } from './models/conference.entity';
 
@@ -73,6 +73,22 @@ export class ConferenceService {
         result.status = false
       }
     return result;
+  }
+
+  async getHostEvent(idHost: number): Promise<ResponseData> {
+    let result = new ResponseData()
+    const data2 = await this.conferenceRepository.find({
+      relations : ["host"],
+      where: { host : {
+        host_id : idHost
+      }}
+    })
+    if (data2.length >= 1) {
+      result.data = data2
+    } else {
+      result.status = false
+    }
+    return result
   }
   convertEntityToDto(entity: ConferenceEntity): ConferenceResponseDto {
     let dto = new ConferenceResponseDto()

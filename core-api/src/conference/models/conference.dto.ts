@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 export class ConferenceResponseDto {
     conferenceId: number;
     conferenceName: string;
@@ -35,4 +36,5 @@ export class HostCreatedConferenceResponseDto {
     currentTicket: number;
     ticketPrice: number;
     statusTicket: string;
+    ticketType: string;
 }

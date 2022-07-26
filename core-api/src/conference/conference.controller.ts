@@ -13,10 +13,10 @@ export class ConferenceController {
   findAll(): Observable<ResponseData> {
     return from(this.conferenceService.findAllConferences());
   }
-  @Get('/:id')
-  findOne(@Param('id') id: string): Observable<ResponseData> {
-    return from(this.conferenceService.findOne(+id));
-  }
+  // @Get('/:id')
+  // findOne(@Param('id') id: string): Observable<ResponseData> {
+  //   return from(this.conferenceService.findOne(+id));
+  // }
   @Post('/create-new')
   create(@Body() conference: ConferenceRequestDto): Observable<ResponseData> {
     return from(this.conferenceService.createConference(conference));
@@ -32,5 +32,9 @@ export class ConferenceController {
   @Get('/list-conference-banner/:limit')
   findNumberOfConference(@Param('limit') limit: number): Observable<ResponseData> {
     return from(this.conferenceService.getNumberOfConference(+limit));
+  }
+  @Get('/get-host-event')
+  findHostEvent(@Body('id') id: number): Observable<ResponseData> {
+    return from(this.conferenceService.getHostEvent(+id));
   }
 }

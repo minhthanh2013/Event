@@ -1,19 +1,29 @@
 import { Injectable } from '@nestjs/common';
-const crypto = require('crypto')
 import { ConfigService } from '@nestjs/config';
 import { createWriteStream } from 'fs';
 import { finished } from 'stream';
 import { CreateSignature } from './dto/create.signature';
+import { ScheduleZoomDto } from './dto/create.zoom.dto';
+import { HttpService } from '@nestjs/axios';
+
 const KJUR = require('jsrsasign')
 const Fs = require('fs')
 const Path = require('path')
 const Axios = require('axios')
+const https = require('https');
+
+// import KJUR from 'jsrsasign';
+// import Fs from 'fs';
+// import Path from 'path';
+// import Axios from 'axios';
+// import https from 'https';
 
 
 @Injectable()
 export class ZoomService {
   constructor(
     private readonly config: ConfigService,  
+    private readonly httpService: HttpService,
     ) {}
 
   generateSignature(createSignature: CreateSignature) {
@@ -62,6 +72,8 @@ export class ZoomService {
         writer.on('close', () => {
           if (!error) {
             resolve(true);
+          } else {
+            resolve(false);
           }
           //no need to call the reject here, as it will have been called in the
           //'error' stream;
@@ -69,4 +81,68 @@ export class ZoomService {
       });
     });
   }
+
+  scheduleMeeting(scheduleZoomDto: ScheduleZoomDto) {
+    const encodeToken = this.config.get('ZOOM_JWT_KEY');
+    const headersRequest = {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${encodeToken}`
+  };
+  const url = "https://" + this.config.get("ZOOM_BASE_URL") + `/v2/users/${this.config.get('ZOOM_USER_ID')}/meetings`;
+    const data = JSON.stringify({
+      "agenda": scheduleZoomDto.conferenceName,
+      "default_password": false,
+      "duration": 60,
+      "password": "357159",
+      "pre_schedule": false,
+      "schedule_for": "minhthanhd013@gmail.com",
+      "settings": {
+          "allow_multiple_devices": true,
+          "approval_type": 2,
+          "authentication_exception": [
+            {
+              "email": "suthaydoi2017@gmail.com",
+              "name": "No need to invite"
+            }
+          ],
+          "auto_recording": "cloud",
+          "calendar_type": 2,
+          "close_registration": true,
+          "contact_email": "minhthanhd013@gmail.com",
+          "contact_name": scheduleZoomDto.hostName,
+          "email_notification": true,
+          "encryption_type": "enhanced_encryption",
+          "focus_mode": true,
+          "host_video": false,
+          "jbh_time": 0,
+          "join_before_host": false,
+          "meeting_authentication": true,
+          "mute_upon_entry": true,
+          "participant_video": false,
+          "private_meeting": false,
+          "registrants_confirmation_email": true,
+          "registrants_email_notification": true,
+          "registration_type": 1,
+          "show_share_button": false,
+          "use_pmi": false,
+          "waiting_room": false,
+          "watermark": false
+        },
+        "start_time": scheduleZoomDto.dateStartConference,
+        "template_id": "Dv4YdINdTk+Z5RToadh5ug==",
+        "timezone": "Asia/Saigon",
+        "topic": scheduleZoomDto.conferenceCategory,
+        "type": 2
+});
+const a = this.httpService.post( url,  data, { headers: headersRequest });
+return new Promise((resolve, reject) => {
+  a.subscribe(
+    (res) => {
+      const obj = JSON.parse(JSON.stringify(res.data));
+      resolve(obj);
+    }
+  )
+}
+)
+}
 }

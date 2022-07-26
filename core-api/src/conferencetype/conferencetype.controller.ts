@@ -8,7 +8,7 @@ import { ConferencetypeService } from './conferencetype.service';
 export class ConferencetypeController {
   constructor(private conferenceTypeService: ConferencetypeService) {}
 
-  @Get()
+  @Get('/get-all')
   findAll(): Observable<ResponseData> {
     return from(this.conferenceTypeService.findAllConferenceTypes());
   }
