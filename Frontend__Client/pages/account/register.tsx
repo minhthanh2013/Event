@@ -14,19 +14,23 @@ import { Props } from 'next/script'
 const validationSchema = yup.object({
 	email: yup.string().email('Enter a valid email').required('Email is required'),
 	password: yup.string().required('Password is required'),
-	fullname: yup.string().required('Fullname is required'),
+	firstname: yup.string().required('firstname is required'),
+	lastname: yup.string().required('lastname is required'),
+	username: yup.string().required('username is required'),
 })
 
 const Register = (props: Props) => {
 	const formik = useFormik({
 		initialValues: {
-			fullname: '',
+			lastname: '',
+			firstname: '',
 			email: '',
 			password: '',
+			username: '',
 		},
 		validationSchema: validationSchema,
 		onSubmit: (values: any) => {
-			alert(JSON.stringify(values, null, 3))
+			alert(JSON.stringify(values, null, 5))
 		},
 	})
 	return (
@@ -37,7 +41,7 @@ const Register = (props: Props) => {
 					<Box className={styles.redirect}>
 						<Typography component='h3'>Hello, Friend!</Typography>
 						<Typography component='h4'>Enter your personal details and start your journey with us.</Typography>
-						<Link href='login'>
+						<Link href='/account/login' passHref>
 							<Button variant='contained' size='medium' type='button'>
 								Go To Sign in
 							</Button>
@@ -68,29 +72,14 @@ const Register = (props: Props) => {
 							<form onSubmit={formik.handleSubmit} className={styles.mainForm}>
 								<TextField
 									fullWidth
-									id='fullname'
-									name='fullname'
-									label='Full Name'
-									value={formik.values.fullname}
+									id='username'
+									name='username'
+									label='Username'
+									value={formik.values.username}
 									onChange={formik.handleChange}
-									error={formik.touched.fullname && Boolean(formik.errors.fullname)}
-									helperText={formik.touched.fullname && formik.errors.fullname}
-								/>
-								<TextField
-									fullWidth
-									id='email'
-									name='email'
-									label='Email'
-									value={formik.values.email}
-									onChange={formik.handleChange}
-									error={formik.touched.email && Boolean(formik.errors.email)}
-									helperText={formik.touched.email && formik.errors.email}
-									sx={{
-										my: '1.5rem',
-										'& .MuiInputBase-input': {
-											paddingLeft: '1rem',
-										},
-									}}
+									error={formik.touched.username && Boolean(formik.errors.username)}
+									helperText={formik.touched.username && formik.errors.username}
+									sx={{ '& input': { marginLeft: '1.5rem' } }}
 								/>
 								<TextField
 									fullWidth
@@ -101,13 +90,42 @@ const Register = (props: Props) => {
 									onChange={formik.handleChange}
 									error={formik.touched.password && Boolean(formik.errors.password)}
 									helperText={formik.touched.password && formik.errors.email}
-									sx={{
-										mb: '2rem',
-										'& .MuiInputBase-input': {
-											paddingLeft: '1rem',
-										},
-									}}
+									sx={{ my: '2rem', '& input': { marginLeft: '1.5rem' } }}
 								/>
+								<TextField
+									fullWidth
+									id='email'
+									name='email'
+									label='Email'
+									value={formik.values.email}
+									onChange={formik.handleChange}
+									error={formik.touched.email && Boolean(formik.errors.email)}
+									helperText={formik.touched.email && formik.errors.email}
+									sx={{ '& input': { marginLeft: '1.5rem' } }}
+								/>
+								<TextField
+									fullWidth
+									id='firstname'
+									name='firstname'
+									label='First Name'
+									value={formik.values.firstname}
+									onChange={formik.handleChange}
+									error={formik.touched.firstname && Boolean(formik.errors.firstname)}
+									helperText={formik.touched.firstname && formik.errors.firstname}
+									sx={{ my: '2rem', '& input': { marginLeft: '1.5rem' } }}
+								/>
+								<TextField
+									fullWidth
+									id='lastname'
+									name='lastname'
+									label='Last Name'
+									value={formik.values.lastname}
+									onChange={formik.handleChange}
+									error={formik.touched.lastname && Boolean(formik.errors.lastname)}
+									helperText={formik.touched.lastname && formik.errors.lastname}
+									sx={{ mb: '1.5rem', '& input': {marginLeft:'1.5rem'}}}
+								/>
+
 								<Button variant='contained' size='medium' type='submit'>
 									Sign up
 								</Button>

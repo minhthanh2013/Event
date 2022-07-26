@@ -2,13 +2,14 @@ import { AppBar } from '@material-ui/core'
 import { Box, Button, Toolbar, Typography } from '@mui/material'
 import IconButton from '@mui/material/IconButton'
 import React from 'react'
-import Badge from "@mui/material/Badge";
-import MailOutlineIcon from "@mui/icons-material/MailOutline";
-import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
-import Avatar from "@mui/material/Avatar";
+import Badge from '@mui/material/Badge'
+import MailOutlineIcon from '@mui/icons-material/MailOutline'
+import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone'
+import Avatar from '@mui/material/Avatar'
+import Link from 'next/link'
 
-interface HeaderProps {}
-const Header = (props: HeaderProps) => {
+// interface HeaderProps {}
+const Header = (props: any) => {
 	function stringToColor(string: any) {
 		let hash = 0
 		let i
@@ -30,7 +31,10 @@ const Header = (props: HeaderProps) => {
 			children: `${name.split(' ')[0][0]}`.toUpperCase(),
 		}
 	}
-	let isLogin = true
+	let isLogin = false;
+	if (props.token !== undefined) {
+		isLogin = true;
+	}
 	return (
 		<Box sx={{ my: '20px' }}>
 			<AppBar position='static' color='transparent' elevation={0}>
@@ -84,12 +88,17 @@ const Header = (props: HeaderProps) => {
 						</>
 					) : (
 						<>
+						<Link href='/account/login' passHref >
 							<Button variant='text' sx={{ color: '#000000' }}>
 								Login
 							</Button>
-							<Button variant='text' sx={{ color: '#000000' }}>
+						</Link>
+						<Link href='/account/register' passHref >
+						<Button variant='text' sx={{ color: '#000000' }}>
 								Sign up
 							</Button>
+						</Link>
+							
 							<Button variant='text' sx={{ color: '#6A35F2' }}>
 								create an event
 							</Button>

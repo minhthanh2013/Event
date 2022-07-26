@@ -27,14 +27,25 @@ interface CreateEventProps {
   setData: (data: object) => void;
   setValue: (value: number) => void;
 }
-interface PropsArray {
-  id: number,
-  name: string,
+
+const categoryList = {
+  status: 'success',
+  data: [
+    { id: 1, name: 'foo' },
+    { id: 2, name: 'bar' },
+    { id: 3, name: 'baz' },
+  ],
 }
-interface Props {
-  status: boolean,
-  data: PropsArray[],
+
+const typeList = {
+  status: 'success',
+  data: [
+    { id: 1, name: 'foo' },
+    { id: 2, name: 'bar' },
+    { id: 3, name: 'baz' },
+  ],
 }
+
 export const BasicInfo: React.FC<CreateEventProps> = ({ data, setData, setValue }) => {
   const [type, setType] = useState("");
   const [category, setCategory] = useState("");
@@ -46,32 +57,6 @@ export const BasicInfo: React.FC<CreateEventProps> = ({ data, setData, setValue 
     watch,
     formState: { errors },
   } = useForm();
-
-  useEffect(() => {
-    getDataCategory();
-  }, []);
-
-  useEffect(() => {
-    getDataType();
-  }, []);
-
-  const getDataCategory = async () => {
-    let res = await fetch("http://localhost:3000/conferencecategory/get-all")
-    let categoryData = await res.json()
-    setCategoryList(categoryData)
-  }
-  const getDataType = async () => {
-    let res = await fetch("http://localhost:3000/conferencetype/get-all")
-    let typeData = await res.json()
-    setTypeList(typeData)
-  }
-
-  const handleChangeType = (event: SelectChangeEvent) => {
-    setType(event.target.value as string);
-  };
-  const handleChangeCategory = (event: SelectChangeEvent) => {
-    setCategory(event.target.value as string);
-  };
   const onSubmit = (value: any) => {
     setData({
       ...data, eventName: value.eventName, organizerName: value.organizerName,
@@ -113,13 +98,12 @@ export const BasicInfo: React.FC<CreateEventProps> = ({ data, setData, setValue 
               className={styles.selectType}
               required
               labelId="select-type"
-              defaultValue={data.type}
+              defaultValue={data.eventType}
               label="Type"
               {...register("type")}
-              onChange={handleChangeType}
             >
-              {typeList?.data.map((typeItem) => (
-                <MenuItem value={typeItem.name} key={typeItem.id}>aiusfhaisufh: + {typeItem.name}</MenuItem>
+              {typeList.data?.map((dataItem) => (
+                <MenuItem key={dataItem.id} value={dataItem.id}>{dataItem.name}</MenuItem>
               ))}
             </Select>
           </FormControl>
@@ -129,13 +113,12 @@ export const BasicInfo: React.FC<CreateEventProps> = ({ data, setData, setValue 
             <Select
               required
               labelId="select-category"
-              defaultValue={data ? data.category : category}
+              defaultValue={data.eventType}
               label="Category"
               {...register("category")}
-              onChange={handleChangeCategory}
             >
-              {categoryList?.data.map(cateItem => (
-                <MenuItem value={cateItem.name}>{cateItem.name}</MenuItem>
+              {categoryList.data?.map((dataItem) => (
+                <MenuItem key={dataItem.id} value={dataItem.id}>{dataItem.name}</MenuItem>
               ))}
             </Select>
           </FormControl>

@@ -45,7 +45,7 @@ const Event = ({event}:any) => {
             
             <Box className={styles.background__wrap}>
                 <Box className={styles.dot__1}></Box>
-                <Header />
+                <Header token={undefined} />
                 <DetailBanner/>
                 <DetailContent/>
             </Box>

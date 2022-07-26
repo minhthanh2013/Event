@@ -4,6 +4,7 @@ import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 import IconButton from '@mui/material/IconButton';
 import AddIcon from '@mui/icons-material/Add';
 import Button from '@mui/material/Button';
+import Image from 'next/image';
 const imageURL = "https://images.pexels.com/photos/2306281/pexels-photo-2306281.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
 const DetailBanner = () => {
 
@@ -32,7 +33,7 @@ const DetailBanner = () => {
                         </Box>
                     </Box>
                 </Box>
-                <img src="/purpleDot.svg" alt="purple dot" />
+                <Image src="/purpleDot.svg" alt="purple dot" />
                 
             </Box>
         </>
