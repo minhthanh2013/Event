@@ -13,6 +13,9 @@ a {
 * {
   box-sizing: border-box;
   font-family: 'Inter', sans-serif !important;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 .MuiDataGrid {

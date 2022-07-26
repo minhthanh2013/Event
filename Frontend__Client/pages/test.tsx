@@ -1,11 +1,11 @@
-import React from "react"
-import Map from "../components/Map"
+import React from 'react'
+import PurchaseModal from '../components/PurchaseModal'
 const Test = () => {
-    return (
-        <>
-            <Map/>
-        </>
-    )
+	return (
+		<>
+			<PurchaseModal />
+		</>
+	)
 }
 
 export default Test
