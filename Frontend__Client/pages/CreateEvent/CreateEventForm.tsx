@@ -7,7 +7,7 @@ import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import Grid from "@material-ui/core/Grid";
 import MenuItem from "@mui/material/MenuItem";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
+import Select from "@mui/material/Select";
 import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
 import InterpreterModeIcon from "@mui/icons-material/InterpreterMode";
@@ -28,33 +28,39 @@ interface CreateEventProps {
   setValue: (value: number) => void;
 }
 
-const categoryList = {
-  status: 'success',
-  data: [
-    { id: 1, name: 'foo' },
-    { id: 2, name: 'bar' },
-    { id: 3, name: 'baz' },
-  ],
+interface Props {
+  status: boolean;
+  data: PropsArray[];
 }
 
-const typeList = {
-  status: 'success',
-  data: [
-    { id: 1, name: 'foo' },
-    { id: 2, name: 'bar' },
-    { id: 3, name: 'baz' },
-  ],
+interface PropsArray {
+  id: number;
+  name: string;
 }
 
 export const BasicInfo: React.FC<CreateEventProps> = ({ data, setData, setValue }) => {
-  const [type, setType] = useState("");
-  const [category, setCategory] = useState("");
   const [categoryList, setCategoryList] = useState<Props>()
   const [typeList, setTypeList] = useState<Props>()
+
+  useEffect(() => {
+    const fetchDataCate = async () => {
+      const dataResult = await fetch("http://localhost:3000/conferencecategory/get-all");
+      const cateResult = await dataResult.json();
+      setCategoryList(cateResult)
+    }
+    const fetchDataType = async () => {
+      const dataResult = await fetch("http://localhost:3000/conferencetype/get-all");
+      const typeResult = await dataResult.json();
+      setTypeList(typeResult)
+    }
+
+    fetchDataType();
+    fetchDataCate();
+  }, [])
+
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors },
   } = useForm();
   const onSubmit = (value: any) => {
@@ -149,7 +155,6 @@ export const Speakers: React.FC<CreateEventProps> = ({ data, setData, setValue }
     register,
     handleSubmit,
     resetField,
-    watch,
     formState: { errors },
   } = useForm();
 
@@ -311,7 +316,6 @@ export const Date: React.FC<CreateEventProps> = ({ data, setData, setValue }) =>
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors },
     control
   } = useForm();
