@@ -34,8 +34,8 @@ interface Props {
 }
 
 interface PropsArray {
-  id: number;
-  name: string;
+  type_id: number;
+  type_name: string;
 }
 
 export const BasicInfo: React.FC<CreateEventProps> = ({ data, setData, setValue }) => {
@@ -44,12 +44,12 @@ export const BasicInfo: React.FC<CreateEventProps> = ({ data, setData, setValue 
 
   useEffect(() => {
     const fetchDataCate = async () => {
-      const dataResult = await fetch("http://localhost:3000/conferencecategory/get-all");
+      const dataResult = await fetch("http://evenity.page/conferencecategory/get-all");
       const cateResult = await dataResult.json();
       setCategoryList(cateResult)
     }
     const fetchDataType = async () => {
-      const dataResult = await fetch("http://localhost:3000/conferencetype/get-all");
+      const dataResult = await fetch("http://evenity.page/conferencetype/get-all");
       const typeResult = await dataResult.json();
       setTypeList(typeResult)
     }
@@ -108,8 +108,8 @@ export const BasicInfo: React.FC<CreateEventProps> = ({ data, setData, setValue 
               label="Type"
               {...register("type")}
             >
-              {typeList.data?.map((dataItem) => (
-                <MenuItem key={dataItem.id} value={dataItem.id}>{dataItem.name}</MenuItem>
+              {typeList?.data?.map((dataItem) => (
+                <MenuItem key={dataItem.type_id} value={dataItem.type_id}>{dataItem.type_name}</MenuItem>
               ))}
             </Select>
           </FormControl>
@@ -123,8 +123,8 @@ export const BasicInfo: React.FC<CreateEventProps> = ({ data, setData, setValue 
               label="Category"
               {...register("category")}
             >
-              {categoryList.data?.map((dataItem) => (
-                <MenuItem key={dataItem.id} value={dataItem.id}>{dataItem.name}</MenuItem>
+              {categoryList?.data?.map((dataItem) => (
+                <MenuItem key={dataItem.type_id} value={dataItem.type_id}>{dataItem.type_name}</MenuItem>
               ))}
             </Select>
           </FormControl>
