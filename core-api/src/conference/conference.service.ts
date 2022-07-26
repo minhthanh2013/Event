@@ -3,7 +3,6 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ConferenceCategoryEntity } from 'src/conferencecategory/models/conference_category.entity';
 import { ConferenceTypeEntity } from 'src/conferencetype/models/conference_type.entity';
-import { HostEntity } from 'src/host/models/host.entity';
 import { ResponseData } from 'src/responsedata/response-data.dto';
 import { UserEntity } from 'src/user/models/user.entity';
 import { FindOptionsUtils, Repository } from 'typeorm';

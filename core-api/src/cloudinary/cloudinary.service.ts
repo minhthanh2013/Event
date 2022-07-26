@@ -30,10 +30,10 @@ export class CloudinaryService {
     });
   }
 
-  async uploadVideoByPath(path: string): Promise<UploadApiResponse | UploadApiErrorResponse> {
+  async uploadVideoByPath(path: string, videoName: string): Promise<UploadApiResponse | UploadApiErrorResponse> {
     return v2.uploader.upload(path, 
-  {resource_type: "video", public_id: "my_dog",
-  overwrite: true, notification_url: "https://mysite.example.com/notify_endpoint"},
+      {resource_type: "video", public_id: videoName,
+      overwrite: true, notification_url: "https://evenity.page/zoom/notification/finish-upload-record"},
   function(error, result) {console.log(result, error)});
   }
 
@@ -49,17 +49,17 @@ export class CloudinaryService {
     });
   }
 
-  async uploadVideoToCloudinaryByPath(path: string) {
-    return await this.uploadVideoByPath(path).catch(() => {
+  async uploadVideoToCloudinaryByPath(path: string, videoName: string) {
+    return await this.uploadVideoByPath(path, videoName).catch(() => {
       throw new BadRequestException('Invalid video file type.');
     });
   }
 
-  getImage() {
-    return v2.image("vn")
+  getImage(meetingId: string) {
+    return v2.image("conference-"+meetingId+"-avatar")
   }
 
-  getVideo() {
-    return v2.video("my_dog")
+  getVideo(meetingId: string) {
+    return v2.image("conference-"+meetingId+"-record")
   }
 }

@@ -1,20 +1,111 @@
 version: '3.8'
 services:
-  dev-db:
+  postgres:
     image: postgres:13
     ports:
       - 5434:5432
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: 123
-      POSTGRES_DB: nest
+      POSTGRES_DB: evenity
     networks:
       - doan2022
+    container_name: postgres
   redis:
     image: redis
     ports:
       - 6379:6379
     networks:
       - doan2022
+    container_name: redis
+  core-api:
+    tty: true
+    stdin_open: true # without this node doesn't start
+    build:
+      dockerfile: ./Dockerfile
+      context: ./core-api
+    # depends_on:
+    #   - postgres
+    ports:
+      - 3000:3000
+    networks:
+      - doan2022  
+    volumes:
+      - DISK1:/usr/src/app/resources
+    container_name: core-api
+  payment:
+    tty: true
+    stdin_open: true # without this node doesn't start
+    build:
+      dockerfile: ./Dockerfile
+      context: ./payment
+    # ports:
+    #   - 3002:4002
+    networks:
+      - doan2022  
+    container_name: payment
+  # redis-image:
+  #   tty: true
+  #   stdin_open: true # without this node doesn't start
+  #   build:
+  #     dockerfile: ./Dockerfile
+  #     context: ./redis
+  zoom:
+    tty: true
+    stdin_open: true # without this node doesn't start
+    build:
+      dockerfile: ./Dockerfile
+      context: ./zoom
+    # ports:
+    #   - 3001:4001
+    networks:
+      - doan2022  
+    volumes:
+      - DISK1:/usr/src/app/resources
+    container_name: zoom
+  # webserver:
+  #   image: nginx:mainline-alpine
+  #   container_name: webserver
+  #   restart: unless-stopped
+  #   volumes:
+  #     - web-root:/var/www/html
+  #     - ./nginx-conf:/etc/nginx/conf.d
+  #     - certbot-etc:/etc/letsencrypt
+  #     - certbot-var:/var/lib/letsencrypt
+  #     - ./dhparam:/etc/ssl/certs
+  #   ports:
+  #     - 80:80
+  #     - "443:443"
+  #   depends_on:
+  #     - core-api
+  #   networks:
+  #     - doan2022
+  # certbot:
+  #   image: certbot/certbot
+  #   container_name: certbot
+  #   volumes:
+  #     - certbot-etc:/etc/letsencrypt
+  #     - certbot-var:/var/lib/letsencrypt
+  #     - web-root:/var/www/html
+  #   depends_on:
+  #     - webserver
+  #   command: certonly --webroot --webroot-path=/var/www/html --email sammy@evenity.page --agree-tos --no-eff-email --force-renewal -d evenity.page  -d www.evenity.page
 networks:
   doan2022:
+    driver: bridge
+volumes:
+  DISK1:
+  # certbot-etc:
+  # certbot-var:
+  # web-root:
+  #   driver: local
+  #   driver_opts:
+  #     type: none
+  #     device: ~/Event/views
+  #     o: bind
+  # dhparam:
+  #   driver: local
+  #   driver_opts:
+  #     type: none
+  #     device: ~/Event/dhparam/
+  #     o: bind
