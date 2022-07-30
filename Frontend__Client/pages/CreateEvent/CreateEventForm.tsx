@@ -28,19 +28,29 @@ interface CreateEventProps {
   setValue: (value: number) => void;
 }
 
-interface Props {
+interface TypeProps {
   status: boolean;
-  data: PropsArray[];
+  data: TypeProps[];
 }
 
-interface PropsArray {
+interface CategoryProps {
+  status: boolean;
+  data: CategoryProps[];
+}
+
+interface TypeProps {
   type_id: number;
   type_name: string;
 }
 
+interface CategoryProps {
+  category_id: number;
+  category_name: string;
+}
+
 export const BasicInfo: React.FC<CreateEventProps> = ({ data, setData, setValue }) => {
-  const [categoryList, setCategoryList] = useState<Props>()
-  const [typeList, setTypeList] = useState<Props>()
+  const [categoryList, setCategoryList] = useState<CategoryProps>()
+  const [typeList, setTypeList] = useState<TypeProps>()
 
   useEffect(() => {
     const fetchDataCate = async () => {
@@ -124,7 +134,7 @@ export const BasicInfo: React.FC<CreateEventProps> = ({ data, setData, setValue 
               {...register("category")}
             >
               {categoryList?.data?.map((dataItem) => (
-                <MenuItem key={dataItem.type_id} value={dataItem.type_id}>{dataItem.type_name}</MenuItem>
+                <MenuItem key={dataItem.category_id} value={dataItem.category_id}>{dataItem.category_name}</MenuItem>
               ))}
             </Select>
           </FormControl>
