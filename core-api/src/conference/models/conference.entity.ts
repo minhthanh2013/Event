@@ -48,6 +48,9 @@ export class ConferenceEntity {
   update_at: Date;
   @Column({ default: false })
   isValidated: boolean;
+
+  @Column()
+  conference_type: number;
   @OneToOne(
     () => ConferenceTypeEntity,
     (conferenceType) => conferenceType.type_id,
@@ -56,7 +59,10 @@ export class ConferenceEntity {
     name: 'conference_type',
     referencedColumnName: 'type_id',
   })
-  conference_type: ConferenceTypeEntity;
+  conferenceType: ConferenceTypeEntity;
+
+  @Column()
+  conference_category: number;
   @OneToOne(
     () => ConferenceCategoryEntity,
     (conferenceCategory) => conferenceCategory.category_id,
@@ -65,27 +71,48 @@ export class ConferenceEntity {
     name: 'conference_category',
     referencedColumnName: 'category_id',
   })
-  conference_category: ConferenceCategoryEntity;
+  conferenceCategory: ConferenceCategoryEntity;
+
+  @Column()
+  analytic_detail: number;
+
   @OneToOne(() => AnalyticEntity, (analytic) => analytic.analytic_id)
-  analytic_detail: AnalyticEntity;
+  @JoinColumn({
+    name: 'analytic_detail',
+    referencedColumnName: 'analytic_id',
+  })
+  analyticDetail: AnalyticEntity;
+
+  @Column()
+  admin_id: number;
+  
   @OneToOne(() => AdminEntity, (admin) => admin.admin_id)
   @JoinColumn({
     name: 'admin_id',
     referencedColumnName: 'admin_id',
   })
-  admin_id: AdminEntity;
+  adminId: AdminEntity;
+
+  @Column()
+  combo_id: number;
   @ManyToOne(() => ComboSessionEntity, (session) => session.conferences)
   @JoinColumn({
     name: "combo_id",
     referencedColumnName: "combo_id"
   })
   comboSession: ComboSessionEntity;
+
+  @Column()
+  speaker_id: number;
   @ManyToOne(() => SpeakerEntity, (speaker) => speaker.conferences)
   @JoinColumn({
     name: "speaker_id",
     referencedColumnName: "user_id"
   })
   speaker: SpeakerEntity;
+
+  @Column()
+  host_id: number
   @ManyToOne(() => HostEntity, host => host.conferences)
   @JoinColumn({
     name: "host_id",

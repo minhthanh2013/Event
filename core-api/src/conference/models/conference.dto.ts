@@ -11,13 +11,14 @@ export class ConferenceResponseDto {
 export class ConferenceRequestDto {
     conferenceName: string;
     hostName: string;
-    conferenceType: string;
-    conferenceCategory: string;
+    conferenceTypeId: number;
+    conferenceCategoryId: number;
     conferenceDescription: string;
     speakerList: SpeakerList[];
     dateStartConference: Date;
     dateStartSell: Date;
     dateEndSell: Date;
+    dateEndConference: Date;
     ticketQuantity: number;
     conferencePrice: number;
 }

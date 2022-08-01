@@ -1,7 +1,6 @@
 /* eslint-disable prettier/prettier */
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import * as nodemailer from 'nodemailer';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const sgMail = require('@sendgrid/mail')
 
@@ -9,11 +8,11 @@ const sgMail = require('@sendgrid/mail')
 export class EmailService {
   constructor(private configService: ConfigService) {}
 
-  async sendEmail() {
+  async sendEmail(email: string, ) {
     
     sgMail.setApiKey(this.configService.get("SENDGRID_API_KEY"))
     const msg = {
-    to: 'damon.taquan@moondoo.org', // Change to your recipient
+    to: email, // Change to your recipient
     from: 'minhthanhd013@gmail.com', // Change to your verified sender
     subject: 'Sending with SendGrid is Fun',
     text: 'and easy to do anywhere, even with Node.js',

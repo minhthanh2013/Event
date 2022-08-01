@@ -7,9 +7,10 @@ import { ConferenceEntity } from './models/conference.entity';
 import { ConferenceTypeEntity } from 'src/conferencetype/models/conference_type.entity';
 import { ConferenceCategoryEntity } from 'src/conferencecategory/models/conference_category.entity';
 import { UserEntity } from 'src/user/models/user.entity';
+import { HostEntity } from 'src/host/models/host.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([ConferenceEntity, ConferenceTypeEntity, ConferenceCategoryEntity, UserEntity])],
+  imports: [TypeOrmModule.forFeature([ConferenceEntity, ConferenceTypeEntity, ConferenceCategoryEntity, UserEntity, HostEntity])],
   providers: [ConferenceService],
   controllers: [ConferenceController],
 })
