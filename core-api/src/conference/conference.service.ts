@@ -5,11 +5,12 @@ import { ConferenceCategoryEntity } from 'src/conferencecategory/models/conferen
 import { ConferenceTypeEntity } from 'src/conferencetype/models/conference_type.entity';
 import { HostEntity } from 'src/host/models/host.entity';
 import { ResponseData } from 'src/responsedata/response-data.dto';
-import { SpeakerEntity } from 'src/speaker/models/speaker.entity';
 import { UserEntity } from 'src/user/models/user.entity';
-import { FindOptionsUtils, Repository } from 'typeorm';
+import { ZoomService } from 'src/zoom/zoom.service';
+import { Repository } from 'typeorm';
 import { ConferenceRequestDto, ConferenceResponseDto } from './models/conference.dto';
 import { ConferenceEntity } from './models/conference.entity';
+import { ScheduleZoomDto } from './models/create.zoom.dto';
 
 @Injectable()
 export class ConferenceService {
@@ -24,6 +25,7 @@ export class ConferenceService {
     private readonly speakerRepository: Repository<UserEntity>,
     @InjectRepository(HostEntity)
     private readonly hostRepository: Repository<HostEntity>,
+    private readonly zoomService: ZoomService,
   ) { }
 
   async findAllConferences(): Promise<ResponseData> {
@@ -52,6 +54,19 @@ export class ConferenceService {
       const data = await this.conferenceRepository.save(newConference);
       result.status = data !== undefined;
       result.data = data;
+      if (data.conference_type == 2){ 
+        const zoomDto: ScheduleZoomDto = new ScheduleZoomDto();
+        zoomDto.conferenceId = data.conference_id;
+        zoomDto.conferenceName = data.conference_name;
+        zoomDto.hostName = conference.hostName;
+        const conferenceCategor = await this.conferenceCategoryRepository.findOne({where: {
+          category_id: data.conference_category
+        }});
+        zoomDto.conferenceCategory = conferenceCategor.category_name;
+        zoomDto.dateStartConference = data.date_start_conference;
+        const scheduleZoomResult = await this.zoomService.createConference(zoomDto);
+        console.log(scheduleZoomResult);
+      }
       return result;
     }
     );

@@ -1,5 +1,6 @@
+/* eslint-disable prettier/prettier */
 export class ScheduleZoomDto {
-    conferenceId: string;
+    conferenceId: number;
     conferenceName: string;
     hostName: string;
     conferenceCategory: string;
