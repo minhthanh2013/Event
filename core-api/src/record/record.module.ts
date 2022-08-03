@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { Module } from '@nestjs/common';
 import { RecordService } from './record.service';
 import { RecordController } from './record.controller';

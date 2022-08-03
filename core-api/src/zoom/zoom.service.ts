@@ -6,7 +6,6 @@ import { Multer } from 'multer';
 import { ZoomDto } from "./dto/zoom.dto";
 import { HttpService } from '@nestjs/axios';
 import { ConfigService } from '@nestjs/config';
-import { Observable } from "rxjs";
 import { ScheduleZoomDto } from "./dto/create.zoom.dto";
 import { InjectRepository } from "@nestjs/typeorm";
 import { ConferenceEntity } from "src/conference/models/conference.entity";
@@ -55,7 +54,6 @@ export class ZoomService {
                 this.httpService.get( url, { headers: headersRequest }).subscribe(res => {
                     const obj = JSON.parse(JSON.stringify(res.data));
                     resolve(obj.recording_files[0].download_url);
-                    // return obj.recording_files[0].download_url;
                 })
             })
         }
