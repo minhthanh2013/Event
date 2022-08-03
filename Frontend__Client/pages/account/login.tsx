@@ -34,7 +34,7 @@ const Login = (props: Props) => {
         onSubmit: async (values: any) => {
             let user = null;
             try {
-                user = await axios.post("/api/auth/login", values);
+                user = await axios.post("/api/auth/user/login", values);
             } catch (error) {
                 console.log(error)
             }
