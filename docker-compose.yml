@@ -18,6 +18,18 @@ services:
     networks:
       - doan2022
     container_name: redis
+  frontend:
+    tty: true
+    stdin_open: true # without this node doesn't start
+    build:
+      dockerfile: ./Dockerfile
+      context: ./Frontend__Client
+    image: frontend
+    ports:
+      - 8080:8080
+    networks:
+      - doan2022
+    container_name: frontend
   core-api:
     tty: true
     stdin_open: true # without this node doesn't start

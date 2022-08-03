@@ -30,7 +30,7 @@ export async function getServerSideProps(ctx: any) {
     try{
       raw = ctx.req.headers.cookie.toString();
     } catch(e) {
-      return null;
+      return { props: {} }
     }
     if(raw.includes(";")) {
       let rawCookie = raw.split(";")
