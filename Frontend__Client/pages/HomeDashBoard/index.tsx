@@ -71,9 +71,9 @@ const EventCreate = (props: EventCreate) => {
         sx={{
           background: "#F1EFEF",
           width: "100%",
-          minHeight: "1920px",
           overflow: "hidden",
           position: "relative",
+          marginBottom: "10rem",
         }}
       >
         <Box className={styles.dot__1}></Box>

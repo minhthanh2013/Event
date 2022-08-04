@@ -54,12 +54,12 @@ export const BasicInfo: React.FC<CreateEventProps> = ({ data, setData, setValue 
 
   useEffect(() => {
     const fetchDataCate = async () => {
-      const dataResult = await fetch("http://evenity.page/conferencecategory/get-all");
+      const dataResult = await fetch("https://evenity.page/conferencecategory/get-all");
       const cateResult = await dataResult.json();
       setCategoryList(cateResult)
     }
     const fetchDataType = async () => {
-      const dataResult = await fetch("http://evenity.page/conferencetype/get-all");
+      const dataResult = await fetch("https://evenity.page/conferencetype/get-all");
       const typeResult = await dataResult.json();
       setTypeList(typeResult)
     }
@@ -75,11 +75,23 @@ export const BasicInfo: React.FC<CreateEventProps> = ({ data, setData, setValue 
   } = useForm();
   const onSubmit = (value: any) => {
     setData({
-      ...data, eventName: value.eventName, organizerName: value.organizerName,
-      eventType: value.type, eventCategory: value.category, description: value.description
+      ...data, conferenceName: value.conferenceName, organizerName: value.organizerName,
+      conferenceType: value.conferenceType, conferenceCategory: value.conferenceCategory, conferenceDescription: value.conferenceDescription
     });
+    apiCall({...data, hostName: "minhthanh1"});
     setValue(1);
   };
+  const apiCall = async (data) => {
+    const res = await fetch("https://evenity.page/conference/create-new", {
+      method: "POST",
+      body: JSON.stringify(data),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    const result = await res.json();
+    console.log(result);
+  }
   return (
     <>
       <Grid
@@ -95,9 +107,9 @@ export const BasicInfo: React.FC<CreateEventProps> = ({ data, setData, setValue 
             required
             id="standard-required"
             label="Event Name"
-            defaultValue={data ? data.eventName : undefined}
+            defaultValue={data.conferenceName}
             variant="standard"
-            {...register("eventName")}
+            {...register("conferenceName")}
           />
           <TextField
             className={styles.eventFields}
@@ -114,9 +126,9 @@ export const BasicInfo: React.FC<CreateEventProps> = ({ data, setData, setValue 
               className={styles.selectType}
               required
               labelId="select-type"
-              defaultValue={data.eventType}
+              defaultValue={data.conferenceType}
               label="Type"
-              {...register("type")}
+              {...register("conferenceType")}
             >
               {typeList?.data?.map((dataItem) => (
                 <MenuItem key={dataItem.type_id} value={dataItem.type_id}>{dataItem.type_name}</MenuItem>
@@ -129,9 +141,9 @@ export const BasicInfo: React.FC<CreateEventProps> = ({ data, setData, setValue 
             <Select
               required
               labelId="select-category"
-              defaultValue={data.eventType}
+              defaultValue={data.conferenceCategory}
               label="Category"
-              {...register("category")}
+              {...register("conferenceCategory")}
             >
               {categoryList?.data?.map((dataItem) => (
                 <MenuItem key={dataItem.category_id} value={dataItem.category_id}>{dataItem.category_name}</MenuItem>
@@ -142,9 +154,9 @@ export const BasicInfo: React.FC<CreateEventProps> = ({ data, setData, setValue 
           <TextField
             className={styles.eventFields}
             label="Description"
-            defaultValue={data ? data.description : undefined}
+            defaultValue={data.conferenceDescription}
             multiline
-            {...register("description")}
+            {...register("conferenceDescription")}
           />
           <Button className={styles.nextBtn} variant="contained" type="submit">
             Next
@@ -169,9 +181,9 @@ export const Speakers: React.FC<CreateEventProps> = ({ data, setData, setValue }
   } = useForm();
 
   const onSubmit = (value: any) => {
-    let temp = [...(data.speakers ?? [])];
+    let temp = [...(data.speakerList ?? [])];
     temp.push(value);
-    setData({ ...data, speakers: temp })
+    setData({ ...data, speakerList: temp })
     setOpen(false);
   };
 
@@ -239,14 +251,14 @@ export const Speakers: React.FC<CreateEventProps> = ({ data, setData, setValue }
   const handleDelete = (index: number) => {
     let temp: Speaker[] = [];
     let arr: Speaker[] = [];
-    data.speakers?.forEach((speaker) => temp.push(Object.assign({}, speaker)));
-    data.speakers !== undefined ? (arr = temp.splice(index, 1)) : (temp = []);
-    setData({ ...data, speakers: temp })
+    data.speakerList?.forEach((speaker) => temp.push(Object.assign({}, speaker)));
+    data.speakerList !== undefined ? (arr = temp.splice(index, 1)) : (temp = []);
+    setData({ ...data, speakerList: temp })
   };
 
   return (
     <>
-      {data.speakers?.length === undefined || data.speakers?.length < 1 ? (
+      {data.speakerList?.length === undefined || data.speakerList?.length < 1 ? (
         <Grid container spacing={0} direction="column" alignItems="center">
           <InterpreterModeIcon
             className={styles.speakersIcon}
@@ -268,7 +280,7 @@ export const Speakers: React.FC<CreateEventProps> = ({ data, setData, setValue }
         </Grid>
       ) : (
         <Stack sx={{ width: "100%" }} spacing={2}>
-          {data.speakers?.map((speaker, index) => (
+            {data.speakerList?.map((speaker, index) => (
             <>
               <Alert
                 key={index}
@@ -335,8 +347,8 @@ export const Date: React.FC<CreateEventProps> = ({ data, setData, setValue }) =>
   const [ticketEnd, setTicketEnd] = useState<Date | null>(null);
   const onSubmit = (value: any) => {
     setData({
-      ...data, eventStart: value.eventStart, ticketStart: value.ticketStart,
-      ticketEnd: value.ticketEnd, price: value.price, quantity: value.quantity
+      ...data, dateStartConference: value.dateStartConference, dateStartSell: value.dateStartSell,
+      dateEndSell: value.dateEndSell, conferencePrice: value.conferencePrice, ticketQuantity: value.ticketQuantity
     });
     setValue(0);
   };
@@ -353,14 +365,14 @@ export const Date: React.FC<CreateEventProps> = ({ data, setData, setValue }) =>
           <LocalizationProvider dateAdapter={AdapterDateFns}>
             <Stack spacing={3}>
               <Controller
-                name="eventStart"
+                name="dateStartConference"
                 control={control}
-                defaultValue={data.eventStart}
+                defaultValue={data.dateStartConference}
                 render={({ field: { ref, ...rest } }) => (
                   <DatePicker
                     label="Event start date"
                     inputFormat="dd/MM/yyyy"
-                    value={data.eventStart}
+                    value={data.dateStartConference}
                     disablePast
                     inputRef={ref}
                     onChange={(newValue: Date | null) => {
@@ -378,14 +390,14 @@ export const Date: React.FC<CreateEventProps> = ({ data, setData, setValue }) =>
                 )}
               />
               <Controller
-                name="ticketStart"
+                name="dateStartSell"
                 control={control}
-                defaultValue={data.ticketStart}
+                defaultValue={data.dateStartSell}
                 render={({ field: { ref, ...rest } }) => (
                   <DatePicker
                     label="Ticket sales start"
                     inputFormat="dd/MM/yyyy"
-                    value={data.ticketStart}
+                    value={data.dateStartSell}
                     disablePast
                     inputRef={ref}
                     onChange={(newValue: Date | null) => {
@@ -403,15 +415,15 @@ export const Date: React.FC<CreateEventProps> = ({ data, setData, setValue }) =>
                 )}
               />
               <Controller
-                name="ticketEnd"
+                name="dateEndSell"
                 control={control}
+                defaultValue={data.dateEndSell} 
                 render={({ field: { ref, ...rest } }) => (
                   <DatePicker
                     label="Ticket sales end"
                     inputFormat="dd/MM/yyyy"
-                    value={data.ticketEnd}
+                    value={data.dateEndSell}
                     disablePast
-                    minDate={data.ticketStart}
                     inputRef={ref}
                     onChange={(newValue: Date | null) => {
                       setTicketEnd(newValue);
@@ -436,9 +448,9 @@ export const Date: React.FC<CreateEventProps> = ({ data, setData, setValue }) =>
             id="standard-required"
             label="Ticket price"
             variant="standard"
-            defaultValue={data.price}
+            defaultValue={data.conferencePrice}
             type="number"
-            {...register("price")}
+            {...register("conferencePrice")}
           />
           <TextField
             className={styles.eventFields}
@@ -447,8 +459,8 @@ export const Date: React.FC<CreateEventProps> = ({ data, setData, setValue }) =>
             label="Ticket quantity"
             variant="standard"
             type="number"
-            defaultValue={data.quantity}
-            {...register("quantity")}
+            defaultValue={data.ticketQuantity}
+            {...register("ticketQuantity")}
           />
           <Button className={styles.nextBtn} variant="contained" type="submit">
             Submit

@@ -55,20 +55,20 @@ function a11yProps(index: number) {
 const CreateEvent = () => {
   const [data, setData] = useState({})
   const [image, setImage] = useState<string | ArrayBuffer | null>();
-  
+  console.log(data)
   const onImageChange = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
       let reader = new FileReader();
       reader.onload = (e) => {
         setImage(e?.target?.result);
-        setData({ ...data, image: e?.target?.result })
+        setData({ ...data, image: event.target.files[0] })
+        console.log(e)
       };
+      
       reader.readAsDataURL(event.target.files[0]);
     }
   };
-
   const [value, setValue] = React.useState(0);
-  console.log(data)
   //change tabs, value = tabs value
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
