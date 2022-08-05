@@ -6,7 +6,8 @@ import axios from 'axios'
 export default async function (req: NextApiRequest, res: NextApiResponse) {
 	let user = null
 	try {
-		console.log(process.env.BACKEND_PROTOCOL+'://' + process.env.BACKEND_HOST + ':' + process.env.BACKEND_PORT + '/user/signup')
+		const request = process.env.BACKEND_PROTOCOL+'://' + process.env.BACKEND_HOST + ':' + process.env.BACKEND_PORT + '/user/signup';
+		console.log(request)
 		const config = {
 			headers: {
 				'Content-Type': 'application/x-www-form-urlencoded',

@@ -1,5 +1,13 @@
+import { Box } from '@mui/material';
 import type { NextPage } from 'next'
+import CarouselSlide from '../components/CarouselSlide';
+import Footer from '../components/Footer';
+import Header from '../components/Header';
+import SearchBar from '../components/SearchBar';
+import SessionList from '../components/SessionList';
+import TicketList from '../components/TicketList';
 import HomeDashboard from './HomeDashBoard'
+import styles from '../styles/Background.module.scss';
 export { default as buildStore } from '../shared/redux/buildStore';
 const Home: NextPage = props  => {
   return (
@@ -8,8 +16,6 @@ const Home: NextPage = props  => {
         <Box className={styles.dot__1}></Box>
         <Box className={styles.dot__2}></Box>
         <Box className={styles.dot__3}></Box>
-
-
         <Header {...props}/>
         <CarouselSlide/>
         <SearchBar/>
@@ -17,7 +23,7 @@ const Home: NextPage = props  => {
         <TicketList/>
         
       </Box>
-      <Footer/> */}
+      <Footer/>  */}
       <HomeDashboard />
     </>
   )

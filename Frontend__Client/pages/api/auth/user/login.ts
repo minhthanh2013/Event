@@ -2,14 +2,21 @@
 import { serialize } from 'cookie'
 import { NextApiResponse, NextApiRequest } from 'next'
 import axios from 'axios'
+import https from 'https';
 
 export default async function (req: NextApiRequest, res: NextApiResponse) {
+	const config = {
+		headers: {
+			'Content-Type': 'application/x-www-form-urlencoded',
+		}
+	}
 	let user = null
 	try {
-		console.log(process.env.BACKEND_PROTOCOL+'://' + process.env.BACKEND_HOST + ':' + process.env.BACKEND_PORT + '/user/signin')
-		user = await axios.post(process.env.BACKEND_PROTOCOL+'://' + process.env.BACKEND_HOST + '/user/signin', req.body)
+		const request = process.env.BACKEND_PROTOCOL+'://' + process.env.BACKEND_HOST + ':' + process.env.BACKEND_PORT + '/user/signin'; 
+		console.log(11, request)
+		user = await axios.post(request, req.body);
 	} catch (error) {
-		// console.log(error);
+		console.log(error);
 	}
 	if (user !== null) {
 		const token = user.data.access_token
