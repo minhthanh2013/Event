@@ -3,6 +3,9 @@ $fontSize-text1: 1.2rem;
 $fontSize-text2: 1rem;
 $fontSize-text3: 0.9rem;
 $color-text2: #969696;
+$color-text1: rgba(0, 0, 0, 0.87);
+$color-text3: white;
+
 .container {
     
    
@@ -67,6 +70,15 @@ $color-text2: #969696;
 .rightWrap {
     width: 35%;
     background-color: #180a3d;
+    .content{
+        h3{
+            font-size: $fontSize-text1;
+            color: $color-text3;
+            font-weight: 600;
+            letter-spacing: 0.1rem;
+        }
+
+    }
 }
 
 

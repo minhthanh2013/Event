@@ -12,7 +12,7 @@ export { default as buildStore } from '../shared/redux/buildStore';
 const Home: NextPage = props  => {
   return (
     <>
-      {/* <Box className={styles.background__wrap}>
+      <Box className={styles.background__wrap}>
         <Box className={styles.dot__1}></Box>
         <Box className={styles.dot__2}></Box>
         <Box className={styles.dot__3}></Box>
@@ -23,7 +23,7 @@ const Home: NextPage = props  => {
         <TicketList/>
         
       </Box>
-      <Footer/>  */}
+      <Footer/> 
       <HomeDashboard />
     </>
   )
