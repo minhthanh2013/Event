@@ -43,6 +43,9 @@ export class ConferenceService {
     const result = new ResponseData()
     const data = await this.conferenceRepository.findOne({ where: { conference_id: id } })
       result.status = data !== undefined
+      if(result.status === true) {
+        result.data = data
+      }
     return result;
   }
   async createConference(conference: ConferenceRequestDto): Promise<ResponseData> {

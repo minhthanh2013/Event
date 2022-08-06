@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
 
@@ -37,21 +37,72 @@ import DetailContent from '../../components/DetailContent'
 //     }
 // }
 
-const Event = ({event}:any) => {
+interface TicketProp {
+	conference_id: number;
+    description: string;
+	price: number;
+	conference_name: number;
+	date_start_conference: Date;
+	address: string;
+	// conferenceOrganizer: string;
+}
+
+interface TicketProps {
+	data: TicketProp;
+	// conferenceOrganizer: string;
+}
+
+const Event = (props: any) => {
     const router = useRouter();
     const { id } = router.query;
+    const [ticketList, setTicketList] = useState<TicketProps>()
+	useEffect(() => {
+		const fetchTicketList = async () => {
+		  const dataResult = await fetch(`/api/conference/${id}`);
+		  const cateResult = await dataResult.json();
+		  setTicketList(cateResult)
+		}
+		fetchTicketList().catch(() => {
+            // 
+        })
+	  }, [id])
+
+
     return (
         <>
-            
             <Box className={styles.background__wrap}>
                 <Box className={styles.dot__1}></Box>
-                <Header token={undefined} />
-                <DetailBanner/>
-                <DetailContent/>
+                <Header {...props}/>
+                {ticketList?.data && <DetailBanner data={ticketList.data} />}
+                {ticketList?.data && <DetailContent data={ticketList.data} />}
+                {/* <DetailBanner data={ticketList.data}/>
+                <DetailContent data={ticketList.data}/> */}
             </Box>
             <Footer/>
         </>
-    )
+    ) 
 }
 
+export async function getServerSideProps(ctx: any) {
+    // Fetch data from external API
+    // Pass data to the page via props
+      let raw = null;
+      try{
+        raw = ctx.req.headers.cookie.toString();
+      } catch(e) {
+        return { props: {} }
+      }
+      if(raw.includes(";")) {
+        let rawCookie = raw.split(";")
+        for(let i = 0; i < rawCookie.length; i++) {
+          if(rawCookie[i].includes("OursiteJWT")) {
+            let cookies = rawCookie[i];
+            let token = cookies.split("=")[0];
+            let value = cookies.split("=")[1];
+            return {props : {token, value}};
+          }
+        }
+      }
+    return { props: {} }
+  }
 export default Event

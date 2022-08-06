@@ -1,7 +1,57 @@
 import { Box, Typography } from '@mui/material'
 import styles from '../styles/DetailContent.module.scss'
 import LocationOnIcon from '@mui/icons-material/LocationOn'
-const DetailContent = () => {
+import { useEffect, useState } from 'react';
+
+interface TicketProp {
+	conference_id: number;
+    description: string;
+	price: number;
+	conference_name: number;
+	date_start_conference: Date;
+	address: string;
+	// conferenceOrganizer: string;
+}
+
+
+interface TicketProps {
+	data: TicketProp;
+	// conferenceOrganizer: string;
+}
+
+const weekday = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+
+const DetailContent = (props: TicketProps) => {
+	const [imageProp, setImageProp] = useState<string>()
+	const [year, setYear] = useState<string>()
+	const [month, setMonth] = useState<string>()
+	const [monthString, setMonthString] = useState<string>()
+	const [day, setDay] = useState<string>()
+	const [hour, setHour] = useState<string>()
+	const [min, setMin] = useState<string>()
+	const [weekDay, setWeekDay] = useState<string>()
+	const [timePeriod, setTimePeriod] = useState<string>()
+	
+	useEffect(() => {
+		const parseDate = () => {
+			const date = new Date(props.data.date_start_conference)
+			setYear(date.getFullYear().toString())
+			setMonth(date.getMonth().toString())
+			setMonthString(date.toLocaleString('en-us', { month: 'short' }))
+			setDay(date.getDate().toString())
+			let hours = date.getHours();
+			let minutes = date.getMinutes();
+			let ampm = hours >= 12 ? 'pm' : 'am';
+			hours = hours % 12;
+			hours = hours ? hours : 12; // the hour '0' should be '12'
+			let minuteString = minutes < 10 ? '0'+minutes : minutes;
+			setTimePeriod(ampm)
+			setHour(hours.toString())
+			setMin(minuteString.toString())
+			setWeekDay(weekday[date.getDay()])
+		}
+		parseDate();
+	}, [])
 	return (
 		<>
 			<Box className={styles.container}>
@@ -11,10 +61,7 @@ const DetailContent = () => {
 							<Typography component='h3'>Description</Typography>
 							<Box>
 								<Typography component='span'>
-									“Metaverse”- “NFT” is considered the keyword of the fashion and retail industry in 2022. As consumers spend more time using the internet, the
-									metaverse universe becomes the “perfect launching pad” for “virtual goods.” Fashion industry leaders need to discover new ways of interacting
-									with today’s young consumers, by experimenting with “NFT” (Non-fungible Token), virtual fashion in Brands will use the metaverse platform to
-									engage young consumers and find new avenues for creativity, community building or new commercial models.
+									{props.data?.description || 'No description'}
 								</Typography>
 							</Box>
 						</Box>
@@ -27,13 +74,13 @@ const DetailContent = () => {
 								loading='lazy'
 							></iframe>
 							{/* <Box component='img' src='https://i.stack.imgur.com/HILmr.png'></Box> */}
-							<Typography component='h4'>Auditorium 2.1.004, RMIT University Saigon South Campus</Typography>
-							<Typography component='span'>702 Nguyen Van Linh, District 7, Ho Chi Minh City</Typography>
+							<Typography component='h4'>{props.data?.address ? "Zoom" : props.data.address }</Typography>
+							<Typography component='span'>{props.data?.address ? "Zoom" : props.data.address }</Typography>
 						</Box>
 					</Box>
 					<Box className={styles.info__section}>
 						<Typography component='h3'>Hours</Typography>
-						<Typography component='p'>Sunday, Apr 24, 2022 at 9:30 AM</Typography>
+						<Typography component='p'>{weekDay}, {monthString} {day}, {year} at {hour}:{min} {timePeriod}</Typography>
 						<Typography component='h3'>How can I contact the organizer with any question?</Typography>
 						<Typography component='p'>
 							Please visit <a href='#'>https://www.rmit.edu.vn/</a> and refer to the FAQ section for all questions and contact information.{' '}

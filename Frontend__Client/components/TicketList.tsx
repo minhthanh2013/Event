@@ -4,24 +4,6 @@ import Ticket from './Ticket'
 import Grid from '@mui/material/Grid'
 import { Typography, Box } from '@mui/material'
 import Link from '@mui/material/Link'
-interface TicketListProps {}
-
-const products = [
-	{
-		title: 've cha 1',
-		id: 1,
-		listChild: [
-			{ title: 've con 1', id: 2, listChild: [] },
-			{ title: 've con 2', id: 3, listChild: [] },
-		],
-	},
-	{ title: 've con 3', id: 4, listChild: [] },
-	{ title: 've con 4', id: 5, listChild: [] },
-	{ title: 've con 1', id: 2, listChild: [] },
-	{ title: 've con 2', id: 3, listChild: [] },
-]
-
-const types = [1, 2, 2, 2, 2, 1]
 
 interface TicketProps {
 	status: boolean;
@@ -37,7 +19,7 @@ interface TicketProp {
 	// conferenceOrganizer: string;
 }
 
-const TicketList = (props: TicketListProps) => {
+const TicketList = (props: any) => {
 	const [ticketList, setTicketList] = useState<TicketProps>()
 	// 'conference-1-avatar '
 	useEffect(() => {
@@ -61,7 +43,9 @@ const TicketList = (props: TicketListProps) => {
 						{ticketList?.data?.map((dataItem) => (
 							// eslint-disable-next-line react/jsx-key
 							<Grid item lg={4} md={6} sm={12} >
-								<Ticket data={dataItem}/>
+								<Link href={'/event/' + dataItem.conference_id}>
+									<Ticket data={dataItem} props={props}/>
+								</Link>
 							</Grid>
 						))}
 					</Grid>

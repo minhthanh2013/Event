@@ -25,8 +25,8 @@ const Home: NextPage = props  => {
         <Header {...props}/>
         <CarouselSlide/>
         <SearchBar/>
-        <SessionList/>
-        <TicketList/>
+        <SessionList {...props}/>
+        <TicketList {...props}/>
         
       </Box>
       <Footer/> 

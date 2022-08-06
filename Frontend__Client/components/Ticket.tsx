@@ -19,6 +19,7 @@ interface TicketProp {
 interface TicketProps {
 	// imageProps: string;
 	data: TicketProp;
+	props: any;
 }
 const weekday = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
 

@@ -6,7 +6,7 @@ import { Typography, Box } from '@mui/material'
 import Link from '@mui/material/Link'
 interface SessionListProps {}
 
-const SessionList = (props: SessionListProps) => {
+const SessionList = (props : any) => {
 	return (
 		<>
 			<div className={styles.productWrap}>

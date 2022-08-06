@@ -13,10 +13,10 @@ export class ConferenceController {
   findAll(): Observable<ResponseData> {
     return from(this.conferenceService.findAllConferences());
   }
-  // @Get('/:id')
-  // findOne(@Param('id') id: string): Observable<ResponseData> {
-  //   return from(this.conferenceService.findOne(+id));
-  // }
+  @Get('/:id')
+  findOne(@Param('id') id: string): Observable<ResponseData> {
+    return from(this.conferenceService.findOne(+id));
+  }
   @Post('/create-new')
   create(@Body() conference: ConferenceRequestDto): Observable<ResponseData> {
     return from(this.conferenceService.createConference(conference));
