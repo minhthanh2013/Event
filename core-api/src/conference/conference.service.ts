@@ -164,5 +164,25 @@ export class ConferenceService {
     // )
     return entity
   }
+  async getLatestXConferences(limit: number): Promise<ResponseData>{
+    const conferences = await this.conferenceRepository.createQueryBuilder()
+    .select("conference")
+    .from(ConferenceEntity, "conference")
+    // .where ({ order: {create_at: "DESC"}})
+    .orderBy('conference.create_at', 'DESC')
+    .getMany()
+    const result = new ResponseData()
+    const conferenceResult: ConferenceEntity[] = [];
+    for (let index = 0; index < limit; index++) {
+      if(index > conferences.length - 1){ 
+        break;
+      }
+      const conferenceTemp = conferences[index];
+      conferenceResult.push(conferenceTemp);
+    }
+    result.data = conferenceResult;
+    result.status = conferences.length >= 1;
+    return result;
+  }
 }
 

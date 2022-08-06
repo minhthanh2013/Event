@@ -55,8 +55,11 @@ export class CloudinaryService {
     });
   }
 
-  getImage(meetingId: string) {
-    return v2.image("conference-"+meetingId+"-avatar")
+  getImage(meetingId: number) {
+    const rawResponse = v2.image("conference-"+meetingId+"-avatar")
+    const index = rawResponse.indexOf("'");
+    const index2 = rawResponse.lastIndexOf("'");
+    return rawResponse.slice(index + 1, index2);
   }
 
   getVideo(meetingId: string) {

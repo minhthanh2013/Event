@@ -37,4 +37,8 @@ export class ConferenceController {
   findHostEvent(@Body('id') id: number): Observable<ResponseData> {
     return from(this.conferenceService.getHostEvent(+id));
   }
+  @Get('/get-x-conferences/:limit')
+  findLatestXConferences(@Param('limit') limit: number): Observable<ResponseData> {
+    return from(this.conferenceService.getLatestXConferences(+limit));
+  }
 }

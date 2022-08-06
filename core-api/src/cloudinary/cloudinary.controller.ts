@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { Controller, Get, Post, UploadedFile, UseInterceptors } from '@nestjs/common';
+import { Controller, Get, Post, UploadedFile, UseInterceptors, Param } from '@nestjs/common';
 import { CloudinaryService } from './cloudinary.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Multer } from 'multer';
@@ -26,4 +26,8 @@ export class CloudinaryController {
         return this.cloudinaryService.uploadVideoToCloudinary(file);
     }
 
+    @Get('get-conference-image/:imageId')
+    getImageUrl(@Param('imageId') imageId: number) {
+        return this.cloudinaryService.getImage(imageId);
+    }
 }

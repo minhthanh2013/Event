@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import styles from '../styles/TicketList.module.scss'
 import Ticket from './Ticket'
 import Grid from '@mui/material/Grid'
@@ -23,7 +23,32 @@ const products = [
 
 const types = [1, 2, 2, 2, 2, 1]
 
+interface TicketProps {
+	status: boolean;
+	data: TicketProp[];
+}
+
+interface TicketProp {
+	conference_id: number;
+	price: number;
+	conference_name: number;
+	date_start_conference: Date;
+	address: string;
+	// conferenceOrganizer: string;
+}
+
 const TicketList = (props: TicketListProps) => {
+	const [ticketList, setTicketList] = useState<TicketProps>()
+	// 'conference-1-avatar '
+	useEffect(() => {
+		const fetchTicketList = async () => {
+		  const dataResult = await fetch('/api/conference/get-latest-x');
+		  const cateResult = await dataResult.json();
+		  setTicketList(cateResult)
+		}
+		fetchTicketList();
+	  }, [ticketList])
+
 	return (
 		<>
 			<div className={styles.productWrap}>
@@ -33,41 +58,12 @@ const TicketList = (props: TicketListProps) => {
 						<a className={styles.see__all}>See all</a>
 					</Box>
 					<Grid container rowSpacing={8} columnSpacing={8} marginTop={0}>
-						{/* {Array.from(Array(6)).map((_, index) => (
-							<Grid item lg={4} md={6} sm={12} key={index}>
-								<Ticket />
+						{ticketList?.data?.map((dataItem) => (
+							// eslint-disable-next-line react/jsx-key
+							<Grid item lg={4} md={6} sm={12} >
+								<Ticket data={dataItem}/>
 							</Grid>
-						))} */}
-						<Grid item lg={4} md={6} sm={12}>
-							<Link href='/event/2'>
-								<Ticket imageProps='https://images.unsplash.com/photo-1657311277098-e5fb0b95d28e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80' />
-							</Link>
-						</Grid>
-						<Grid item lg={4} md={6} sm={12}>
-							<Link href='/event/2'>
-								<Ticket imageProps='https://images.unsplash.com/photo-1618758993113-2447833402d6?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80' />
-							</Link>
-						</Grid>
-						<Grid item lg={4} md={6} sm={12}>
-							<Link href='/event/2'>
-								<Ticket imageProps='https://images.unsplash.com/photo-1459499362902-55a20553e082?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1169&q=80' />
-							</Link>
-						</Grid>
-						<Grid item lg={4} md={6} sm={12}>
-							<Link href='/event/2'>
-								<Ticket imageProps='https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80' />
-							</Link>
-						</Grid>
-						<Grid item lg={4} md={6} sm={12}>
-							<Link href='/event/2'>
-								<Ticket imageProps='https://images.unsplash.com/photo-1527689368864-3a821dbccc34?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80' />
-							</Link>
-						</Grid>
-						<Grid item lg={4} md={6} sm={12}>
-							<Link href='/event/2'>
-								<Ticket imageProps='https://images.unsplash.com/photo-1499750310107-5fef28a66643?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80' />
-							</Link>
-						</Grid>
+						))}
 					</Grid>
 				</div>
 			</div>

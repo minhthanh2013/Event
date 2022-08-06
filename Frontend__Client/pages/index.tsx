@@ -9,6 +9,12 @@ import TicketList from '../components/TicketList';
 import HomeDashboard from './HomeDashBoard'
 import styles from '../styles/Background.module.scss';
 export { default as buildStore } from '../shared/redux/buildStore';
+
+interface ConferenceProps {
+  status: boolean;
+  data: ConferenceProps[];
+}
+
 const Home: NextPage = props  => {
   return (
     <>
@@ -24,7 +30,7 @@ const Home: NextPage = props  => {
         
       </Box>
       <Footer/> 
-      <HomeDashboard />
+      {/* <HomeDashboard /> */}
     </>
   )
 }
@@ -51,28 +57,4 @@ export async function getServerSideProps(ctx: any) {
     }
   return { props: {} }
 }
-// if(Home.getInitialProps !== undefined) {
-  // Home.getInitialProps = async (ctx) => {
-  //   let raw = null;
-  //   try{
-  //     raw = ctx.req.headers.cookie.toString();
-  //   } catch(e) {
-  //     return null;
-  //   }
-  //   if(raw.includes(";")) {
-  //     let rawCookie = raw.split(";")
-  //     for(let i = 0; i < rawCookie.length; i++) {
-  //       if(rawCookie[i].includes("OursiteJWT")) {
-  //         let cookies = rawCookie[i];
-  //         let key = cookies.split("=")[0];
-  //         let value = cookies.split("=")[1];
-  //         return {token : {key, value}};
-  //       }
-  //     }
-  //   }
-  //   return null;
-  // }
-// } 
-// else {
-// }
 export default Home
