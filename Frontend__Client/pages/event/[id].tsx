@@ -39,7 +39,7 @@ import DetailContent from '../../components/DetailContent'
 
 interface TicketProp {
 	conference_id: number;
-    description: string;
+  description: string;
 	price: number;
 	conference_name: number;
 	date_start_conference: Date;

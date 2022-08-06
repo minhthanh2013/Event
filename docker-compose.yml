@@ -18,18 +18,18 @@ services:
     networks:
       - doan2022
     container_name: redis
-  frontend:
-    tty: true
-    stdin_open: true # without this node doesn't start
-    build:
-      dockerfile: ./Dockerfile
-      context: ./Frontend__Client
-    image: frontend
-    ports:
-      - 8080:8080
-    networks:
-      - doan2022
-    container_name: frontend
+  # frontend:
+  #   tty: true
+  #   stdin_open: true # without this node doesn't start
+  #   build:
+  #     dockerfile: ./Dockerfile
+  #     context: ./Frontend__Client
+  #   image: frontend
+  #   ports:
+  #     - 8080:8080
+  #   networks:
+  #     - doan2022
+  #   container_name: frontend
   core-api:
     tty: true
     stdin_open: true # without this node doesn't start
@@ -56,12 +56,6 @@ services:
     networks:
       - doan2022  
     container_name: payment
-  # redis-image:
-  #   tty: true
-  #   stdin_open: true # without this node doesn't start
-  #   build:
-  #     dockerfile: ./Dockerfile
-  #     context: ./redis
   zoom:
     tty: true
     stdin_open: true # without this node doesn't start
@@ -75,98 +69,8 @@ services:
     volumes:
       - DISK1:/usr/src/app/resources
     container_name: zoom
-  webserver:
-    image: nginx:mainline-alpine
-    container_name: webserver
-    restart: unless-stopped
-    volumes:
-      - web-root:/var/www/html
-      - ./nginx-conf:/etc/nginx/conf.d
-      - certbot-etc:/etc/letsencrypt
-      - certbot-var:/var/lib/letsencrypt
-      - dhparam:/etc/ssl/certs
-    ports:
-      - "80:80"
-      - "443:443"
-    depends_on:
-      - core-api
-    networks:
-      - doan2022
-  certbot:
-    image: certbot/certbot
-    container_name: certbot
-    volumes:
-      - certbot-etc:/etc/letsencrypt
-      - certbot-var:/var/lib/letsencrypt
-      - web-root:/var/www/html
-    depends_on:
-      - webserver
-    # command: certonly --webroot --webroot-path=/var/www/html --agree-tos --staging -d api.evenity.page -d www.api.evenity.page
-    # command: certonly --webroot --webroot-path=/var/www/html --email sammy@example.com --agree-tos --no-eff-email --staging -d example.com  -d www.example.com
-    command: certonly --webroot --webroot-path=/var/www/html --email sammy@evenity.page --agree-tos --no-eff-email --force-renewal -d evenity.page  -d www.evenity.page
-    # command: >
-    #  sh -c "certonly --webroot --webroot-path=/var/www/html --email sammy@evenity.page --agree-tos --no-eff-email --force-renewal -d evenity.page  -d www.evenity.page  &&
-    #         certonly --webroot --webroot-path=/var/www/html --email sammy@evenity.page --agree-tos --no-eff-email --force-renewal -d api.evenity.page -d www.api.evenity.page"
-  webserver-api:
-    image: nginx:mainline-alpine
-    container_name: webserver-api
-    restart: unless-stopped
-    volumes:
-      - web-root-api:/var/www/html
-      - ./nginx-conf-api:/etc/nginx/conf.d
-      - certbot-etc-api:/etc/letsencrypt
-      - certbot-var-api:/var/lib/letsencrypt
-      - dhparam-api:/etc/ssl/certs
-    ports:
-      - "8000:8000"
-      - "8443:8443"
-    depends_on:
-      - core-api
-    networks:
-      - doan2022
-  certbot-api:
-    image: certbot/certbot
-    container_name: certbot-api
-    volumes:
-      - certbot-etc-api:/etc/letsencrypt
-      - certbot-var-api:/var/lib/letsencrypt
-      - web-root-api:/var/www/html
-    depends_on:
-      - webserver-api
-    command: certonly --webroot --webroot-path=/var/www/html --email sammy@api.evenity.page --agree-tos --no-eff-email --force-renewal -d api.evenity.page  -d www.api.evenity.page
-    # command: certonly --webroot --webroot-path=/var/www/html --email sammy@example.com --agree-tos --no-eff-email --staging -d example.com  -d www.example.com
-    # command: certonly --webroot --webroot-path=/var/www/html --email sammy@evenity.page --agree-tos --no-eff-email --force-renewal -d evenity.page  -d www.evenity.page
-
 networks:
   doan2022:
     driver: bridge
 volumes:
   DISK1:
-  certbot-etc:
-  certbot-var:
-  web-root:
-    driver: local
-    driver_opts:
-      type: none
-      device: ~/Event/views
-      o: bind
-  certbot-etc-api:
-  certbot-var-api:
-  web-root-api:
-    driver: local
-    driver_opts:
-      type: none
-      device: ~/Event/views
-      o: bind
-  dhparam:
-    driver: local
-    driver_opts:
-      type: none
-      device: ~/Event/dhparam/
-      o: bind
-  dhparam-api:
-    driver: local
-    driver_opts:
-      type: none
-      device: ~/Event/dhparam-api/
-      o: bind

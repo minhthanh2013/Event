@@ -12,6 +12,7 @@ interface TicketProps {
 
 interface TicketProp {
 	conference_id: number;
+	description: string;
 	price: number;
 	conference_name: number;
 	date_start_conference: Date;

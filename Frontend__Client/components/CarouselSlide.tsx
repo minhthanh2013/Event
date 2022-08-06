@@ -1,7 +1,7 @@
 
 import Container from '@material-ui/core/Container'
 import {Paper , Button} from '@mui/material'
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Typography } from '@mui/material';
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
@@ -13,17 +13,45 @@ import { Pagination, Navigation } from "swiper";
 import Box from '@material-ui/core/Box';
 
 
+interface CarouselSlideProps {
+	status: boolean;
+	data: CarouselSlideProp[];
+}
 
-interface CarouselSlideProps {}
-
-
+interface CarouselSlideProp {
+	conference_id: number;
+	description: string;
+	price: number;
+	conference_name: number;
+	date_start_sell: Date;
+	date_end_sell: Date;
+	date_start_sell_string: string;
+	date_end_sell_string: string;
+	address: string;
+	// conferenceOrganizer: string;
+}
+const weekday = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
 const CarouselSlide = (props: CarouselSlideProps) => {
-    const lists = [
-        {id: 1, title: 'title1', content: 'content1'},
-      
-    ]
+	const [ticketList, setTicketList] = useState<CarouselSlideProps>()
+	//10:00 AM – 9:00 PM – Saturday, Dec 10,{" "}
+	const [dateMap, setDateMap] = useState<Map<number, string>>()
 
-    
+	// 'conference-1-avatar '
+	useEffect(() => {
+		const fetchTicketList = async () => {
+		  const dataResult = await fetch('/api/conference/get-latest-x');
+		  const cateResult = await dataResult.json();
+		  setTicketList(cateResult)
+		}
+		fetchTicketList();
+	  }, []);
+
+	    function test (date: Date) {
+		let day = date.getDay();
+		let dateString = weekday[day] + ", " + date.getDate() + ", " + date.getFullYear();
+		console.log(dateString);
+	  }
+	
   return (
 		<>
 			<Box>
@@ -35,8 +63,8 @@ const CarouselSlide = (props: CarouselSlideProps) => {
 					modules={[Pagination, Navigation]}
 					className="mySwiper"
 				>
-					{lists.map((list) => (
-						<SwiperSlide key={list.id}>
+					{ticketList?.data.map((list) => (
+						<SwiperSlide key={list?.conference_id}>
 							<Box>
 								<Typography
 									sx={{
@@ -46,7 +74,7 @@ const CarouselSlide = (props: CarouselSlideProps) => {
 										"user-select": "none",
 									}}
 								>
-									Traders Fair and Gala Night 2022
+									{list?.conference_name}
 								</Typography>
 
 								<Typography
@@ -73,9 +101,7 @@ const CarouselSlide = (props: CarouselSlideProps) => {
 										"user-select": "none",
 									}}
 								>
-									Series of Fantastic Traders Fairs is going to take place in
-									Asia attracting the world of traders to one place during in
-									one day and has yet again come to Vietnam, HCMC.
+									{list?.description || "No description"}
 								</Typography>
 
 								<Button
@@ -92,8 +118,9 @@ const CarouselSlide = (props: CarouselSlideProps) => {
 										},
 									}}
 									variant="outlined"
+									href={`/event/${list?.conference_id}`}
 								>
-									Explor more
+									Explore more
 								</Button>
 							</Box>
 							<Box>
@@ -124,6 +151,7 @@ const CarouselSlide = (props: CarouselSlideProps) => {
 									>
 										<AccessAlarmIcon sx={{ ml: "22px", mr: "38px" }} />
 										10:00 AM – 9:00 PM – Saturday, Dec 10,{" "}
+										{test(list?.date_start_sell)}
 									</Typography>
 									<Typography
 										sx={{
@@ -139,8 +167,7 @@ const CarouselSlide = (props: CarouselSlideProps) => {
 										}}
 									>
 										<LocationOnIcon sx={{ ml: "22px", mr: "38px" }} />
-										Windsor Plaza Hotel – 18 An Duong Vuong Street, District 5,
-										Ho Chi Minh City
+										{list?.address? list.address : "Zoom" }
 									</Typography>
 
 									<Button
@@ -157,7 +184,7 @@ const CarouselSlide = (props: CarouselSlideProps) => {
 										}}
 										variant="outlined"
 									>
-										Buy ticket ($ 10.00)
+										Buy ticket ($ {list?.price ? list.price : "0"})
 									</Button>
 								</Box>
 							</Box>
