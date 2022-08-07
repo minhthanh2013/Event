@@ -16,8 +16,8 @@ import DetailContent from '../../components/DetailContent'
 // export const getStaticPaths = async () => {
 //     const res = await fetch('api/event')
 //     const data = await res.json()
-    
-//     const paths = data.map((event:any) => {   
+
+//     const paths = data.map((event:any) => {
 //         return {
 //             params: { id: event.id.toString()}
 //         }
@@ -38,71 +38,70 @@ import DetailContent from '../../components/DetailContent'
 // }
 
 interface TicketProp {
-	conference_id: number;
-  description: string;
-	price: number;
-	conference_name: number;
-	date_start_conference: Date;
-	address: string;
+	conference_id: number
+	description: string
+	price: number
+	conference_name: number
+	date_start_conference: Date
+	address: string
 	// conferenceOrganizer: string;
 }
 
 interface TicketProps {
-	data: TicketProp;
+	data: TicketProp
 	// conferenceOrganizer: string;
 }
 
 const Event = (props: any) => {
-    const router = useRouter();
-    const { id } = router.query;
-    const [ticketList, setTicketList] = useState<TicketProps>()
+	const router = useRouter()
+	const { id } = router.query
+	const [ticketList, setTicketList] = useState<TicketProps>()
 	useEffect(() => {
 		const fetchTicketList = async () => {
-		  const dataResult = await fetch(`/api/conference/${id}`);
-		  const cateResult = await dataResult.json();
-		  setTicketList(cateResult)
+			const dataResult = await fetch(`/api/conference/${id}`)
+			const cateResult = await dataResult.json()
+			setTicketList(cateResult)
 		}
 		fetchTicketList().catch(() => {
-            // 
-        })
-	  }, [id])
+			//
+		})
+	}, [id])
 
-
-    return (
-        <>
-            <Box className={styles.background__wrap}>
-                <Box className={styles.dot__1}></Box>
-                <Header {...props}/>
-                {ticketList?.data && <DetailBanner data={ticketList.data} />}
-                {ticketList?.data && <DetailContent data={ticketList.data} />}
-                {/* <DetailBanner data={ticketList.data}/>
+	return (
+		<>
+			<Box className={styles.background__wrap}>
+				<Box className={styles.dot__1}></Box>
+				<Header {...props} />
+				{ticketList?.data && <DetailBanner data={ticketList.data} />}
+				{ticketList?.data && <DetailContent data={ticketList.data} />}
+				{/* <DetailBanner data={ticketList.data}/>
                 <DetailContent data={ticketList.data}/> */}
-            </Box>
-            <Footer/>
-        </>
-    ) 
+			</Box>
+			<Footer />
+		</>
+	)
 }
 
 export async function getServerSideProps(ctx: any) {
-    // Fetch data from external API
-    // Pass data to the page via props
-      let raw = null;
-      try{
-        raw = ctx.req.headers.cookie.toString();
-      } catch(e) {
-        return { props: {} }
-      }
-      if(raw.includes(";")) {
-        let rawCookie = raw.split(";")
-        for(let i = 0; i < rawCookie.length; i++) {
-          if(rawCookie[i].includes("OursiteJWT")) {
-            let cookies = rawCookie[i];
-            let token = cookies.split("=")[0];
-            let value = cookies.split("=")[1];
-            return {props : {token, value}};
-          }
-        }
-      }
-    return { props: {} }
-  }
+	// Fetch data from external API
+	// Pass data to the page via props
+	let raw = null
+	try {
+		raw = ctx.req.headers.cookie.toString()
+	} catch (e) {
+		return { props: {} }
+	}
+	if (raw.includes(';')) {
+		let rawCookie = raw.split(';')
+		for (let i = 0; i < rawCookie.length; i++) {
+			if (rawCookie[i].includes('OursiteJWT')) {
+				let cookies = rawCookie[i]
+				let token = cookies.split('=')[0]
+				let value = cookies.split('=')[1]
+				return { props: { token, value } }
+			}
+		}
+	}
+	return { props: {} }
+}
 export default Event
