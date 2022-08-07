@@ -7,11 +7,38 @@ import { CardActionArea } from "@mui/material";
 import styles from "../styles/TicketSession.module.scss";
 import Box from "@mui/material/Box";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
-interface TicketSesstionProps {
-  imageProps: string;
+interface SessionProp {
+	comboSessionId: number;
+	comboSessionPrice: number;
+	comboSessionName: string;
+	comboSessionDescription: string;
+	conferenceList: TicketProp[];
 }
 
-const TicketSession = (props: TicketSesstionProps) => {
+interface TicketProp {
+	conference_id: number;
+	description: string;
+	price: number;
+	conference_name: number;
+	date_start_conference: Date;
+	address: string;
+}
+
+interface TicketSessionProps {
+	// imageProps: string;
+	data: SessionProp;
+	props: any;
+}
+
+const TicketSession = (props: TicketSessionProps) => {
+	const getPrice = ( session: SessionProp) => {
+		// 9:00 PM – Saturday, Dec 10,{" "}
+		let totalPrice = 0;
+		session.conferenceList.forEach((item) => {
+			totalPrice += item.price;
+		});
+		return totalPrice;
+	  }
   return (
 		<>
 			<div>
@@ -20,25 +47,25 @@ const TicketSession = (props: TicketSesstionProps) => {
 						<CardMedia
 							component='img'
 							height='250'
-							src={props.imageProps || 'https://images.pexels.com/photos/2306281/pexels-photo-2306281.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'}
+							src={'https://images.pexels.com/photos/2306281/pexels-photo-2306281.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'}
 							alt='Event'
 						/>
 						<CardContent className={styles.ticketContent}>
 							<Box component='div'>
 								<Typography gutterBottom component='h2'>
-									Vietnam Talent Trends 2022
+									{props?.data?.comboSessionName}
 								</Typography>
 								<Typography gutterBottom component='h3'>
 									by FINEXPO PTE LTD.
 								</Typography>
 								<Typography gutterBottom component='p'>
-									6 events
+								{props?.data?.conferenceList.length} events
 								</Typography>
 							</Box>
 
 							<Box component='div'>
 								<AttachMoneyIcon />
-								<Typography>10.00</Typography>
+								<Typography>{getPrice(props?.data)}</Typography>
 							</Box>
 						</CardContent>
 					</CardActionArea>

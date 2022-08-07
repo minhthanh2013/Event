@@ -21,12 +21,12 @@ const ZoomV2 = () => {
   var signatureEndpoint = "https://api.evenity.page:8443/zoom/create-signature";
   // This Sample App has been updated to use SDK App type credentials https://marketplace.zoom.us/docs/guides/build/sdk-app
   var sdkKey = "OWYLmd5UiEI0RchfL8tCFQapDQ7lqOzjNAi6"
-  var meetingNumber = '85957422546'
+  var meetingNumber = '86728842678'
   var role = 0
   var leaveUrl = 'http://localhost:8080/'
   var userName = 'React'
   var userEmail = ''
-  var passWord = '367683'
+  var passWord = '912284'
   // pass in the registrant's token if your meeting or webinar requires registration. More info here:
   // Meetings: https://marketplace.zoom.us/docs/sdk/native-sdks/web/client-view/meetings#join-registered
   // Webinars: https://marketplace.zoom.us/docs/sdk/native-sdks/web/client-view/webinars#join-registered

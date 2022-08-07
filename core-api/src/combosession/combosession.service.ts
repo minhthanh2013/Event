@@ -3,10 +3,12 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Observable, from } from 'rxjs';
 import { ConferenceEntity } from 'src/conference/models/conference.entity';
+import { ResponseData } from 'src/responsedata/response-data.dto';
 import { DeleteResult, Repository, UpdateResult } from 'typeorm';
 import { ComboSessionDto } from './models/combo_session.dto';
 import { ComboSessionEntity } from './models/combo_session.entiy';
 import { ComboSession } from './models/combo_session.interface';
+import { ComboIdDateDto } from './models/combo_session_id_create_at';
 
 @Injectable()
 export class CombosessionService {
@@ -32,7 +34,58 @@ export class CombosessionService {
   remove(id: number): Observable<DeleteResult> {
     return from(this.comboSessionRepository.delete(id));
   }
-  async findAllSessionsBySessionId(comboId: number): Promise<ComboSessionDto> {
+  async findAllComoIds(): Promise<ComboIdDateDto[]> {
+    return this.comboSessionRepository.find({
+        select: ['combo_id', "create_at"]
+      }).then(result => {
+        const tempJson: any[] = [];
+        result.forEach(combo => {
+          const comboTemp = new ComboIdDateDto();
+          comboTemp.combo_id = combo.combo_id;
+          comboTemp.create_at = combo.create_at;
+          tempJson.push(JSON.parse(JSON.stringify(comboTemp)));
+        })
+        const arrayUniqueByKey = [...new Map(tempJson.map(item =>
+          [item["combo_id"], item])).values()];
+        return arrayUniqueByKey;
+      }
+    )
+  }
+    
+  comp(a: ComboIdDateDto, b: ComboIdDateDto) {
+    return new Date(b.create_at).getTime() - new Date(a.create_at).getTime();
+  }
+
+  async getLatestXCombos(limit: number): Promise<ResponseData> {
+    let arrayOfIdsAndDate = (await this.findAllComoIds())
+    arrayOfIdsAndDate = arrayOfIdsAndDate.sort(this.comp);
+    let arrayOfIdsAndDateResult = [];
+    for(let i = 0; i < limit; i++){
+      arrayOfIdsAndDateResult.push(arrayOfIdsAndDate[i]);
+    }
+    if (limit > arrayOfIdsAndDate.length) {
+      console.log(limit)
+      limit = arrayOfIdsAndDate.length;
+      console.log(limit)
+    }
+    return new Promise((resolve, reject) => {
+      const comboSessionDto: ComboSessionDto[] = [];
+      for (let index = 0; index < limit; index++) {
+        const comboId = arrayOfIdsAndDateResult[index].combo_id;
+        this.findAllSessionsBySessionId(comboId).then(result => {
+          comboSessionDto.push(result.data);
+          if(comboSessionDto.length === limit) {
+            const resultDto = new ResponseData()
+            resultDto.status = true;
+            resultDto.data = comboSessionDto;
+            resolve(resultDto);
+          }
+        })
+      }
+    });
+  }
+
+  async findAllSessionsBySessionId(comboId: number): Promise<ResponseData> {
     const comboSessionDto = new ComboSessionDto();
     const comboEntities = await this.comboSessionRepository.find({
       where: {
@@ -56,7 +109,10 @@ export class CombosessionService {
           conferences.push(result);
           if(conferences.length == comboEntities.length) {
             comboSessionDto.conferenceList = conferences;
-            resolve(comboSessionDto)
+            const resultDto = new ResponseData()
+            resultDto.status = true;
+            resultDto.data = comboSessionDto;
+            resolve(resultDto)
           }
         })
       })

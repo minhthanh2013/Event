@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/link-passhref */
 import { AppBar } from '@material-ui/core'
 import { Box, Button, Toolbar, Typography } from '@mui/material'
 import IconButton from '@mui/material/IconButton'
@@ -90,12 +91,17 @@ const Header = (props: any) => {
             </>
           ) : (
             <>
-              <Button variant='text' sx={{ color: '#000000' }}>
-                Login
-              </Button>
-              <Button variant='text' sx={{ color: '#000000' }}>
-                Sign up
-              </Button>
+              <Link href={"/account/login"}>
+                <Button variant='text' sx={{ color: '#000000' }}>
+                  Login
+                </Button>
+              </Link>
+              <Link href={"/account/register"}>
+                <Button variant='text' sx={{ color: '#000000' }}>
+                  Sign up
+                </Button>
+              </Link>
+              
               <Button variant='text' sx={{ color: '#6A35F2' }}>
                 create an event
               </Button>

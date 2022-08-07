@@ -30,7 +30,7 @@ const TicketList = (props: any) => {
 		  setTicketList(cateResult)
 		}
 		fetchTicketList();
-	  }, [ticketList])
+	  }, [])
 
 	return (
 		<>

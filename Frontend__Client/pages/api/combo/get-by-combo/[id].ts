@@ -7,12 +7,12 @@ import https from 'https';
 
 export default async function (req: NextApiRequest, res: NextApiResponse) {
 	const { id } = req.query;
+	console.log(10, id);
 	try {
 		// const request = process.env.BACKEND_PROTOCOL+'://' + process.env.BACKEND_HOST + ':' + process.env.BACKEND_PORT + "/conference/get-x-conferences/6"; 
 		const request = `http://localhost:3000/combosession/${id}`;
 		const response = await axios.get(request);
-        const url = response.data;
-        res.status(200).json({ url });
+        res.status(200).json(response.data);
 	} catch (error) {
         console.log(error);
 		res.status(200).json(null);

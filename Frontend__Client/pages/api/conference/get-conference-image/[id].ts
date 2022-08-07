@@ -12,7 +12,7 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
 		const request = `http://localhost:3000/cloudinary/get-conference-image/${id}`;
 		const response = await axios.get(request);
         const url = response.data;
-        res.status(200).json({ url });
+        res.status(200).json({url});
 	} catch (error) {
         console.log(error);
 		res.status(200).json(null);
