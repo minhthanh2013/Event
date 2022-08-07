@@ -31,9 +31,9 @@ interface CarouselSlideProp {
 	// conferenceOrganizer: string;
 }
 const weekday = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
-const CarouselSlide = (props: CarouselSlideProps) => {
+const CarouselSlide = (props: any) => {
 	const [ticketList, setTicketList] = useState<CarouselSlideProps>()
-	//10:00 AM – 9:00 PM – Saturday, Dec 10,{" "}
+
 	const [dateMap, setDateMap] = useState<Map<number, string>>()
 
 	// 'conference-1-avatar '
@@ -46,12 +46,18 @@ const CarouselSlide = (props: CarouselSlideProps) => {
 		fetchTicketList();
 	  }, []);
 
-	    function test (date: Date) {
-		let day = date.getDay();
-		let dateString = weekday[day] + ", " + date.getDate() + ", " + date.getFullYear();
-		console.log(dateString);
+	  const test = (date: Date) => {
+		// 9:00 PM – Saturday, Dec 10,{" "}
+		const newDate = new Date(date);
+		let hours = newDate.getHours();
+		let minutes = newDate.getMinutes();
+		let ampm = hours >= 12 ? 'pm' : 'am';
+		hours = hours % 12;
+		hours = hours ? hours : 12; // the hour '0' should be '12'
+		let minuteString = minutes < 10 ? '0'+minutes : minutes;
+		const dateString = hours.toString() + ":" + minuteString.toString() + " " + ampm +" - " + weekday[newDate.getDay()]+", "+newDate.toLocaleString('en-us', { month: 'short' })+" "+newDate.getDate().toString();
+		return dateString;
 	  }
-	
   return (
 		<>
 			<Box>
@@ -150,8 +156,10 @@ const CarouselSlide = (props: CarouselSlideProps) => {
 										}}
 									>
 										<AccessAlarmIcon sx={{ ml: "22px", mr: "38px" }} />
-										10:00 AM – 9:00 PM – Saturday, Dec 10,{" "}
-										{test(list?.date_start_sell)}
+										{/* 10:00 AM – 9:00 PM – Saturday, Dec 10,{" "} */}
+										{test(list?.date_start_sell)}	
+										<br/>	
+										{test(list?.date_end_sell)}
 									</Typography>
 									<Typography
 										sx={{

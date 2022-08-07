@@ -23,7 +23,7 @@ const Home: NextPage = props  => {
         <Box className={styles.dot__2}></Box>
         <Box className={styles.dot__3}></Box>
         <Header {...props}/>
-        <CarouselSlide/>
+        <CarouselSlide {...props}/>
         <SearchBar/>
         <SessionList {...props}/>
         <TicketList {...props}/>
