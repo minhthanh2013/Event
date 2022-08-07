@@ -3,20 +3,26 @@ import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/commo
 import { Observable } from 'rxjs';
 import { DeleteResult, UpdateResult } from 'typeorm';
 import { CombosessionService } from './combosession.service';
+import { ComboSessionDto } from './models/combo_session.dto';
 import { ComboSession } from './models/combo_session.interface';
 
 @Controller('combosession')
 export class CombosessionController {
   constructor(private comboSessionService: CombosessionService) {}
+  @Get("/:combo_id")
+  getCombo(@Param('combo_id') comboId: number): Promise<ComboSessionDto> {
+    return this.comboSessionService.findAllSessionsBySessionId(comboId);
+  }
+
   @Get()
   findAll(): Observable<ComboSession[]> {
     return this.comboSessionService.findAllSessions();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string): Observable<ComboSession> {
-    return this.comboSessionService.findOne(+id);
-  }
+  // @Get(':id')
+  // findOne(@Param('id') id: string): Observable<ComboSession> {
+  //   return this.comboSessionService.findOne(+id);
+  // }
 
   @Post()
   create(@Body() comboSession: ComboSession): Observable<ComboSession> {

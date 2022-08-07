@@ -1,16 +1,25 @@
 /* eslint-disable prettier/prettier */
 import { ConferenceEntity } from 'src/conference/models/conference.entity';
-import { HostEntity } from 'src/host/models/host.entity';
-import { Column, Entity, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity("ComboSession")
 export class ComboSessionEntity {
   @PrimaryGeneratedColumn()
-  combo_id: number;
-  @OneToOne(() => HostEntity, (host) => host.host_id)
-  host: HostEntity;
+  id: number;
   @Column()
-  total_ticket: number;
+  combo_id: number;
+  @Column()
+  conference_id: number
   @OneToMany(() => ConferenceEntity, (conference) => conference.comboSession)
   conferences: ConferenceEntity[];
+  @Column()
+  combo_name: string;
+  @Column()
+  combo_description: string;
+  @CreateDateColumn({
+    name: 'create_at',
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP',
+  })
+  create_at: Date;
 }

@@ -26,7 +26,7 @@ const DetailBannerSession = () => {
                         </Box>
                     </Box>
                 </Box>
-                <Image src="/purpleDot.svg" alt="purple dot" />
+                {/* <Image src="/purpleDot.svg" alt="purple dot" /> */}
 
             </Box>
         </>
