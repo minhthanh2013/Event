@@ -1,9 +1,9 @@
-import React, { useState, ChangeEvent } from "react";
-import Header from "../../components/Header";
+import React, { useState, ChangeEvent, useEffect } from "react";
+import Header from "../../../components/Header";
 import Box from "@mui/material/Box";
-import Footer from "../../components/Footer";
+import Footer from "../../../components/Footer";
 import Typography from "@mui/material/Typography";
-import styles from "../../styles/EventDashboard.module.scss";
+import styles from "../../../styles/EventDashboard.module.scss";
 import Card from "@mui/material/Card";
 import CardActionArea from "@mui/material/CardActionArea";
 import CardContent from "@mui/material/CardContent";
@@ -14,7 +14,7 @@ import Tab from "@mui/material/Tab";
 import EventIcon from "@mui/icons-material/Event";
 import SessionsIcon from "@mui/icons-material/EmojiEvents";
 import SubscriptionsIcon from "@mui/icons-material/ShopTwo";
-import { BasicInfo, Speakers, Date } from "../CreateEvent/CreateEventForm";
+import { BasicInfo, Speakers, Date } from "../../CreateEvent/CreateEventForm";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Subcriptions } from "./Subcriptions";
 import { EventList } from "./EventList";
@@ -59,8 +59,69 @@ function a11yProps(index: number) {
   };
 }
 
+interface ConferenceProp {
+	conference_id: number;
+	description: string;
+	price: number;
+	conference_name: number;
+	date_start_conference: Date;
+	address: string;
+  ticket_quantity: number;
+  current_quantity: number;
+  status_ticket: string;
+	// conferenceOrganizer: string;
+}
+
+interface ConferenceProps {
+  status: boolean;
+  data: ConferenceProp[];
+}
+
+// Session props
+interface SessionListProps {
+	status: boolean;
+	data: SessionListProp[];
+}
+interface SessionListProp {
+	comboSessionId: number;
+	comboSessionPrice: number;
+	comboSessionName: string;
+	comboSessionDescription: string;
+	conferenceList: TicketProp[];
+}
+
+interface TicketProp {
+	conference_id: number;
+	description: string;
+	price: number;
+	conference_name: number;
+	date_start_conference: Date;
+	address: string;
+  ticket_quantity: number;
+  current_quantity: number;
+  status_ticket: string;
+}
+//
 const EventCreate = (props: EventCreate) => {
+  const [conferences, setConferences] = useState<ConferenceProps>();
+  const [sessions, setSessions] = useState<SessionListProps>();
   const [value, setValue] = React.useState(0);
+
+	useEffect(() => {
+		const fetchConferences = async () => {
+		  const dataResult = await fetch('/api/conference/get-conference-by-host-id/1');
+		  const cateResult = await dataResult.json();
+		  setConferences(cateResult)
+		}
+    // Wrong
+    const fetchSessions = async () => {
+		  const dataResult = await fetch('/api/combo/get-by-host/1');
+		  const cateResult = await dataResult.json();
+		  setSessions(cateResult)
+		}
+		fetchConferences();
+    fetchSessions();
+	  }, [])
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
@@ -157,12 +218,12 @@ const EventCreate = (props: EventCreate) => {
           <Grid item xs={10} md={10}>
             <TabPanel value={value} index={0}>
               <Box sx={{ marginLeft: "3rem" }}>
-                <EventList />
+                <EventList data={conferences?.data}/>
               </Box>
             </TabPanel>
             <TabPanel value={value} index={1}>
               <Box sx={{ marginLeft: "3rem" }}>
-                <Sessions />
+                <Sessions data={sessions?.data}/>
               </Box>
             </TabPanel>
             <TabPanel value={value} index={2}>

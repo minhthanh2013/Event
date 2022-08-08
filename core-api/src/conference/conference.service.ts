@@ -8,6 +8,7 @@ import { ResponseData } from 'src/responsedata/response-data.dto';
 import { UserEntity } from 'src/user/models/user.entity';
 import { ZoomService } from 'src/zoom/zoom.service';
 import { Repository } from 'typeorm';
+import { resourceLimits } from 'worker_threads';
 import { ConferenceRequestDto, ConferenceResponseDto } from './models/conference.dto';
 import { ConferenceEntity } from './models/conference.entity';
 import { ScheduleZoomDto } from './models/create.zoom.dto';
@@ -185,6 +186,19 @@ export class ConferenceService {
     }
     result.data = conferenceResult;
     result.status = conferences.length >= 1;
+    return result;
+  }
+  async findAllByHostId(id: number) {
+    const result = new ResponseData()
+    const tempResult = await this.conferenceRepository.find({
+      where: {
+        host_id: id
+      }
+    });
+    result.status = tempResult.length > 1;
+    if(tempResult.length > 1) {
+      result.data = tempResult
+    }
     return result;
   }
 }

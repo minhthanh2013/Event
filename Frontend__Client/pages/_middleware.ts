@@ -40,17 +40,17 @@ export default function middleware(req: NextRequest) {
     //      }
     // }
 
-    if(url.includes("/host")) {
-        if (jwt === undefined) {
-           return NextResponse.redirect(`${origin}/host/login`);
-        }
-        try {
-           verify(jwt, hostSecret);
-           return NextResponse.next();
-       } catch (error) {
-           return NextResponse.redirect(`${origin}/host/login`);
-        }
-   }
+//     if(url.includes("/host")) {
+//         if (jwt === undefined) {
+//            return NextResponse.redirect(`${origin}/host/login`);
+//         }
+//         try {
+//            verify(jwt, hostSecret);
+//            return NextResponse.next();
+//        } catch (error) {
+//            return NextResponse.redirect(`${origin}/host/login`);
+//         }
+//    }
 
    if(url.includes("/admin")) {
     if (jwt === undefined) {

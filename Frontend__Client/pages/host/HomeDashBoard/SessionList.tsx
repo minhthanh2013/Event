@@ -13,14 +13,37 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import styles from "../styles/CreateEventForm.module.scss";
 import Link from 'next/link'
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/MoreVertOutlined';
 import Menu from '@mui/material/Menu';
 import MenuItem from "@mui/material/MenuItem";
 
-export const EventList = () => {
+interface SessionProps {
+  data: SessionListProp[];
+}
+
+interface SessionListProp {
+	comboSessionId: number;
+	comboSessionPrice: number;
+	comboSessionName: string;
+	comboSessionDescription: string;
+	conferenceList: TicketProp[];
+}
+
+interface TicketProp {
+	conference_id: number;
+	description: string;
+	price: number;
+	conference_name: number;
+	date_start_conference: Date;
+	address: string;
+  ticket_quantity: number;
+  current_quantity: number;
+  status_ticket: string;
+}
+
+export const Sessions = (props: SessionProps) => {
   const types = {
     lastest: 'Latest',
     sold: 'Sold',
@@ -32,32 +55,23 @@ export const EventList = () => {
     name: string;
     sold: number;
     gross: number;
-    date: string;
-    status: string;
+    numOfEvent: number;
   }
 
   function createData(
     name: string,
     sold: number,
     gross: number,
-    date: string,
-    status: string,
+    numOfEvent: number,
   ): Data {
     return {
       name,
       sold,
       gross,
-      date,
-      status
+      numOfEvent,
     };
   }
 
-  const rows = [
-    createData('Concert: Ensemble of Nature', 56, 3.7, '7/7/2022', 'draft'),
-    createData('Music Show: Son Tung MTP Live Show', 305, 5, '15/7/2022', 'pending'),
-    createData('Workshop: How to use pencil', 88, 3.565, '22/7/2022', 'published'),
-    createData('Concert: ABCD', 45, 3.612, '5/7/2022', 'ended'),
-  ];
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -67,11 +81,42 @@ export const EventList = () => {
     setAnchorEl(null);
   };
 
+  const getTotalPrice = ( conferenceList: TicketProp[]) => {
+    console.log(85, conferenceList)
+		// 9:00 PM – Saturday, Dec 10,{" "}
+		let totalPrice = 0;
+		conferenceList.forEach((item) => {
+			totalPrice += item.price;
+		});
+		return totalPrice;
+	  }
+
+    const getTotalTicket = ( conferenceList: TicketProp[]) => {
+      console.log(95, conferenceList)
+      // 9:00 PM – Saturday, Dec 10,{" "}
+      let totalPrice = 0;
+      conferenceList.forEach((item) => {
+        totalPrice += item.ticket_quantity;
+      });
+      return totalPrice;
+      }
+
+      const getTotalTicketSold = ( conferenceList: TicketProp[]) => {
+        console.log(105, conferenceList)
+        // 9:00 PM – Saturday, Dec 10,{" "}
+        let totalPrice = 0;
+        conferenceList.forEach((item) => {
+          totalPrice += item.current_quantity;
+        });
+        return totalPrice;
+        }
+  
+
   return (
     <>
       <Box sx={{ marginLeft: "0" }}>
         <Typography variant="h3" component="div" sx={{ fontWeight: "bold" }}>
-          Events
+          Sessions
         </Typography>
         <Box sx={{ marginRight: "5rem", float: "right" }}>
           <FormControl sx={{ width: "15rem" }}>
@@ -87,14 +132,13 @@ export const EventList = () => {
               <MenuItem value="published">Published</MenuItem>
             </Select>
           </FormControl>
-
           <Button
             variant="outlined"
             sx={{ width: "15rem", height: "3.5rem", marginLeft: "5rem", color: "black", borderColor: "black" }}
           >
-            <Link href="/CreateEvent">
+            <Link href="/CreateSession">
               <a>
-                Create an event
+                Create a session
               </a>
             </Link>
           </Button>
@@ -103,26 +147,23 @@ export const EventList = () => {
           <Table >
             <TableHead sx={{ backgroundColor: "#4F3398" }}>
               <TableRow>
-                <TableCell sx={{ color: "#ffffff" }}>Events</TableCell>
+                <TableCell sx={{ color: "#ffffff" }}>Combos</TableCell>
                 <TableCell align="right" sx={{ color: "#ffffff" }}>Sold</TableCell>
                 <TableCell align="right" sx={{ color: "#ffffff" }}>Gross</TableCell>
-                <TableCell align="right" sx={{ color: "#ffffff" }}>Status</TableCell>
-                <TableCell align="right"></TableCell>
+                <TableCell align="right" sx={{ color: "#ffffff", paddingRight: "3rem" }}>Number of Event</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {rows.map((row) => (
-                <TableRow key={row.name} sx={{ width: "100%" }}>
+              {props?.data?.map((row) => (
+                <TableRow key={row.comboSessionName} sx={{ width: "100%" }}>
                   <TableCell component="th" scope="row">
-                    <Typography sx={{ fontWeight: "bold" }}>{row.name}</Typography>
-                    online event <br />
-                    {row.date}
+                    <Typography sx={{ fontWeight: "bold" }}>{row.comboSessionName}</Typography>
                   </TableCell>
-                  <TableCell align="right">{row.sold}/100</TableCell>
-                  <TableCell align="right">${row.gross}</TableCell>
-                  <TableCell align="right">{row.status}</TableCell>
-                  <TableCell sx={{ width: "2rem" }}>
-                    <IconButton sx={{ color: "rgba(106, 53, 242, 0.77)" }} onClick={handleClick}>
+                  <TableCell align="right">{getTotalTicketSold(row?.conferenceList)}/{getTotalTicket(row?.conferenceList)}</TableCell>
+                  <TableCell align="right">${getTotalPrice(row?.conferenceList)}</TableCell>
+                  <TableCell align="right" sx={{ width: "15rem" }}>
+                    {row.conferenceList.length}
+                    <IconButton sx={{ color: "rgba(106, 53, 242, 0.77)", marginLeft: "2rem"}} onClick={handleClick}>
                       <MenuIcon />
                     </IconButton>
                     <Menu
@@ -136,7 +177,7 @@ export const EventList = () => {
                       <MenuItem onClick={handleClose}>Publish</MenuItem>
                       <MenuItem onClick={handleClose}>Delete</MenuItem>
                     </Menu>
-                  </TableCell>
+                    </TableCell>
                 </TableRow>
               ))}
             </TableBody>

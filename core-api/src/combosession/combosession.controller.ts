@@ -38,5 +38,9 @@ export class CombosessionController {
   @Delete(':id')
   remove(@Param('id') id: number): Observable<DeleteResult> {
     return this.comboSessionService.remove(+id);
+  } 
+  @Get('/find-combo-by-host-id/:id')
+  getComboByHostId(@Param("id") id: number): Promise<ResponseData> {
+    return this.comboSessionService.getComboByHostId(+id);
   }
 }
