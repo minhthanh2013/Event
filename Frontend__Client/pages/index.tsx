@@ -6,7 +6,7 @@ import Header from '../components/Header';
 import SearchBar from '../components/SearchBar';
 import SessionList from '../components/SessionList';
 import TicketList from '../components/TicketList';
-import HomeDashboard from './host/HomeDashBoard'
+import HomeDashboard from './host/dashboard'
 import styles from '../styles/Background.module.scss';
 export { default as buildStore } from '../shared/redux/buildStore';
 

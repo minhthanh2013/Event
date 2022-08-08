@@ -21,6 +21,7 @@ import MenuItem from "@mui/material/MenuItem";
 
 interface SessionProps {
   data: SessionListProp[];
+  propss: any;
 }
 
 interface SessionListProp {
@@ -34,16 +35,17 @@ interface SessionListProp {
 interface TicketProp {
 	conference_id: number;
 	description: string;
-	price: number;
+	price: string;
 	conference_name: number;
 	date_start_conference: Date;
 	address: string;
-  ticket_quantity: number;
-  current_quantity: number;
+  ticket_quantity: string;
+  current_quantity: string;
   status_ticket: string;
 }
 
 export const Sessions = (props: SessionProps) => {
+  console.log(50, props.propss)
   const types = {
     lastest: 'Latest',
     sold: 'Sold',
@@ -82,35 +84,31 @@ export const Sessions = (props: SessionProps) => {
   };
 
   const getTotalPrice = ( conferenceList: TicketProp[]) => {
-    console.log(85, conferenceList)
 		// 9:00 PM – Saturday, Dec 10,{" "}
 		let totalPrice = 0;
-		conferenceList.forEach((item) => {
-			totalPrice += item.price;
+		conferenceList?.forEach((item) => {
+			totalPrice += parseInt(item.price);
 		});
 		return totalPrice;
 	  }
 
     const getTotalTicket = ( conferenceList: TicketProp[]) => {
-      console.log(95, conferenceList)
       // 9:00 PM – Saturday, Dec 10,{" "}
       let totalPrice = 0;
-      conferenceList.forEach((item) => {
-        totalPrice += item.ticket_quantity;
+      conferenceList?.forEach((item) => {
+        totalPrice += parseInt(item.ticket_quantity);
       });
       return totalPrice;
       }
 
       const getTotalTicketSold = ( conferenceList: TicketProp[]) => {
-        console.log(105, conferenceList)
         // 9:00 PM – Saturday, Dec 10,{" "}
         let totalPrice = 0;
-        conferenceList.forEach((item) => {
-          totalPrice += item.current_quantity;
+        conferenceList?.forEach((item) => {
+          totalPrice += parseInt(item.current_quantity);
         });
         return totalPrice;
         }
-  
 
   return (
     <>
@@ -155,14 +153,14 @@ export const Sessions = (props: SessionProps) => {
             </TableHead>
             <TableBody>
               {props?.data?.map((row) => (
-                <TableRow key={row.comboSessionName} sx={{ width: "100%" }}>
+                <TableRow key={row.data.comboSessionName} sx={{ width: "100%" }}>
                   <TableCell component="th" scope="row">
-                    <Typography sx={{ fontWeight: "bold" }}>{row.comboSessionName}</Typography>
+                    <Typography sx={{ fontWeight: "bold" }}>{row.data.comboSessionName}</Typography>
                   </TableCell>
-                  <TableCell align="right">{getTotalTicketSold(row?.conferenceList)}/{getTotalTicket(row?.conferenceList)}</TableCell>
-                  <TableCell align="right">${getTotalPrice(row?.conferenceList)}</TableCell>
+                  <TableCell align="right">{getTotalTicketSold(row?.data?.conferenceList)}/{getTotalTicket(row?.data?.conferenceList)}</TableCell>
+                  <TableCell align="right">${getTotalPrice(row?.data?.conferenceList)}</TableCell>
                   <TableCell align="right" sx={{ width: "15rem" }}>
-                    {row.conferenceList.length}
+                    {row?.data?.conferenceList?.length}
                     <IconButton sx={{ color: "rgba(106, 53, 242, 0.77)", marginLeft: "2rem"}} onClick={handleClick}>
                       <MenuIcon />
                     </IconButton>

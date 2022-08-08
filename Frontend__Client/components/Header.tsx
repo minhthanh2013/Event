@@ -11,6 +11,7 @@ import Link from 'next/link'
 
 // interface HeaderProps {}
 const Header = (props: any) => {
+  console.log(14, props)
   function stringToColor(string: any) {
     let hash = 0
     let i

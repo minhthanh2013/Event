@@ -55,13 +55,11 @@ export const BasicInfo: React.FC<CreateEventProps> = ({ data, setData, setValue 
   useEffect(() => {
     const fetchDataCate = async () => {
       const dataResult = await fetch("/api/conference-category/get-all");
-      console.log(dataResult)
       const cateResult = await dataResult.json();
       setCategoryList(cateResult)
     }
     const fetchDataType = async () => {
       const dataResult = await fetch("/api/conference-type/get-all");
-      console.log(dataResult)
       const typeResult = await dataResult.json();
       setTypeList(typeResult)
     }

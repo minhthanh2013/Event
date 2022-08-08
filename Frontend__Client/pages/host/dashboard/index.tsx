@@ -93,16 +93,16 @@ interface SessionListProp {
 interface TicketProp {
 	conference_id: number;
 	description: string;
-	price: number;
+	price: string;
 	conference_name: number;
 	date_start_conference: Date;
 	address: string;
-  ticket_quantity: number;
-  current_quantity: number;
+  ticket_quantity: string;
+  current_quantity: string;
   status_ticket: string;
 }
 //
-const EventCreate = (props: EventCreate) => {
+const EventCreate = (propss: any) => {
   const [conferences, setConferences] = useState<ConferenceProps>();
   const [sessions, setSessions] = useState<SessionListProps>();
   const [value, setValue] = React.useState(0);
@@ -140,7 +140,7 @@ const EventCreate = (props: EventCreate) => {
         <Box className={styles.dot__1}></Box>
         <Box className={styles.dot__2}></Box>
         <Box className={styles.dot__3}></Box>
-        <Header />
+        <Header {...propss}/>
 
         <Grid container spacing={2}>
           <Grid item xs={2} md={2}>
@@ -218,12 +218,12 @@ const EventCreate = (props: EventCreate) => {
           <Grid item xs={10} md={10}>
             <TabPanel value={value} index={0}>
               <Box sx={{ marginLeft: "3rem" }}>
-                <EventList data={conferences?.data}/>
+                <EventList data={conferences?.data} propss={propss}/>
               </Box>
             </TabPanel>
             <TabPanel value={value} index={1}>
               <Box sx={{ marginLeft: "3rem" }}>
-                <Sessions data={sessions?.data}/>
+                <Sessions data={sessions?.data} propss={propss}/>
               </Box>
             </TabPanel>
             <TabPanel value={value} index={2}>
@@ -239,5 +239,34 @@ const EventCreate = (props: EventCreate) => {
     </>
   );
 };
+
+export async function getServerSideProps(ctx: any) {
+  // Fetch data from external API
+  // Pass data to the page via props
+    let raw = null;
+    try{
+      raw = ctx.req.headers.cookie.toString();
+    } catch(e) {
+      return { props: {} }
+    }
+    if(raw.includes(";")) {
+      let rawCookie = raw.split(";")
+      for(let i = 0; i < rawCookie.length; i++) {
+        if(rawCookie[i].includes("OursiteJWT")) {
+          let cookies = rawCookie[i];
+          let token = cookies.split("=")[0];
+          let value = cookies.split("=")[1];
+          let tempDecode = JSON.parse(Buffer.from(value.split('.')[1], 'base64').toString());
+          return {
+            props : {
+            token, value,
+            tempDecode
+          }
+          };
+        }
+      }
+    }
+  return { props: {} }
+}
 
 export default EventCreate;

@@ -10,16 +10,16 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
 			'Content-Type': 'application/x-www-form-urlencoded',
 		}
 	}
-	let user = null
+	let host = null
 	try {
-		// const request = process.env.BACKEND_PROTOCOL+'://' + process.env.BACKEND_HOST + ':' + process.env.BACKEND_PORT + '/user/signin'; 
-		const request = 'http://localhost:3000/user/signin'; 
-		user = await axios.post(request, req.body);
+		// const request = process.env.BACKEND_PROTOCOL+'://' + process.env.BACKEND_HOST + ':' + process.env.BACKEND_PORT + '/host/signin'; 
+		const request = 'http://localhost:3000/host/signin'; 
+		host = await axios.post(request, req.body);
 	} catch (error) {
 		console.log(error);
 	}
-	if (user !== null) {
-		const token = user.data.access_token
+	if (host !== null) {
+		const token = host.data.access_token
 
 		const serialised = serialize('OursiteJWT', token, {
 			httpOnly: false,

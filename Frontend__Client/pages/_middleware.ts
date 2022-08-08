@@ -16,7 +16,6 @@ export default function middleware(req: NextRequest) {
 
     if(url === `${origin}/account/login`) {
         if (jwt) {
-            console.log(jwt)
             try {
                 verify(jwt, userSecret);
                 return NextResponse.redirect(`${origin}/`);
@@ -26,6 +25,30 @@ export default function middleware(req: NextRequest) {
              } 
          }
     }
+
+    if(url === `${origin}/host/login`) {
+        if (jwt) {
+            try {
+                verify(jwt, hostSecret);
+                return NextResponse.redirect(`${origin}/`);
+            } catch (error) {
+                console.log(35, error);
+                return NextResponse.next();
+             } 
+         }
+    }
+
+    if(url.includes("/host") && !url.includes("/host/login")) {
+        if (jwt === undefined) {
+           return NextResponse.redirect(`${origin}/host/login`);
+        }
+        try {
+            verify(jwt, hostSecret);
+           return NextResponse.next();
+       } catch (error) {
+           return NextResponse.redirect(`${origin}/host/login`);
+        }
+   }
 
     // if(url === `${origin}/`) {
     //      if (jwt === undefined) {
@@ -40,19 +63,9 @@ export default function middleware(req: NextRequest) {
     //      }
     // }
 
-//     if(url.includes("/host")) {
-//         if (jwt === undefined) {
-//            return NextResponse.redirect(`${origin}/host/login`);
-//         }
-//         try {
-//            verify(jwt, hostSecret);
-//            return NextResponse.next();
-//        } catch (error) {
-//            return NextResponse.redirect(`${origin}/host/login`);
-//         }
-//    }
 
-   if(url.includes("/admin")) {
+
+   if(url.includes("/admin")&& !url.includes("/admin/login")) {
     if (jwt === undefined) {
        return NextResponse.redirect(`${origin}/admin/login`);
     }

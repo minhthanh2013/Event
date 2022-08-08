@@ -35,8 +35,10 @@ interface ConferenceProp {
 
 interface EventListProps {
   data: ConferenceProp[];
+  propss: any;
 }
 export const EventList = (props: EventListProps) => {
+  console.log(41, props.propss)
   const types = {
     lastest: 'Latest',
     sold: 'Sold',

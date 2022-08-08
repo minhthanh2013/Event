@@ -50,10 +50,8 @@ export class HostService {
   }
 
   async createHost(host: Host) {
-    console.log(host);
     const hash = await argon.hash(host.password);
     host.password = hash;
-    console.log(host);
     const tempHost = await this.hostRepository.save(host);
     return this.signToken(tempHost.host_id, tempHost.user_name, 'host');
   }

@@ -32,6 +32,7 @@ export class UserService {
             user_name: dto.username,
         },
     });
+    console.log(35, user)
     // if user does not exist throw exception
     if(!user) 
         throw new ForbiddenException(
@@ -73,7 +74,6 @@ async signToken(userId: number, username: string, role: string): Promise<{access
         role,
     }
 
-    
     const token = await this.jwt.signAsync(
         payload,
     );
