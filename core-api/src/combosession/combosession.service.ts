@@ -1,6 +1,8 @@
 /* eslint-disable prettier/prettier */
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import e from 'express';
+import { resolve } from 'path';
 import { Observable, from } from 'rxjs';
 import { ConferenceEntity } from 'src/conference/models/conference.entity';
 import { ResponseData } from 'src/responsedata/response-data.dto';
@@ -59,7 +61,7 @@ export class CombosessionService {
   async getLatestXCombos(limit: number): Promise<ResponseData> {
     let arrayOfIdsAndDate = (await this.findAllComoIds())
     arrayOfIdsAndDate = arrayOfIdsAndDate.sort(this.comp);
-    let arrayOfIdsAndDateResult = [];
+    const arrayOfIdsAndDateResult = [];
     for(let i = 0; i < limit; i++){
       arrayOfIdsAndDateResult.push(arrayOfIdsAndDate[i]);
     }
@@ -117,5 +119,61 @@ export class CombosessionService {
         })
       })
     });
+  }
+
+  findComboByConferenceId(id: number): Promise<ResponseData> {
+    const result = new ResponseData();
+    return new Promise(async (resolve, reject) => {
+      await this.comboSessionRepository.findOne({
+        where: {
+          conference_id: id
+        }
+      }).then(tempResult => {
+        console.log(131, tempResult === null)
+        if(tempResult === undefined || tempResult === null) {
+          reject("fail")
+          return 0;
+        }
+        this.findAllSessionsBySessionId(tempResult.combo_id).then(temp => {
+          result.data = temp;
+          result.status = true;
+          resolve(result)
+        })
+      })
+    })
+  }
+
+  getComboByHostId(id: number): Promise<ResponseData> {
+    const response = new ResponseData();
+    return new Promise((resolve, reject) => {
+      this.conferenceRepository.find({
+        where: {
+          host_id: id
+        }
+      }).then(async results => {
+        const comboSessionDto: ComboSessionDto[] = [];
+        for (let index = 0; index < results.length; index++) {
+          const element = results[index];
+          await this.findComboByConferenceId(element.conference_id).then(tempCombo => {
+            comboSessionDto.push(tempCombo.data)
+            console.log(159, comboSessionDto)
+          }).catch((error) => {
+            console.log(error)
+          })
+          if(index === results.length - 1) {
+            console.log("here")
+            response.status = true;
+            response.data = comboSessionDto;
+            console.log(164, response)
+            // resolve(response);
+          }
+        }
+      }).catch((error2) => {
+        console.log(169, error2)
+        reject("Fail to get list of combo by host id");
+      }).finally(()=>{
+        resolve(response);
+      })
+    })
   }
 }

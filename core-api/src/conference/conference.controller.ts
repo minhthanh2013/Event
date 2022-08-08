@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
 /* eslint-disable prettier/prettier */
 import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
 import { from, Observable } from 'rxjs';
@@ -40,5 +41,9 @@ export class ConferenceController {
   @Get('/get-x-conferences/:limit')
   findLatestXConferences(@Param('limit') limit: number): Observable<ResponseData> {
     return from(this.conferenceService.getLatestXConferences(+limit));
+  }
+  @Get('/find-all-by-host-id/:id')
+  getAllByHostId(@Param("id") id: number): Observable<ResponseData> {
+    return from(this.conferenceService.findAllByHostId(+id));
   }
 }
