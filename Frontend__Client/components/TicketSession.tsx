@@ -35,7 +35,7 @@ const TicketSession = (props: TicketSessionProps) => {
 		// 9:00 PM – Saturday, Dec 10,{" "}
 		let totalPrice = 0;
 		session.conferenceList.forEach((item) => {
-			totalPrice += item.price;
+			totalPrice += parseInt(item.price.toString());
 		});
 		return totalPrice;
 	  }

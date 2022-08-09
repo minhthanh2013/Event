@@ -6,11 +6,12 @@ import https from 'https';
 
 export default async function (req: NextApiRequest, res: NextApiResponse) {
 	try {
-		const request = process.env.BACKEND_PROTOCOL+'://' + process.env.BACKEND_HOST + ':' + process.env.BACKEND_PORT + "/conference/create-new"; 
-        console.log(request)
-        console.log(req.body)
-        // const response = await axios.post(request, req.body);
-        // res.status(200).json(response.data);
+		// const request = process.env.BACKEND_PROTOCOL+'://' + process.env.BACKEND_HOST + ':' + process.env.BACKEND_PORT + "/conference/create-new"; 
+        const request = "http://localhost:3000/conference/create-new"; 
+		console.log(10, request)
+        console.log(12, req.body)
+        const response = await axios.post(request, req.body);
+        res.status(200).json(response.data);
 	} catch (error) {
 		// console.log(error);
 	}

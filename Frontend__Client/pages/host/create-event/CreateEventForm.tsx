@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import styles from "../../styles/CreateEventForm.module.scss";
+import styles from "../../../styles/CreateEventForm.module.scss";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import { Controller, useForm } from "react-hook-form";
@@ -82,7 +82,7 @@ export const BasicInfo: React.FC<CreateEventProps> = ({ data, setData, setValue 
     setValue(1);
   };
   const apiCall = async (data) => {
-    const res = await fetch("api/conference/create-new", {
+    const res = await fetch("/api/conference/create-new", {
       method: "POST",
       body: JSON.stringify(data),
       headers: {

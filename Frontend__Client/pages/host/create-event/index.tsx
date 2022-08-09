@@ -1,9 +1,9 @@
 import React, { useState, ChangeEvent } from "react";
-import Header from "../../components/Header";
+import Header from "../../../components/Header";
 import Box from "@mui/material/Box";
-import Footer from "../../components/Footer";
+import Footer from "../../../components/Footer";
 import Typography from "@mui/material/Typography";
-import styles from "../../styles/EventDashboard.module.scss";
+import styles from "../../../styles/EventDashboard.module.scss";
 import Card from "@mui/material/Card";
 import CardActionArea from "@mui/material/CardActionArea";
 import CardContent from "@mui/material/CardContent";
@@ -62,7 +62,7 @@ const CreateEvent = () => {
       reader.onload = (e) => {
         setImage(e?.target?.result);
         setData({ ...data, image: event.target.files[0] })
-        console.log(e)
+        
       };
       
       reader.readAsDataURL(event.target.files[0]);
