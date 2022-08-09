@@ -74,24 +74,8 @@ export const BasicInfo: React.FC<CreateEventProps> = ({ data, setData, setValue 
     formState: { errors },
   } = useForm();
   const onSubmit = (value: any) => {
-    setData({
-      ...data, conferenceName: value.conferenceName, organizerName: value.organizerName,
-      conferenceType: value.conferenceType, conferenceCategory: value.conferenceCategory, conferenceDescription: value.conferenceDescription
-    });
-    apiCall({...data, hostName: "minhthanh1"});
     setValue(1);
   };
-  const apiCall = async (data) => {
-    const res = await fetch("/api/conference/create-new", {
-      method: "POST",
-      body: JSON.stringify(data),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-    const result = await res.json();
-    console.log(result);
-  }
   return (
     <>
       <Grid
@@ -345,11 +329,23 @@ export const Date: React.FC<CreateEventProps> = ({ data, setData, setValue }) =>
   const [eventStart, setEventStart] = useState<Date | null>(null);
   const [ticketStart, setTicketStart] = useState<Date | null>(null);
   const [ticketEnd, setTicketEnd] = useState<Date | null>(null);
+  const apiCall = async (data) => {
+    const res = await fetch("/api/conference/create-new", {
+      method: "POST",
+      body: JSON.stringify(data),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    const result = await res.json();
+    console.log(result);
+  }
   const onSubmit = (value: any) => {
     setData({
       ...data, dateStartConference: value.dateStartConference, dateStartSell: value.dateStartSell,
       dateEndSell: value.dateEndSell, conferencePrice: value.conferencePrice, ticketQuantity: value.ticketQuantity
     });
+    apiCall({ ...data, hostName: "minhthanh1" });
     setValue(0);
   };
   return (

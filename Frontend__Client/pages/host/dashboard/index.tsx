@@ -113,7 +113,7 @@ const EventCreate = (propss: any) => {
 		  const cateResult = await dataResult.json();
 		  setConferences(cateResult)
 		}
-    // Wrong
+    
     const fetchSessions = async () => {
 		  const dataResult = await fetch('/api/combo/get-by-host/1');
 		  const cateResult = await dataResult.json();
