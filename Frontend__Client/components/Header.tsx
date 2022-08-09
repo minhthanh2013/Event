@@ -11,7 +11,7 @@ import Link from 'next/link'
 
 // interface HeaderProps {}
 const Header = (props: any) => {
-  console.log(14, props)
+  // console.log(14, props)
   function stringToColor(string: any) {
     let hash = 0
     let i
@@ -52,7 +52,7 @@ const Header = (props: any) => {
               color: 'rgba(0, 0, 0, 0.87)',
             }}
           >
-            <Link href='/' underline='none'sx={{ color:'rgba(0, 0, 0, 0.87)'}}>
+            <Link href='/'>
               Evenity
             </Link>
           </Typography>
