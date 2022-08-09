@@ -52,17 +52,15 @@ function a11yProps(index: number) {
   };
 }
 
-const CreateEvent = () => {
+const CreateEvent = (propss) => {
   const [data, setData] = useState({})
   const [image, setImage] = useState<string | ArrayBuffer | null>();
-  console.log(data)
   const onImageChange = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
       let reader = new FileReader();
       reader.onload = (e) => {
         setImage(e?.target?.result);
-        setData({ ...data, image: event.target.files[0] })
-        
+        setData({ ...data, image: event.target.files[0] }) 
       };
       
       reader.readAsDataURL(event.target.files[0]);
@@ -87,7 +85,7 @@ const CreateEvent = () => {
         <Box className={styles.dot__1}></Box>
         <Box className={styles.dot__2}></Box>
         <Box className={styles.dot__3}></Box>
-        <Header />
+        <Header {...propss}/>
 
         <Typography variant="h3" component="div" className={styles.header}>
           Event Dashboard
@@ -152,13 +150,13 @@ const CreateEvent = () => {
                 <Tab label="Date and time" {...a11yProps(2)} />
               </Tabs>
               <TabPanel value={value} index={0}>
-                <BasicInfo data={data} setData={setData} setValue={setValue} />
+                <BasicInfo data={data} setData={setData} setValue={setValue} prop={propss}/>
               </TabPanel>
               <TabPanel value={value} index={1}>
-                <Speakers data={data} setData={setData} setValue={setValue} />
+                <Speakers data={data} setData={setData} setValue={setValue} prop={propss}/>
               </TabPanel>
               <TabPanel value={value} index={2}>
-                <Date data={data} setData={setData} setValue={setValue} />
+                <Date data={data} setData={setData} setValue={setValue} prop={propss} />
               </TabPanel>
             </ThemeProvider>
           </Box>
@@ -169,5 +167,34 @@ const CreateEvent = () => {
     </>
   );
 };
+
+export async function getServerSideProps(ctx: any) {
+  // Fetch data from external API
+  // Pass data to the page via props
+    let raw = null;
+    try{
+      raw = ctx.req.headers.cookie.toString();
+    } catch(e) {
+      return { props: {} }
+    }
+    if(raw.includes(";")) {
+      let rawCookie = raw.split(";")
+      for(let i = 0; i < rawCookie.length; i++) {
+        if(rawCookie[i].includes("OursiteJWT")) {
+          let cookies = rawCookie[i];
+          let token = cookies.split("=")[0];
+          let value = cookies.split("=")[1];
+          let tempDecode = JSON.parse(Buffer.from(value.split('.')[1], 'base64').toString());
+          return {
+            props : {
+            token, value,
+            tempDecode
+          }
+          };
+        }
+      }
+    }
+  return { props: {} }
+}
 
 export default CreateEvent;

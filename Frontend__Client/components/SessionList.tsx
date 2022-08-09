@@ -44,8 +44,7 @@ const SessionList = (props : any) => {
 					</Box>
 					<Grid container rowSpacing={8} columnSpacing={8} marginTop={0}>
 						{sessionList?.data?.map((dataItem) => (
-							// eslint-disable-next-line react/jsx-key
-							<Grid item lg={4} md={6} sm={12}>
+							<Grid item lg={4} md={6} sm={12} key={dataItem.comboSessionId}>
 							<Link href={"/session/" + dataItem.comboSessionId}>
 								<TicketSession data={dataItem} props={props} />
 							</Link>

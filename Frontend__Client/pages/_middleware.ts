@@ -62,7 +62,16 @@ export default function middleware(req: NextRequest) {
     //         return NextResponse.redirect(`${origin}/account/login`);
     //      }
     // }
-
+    if(url.includes("/zoom")) {
+        if (jwt === undefined) {
+           return NextResponse.redirect(`${origin}/user/login`);
+        }
+        try {
+           verify(jwt, userSecret);
+           return NextResponse.next();
+       } catch (error) {
+           return NextResponse.redirect(`${origin}/user/login`);
+        }
 
 
    if(url.includes("/admin")&& !url.includes("/admin/login")) {

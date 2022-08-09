@@ -26,6 +26,7 @@ interface CreateEventProps {
   data: Data;
   setData: (data: object) => void;
   setValue: (value: number) => void;
+  prop: any
 }
 
 interface TypeProps {
@@ -318,7 +319,7 @@ export const Speakers: React.FC<CreateEventProps> = ({ data, setData, setValue }
   );
 };
 
-export const Date: React.FC<CreateEventProps> = ({ data, setData, setValue }) => {
+export const Date: React.FC<CreateEventProps> = ({ data, setData, setValue, prop }) => {
   const {
     register,
     handleSubmit,
@@ -338,14 +339,13 @@ export const Date: React.FC<CreateEventProps> = ({ data, setData, setValue }) =>
       },
     });
     const result = await res.json();
-    console.log(result);
   }
   const onSubmit = (value: any) => {
     setData({
       ...data, dateStartConference: value.dateStartConference, dateStartSell: value.dateStartSell,
       dateEndSell: value.dateEndSell, conferencePrice: value.conferencePrice, ticketQuantity: value.ticketQuantity
     });
-    apiCall({ ...data, hostName: "minhthanh1" });
+    apiCall({ ...data, hostName: prop.tempDecode.username });
     setValue(0);
   };
   return (

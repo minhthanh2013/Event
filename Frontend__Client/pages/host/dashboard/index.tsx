@@ -14,7 +14,7 @@ import Tab from "@mui/material/Tab";
 import EventIcon from "@mui/icons-material/Event";
 import SessionsIcon from "@mui/icons-material/EmojiEvents";
 import SubscriptionsIcon from "@mui/icons-material/ShopTwo";
-import { BasicInfo, Speakers, Date } from "../../CreateEvent/CreateEventForm";
+import { BasicInfo, Speakers, Date } from "../../../CreateEvent/CreateEventForm";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Subcriptions } from "./Subcriptions";
 import { EventList } from "./EventList";
@@ -69,6 +69,7 @@ interface ConferenceProp {
   ticket_quantity: number;
   current_quantity: number;
   status_ticket: string;
+  conference_type: string;
 	// conferenceOrganizer: string;
 }
 
