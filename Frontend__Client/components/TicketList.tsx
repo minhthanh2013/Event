@@ -40,11 +40,11 @@ const TicketList = (props: any) => {
 						<Typography className={styles.list__title}>Ticket</Typography>
 						<a className={styles.see__all}>See all</a>
 					</Box>
-					<Grid container rowSpacing={8} columnSpacing={8} marginTop={0}>
+					<Grid container rowSpacing={8} columnSpacing={8} marginTop={0} sx={{ position: 'relative' }}>
 						{ticketList?.data?.map((dataItem) => (
 							<Grid item lg={4} md={6} sm={12} key={dataItem.conference_id}>
 								<Link href={'/event/' + dataItem.conference_id}>
-									<Ticket data={dataItem} props={props}/>
+									<Ticket data={dataItem} props={props} />
 								</Link>
 							</Grid>
 						))}

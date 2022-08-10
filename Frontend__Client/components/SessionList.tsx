@@ -42,14 +42,14 @@ const SessionList = (props : any) => {
 						<Typography className={styles.list__title}>Combo</Typography>
 						<a className={styles.see__all}>See all</a>
 					</Box>
-					<Grid container rowSpacing={8} columnSpacing={8} marginTop={0}>
+					<Grid container rowSpacing={8} columnSpacing={8} marginTop={0} sx={{ position: 'relative' }}>
 						{sessionList?.data?.map((dataItem) => (
 							<Grid item lg={4} md={6} sm={12} key={dataItem.comboSessionId}>
-							<Link href={"/session/" + dataItem.comboSessionId}>
-								<TicketSession data={dataItem} props={props} />
-							</Link>
+								<Link href={'/session/' + dataItem.comboSessionId}>
+									<TicketSession data={dataItem} props={props} />
+								</Link>
 							</Grid>
-              			))}
+						))}
 					</Grid>
 				</div>
 			</div>

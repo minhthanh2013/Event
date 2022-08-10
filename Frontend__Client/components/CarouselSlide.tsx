@@ -1,36 +1,34 @@
-
 import Container from '@material-ui/core/Container'
 import { Paper, Button } from '@mui/material'
-import React, { useEffect, useRef, useState } from "react";
-import { Typography } from '@mui/material';
-import { Swiper, SwiperSlide } from "swiper/react";
-import "swiper/css";
-import "swiper/css/navigation";
-import "swiper/css/pagination";
-import AccessAlarmIcon from '@mui/icons-material/AccessAlarm';
-import LocationOnIcon from '@mui/icons-material/LocationOn';
-import { Pagination, Navigation } from "swiper";
-import Box from '@material-ui/core/Box';
-
+import React, { useEffect, useRef, useState } from 'react'
+import { Typography } from '@mui/material'
+import { Swiper, SwiperSlide } from 'swiper/react'
+import 'swiper/css'
+import 'swiper/css/navigation'
+import 'swiper/css/pagination'
+import AccessAlarmIcon from '@mui/icons-material/AccessAlarm'
+import LocationOnIcon from '@mui/icons-material/LocationOn'
+import { Pagination, Navigation } from 'swiper'
+import Box from '@material-ui/core/Box'
 
 interface CarouselSlideProps {
-	status: boolean;
-	data: CarouselSlideProp[];
+	status: boolean
+	data: CarouselSlideProp[]
 }
 
 interface CarouselSlideProp {
-	conference_id: number;
-	description: string;
-	price: number;
-	conference_name: number;
-	date_start_sell: Date;
-	date_end_sell: Date;
-	date_start_sell_string: string;
-	date_end_sell_string: string;
-	address: string;
+	conference_id: number
+	description: string
+	price: number
+	conference_name: number
+	date_start_sell: Date
+	date_end_sell: Date
+	date_start_sell_string: string
+	date_end_sell_string: string
+	address: string
 	// conferenceOrganizer: string;
 }
-const weekday = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+const weekday = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
 const CarouselSlide = (props: any) => {
 	const [ticketList, setTicketList] = useState<CarouselSlideProps>()
 
@@ -39,24 +37,35 @@ const CarouselSlide = (props: any) => {
 	// 'conference-1-avatar '
 	useEffect(() => {
 		const fetchTicketList = async () => {
-			const dataResult = await fetch('/api/conference/get-latest-x');
-			const cateResult = await dataResult.json();
+			const dataResult = await fetch('/api/conference/get-latest-x')
+			const cateResult = await dataResult.json()
 			setTicketList(cateResult)
 		}
-		fetchTicketList();
-	}, []);
+		fetchTicketList()
+	}, [])
 
 	const test = (date: Date) => {
 		// 9:00 PM – Saturday, Dec 10,{" "}
-		const newDate = new Date(date);
-		let hours = newDate.getHours();
-		let minutes = newDate.getMinutes();
-		let ampm = hours >= 12 ? 'pm' : 'am';
-		hours = hours % 12;
-		hours = hours ? hours : 12; // the hour '0' should be '12'
-		let minuteString = minutes < 10 ? '0' + minutes : minutes;
-		const dateString = hours.toString() + ":" + minuteString.toString() + " " + ampm + " - " + weekday[newDate.getDay()] + ", " + newDate.toLocaleString('en-us', { month: 'short' }) + " " + newDate.getDate().toString();
-		return dateString;
+		const newDate = new Date(date)
+		let hours = newDate.getHours()
+		let minutes = newDate.getMinutes()
+		let ampm = hours >= 12 ? 'pm' : 'am'
+		hours = hours % 12
+		hours = hours ? hours : 12 // the hour '0' should be '12'
+		let minuteString = minutes < 10 ? '0' + minutes : minutes
+		const dateString =
+			hours.toString() +
+			':' +
+			minuteString.toString() +
+			' ' +
+			ampm +
+			' - ' +
+			weekday[newDate.getDay()] +
+			', ' +
+			newDate.toLocaleString('en-us', { month: 'short' }) +
+			' ' +
+			newDate.getDate().toString()
+		return dateString
 	}
 	return (
 		<>
@@ -67,18 +76,24 @@ const CarouselSlide = (props: any) => {
 					loop={true}
 					navigation={true}
 					modules={[Pagination, Navigation]}
-					className="mySwiper"
+					className='mySwiper'
 					autoplay
 				>
 					{ticketList?.data.map((list) => (
 						<SwiperSlide key={list?.conference_id}>
-							<Box>
+							<Box sx={{ maxHeight: '870px' }}>
 								<Typography
 									sx={{
-										fontWeight: "500",
-										fontSize: "3.1rem",
-										"-webkit-user-select": "none",
-										"user-select": "none",
+										fontWeight: '500',
+										fontSize: '3.1rem',
+										'-webkit-user-select': 'none',
+										'user-select': 'none',
+										textOverflow: 'ellipsis',
+										overflow: 'hidden',
+										display: '-webkit-box',
+										'-webkit-line-clamp': '3',
+										'line-clamp': '3',
+										'-webkit-box-orient': 'vertical',
 									}}
 								>
 									{list?.conference_name}
@@ -87,13 +102,13 @@ const CarouselSlide = (props: any) => {
 								<Typography
 									sx={{
 										background:
-											"linear-gradient(90deg, #C64EFF 55.78%, rgba(184, 64, 233, 0.665587) 88.26%, rgba(207, 77, 247, 0) 125.43%)",
-										"-webkit-background-clip": "text",
-										"-webkit-text-fill-color": "transparent",
-										fontSize: "3.1rem",
-										fontWeight: "500",
-										"-webkit-user-select": "none",
-										"user-select": "none",
+											'linear-gradient(90deg, #C64EFF 55.78%, rgba(184, 64, 233, 0.665587) 88.26%, rgba(207, 77, 247, 0) 125.43%)',
+										'-webkit-background-clip': 'text',
+										'-webkit-text-fill-color': 'transparent',
+										fontSize: '3.1rem',
+										fontWeight: '500',
+										'-webkit-user-select': 'none',
+										'user-select': 'none',
 									}}
 								>
 									Vietnam
@@ -101,30 +116,36 @@ const CarouselSlide = (props: any) => {
 
 								<Typography
 									sx={{
-										fontSize: "1.1rem",
-										fontWeight: "400",
-										my: "44px",
-										"-webkit-user-select": "none",
-										"user-select": "none",
+										fontSize: '1.1rem',
+										fontWeight: '400',
+										my: '44px',
+										'-webkit-user-select': 'none',
+										'user-select': 'none',
+										textOverflow: 'ellipsis',
+										overflow: 'hidden',
+										display: '-webkit-box',
+										'-webkit-line-clamp': '6',
+										'line-clamp': '6',
+										'-webkit-box-orient': 'vertical',
 									}}
 								>
-									{list?.description || "No description"}
+									{list?.description || 'No description'}
 								</Typography>
 
 								<Button
 									sx={{
-										fontSize: "1.1rem",
-										fontWeight: "500",
+										fontSize: '1.1rem',
+										fontWeight: '500',
 										background:
-											"linear-gradient(90deg, #C64EFF 55.78%, rgba(184, 64, 233, 0.665587) 88.26%, rgba(207, 77, 247, 0) 125.43%)",
-										"-webkit-background-clip": "text",
-										"-webkit-text-fill-color": "transparent",
-										border: "1px solid rgba(184, 64, 233, 0.665587)",
-										"&:hover": {
-											borderColor: "rgba(184, 64, 233, 0.2)",
+											'linear-gradient(90deg, #C64EFF 55.78%, rgba(184, 64, 233, 0.665587) 88.26%, rgba(207, 77, 247, 0) 125.43%)',
+										'-webkit-background-clip': 'text',
+										'-webkit-text-fill-color': 'transparent',
+										border: '1px solid rgba(184, 64, 233, 0.665587)',
+										'&:hover': {
+											borderColor: 'rgba(184, 64, 233, 0.2)',
 										},
 									}}
-									variant="outlined"
+									variant='outlined'
 									href={`/event/${list?.conference_id}`}
 								>
 									Explore more
@@ -134,29 +155,29 @@ const CarouselSlide = (props: any) => {
 								<Box>
 									<Typography
 										sx={{
-											mt: "45px",
-											fontWeight: "500",
-											fontSize: "1.8rem",
-											"-webkit-user-select": "none",
-											"user-select": "none",
+											mt: '45px',
+											fontWeight: '500',
+											fontSize: '1.8rem',
+											'-webkit-user-select': 'none',
+											'user-select': 'none',
 										}}
 									>
 										Date & Location
 									</Typography>
 									<Typography
 										sx={{
-											my: "40px",
-											mr: "22px",
-											display: "flex",
-											textAlign: "left",
-											alignItems: "center",
-											fontWeight: "400",
-											fontSize: "1.1rem",
-											"-webkit-user-select": "none",
-											"user-select": "none",
+											my: '40px',
+											mr: '22px',
+											display: 'flex',
+											textAlign: 'left',
+											alignItems: 'center',
+											fontWeight: '400',
+											fontSize: '1.1rem',
+											'-webkit-user-select': 'none',
+											'user-select': 'none',
 										}}
 									>
-										<AccessAlarmIcon sx={{ ml: "22px", mr: "38px" }} />
+										<AccessAlarmIcon sx={{ ml: '22px', mr: '38px' }} />
 										{/* 10:00 AM – 9:00 PM – Saturday, Dec 10,{" "} */}
 										{test(list?.date_start_sell)}
 										<br />
@@ -164,36 +185,36 @@ const CarouselSlide = (props: any) => {
 									</Typography>
 									<Typography
 										sx={{
-											mb: "40px",
-											mr: "22px",
-											display: "flex",
-											textAlign: "left",
-											alignItems: "center",
-											fontWeight: "400",
-											fontSize: "1.1rem",
-											"-webkit-user-select": "none",
-											"user-select": "none",
+											mb: '40px',
+											mr: '22px',
+											display: 'flex',
+											textAlign: 'left',
+											alignItems: 'center',
+											fontWeight: '400',
+											fontSize: '1.1rem',
+											'-webkit-user-select': 'none',
+											'user-select': 'none',
 										}}
 									>
-										<LocationOnIcon sx={{ ml: "22px", mr: "38px" }} />
-										{list?.address? list.address : "Zoom" }
+										<LocationOnIcon sx={{ ml: '22px', mr: '38px' }} />
+										{list?.address ? list.address : 'Zoom'}
 									</Typography>
 
 									<Button
 										sx={{
-											mb: "45px",
-											fontSize: "1.1rem",
-											fontWeight: "500",
-											color: "white",
-											border: "1px solid white",
-											minWidth: "70%",
-											"&:hover": {
-												borderColor: "rgba(255,255, 255, 0.2)",
+											mb: '45px',
+											fontSize: '1.1rem',
+											fontWeight: '500',
+											color: 'white',
+											border: '1px solid white',
+											minWidth: '70%',
+											'&:hover': {
+												borderColor: 'rgba(255,255, 255, 0.2)',
 											},
 										}}
-										variant="outlined"
+										variant='outlined'
 									>
-										Buy ticket ($ {list?.price ? list.price : "0"})
+										Buy ticket ($ {list?.price ? list.price : '0'})
 									</Button>
 								</Box>
 							</Box>
@@ -265,11 +286,10 @@ const CarouselSlide = (props: any) => {
 				}
 
 				.swiper-wrapper {
-					height: 1200px;
+					height: 870px;
 				}
 			`}</style>
 		</>
-	);
+	)
 }
 export default CarouselSlide
-
