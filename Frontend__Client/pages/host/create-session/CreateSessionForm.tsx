@@ -161,7 +161,7 @@ interface Speaker {
   name: string;
 }
 
-export const Speakers: React.FC<CreateEventProps> = ({ data, setData, setValue }) => {
+export const Speakers: React.FC<CreateEventProps> = ({ data, setData, setValue, api }) => {
   const {
     register,
     handleSubmit,
@@ -177,7 +177,8 @@ export const Speakers: React.FC<CreateEventProps> = ({ data, setData, setValue }
   };
 
   const onFinish = () => {
-    setValue(2)
+    setValue(0)
+    api({ ...data, hostName: "minhthanh1" });
   }
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
@@ -313,7 +314,7 @@ export const Speakers: React.FC<CreateEventProps> = ({ data, setData, setValue }
               variant="contained"
               onClick={onFinish}
             >
-              Next
+              Submit
             </Button>
           </Box>
           <Popup />
@@ -323,141 +324,3 @@ export const Speakers: React.FC<CreateEventProps> = ({ data, setData, setValue }
   );
 };
 
-export const Date: React.FC<CreateEventProps> = ({ data, setData, setValue, api }) => {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    control
-  } = useForm();
-
-  const [eventStart, setEventStart] = useState<Date | null>(null);
-  const [ticketStart, setTicketStart] = useState<Date | null>(null);
-  const [ticketEnd, setTicketEnd] = useState<Date | null>(null);
-  
-  const onSubmit = (value: any) => {
-    setData({
-      ...data, dateStartConference: value.dateStartConference, dateStartSell: value.dateStartSell,
-      dateEndSell: value.dateEndSell, conferencePrice: value.conferencePrice, ticketQuantity: value.ticketQuantity
-    });
-    setValue(0);
-    api({ ...data, hostName: "minhthanh1" });
-  };
-  return (
-    <>
-      <Grid
-        className={styles.formGrid}
-        container
-        spacing={0}
-        direction="column"
-        alignItems="center"
-      >
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <LocalizationProvider dateAdapter={AdapterDateFns}>
-            <Stack spacing={3}>
-              <Controller
-                name="dateStartConference"
-                control={control}
-                defaultValue={data.dateStartConference}
-                render={({ field: { ref, ...rest } }) => (
-                  <DatePicker
-                    label="Event start date"
-                    inputFormat="dd/MM/yyyy"
-                    value={data.dateStartConference}
-                    disablePast
-                    inputRef={ref}
-                    onChange={(newValue: Date | null) => {
-                      setEventStart(newValue);
-                    }}
-                    renderInput={(params) => (
-                      <TextField
-                        className={styles.dateFields}
-                        required
-                        {...params}
-                      />
-                    )}
-                    {...rest}
-                  />
-                )}
-              />
-              <Controller
-                name="dateStartSell"
-                control={control}
-                defaultValue={data.dateStartSell}
-                render={({ field: { ref, ...rest } }) => (
-                  <DatePicker
-                    label="Ticket sales start"
-                    inputFormat="dd/MM/yyyy"
-                    value={data.dateStartSell}
-                    disablePast
-                    inputRef={ref}
-                    onChange={(newValue: Date | null) => {
-                      setTicketStart(newValue);
-                    }}
-                    renderInput={(params) => (
-                      <TextField
-                        className={styles.dateFields}
-                        required
-                        {...params}
-                      />
-                    )}
-                    {...rest}
-                  />
-                )}
-              />
-              <Controller
-                name="dateEndSell"
-                control={control}
-                defaultValue={data.dateEndSell} 
-                render={({ field: { ref, ...rest } }) => (
-                  <DatePicker
-                    label="Ticket sales end"
-                    inputFormat="dd/MM/yyyy"
-                    value={data.dateEndSell}
-                    disablePast
-                    inputRef={ref}
-                    onChange={(newValue: Date | null) => {
-                      setTicketEnd(newValue);
-                    }}
-                    renderInput={(params) => (
-                      <TextField
-                        className={styles.dateFields}
-                        required
-                        {...params}
-                      />
-                    )}
-                    {...rest}
-                  />
-                )}
-              />
-            </Stack>
-          </LocalizationProvider>
-
-          <TextField
-            className={styles.eventFields}
-            required
-            id="standard-required"
-            label="Ticket price"
-            variant="standard"
-            defaultValue={data.conferencePrice}
-            type="number"
-            {...register("conferencePrice")}
-          />
-          <TextField
-            className={styles.eventFields}
-            required
-            id="standard-required"
-            label="Ticket quantity"
-            variant="standard"
-            type="number"
-            defaultValue={data.ticketQuantity}
-            {...register("ticketQuantity")}
-          />
-          <Button className={styles.nextBtn} variant="contained" type="submit">
-            Submit
-          </Button>
-        </form>
-      </Grid>
-    </>
-  );
-};

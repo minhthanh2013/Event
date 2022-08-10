@@ -12,7 +12,7 @@ import Button from "@mui/material/Button";
 import Image from "next/image";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
-import { BasicInfo, Speakers, Date } from "./CreateEventForm";
+import { BasicInfo, Speakers } from "./CreateSessionForm";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 
 interface TabPanelProps {
@@ -164,16 +164,12 @@ const CreateEvent = (props) => {
               >
                 <Tab label="Basic Information" {...a11yProps(0)} />
                 <Tab label="Speakers" {...a11yProps(1)} />
-                <Tab label="Date and time" {...a11yProps(2)} />
               </Tabs>
               <TabPanel value={value} index={0}>
                 <BasicInfo data={data} setData={setData} setValue={setValue} api={apiCall}/>
               </TabPanel>
               <TabPanel value={value} index={1}>
                 <Speakers data={data} setData={setData} setValue={setValue} api={apiCall} />
-              </TabPanel>
-              <TabPanel value={value} index={2}>
-                <Date data={data} setData={setData} setValue={setValue} api={apiCall} />
               </TabPanel>
             </ThemeProvider>
           </Box>
