@@ -3,18 +3,25 @@ import TextField from '@mui/material/TextField'
 import React, { useState } from 'react'
 import SearchIcon from '@mui/icons-material/Search'
 import styles from '../styles/SearchBar__SearchResult.module.scss'
-interface SearchBarProps {}
+interface SearchBarProps {
+	inputSearch: string
+	setInputSearch: any
+	type: string
+	setType: any
+}
 
 const SearchBar__SearchResult = (props: SearchBarProps) => {
-	const handleSearch = (e: any) => {
-		e.preventDefault()
-	}
-
-	const [type, setType] = useState(null)
-
-	const handleChangeType = (event: any) => {
-		setType(event.target.value)
-	}
+		const handleSearch = (e: any) => {
+			e.preventDefault()
+		
+		}
+		const handleChangeType = (event: any) => {
+			props.setType(event.target.value)
+		}
+		const handleOnClick = (event: any) => {
+			// console.log(props.type)
+			// console.log(props.inputSearch)
+		}
 	return (
 		<>
 			<Box
@@ -41,6 +48,7 @@ const SearchBar__SearchResult = (props: SearchBarProps) => {
 							label='Looking for something?'
 							type='search'
 							variant='standard'
+							onChange={e => props.setInputSearch(e.target.value)}
 							sx={{
 								'& label': {
 									color: '#6A35F2',
@@ -54,7 +62,7 @@ const SearchBar__SearchResult = (props: SearchBarProps) => {
 								'& .Mui-focused': { color: '#6A35F2' },
 								'& .MuiInput-underline:after': { borderBottomColor: '#6A35F2' },
 								'& .css-1r19i84-MuiInputBase-root-MuiInput-root:hover:not(.Mui-disabled):before': { borderBottomColor: '#6A35F2' },
-								'& .MuiInputLabel-root.Mui-focused': { color: '#6A35F2' },
+								
 							}}
 						/>
 						<Box sx={{ minWidth: 120, mr: 2 }}>
@@ -65,7 +73,7 @@ const SearchBar__SearchResult = (props: SearchBarProps) => {
 								<Select
 									labelId='demo-simple-select-label'
 									id='demo-simple-select'
-									value={type}
+									value={props.type}
 									onChange={handleChangeType}
 									sx={{
 										'& .MuiSelect-select:before': { color: '#6A35F2', borderBottomColor: '#6A35F2' },
@@ -80,6 +88,7 @@ const SearchBar__SearchResult = (props: SearchBarProps) => {
 										'&:hover:not(.Mui-disabled):before': { borderBottomColor: '#6A35F2' },
 										'&:after': { borderBottomColor: '#6A35F2' },
 										'&:active': { borderBottomColor: '#6A35F2' },
+										'& *': { color: '#6A35F2 !important' },
 									}}
 								>
 									<MenuItem value={10}>Event</MenuItem>
@@ -87,7 +96,7 @@ const SearchBar__SearchResult = (props: SearchBarProps) => {
 								</Select>
 							</FormControl>
 						</Box>
-						<SearchIcon className={styles.searchIcon} />
+						<SearchIcon type="submit" onClick={handleOnClick} className={styles.searchIcon} />
 					</form>
 				</Box>
 			</Box>

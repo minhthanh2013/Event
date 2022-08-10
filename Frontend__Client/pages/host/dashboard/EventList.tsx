@@ -30,6 +30,7 @@ interface ConferenceProp {
   ticket_quantity: number;
   current_quantity: number;
   status_ticket: string;
+  conference_type: string;
 	// conferenceOrganizer: string;
 }
 
@@ -38,12 +39,7 @@ interface EventListProps {
   propss: any;
 }
 export const EventList = (props: EventListProps) => {
-  console.log(41, props.propss)
-  const types = {
-    lastest: 'Latest',
-    sold: 'Sold',
-    published: 'Published',
-  };
+  console.log(props.data)
   const [sortType, setSortType] = useState('lastest');
 
   interface Data {
@@ -54,28 +50,7 @@ export const EventList = (props: EventListProps) => {
     status: string;
   }
 
-  function createData(
-    name: string,
-    sold: number,
-    gross: number,
-    date: string,
-    status: string,
-  ): Data {
-    return {
-      name,
-      sold,
-      gross,
-      date,
-      status
-    };
-  }
 
-  const rows = [
-    createData('Concert: Ensemble of Nature', 56, 3.7, '7/7/2022', 'draft'),
-    createData('Music Show: Son Tung MTP Live Show', 305, 5, '15/7/2022', 'pending'),
-    createData('Workshop: How to use pencil', 88, 3.565, '22/7/2022', 'published'),
-    createData('Concert: ABCD', 45, 3.612, '5/7/2022', 'ended'),
-  ];
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -110,7 +85,7 @@ export const EventList = (props: EventListProps) => {
             variant="outlined"
             sx={{ width: "15rem", height: "3.5rem", marginLeft: "5rem", color: "black", borderColor: "black" }}
           >
-            <Link href="/CreateEvent">
+            <Link href="/host/create-event">
               <a>
                 Create an event
               </a>
@@ -130,11 +105,11 @@ export const EventList = (props: EventListProps) => {
             </TableHead>
             <TableBody>
               {props?.data?.map((row) => (
-                <TableRow key={row.conference_name} sx={{ width: "100%" }}>
+                <TableRow key={row.conference_id} sx={{ width: "100%" }}>
                   <TableCell component="th" scope="row">
                     <>
                       <Typography sx={{ fontWeight: "bold" }}>{row.conference_name}</Typography>
-                      online event <br />
+                      {row?.conference_type.toString() === "1" ? "Offline" : "Online"} event <br />
                       {row.date_start_conference}
                     </>
                   </TableCell>
@@ -151,7 +126,9 @@ export const EventList = (props: EventListProps) => {
                       open={open}
                       onClose={handleClose}
                     >
-                      <MenuItem onClick={handleClose}>View</MenuItem>
+                      <Link href={`/event/${row.conference_id.toString()}`} passHref >
+                        <MenuItem onClick={handleClose}>View</MenuItem>
+                      </Link>
                       <MenuItem onClick={handleClose}>Edit</MenuItem>
                       <MenuItem onClick={handleClose}>Publish</MenuItem>
                       <MenuItem onClick={handleClose}>Delete</MenuItem>

@@ -26,7 +26,11 @@ interface CreateEventProps {
   data: Data;
   setData: (data: object) => void;
   setValue: (value: number) => void;
+<<<<<<< HEAD
   api: (data: object) => void;
+=======
+  prop: any
+>>>>>>> 6fdffc72dbf221d44cad56aa1e88d838c3f8dcbe
 }
 
 interface TypeProps {
@@ -323,7 +327,11 @@ export const Speakers: React.FC<CreateEventProps> = ({ data, setData, setValue }
   );
 };
 
+<<<<<<< HEAD
 export const Date: React.FC<CreateEventProps> = ({ data, setData, setValue, api }) => {
+=======
+export const Date: React.FC<CreateEventProps> = ({ data, setData, setValue, prop }) => {
+>>>>>>> 6fdffc72dbf221d44cad56aa1e88d838c3f8dcbe
   const {
     register,
     handleSubmit,
@@ -334,12 +342,29 @@ export const Date: React.FC<CreateEventProps> = ({ data, setData, setValue, api 
   const [eventStart, setEventStart] = useState<Date | null>(null);
   const [ticketStart, setTicketStart] = useState<Date | null>(null);
   const [ticketEnd, setTicketEnd] = useState<Date | null>(null);
+<<<<<<< HEAD
   
+=======
+  const apiCall = async (data) => {
+    const res = await fetch("/api/conference/create-new", {
+      method: "POST",
+      body: JSON.stringify(data),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    const result = await res.json();
+  }
+>>>>>>> 6fdffc72dbf221d44cad56aa1e88d838c3f8dcbe
   const onSubmit = (value: any) => {
     setData({
       ...data, dateStartConference: value.dateStartConference, dateStartSell: value.dateStartSell,
       dateEndSell: value.dateEndSell, conferencePrice: value.conferencePrice, ticketQuantity: value.ticketQuantity
     });
+<<<<<<< HEAD
+=======
+    apiCall({ ...data, hostName: prop.tempDecode.username });
+>>>>>>> 6fdffc72dbf221d44cad56aa1e88d838c3f8dcbe
     setValue(0);
     api({ ...data, hostName: "minhthanh1" });
   };

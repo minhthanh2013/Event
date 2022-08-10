@@ -42,8 +42,7 @@ const TicketList = (props: any) => {
 					</Box>
 					<Grid container rowSpacing={8} columnSpacing={8} marginTop={0}>
 						{ticketList?.data?.map((dataItem) => (
-							// eslint-disable-next-line react/jsx-key
-							<Grid item lg={4} md={6} sm={12} >
+							<Grid item lg={4} md={6} sm={12} key={dataItem.conference_id}>
 								<Link href={'/event/' + dataItem.conference_id}>
 									<Ticket data={dataItem} props={props}/>
 								</Link>

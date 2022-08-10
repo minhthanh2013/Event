@@ -45,7 +45,6 @@ interface TicketProp {
 }
 
 export const Sessions = (props: SessionProps) => {
-  console.log(50, props.propss)
   const types = {
     lastest: 'Latest',
     sold: 'Sold',

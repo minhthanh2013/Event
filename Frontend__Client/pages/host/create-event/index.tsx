@@ -52,17 +52,27 @@ function a11yProps(index: number) {
   };
 }
 
+<<<<<<< HEAD
 const CreateEvent = (props) => {
   const [data, setData] = useState({})
   const [image, setImage] = useState<string | ArrayBuffer | null>();
 
   console.log(data);
+=======
+const CreateEvent = (propss) => {
+  const [data, setData] = useState({})
+  const [image, setImage] = useState<string | ArrayBuffer | null>();
+>>>>>>> 6fdffc72dbf221d44cad56aa1e88d838c3f8dcbe
   const onImageChange = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
       let reader = new FileReader();
       reader.onload = (e) => {
         setImage(e?.target?.result);
+<<<<<<< HEAD
         setData({ ...data, image: event.target.files[0] })
+=======
+        setData({ ...data, image: event.target.files[0] }) 
+>>>>>>> 6fdffc72dbf221d44cad56aa1e88d838c3f8dcbe
       };
 
       reader.readAsDataURL(event.target.files[0]);
@@ -102,7 +112,7 @@ const CreateEvent = (props) => {
         <Box className={styles.dot__1}></Box>
         <Box className={styles.dot__2}></Box>
         <Box className={styles.dot__3}></Box>
-        <Header />
+        <Header {...propss}/>
 
         <Typography variant="h3" component="div" className={styles.header}>
           Event Dashboard
@@ -167,6 +177,7 @@ const CreateEvent = (props) => {
                 <Tab label="Date and time" {...a11yProps(2)} />
               </Tabs>
               <TabPanel value={value} index={0}>
+<<<<<<< HEAD
                 <BasicInfo data={data} setData={setData} setValue={setValue} api={apiCall}/>
               </TabPanel>
               <TabPanel value={value} index={1}>
@@ -174,6 +185,15 @@ const CreateEvent = (props) => {
               </TabPanel>
               <TabPanel value={value} index={2}>
                 <Date data={data} setData={setData} setValue={setValue} api={apiCall} />
+=======
+                <BasicInfo data={data} setData={setData} setValue={setValue} prop={propss}/>
+              </TabPanel>
+              <TabPanel value={value} index={1}>
+                <Speakers data={data} setData={setData} setValue={setValue} prop={propss}/>
+              </TabPanel>
+              <TabPanel value={value} index={2}>
+                <Date data={data} setData={setData} setValue={setValue} prop={propss} />
+>>>>>>> 6fdffc72dbf221d44cad56aa1e88d838c3f8dcbe
               </TabPanel>
             </ThemeProvider>
           </Box>
@@ -188,6 +208,7 @@ const CreateEvent = (props) => {
 export async function getServerSideProps(ctx: any) {
   // Fetch data from external API
   // Pass data to the page via props
+<<<<<<< HEAD
   let raw = null;
   try {
     raw = ctx.req.headers.cookie.toString();
@@ -211,6 +232,31 @@ export async function getServerSideProps(ctx: any) {
       }
     }
   }
+=======
+    let raw = null;
+    try{
+      raw = ctx.req.headers.cookie.toString();
+    } catch(e) {
+      return { props: {} }
+    }
+    if(raw.includes(";")) {
+      let rawCookie = raw.split(";")
+      for(let i = 0; i < rawCookie.length; i++) {
+        if(rawCookie[i].includes("OursiteJWT")) {
+          let cookies = rawCookie[i];
+          let token = cookies.split("=")[0];
+          let value = cookies.split("=")[1];
+          let tempDecode = JSON.parse(Buffer.from(value.split('.')[1], 'base64').toString());
+          return {
+            props : {
+            token, value,
+            tempDecode
+          }
+          };
+        }
+      }
+    }
+>>>>>>> 6fdffc72dbf221d44cad56aa1e88d838c3f8dcbe
   return { props: {} }
 }
 
