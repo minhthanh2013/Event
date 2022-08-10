@@ -16,7 +16,7 @@ import { HostJwtStrategy } from './strategy/host.jwt.strategy';
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => ({
         secret: configService.get('HOST_JWT_SECRET'),
-        signOptions: { expiresIn: configService.get('JWT_EXPIRE_TIME') },
+        signOptions: { expiresIn: '10000s' },
       }),
     }),
     TypeOrmModule.forFeature([HostEntity]),

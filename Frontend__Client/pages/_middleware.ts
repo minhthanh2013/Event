@@ -14,7 +14,7 @@ export default function middleware(req: NextRequest) {
     
     const url = req.url;
 
-    if(url === `${origin}/account/login`) {
+    if(url === `${origin}/user/login`) {
         if (jwt) {
             try {
                 verify(jwt, userSecret);
@@ -86,4 +86,8 @@ export default function middleware(req: NextRequest) {
     }
 }
     return NextResponse.next();
+    
 }
+export const config = {
+    matcher: ['/user/:path*', '/admin/:path*', '/host/:path*'],
+  }

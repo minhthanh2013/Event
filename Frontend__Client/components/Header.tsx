@@ -11,7 +11,7 @@ import Link from 'next/link'
 
 // interface HeaderProps {}
 const Header = (props: any) => {
-  // console.log(14, props)
+  console.log(14, props)
   function stringToColor(string: any) {
     let hash = 0
     let i
@@ -87,17 +87,17 @@ const Header = (props: any) => {
                 </Badge>
               </IconButton>
               <IconButton>
-                <Avatar {...stringAvatar('duongquangvinh6@gmail.com')} />
+                <Avatar {...stringAvatar(props?.tempDecode?.username || "No user")} />
               </IconButton>
             </>
           ) : (
             <>
-              <Link href={"/account/login"}>
+              <Link href={"/user/login"}>
                 <Button variant='text' sx={{ color: '#000000' }}>
                   Login
                 </Button>
               </Link>
-              <Link href={"/account/register"}>
+              <Link href={"/user/register"}>
                 <Button variant='text' sx={{ color: '#000000' }}>
                   Sign up
                 </Button>
