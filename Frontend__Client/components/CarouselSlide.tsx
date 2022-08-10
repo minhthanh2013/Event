@@ -1,6 +1,6 @@
 
 import Container from '@material-ui/core/Container'
-import {Paper , Button} from '@mui/material'
+import { Paper, Button } from '@mui/material'
 import React, { useEffect, useRef, useState } from "react";
 import { Typography } from '@mui/material';
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -30,7 +30,7 @@ interface CarouselSlideProp {
 	address: string;
 	// conferenceOrganizer: string;
 }
-const weekday = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+const weekday = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 const CarouselSlide = (props: any) => {
 	const [ticketList, setTicketList] = useState<CarouselSlideProps>()
 
@@ -39,14 +39,14 @@ const CarouselSlide = (props: any) => {
 	// 'conference-1-avatar '
 	useEffect(() => {
 		const fetchTicketList = async () => {
-		  const dataResult = await fetch('/api/conference/get-latest-x');
-		  const cateResult = await dataResult.json();
-		  setTicketList(cateResult)
+			const dataResult = await fetch('/api/conference/get-latest-x');
+			const cateResult = await dataResult.json();
+			setTicketList(cateResult)
 		}
 		fetchTicketList();
-	  }, []);
+	}, []);
 
-	  const test = (date: Date) => {
+	const test = (date: Date) => {
 		// 9:00 PM – Saturday, Dec 10,{" "}
 		const newDate = new Date(date);
 		let hours = newDate.getHours();
@@ -54,11 +54,11 @@ const CarouselSlide = (props: any) => {
 		let ampm = hours >= 12 ? 'pm' : 'am';
 		hours = hours % 12;
 		hours = hours ? hours : 12; // the hour '0' should be '12'
-		let minuteString = minutes < 10 ? '0'+minutes : minutes;
-		const dateString = hours.toString() + ":" + minuteString.toString() + " " + ampm +" - " + weekday[newDate.getDay()]+", "+newDate.toLocaleString('en-us', { month: 'short' })+" "+newDate.getDate().toString();
+		let minuteString = minutes < 10 ? '0' + minutes : minutes;
+		const dateString = hours.toString() + ":" + minuteString.toString() + " " + ampm + " - " + weekday[newDate.getDay()] + ", " + newDate.toLocaleString('en-us', { month: 'short' }) + " " + newDate.getDate().toString();
 		return dateString;
-	  }
-  return (
+	}
+	return (
 		<>
 			<Box>
 				<Swiper
@@ -68,6 +68,7 @@ const CarouselSlide = (props: any) => {
 					navigation={true}
 					modules={[Pagination, Navigation]}
 					className="mySwiper"
+					autoplay
 				>
 					{ticketList?.data.map((list) => (
 						<SwiperSlide key={list?.conference_id}>
@@ -157,8 +158,8 @@ const CarouselSlide = (props: any) => {
 									>
 										<AccessAlarmIcon sx={{ ml: "22px", mr: "38px" }} />
 										{/* 10:00 AM – 9:00 PM – Saturday, Dec 10,{" "} */}
-										{test(list?.date_start_sell)}	
-										<br/>	
+										{test(list?.date_start_sell)}
+										<br />
 										{test(list?.date_end_sell)}
 									</Typography>
 									<Typography
@@ -261,6 +262,10 @@ const CarouselSlide = (props: any) => {
 					background-color: #180a3d;
 					border-radius: 30px;
 					box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+				}
+
+				.swiper-wrapper {
+					height: 1200px;
 				}
 			`}</style>
 		</>
