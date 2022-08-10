@@ -14,10 +14,7 @@ import Tab from "@mui/material/Tab";
 import EventIcon from "@mui/icons-material/Event";
 import SessionsIcon from "@mui/icons-material/EmojiEvents";
 import SubscriptionsIcon from "@mui/icons-material/ShopTwo";
-<<<<<<< HEAD
-=======
-import { BasicInfo, Speakers, Date } from "../../../CreateEvent/CreateEventForm";
->>>>>>> 6fdffc72dbf221d44cad56aa1e88d838c3f8dcbe
+import { BasicInfo, Speakers, Date } from "../../host/create-event/CreateEventForm";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Subcriptions } from "./Subcriptions";
 import { EventList } from "./EventList";
