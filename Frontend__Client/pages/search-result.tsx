@@ -11,9 +11,10 @@ import styles from '../styles/Background.module.scss'
 import FilterListIcon from '@mui/icons-material/FilterList'
 function SearchResult() {
 	const temp = 'Vinh Duong Quang'
-    const [filter, setFilter] = useState('10')
+    const number = 123
+    const [filter, setFilter] = useState('0')
 	const  [inputSearch, setInputSearch] = useState('')
-	const [type, setType] = useState('')
+	const [type, setType] = useState('0')
     const handleChange = (event: any) => {
         setFilter(event.target.value)
     }
@@ -41,7 +42,7 @@ function SearchResult() {
                             <MenuItem value=''>
                                 <em>None</em>
                             </MenuItem>
-                            <MenuItem value={10} sx={{ display: 'flex', gap: '1rem' }}>
+                            <MenuItem value={0} sx={{ display: 'flex', gap: '1rem' }}>
                                 Latest
                             </MenuItem>
                         </Select>
@@ -49,8 +50,9 @@ function SearchResult() {
                 </Box>
 				<Box sx={{width:'85%', mx: 'auto', mt:5}}>
 					<Typography component='h3' sx={{lineHeight:'3.4rem', fontWeight: '600', fontSize: '1.6rem'}}>“{temp}” tickets</Typography>
-					<Typography component='h4' sx={{fontWeight:'500', lineHeight:'2rem', fontSize:'1rem'}}>123 results on Evenity</Typography>
+					<Typography component='h4' sx={{fontWeight:'500', lineHeight:'2rem', fontSize:'1rem'}}>{number} results on Evenity</Typography>
 				</Box>
+
             </Box>
             <Footer />
         </>
