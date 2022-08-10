@@ -11,8 +11,24 @@ ZoomMtg.prepareWebSDK();
 ZoomMtg.i18n.load('en-US');
 ZoomMtg.i18n.reload('en-US');
 
-const ZoomV2 = () => {
 
+interface ZoomProps {
+  data: ZoomProp;
+  jwtToken: JwtToken;
+}
+interface JwtToken {
+token: string;
+value: string;
+}
+interface ZoomProp {
+  meetingNumber: string;
+  userName: string;
+  userEmail: string;
+  role: number;
+  password: string;
+}
+const ZoomV2 = (props: ZoomProps) => {
+  console.log(35, props)
   useEffect(() => {
     getSignature();
   }, [getSignature]);
