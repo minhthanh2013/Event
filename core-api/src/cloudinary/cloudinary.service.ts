@@ -1,3 +1,4 @@
+import { NotFoundException } from '@nestjs/common';
 /* eslint-disable prettier/prettier */
 import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { UploadApiErrorResponse, UploadApiResponse, v2 } from 'cloudinary';
@@ -62,7 +63,19 @@ export class CloudinaryService {
     return rawResponse.slice(index + 1, index2);
   }
 
-  getVideo(meetingId: string) {
-    return v2.image("conference-"+meetingId+"-record")
+  getVideo(meetingId: number) {
+    let rawResponse = v2.video("conference-"+meetingId+"-record")
+    while(true) {
+      const index = rawResponse.indexOf("<");
+      const index2 = rawResponse.indexOf(">");
+      const temp = rawResponse.substring(index, index2+1);
+      if(temp.includes("type='video/mp4'")) {
+        return temp.slice(temp.indexOf("'")+1, temp.lastIndexOf("type") - 2)
+      }
+      rawResponse = rawResponse.substring(index2+1);
+      if(rawResponse === "</video>") {
+        throw new NotFoundException('Cannot find record with id '+ meetingId);
+      }
+    }
   }
 }

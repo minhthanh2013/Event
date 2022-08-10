@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import { InjectQueue } from "@nestjs/bull";
-import { Body, Controller, Get, Post } from "@nestjs/common";
+import { Body, Controller, Get, Param, Post } from "@nestjs/common";
 import { Queue } from "bull";
 import { ZoomDto } from "./dto/zoom.dto";
 import { ZoomService } from "./zoom.service";
@@ -57,4 +57,8 @@ export class ZoomController {
         async createSignature(@Body() createSignature: CreateSignature) {
             return this.zoomService.createSignature(createSignature);
         }
-}
+        @Get('get-meeting-details/:id')
+        async getMeetingDetails(@Param("id") zoomMeetingId: string) {
+            return this.zoomService.getMeetingDetails(zoomMeetingId);
+        }
+    }

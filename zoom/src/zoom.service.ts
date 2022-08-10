@@ -145,4 +145,22 @@ return new Promise((resolve, reject) => {
 }
 )
 }
+getMeetingDetails(meetingId: string) {
+  const encodeToken = this.config.get('ZOOM_JWT_KEY');
+  const headersRequest = {
+    'Content-Type': 'application/json',
+    'Authorization': `Bearer ${encodeToken}`
+};
+const url = "https://" + this.config.get("ZOOM_BASE_URL") + `/v2/meetings/${meetingId}`;
+const a = this.httpService.get( url, { headers: headersRequest });
+return new Promise((resolve, reject) => {
+  a.subscribe(
+    (res) => {
+      const obj = JSON.parse(JSON.stringify(res.data));
+      resolve(obj);
+    }
+  )
+}
+)
+}
 }

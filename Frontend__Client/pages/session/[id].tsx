@@ -67,7 +67,8 @@ export async function getServerSideProps(ctx: any) {
             let cookies = rawCookie[i];
             let token = cookies.split("=")[0];
             let value = cookies.split("=")[1];
-            return {props : {token, value}};
+            let tempDecode = JSON.parse(Buffer.from(value.split('.')[1], 'base64').toString());
+            return {props : {token, value, tempDecode}};
           }
         }
       }

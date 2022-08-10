@@ -77,4 +77,12 @@ export class ZoomService {
                 )}
             )
         }
+        getMeetingDetails(zoomMeetingId: string) {
+            return new Promise(async (resolve, reject) => {
+                this.zoomClient.send({ cmd: 'GET_ZOOM_MEETING_DETAILS' }, zoomMeetingId).subscribe(async (res) => {
+                    resolve(res);
+                }
+                )}
+            )
+        }
 }

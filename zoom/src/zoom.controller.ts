@@ -25,4 +25,8 @@ export class ZoomController {
   createConference(scheduleZoomDto: ScheduleZoomDto) {
     return this.zoomService.scheduleMeeting(scheduleZoomDto);
   } 
+  @MessagePattern({ cmd: 'GET_ZOOM_MEETING_DETAILS' })
+  getConferenceDetails(zoomMeetingId: string) {
+    return this.zoomService.getMeetingDetails(zoomMeetingId);
+  }
 }
