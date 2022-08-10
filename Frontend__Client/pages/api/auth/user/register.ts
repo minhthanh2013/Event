@@ -6,8 +6,8 @@ import axios from 'axios'
 export default async function (req: NextApiRequest, res: NextApiResponse) {
 	let user = null
 	try {
-		const request = process.env.BACKEND_PROTOCOL+'://' + process.env.BACKEND_HOST + ':' + process.env.BACKEND_PORT + '/user/signup';
-		console.log(request)
+		// const request = process.env.BACKEND_PROTOCOL+'://' + process.env.BACKEND_HOST + ':' + process.env.BACKEND_PORT + '/user/signup';
+		const request = 'http://localhost:3000/user/signup'; 
 		const config = {
 			headers: {
 				'Content-Type': 'application/x-www-form-urlencoded',
@@ -19,9 +19,9 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
 		params.append('email', req.body.email)
 		params.append('first_name', req.body.first_name)
 		params.append('last_name', req.body.last_name)  
-		user = await axios.post('https://' + process.env.BACKEND_HOST + '/user/signup', params, config)
+		user = await axios.post(request, params, config)
 	} catch (error) {
-		// console.log(error);
+		console.log(error);
 	}
 	if (user !== null) {
 		const token = user.data.access_token

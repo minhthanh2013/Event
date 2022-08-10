@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { ForbiddenException, Injectable } from '@nestjs/common';
+import { ConflictException, ForbiddenException, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Observable } from 'rxjs/internal/Observable';
@@ -53,6 +53,9 @@ export class UserService {
 }
 
 async signupUser(dto: User) {
+    if (await this.userRepository.findOne({where: {user_name: dto.user_name}})) {
+        throw new ConflictException('Username already exists');
+    }
     // generate the password hash
     const hash = await argon.hash(dto.password);
     // save the new user in the db

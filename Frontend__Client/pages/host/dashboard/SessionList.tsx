@@ -133,7 +133,7 @@ export const Sessions = (props: SessionProps) => {
             variant="outlined"
             sx={{ width: "15rem", height: "3.5rem", marginLeft: "5rem", color: "black", borderColor: "black" }}
           >
-            <Link href="/CreateSession">
+            <Link href="/host/create-session">
               <a>
                 Create a session
               </a>

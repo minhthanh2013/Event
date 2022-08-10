@@ -8,15 +8,52 @@ const sgMail = require('@sendgrid/mail')
 export class EmailService {
   constructor(private configService: ConfigService) {}
 
-  async sendEmail(email: string, ) {
-    
+  async sendConfirmTicket(email: string, ) {
     sgMail.setApiKey(this.configService.get("SENDGRID_API_KEY"))
     const msg = {
     to: email, // Change to your recipient
     from: 'minhthanhd013@gmail.com', // Change to your verified sender
-    subject: 'Sending with SendGrid is Fun',
-    text: 'and easy to do anywhere, even with Node.js',
-    html: '<strong>and easy to do anywhere, even with Node.js</strong>',
+    subject: 'Confirm bougth ticket',
+    text: 'Hi there, your ticket has been bougth',
+    html: 'You could check out you bought ticket under this link: <a href="http://localhost:3000/confirm">Confirm</a> Thank you for choosing our service. We hope you enjoy our service. Have a good day.',
+    }
+    sgMail
+    .send(msg)
+    .then(() => {
+        console.log('Email sent')
+    })
+    .catch((error) => {
+        console.error(error)
+    })
+  }
+
+  async sendConfirmRecord(email: string, ) {
+    sgMail.setApiKey(this.configService.get("SENDGRID_API_KEY"))
+    const msg = {
+    to: email, // Change to your recipient
+    from: 'minhthanhd013@gmail.com', // Change to your verified sender
+    subject: 'Confirm bougth conference record',
+    text: 'Hi there, your record has been bougth',
+    html: 'You could check out you bought record under this link: <a href="http://localhost:3000/confirm">Confirm</a> Thank you for choosing our service. We hope you enjoy our service. Have a good day.',
+    }
+    sgMail
+    .send(msg)
+    .then(() => {
+        console.log('Email sent')
+    })
+    .catch((error) => {
+        console.error(error)
+    })
+  }
+
+  async sendBuySubscription(email: string, ) {
+    sgMail.setApiKey(this.configService.get("SENDGRID_API_KEY"))
+    const msg = {
+    to: email, // Change to your recipient
+    from: 'minhthanhd013@gmail.com', // Change to your verified sender
+    subject: 'Confirm bougth subscription',
+    text: 'Hi there, your subscription has been bougth',
+    html: 'You could check out you bought record under this link: <a href="http://localhost:3000/confirm">Confirm</a> Thank you for choosing our service. We hope you enjoy our service. Have a good day.',
     }
     sgMail
     .send(msg)

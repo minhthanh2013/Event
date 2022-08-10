@@ -9,15 +9,18 @@ import { TicketProcessor } from './ticket.processor';
 import { UserEntity } from 'src/user/models/user.entity';
 import { ConferenceEntity } from 'src/conference/models/conference.entity';
 import { PaymentEntity } from 'src/payment/models/payment.entity';
+import { EmailModule } from './../email/email.module';
+import { EmailService } from './../email/email.service';
 
 @Module({
   imports: [
+    EmailModule,
     BullModule.registerQueue({
       name: 'ticket',
     }),
     TypeOrmModule.forFeature([TicketEntity, UserEntity, ConferenceEntity, PaymentEntity]),
   ],
   controllers: [TicketController],
-  providers: [TicketService, TicketProcessor], 
+  providers: [TicketService, TicketProcessor, EmailService], 
 })
 export class TicketModule {}

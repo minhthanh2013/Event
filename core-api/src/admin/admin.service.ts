@@ -1,5 +1,6 @@
+import { ConferenceEntity } from './../conference/models/conference.entity';
 /* eslint-disable prettier/prettier */
-import { ForbiddenException, Injectable } from '@nestjs/common';
+import { ConflictException, ForbiddenException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Observable } from 'rxjs/internal/Observable';
 import { from } from 'rxjs/internal/observable/from';
@@ -14,6 +15,8 @@ export class AdminService {
   constructor(
     @InjectRepository(AdminEntity)
     private readonly adminRepository: Repository<AdminEntity>,
+    @InjectRepository(ConferenceEntity)
+    private readonly conferenceRepository: Repository<ConferenceEntity>,
     private jwt: JwtService,
   ) {}
 
@@ -60,6 +63,9 @@ export class AdminService {
 }
 
   async signupAdmin(dto: Admin) {
+    if (await this.adminRepository.findOne({where: {user_name: dto.user_name}})) {
+      throw new ConflictException('Username already exists');
+    }
     const hash = await argon.hash(dto.password);
     // save the new user in the db
     try{
@@ -92,4 +98,24 @@ export class AdminService {
         access_token: token,
     } 
 }
+  async verifyConference(conferenceId: number) {
+    return new Promise(async (resolve, reject) => {
+      await this.conferenceRepository.findOne({where: {conference_id: conferenceId}}).then(async conference => {
+        if(conference) {
+          conference.isValidated = true;
+          await this.conferenceRepository.save(conference).then(() => {
+            resolve(true);})
+            .catch(error => {
+              reject(error)
+              return error;
+            })
+        } else {
+          reject(false);
+        }
+      }).catch(error => {
+        reject(error);
+      }
+      )
+    });
+  }
 }

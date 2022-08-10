@@ -59,4 +59,11 @@ export class AdminController {
   signinAdmin(@Body() dto: AdminAuthDto) {
     return this.adminService.signinAdmin(dto);
   }
+
+  @HttpCode(HttpStatus.OK)
+  @Post("verify-conference/:id")
+  @UseGuards(AdminJwtGuard)
+  verifyConference(@Param("id") confenrenceId: number) {
+    return this.adminService.verifyConference(confenrenceId);
+  }
 }

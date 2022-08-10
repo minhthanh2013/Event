@@ -7,6 +7,7 @@ import { AdminController } from './admin.controller';
 import { AdminService } from './admin.service';
 import { AdminEntity } from './models/admin.entity';
 import { AdminJwtStrategy } from './strategy/admin.jwt.strategy';
+import { ConferenceEntity } from './../conference/models/conference.entity';
 
 @Module({
   imports: [
@@ -19,7 +20,7 @@ import { AdminJwtStrategy } from './strategy/admin.jwt.strategy';
         signOptions: { expiresIn: '10000s' },
       }),
     }),
-    TypeOrmModule.forFeature([AdminEntity])
+    TypeOrmModule.forFeature([AdminEntity, ConferenceEntity])
   ],
   controllers: [AdminController],
   providers: [AdminService, AdminJwtStrategy],

@@ -3,6 +3,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { from, Observable } from 'rxjs';
 import { ConferenceEntity } from 'src/conference/models/conference.entity';
+import { EmailService } from 'src/email/email.service';
 import { PaymentEntity } from 'src/payment/models/payment.entity';
 import { UserEntity } from 'src/user/models/user.entity';
 import { DeleteResult, Repository, UpdateResult } from 'typeorm';
@@ -20,6 +21,7 @@ export class TicketService {
     private readonly userRepository:  Repository<UserEntity>,
     @InjectRepository(PaymentEntity)
     private readonly paymentRepository:  Repository<PaymentEntity>,
+    private readonly emailService: EmailService,
   ) {}
 
   findAll(): Observable<Ticket[]> {
@@ -62,7 +64,9 @@ export class TicketService {
     } catch (error) {
       throw error;
     }
-    return this.ticketRepository.save(newTicket);
+    const resultTicket = this.ticketRepository.save(newTicket);
+    this.emailService.sendConfirmTicket(buyer.email);
+    return resultTicket;
   }
   update(id: number, ticket: Ticket): Observable<UpdateResult> {
     return from(this.ticketRepository.update(id, ticket));
