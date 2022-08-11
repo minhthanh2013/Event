@@ -68,20 +68,6 @@ const Header = (props: any) => {
                     },
                   }}
                 >
-                  <MailOutlineIcon />
-                </Badge>
-              </IconButton>
-              <IconButton>
-                <Badge
-                  badgeContent={2}
-                  sx={{
-                    color: '#6A35F2',
-                    '&  span': {
-                      backgroundColor: '#6A35F2',
-                      color: '#ffffff',
-                    },
-                  }}
-                >
                   <NotificationsNoneIcon />
                 </Badge>
               </IconButton>
