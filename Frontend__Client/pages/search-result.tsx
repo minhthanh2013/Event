@@ -1,5 +1,5 @@
 import { Box, FormControl, InputLabel, MenuItem, Select, Typography } from '@mui/material'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import CarouselSlide from '../components/CarouselSlide'
 import Footer from '../components/Footer'
 import Header from '../components/Header'
@@ -9,15 +9,51 @@ import SessionList from '../components/SessionList'
 import TicketList from '../components/TicketList'
 import styles from '../styles/Background.module.scss'
 import FilterListIcon from '@mui/icons-material/FilterList'
+import axios, { Axios } from 'axios'
+import SessionList_SearchResult from '../components/SessionList_SearchResult'
+import TicketList_SearchResult from '../components/TicketList__SearchResult'
 function SearchResult() {
 	const temp = 'Vinh Duong Quang'
     const number = 123
     const [filter, setFilter] = useState('0')
 	const  [inputSearch, setInputSearch] = useState('')
 	const [type, setType] = useState('0')
+    const [data, setData] = useState({})
+
     const handleChange = (event: any) => {
         setFilter(event.target.value)
     }
+    
+    const fetchTicket = async () => {
+        try{
+            const response = await axios.get(`put URL Ticket here`)
+            console.log(response)
+            setData(response)
+        } catch (error){
+            console.log(error)
+        }
+    }
+    const fetchSession = async () => {
+        try{
+            const response = await axios.get(`put URL Seesion here`)
+            console.log(response)
+            setData(response)
+        } catch (error){
+            console.log(error)
+        }
+    }
+    useEffect(() => {
+        let isCancelled = true
+        if(isCancelled){
+            if(type === '0')
+                fetchTicket()
+            else
+                fetchSession()
+        }
+        return ()   =>  {
+            isCancelled = false
+        }
+    }, [])
     return (
         <>
             {/* #6A35F2 */}
@@ -52,7 +88,10 @@ function SearchResult() {
 					<Typography component='h3' sx={{lineHeight:'3.4rem', fontWeight: '600', fontSize: '1.6rem'}}>“{temp}” tickets</Typography>
 					<Typography component='h4' sx={{fontWeight:'500', lineHeight:'2rem', fontSize:'1rem'}}>{number} results on Evenity</Typography>
 				</Box>
-
+                <Box sx={{width:'85%', mx: 'auto'}}>
+                    {type === '0' && (<TicketList_SearchResult data={data}></TicketList_SearchResult>)}
+                    {type === '1' && (<SessionList_SearchResult data={data}></SessionList_SearchResult>)}
+                </Box>
             </Box>
             <Footer />
         </>
