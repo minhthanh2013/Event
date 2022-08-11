@@ -85,7 +85,7 @@ function SearchResult() {
                     </FormControl>
                 </Box>
 				<Box sx={{width:'85%', mx: 'auto', mt:5}}>
-					<Typography component='h3' sx={{lineHeight:'3.4rem', fontWeight: '600', fontSize: '1.6rem'}}>“{temp}” tickets</Typography>
+					<Typography component='h3' sx={{lineHeight:'3.4rem', fontWeight: '600', fontSize: '1.6rem'}}>“{inputSearch}” tickets</Typography>
 					<Typography component='h4' sx={{fontWeight:'500', lineHeight:'2rem', fontSize:'1rem'}}>{number} results on Evenity</Typography>
 				</Box>
                 <Box sx={{width:'85%', mx: 'auto'}}>
