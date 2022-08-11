@@ -11,17 +11,16 @@ interface SearchBarProps {
 }
 
 const SearchBar__SearchResult = (props: SearchBarProps) => {
-		const handleSearch = (e: any) => {
-			e.preventDefault()
-		
-		}
-		const handleChangeType = (event: any) => {
-			props.setType(event.target.value)
-		}
-		const handleOnClick = (event: any) => {
-			// console.log(props.type)
-			// console.log(props.inputSearch)
-		}
+	const handleSearch = (e: any) => {
+		e.preventDefault()
+	}
+	const handleChangeType = (event: any) => {
+		props.setType(event.target.value)
+	}
+	const handleOnClick = (event: any) => {
+		// console.log(props.type)
+		// console.log(props.inputSearch)
+	}
 	return (
 		<>
 			<Box
@@ -48,7 +47,7 @@ const SearchBar__SearchResult = (props: SearchBarProps) => {
 							label='Looking for something?'
 							type='search'
 							variant='standard'
-							onChange={e => props.setInputSearch(e.target.value)}
+							onChange={(e) => props.setInputSearch(e.target.value)}
 							sx={{
 								'& label': {
 									color: '#6A35F2',
@@ -62,7 +61,6 @@ const SearchBar__SearchResult = (props: SearchBarProps) => {
 								'& .Mui-focused': { color: '#6A35F2' },
 								'& .MuiInput-underline:after': { borderBottomColor: '#6A35F2' },
 								'& .css-1r19i84-MuiInputBase-root-MuiInput-root:hover:not(.Mui-disabled):before': { borderBottomColor: '#6A35F2' },
-								
 							}}
 						/>
 						<Box sx={{ minWidth: 120, mr: 2 }}>
@@ -91,12 +89,12 @@ const SearchBar__SearchResult = (props: SearchBarProps) => {
 										'& *': { color: '#6A35F2 !important' },
 									}}
 								>
-									<MenuItem value={10}>Event</MenuItem>
-									<MenuItem value={20}>Combo</MenuItem>
+									<MenuItem value={0}>Event</MenuItem>
+									<MenuItem value={1}>Combo</MenuItem>
 								</Select>
 							</FormControl>
 						</Box>
-						<SearchIcon type="submit" onClick={handleOnClick} className={styles.searchIcon} />
+						<SearchIcon type='submit' onClick={handleOnClick} className={styles.searchIcon} />
 					</form>
 				</Box>
 			</Box>
