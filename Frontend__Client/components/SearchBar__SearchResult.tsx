@@ -89,7 +89,7 @@ const SearchBar__SearchResult = (props: SearchBarProps) => {
 										'& *': { color: '#6A35F2 !important' },
 									}}
 								>
-									<MenuItem value={0}>Event</MenuItem>
+									<MenuItem value={0}>Conference</MenuItem>
 									<MenuItem value={1}>Combo</MenuItem>
 								</Select>
 							</FormControl>

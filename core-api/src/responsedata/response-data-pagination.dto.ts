@@ -1,5 +1,6 @@
 /* eslint-disable prettier/prettier */
-export class ResponseData {
+export class ResponseDataPagination {
     status = true;
     data: any = null;
+    total: number;
 }

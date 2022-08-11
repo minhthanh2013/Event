@@ -7,20 +7,17 @@ import { BsFacebook } from 'react-icons/bs'
 import React, { useState } from 'react'
 import styles from '../../styles/Login.module.scss'
 import * as yup from 'yup';
-import { withFormik, FormikProps, FormikErrors, Form, Field, useFormik } from 'formik';
-import { margin, padding } from '@mui/system'
+import { useFormik } from 'formik';
 import Firework from '../../components/Firework'
 import Link from 'next/link'
-import Image from 'next/image'
 import axios from 'axios';
-import { Props } from 'next/script'
 import { useRouter } from 'next/router'
 
 const validationSchema = yup.object({
     username: yup.string().required('Username is required'),
     password: yup.string().required('Password is required')
 })
-const Login = (props: Props) => {
+const Login = (props: any) => {
     const [errorMessage, setErrorMessage] = useState<string>('');
 
     const router = useRouter();
@@ -82,7 +79,7 @@ const Login = (props: Props) => {
                                     value={formik.values.username}
                                     onChange={formik.handleChange}
                                     error={formik.touched.username && Boolean(formik.errors.username)}
-                                    helperText={formik.touched.username && formik.errors.username} />
+                                    helperText={formik.touched.username.toString() && formik.errors.username.toString()} />
                                 <TextField
                                     fullWidth
                                     id="password"
@@ -92,7 +89,7 @@ const Login = (props: Props) => {
                                     value={formik.values.password}
                                     onChange={formik.handleChange}
                                     error={formik.touched.password && Boolean(formik.errors.password)}
-                                    helperText={formik.touched.password && formik.errors.username}
+                                    helperText={formik.touched.password.toString() && formik.errors.username.toString()}
                                     sx={{ my: '1.5rem', "& div > input": {marginLeft: "30px"} }}
                                 />
                                 <Button variant="contained" size='medium' type="submit">Sign in</Button>
