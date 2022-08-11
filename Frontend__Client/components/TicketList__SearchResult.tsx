@@ -20,7 +20,7 @@ interface TicketProp {
     // conferenceOrganizer: string;
 }
 
-const TicketList = (props: any) => {
+const TicketList_SearchResult = (props: any) => {
     const [ticketList, setTicketList] = useState<TicketProps>()
     // 'conference-1-avatar '
     useEffect(() => {
@@ -60,4 +60,4 @@ const TicketList = (props: any) => {
     )
 }
 
-export default TicketList
+export default TicketList_SearchResult
