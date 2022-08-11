@@ -10,13 +10,20 @@ interface TicketProp {
 	conference_name: number;
 	date_start_conference: Date;
 	address: string;
+	host_id: number;
 	// conferenceOrganizer: string;
 }
 
 
 interface TicketProps {
 	data: TicketProp;
+	// host: Host;
 	// conferenceOrganizer: string;
+}
+
+interface Host {
+	host_id: number;
+	email: string;
 }
 
 const weekday = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
@@ -31,8 +38,15 @@ const DetailContent = (props: TicketProps) => {
 	const [min, setMin] = useState<string>()
 	const [weekDay, setWeekDay] = useState<string>()
 	const [timePeriod, setTimePeriod] = useState<string>()
-	
+	const [host, setHost] = useState<Host>();
 	useEffect(() => {
+		
+		const fetchHostDetails = async () => {
+			console.log()
+			const dataResult = await fetch ('/api/conference/get-host-by-conference-id/' + props?.data?.host_id);
+			const cateResult = await dataResult.json();
+			setHost(cateResult);
+		}
 		const parseDate = () => {
 			const date = new Date(props.data.date_start_conference)
 			setYear(date.getFullYear().toString())
@@ -50,6 +64,7 @@ const DetailContent = (props: TicketProps) => {
 			setMin(minuteString.toString())
 			setWeekDay(weekday[date.getDay()])
 		}
+		fetchHostDetails();
 		parseDate();
 	}, [])
 	return (
@@ -83,7 +98,7 @@ const DetailContent = (props: TicketProps) => {
 						<Typography component='p'>{weekDay}, {monthString} {day}, {year} at {hour}:{min} {timePeriod}</Typography>
 						<Typography component='h3'>How can I contact the organizer with any question?</Typography>
 						<Typography component='p'>
-							Please visit <a href='#'>https://www.rmit.edu.vn/</a> and refer to the FAQ section for all questions and contact information.{' '}
+							Please email <a href={"mailto:" + host?.email}>{host?.email}</a> for all questions and contact information.{' '}
 						</Typography>
 					</Box>
 				</Box>

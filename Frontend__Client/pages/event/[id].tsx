@@ -44,9 +44,9 @@ interface TicketProp {
 	conference_name: number
 	date_start_conference: Date
 	address: string
+	host_id: number;
 	// conferenceOrganizer: string;
 }
-
 interface TicketProps {
 	data: TicketProp
 	// conferenceOrganizer: string;
@@ -64,7 +64,7 @@ const Event = (props: any) => {
 		}
 		fetchTicketList().catch(() => {
 			//
-		})
+		});
 	}, [id])
 
 	return (
@@ -73,7 +73,7 @@ const Event = (props: any) => {
 				<Box className={styles.dot__1}></Box>
 				<Header {...props} />
 				{ticketList?.data && <DetailBanner data={ticketList.data} />}
-				{ticketList?.data && <DetailContent data={ticketList.data} />}
+				{ticketList?.data && <DetailContent data={ticketList.data}/>}
 				{/* <DetailBanner data={ticketList.data}/>
                 <DetailContent data={ticketList.data}/> */}
 			</Box>

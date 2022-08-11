@@ -1,3 +1,4 @@
+import { NotFoundException } from '@nestjs/common';
 /* eslint-disable prettier/prettier */
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -40,9 +41,35 @@ export class ConferenceService {
     }
     return result;
   }
+  async getHostDataByConferenceId(id: number): Promise<ResponseData> {
+    return new Promise(async (resolve, reject) => {
+      await this.findOne(id).then((result) => {
+        if(!result.status) {
+          reject("Fail to get host by conference id: " + id)
+          return null;
+        }
+        this.hostRepository.findOne({where: {
+          host_id: result.data.host_id,
+        }}).then((host) => {
+          const resultData = new ResponseData();
+          resultData.data = host;
+          resultData.status = true
+          resolve(resultData)
+        }).catch((e) => {
+          throw e;
+        })
+      }).catch((e) => {
+        throw e;
+      })
+    })
+  }
   async findOne(id: number): Promise<ResponseData> {
     const result = new ResponseData()
     const data = await this.conferenceRepository.findOne({ where: { conference_id: id } })
+    const hostData = this.hostRepository.findOne({where: {
+      host_id: data.host_id,
+    }})
+    
       result.status = data !== undefined
       if(result.status === true) {
         result.data = data

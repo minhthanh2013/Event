@@ -15,6 +15,7 @@ interface TicketProp {
 	conference_name: number;
 	date_start_conference: Date;
 	address: string;
+	host_id: number;
 	// conferenceOrganizer: string;
 }
 
