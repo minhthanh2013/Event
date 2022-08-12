@@ -8,6 +8,11 @@ interface SearchBarProps {
 	setInputSearch: any
 	type: string
 	setType: any
+
+	setTypeTemp: any
+	setInputSearchTemp: any
+	typeTemp: string
+	inputSearchTemp: string
 }
 
 const SearchBar__SearchResult = (props: SearchBarProps) => {
@@ -15,11 +20,11 @@ const SearchBar__SearchResult = (props: SearchBarProps) => {
 		e.preventDefault()
 	}
 	const handleChangeType = (event: any) => {
-		props.setType(event.target.value)
+		props.setTypeTemp(event.target.value)
 	}
 	const handleOnClick = (event: any) => {
-		// console.log(props.type)
-		// console.log(props.inputSearch)
+		props.setType(props.typeTemp)
+		props.setInputSearch(props.inputSearchTemp)
 	}
 	return (
 		<>
@@ -47,7 +52,7 @@ const SearchBar__SearchResult = (props: SearchBarProps) => {
 							label='Looking for something?'
 							type='search'
 							variant='standard'
-							onChange={(e) => props.setInputSearch(e.target.value)}
+							onChange={(e) => props.setInputSearchTemp(e.target.value)}
 							sx={{
 								'& label': {
 									color: '#6A35F2',
