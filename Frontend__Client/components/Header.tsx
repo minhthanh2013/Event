@@ -9,6 +9,7 @@ import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone'
 import Avatar from '@mui/material/Avatar'
 import Link from 'next/link'
 import Divider from '@mui/material/Divider'
+import styles from '../styles/Header.module.scss'
 // interface HeaderProps {}
 const Header = (props: any) => {
 	const pages = ['Products', 'Pricing', 'Blog']
@@ -91,7 +92,7 @@ const Header = (props: any) => {
 								</Badge>
 							</IconButton>
 							<Menu
-								sx={{ mt: '45px', height: '700px' }}
+								sx={{ mt: '45px', height: '700px', overflow: 'hidden' }}
 								id='menu-appbar'
 								anchorEl={anchorElUser}
 								anchorOrigin={{
@@ -111,9 +112,9 @@ const Header = (props: any) => {
 										{' '}
 										<MenuItem key={setting} onClick={handleCloseUserMenu} sx={{ mb: '0.5rem' }}>
 											<Box
-												sx={{ width: '300px', height: '75px', display: 'flex', gap: '2rem', alignItems: 'center' }}
+												sx={{ width: '350px', height: '75px', display: 'flex', gap: '2rem', alignItems: 'center' }}
 											>
-												<Box>
+												<Box sx={{ width: '25%', height: '100%' }}>
 													<img
 														width={100}
 														height={75}
@@ -122,10 +123,24 @@ const Header = (props: any) => {
 														}
 													/>
 												</Box>
-												<Box>Left</Box>
+												<Box
+													className={styles.notification_Content}
+													sx={{
+														width: '75%',
+														height: '100%',
+														display: 'flex',
+														alignContent: 'center',
+														flexDirection: 'column',
+														justifyContent: 'center',
+													}}
+												>
+													<Typography component='h3'>Title</Typography>
+													<Typography component='h4'>12:00 am - Thu, Jul 1</Typography>                            
+												</Box>
+                                                
 											</Box>
 										</MenuItem>
-										<Divider variant='inset' component='li' />
+										<Divider variant='inset' component='li' sx={{ width: '100%', mx: '0 !important' }} />
 									</>
 								))}
 							</Menu>
