@@ -12,7 +12,7 @@ import Button from "@mui/material/Button";
 import Image from "next/image";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
-import { BasicInfo, Speakers } from "./CreateSessionForm";
+import { BasicInfo, Conferences } from "./CreateSessionForm";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 
 interface TabPanelProps {
@@ -56,7 +56,6 @@ const CreateEvent = (props) => {
   const [data, setData] = useState({})
   const [image, setImage] = useState<string | ArrayBuffer | null>();
 
-  console.log(data);
   const onImageChange = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
       let reader = new FileReader();
@@ -81,13 +80,11 @@ const CreateEvent = (props) => {
     const result = await res.json();
     console.log(result);
   }
-
-  
-
   //change tabs; value = tabs value
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
+
   return (
     <>
       <Box
@@ -105,7 +102,7 @@ const CreateEvent = (props) => {
         <Header />
 
         <Typography variant="h3" component="div" className={styles.header}>
-          Event Dashboard
+          Session Dashboard
         </Typography>
         <Grid container spacing={0} direction="column" alignItems="center">
           <Card className={styles.imageInput}>
@@ -163,13 +160,13 @@ const CreateEvent = (props) => {
                 indicatorColor="primary"
               >
                 <Tab label="Basic Information" {...a11yProps(0)} />
-                <Tab label="Speakers" {...a11yProps(1)} />
+                <Tab label="Conference" {...a11yProps(1)} />
               </Tabs>
               <TabPanel value={value} index={0}>
-                <BasicInfo data={data} setData={setData} setValue={setValue} api={apiCall}/>
+                <BasicInfo data={data} setData={setData} setValue={setValue} api={apiCall} prop={props} />
               </TabPanel>
               <TabPanel value={value} index={1}>
-                <Speakers data={data} setData={setData} setValue={setValue} api={apiCall} />
+                <Conferences data={data} setData={setData} setValue={setValue} api={apiCall} prop={props} />
               </TabPanel>
             </ThemeProvider>
           </Box>

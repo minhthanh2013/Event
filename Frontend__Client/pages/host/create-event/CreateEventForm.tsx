@@ -335,16 +335,6 @@ export const Date: React.FC<CreateEventProps> = ({ data, setData, setValue, api,
   const [eventStart, setEventStart] = useState<Date | null>(null);
   const [ticketStart, setTicketStart] = useState<Date | null>(null);
   const [ticketEnd, setTicketEnd] = useState<Date | null>(null);
-  const apiCall = async (data) => {
-    const res = await fetch("/api/conference/create-new", {
-      method: "POST",
-      body: JSON.stringify(data),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-    const result = await res.json();
-  }
 
   const onSubmit = (value: any) => {
     setData({

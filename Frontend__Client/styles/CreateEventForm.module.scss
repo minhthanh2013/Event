@@ -18,6 +18,9 @@
 .inviteBtn {
   margin-top: 2rem;
   align-items: center;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .popup {
@@ -25,7 +28,7 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 300;
+  width: 30vw;
   background-color: #ffffff;
   border-radius: 0.75rem;
   box-shadow: 24;
@@ -53,4 +56,3 @@
 .dateFields {
   margin: 1.5rem 0 1.5rem 0 !important;
 }
-
