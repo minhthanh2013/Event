@@ -103,7 +103,7 @@ interface TicketProp {
   status_ticket: string;
 }
 //
-const EventCreate = (propss: any) => {
+const EventCreate = (props: any) => {
   const [conferences, setConferences] = useState<ConferenceProps>();
   const [sessions, setSessions] = useState<SessionListProps>();
   const [value, setValue] = React.useState(0);
@@ -141,7 +141,7 @@ const EventCreate = (propss: any) => {
         <Box className={styles.dot__1}></Box>
         <Box className={styles.dot__2}></Box>
         <Box className={styles.dot__3}></Box>
-        <Header {...propss}/>
+        <Header {...props}/>
 
         <Grid container spacing={2}>
           <Grid item xs={2} md={2}>
@@ -219,12 +219,12 @@ const EventCreate = (propss: any) => {
           <Grid item xs={10} md={10}>
             <TabPanel value={value} index={0}>
               <Box sx={{ marginLeft: "3rem" }}>
-                <EventList data={conferences?.data} propss={propss}/>
+                <EventList data={conferences?.data} propss={props}/>
               </Box>
             </TabPanel>
             <TabPanel value={value} index={1}>
               <Box sx={{ marginLeft: "3rem" }}>
-                <Sessions data={sessions?.data} propss={propss}/>
+                <Sessions data={sessions?.data} propss={props}/>
               </Box>
             </TabPanel>
             <TabPanel value={value} index={2}>

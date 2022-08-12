@@ -6,7 +6,8 @@ import https from 'https';
 
 export default async function (req: NextApiRequest, res: NextApiResponse) {
 	try {
-		const request = process.env.BACKEND_PROTOCOL+'://' + process.env.BACKEND_HOST + ':' + process.env.BACKEND_PORT + "/conferencecategory/get-all"; 
+		// const request = process.env.BACKEND_PROTOCOL+'://' + process.env.BACKEND_HOST + ':' + process.env.BACKEND_PORT + "/conferencecategory/get-all"; 
+		const request = "http://localhost:3000/conferencecategory/get-all"
 		const response = await axios.get(request);
         res.status(200).json(response.data);
 	} catch (error) {

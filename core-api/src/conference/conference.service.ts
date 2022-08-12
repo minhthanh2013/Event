@@ -266,46 +266,4 @@ export class ConferenceService {
   }
     return paginate<ConferenceEntity>(queryBuilder, options);
   }
-
-  // getAllWithFilter(
-  //   page: number,
-  //   limit: number,
-  //   search: string,
-  // ): Promise<ResponseDataPagination> {
-  //   const result = new ResponseDataPagination();
-  //   if(limit === undefined || limit === null){
-  //     limit = 12;
-  //   }
-  //   const query = this.conferenceRepository
-  //     .createQueryBuilder()
-  //     .select('conference')
-  //     .from(ConferenceEntity, 'conference')
-  //     .skip(page * limit)
-  //     .take(limit);
-  //   if (search) {
-  //     query.where('conference.conference_name LIKE :search', {
-  //       search: `%${search}%`,
-  //     });
-  //   }
-  //   return new Promise((resolve, reject) => {
-  //     query
-  //       .getManyAndCount()
-  //       .then(async (res) => {
-  //         result.data = res[0];
-  //         result.status = true;
-  //         await this.dataSource.query('SELECT COUNT("conference_id") FROM "public"."Conference"').then(async (data) => {
-  //           result.total = data[0].count;
-  //         }).catch(err => {
-  //           console.log(err);
-  //         })
-  //         resolve(result);
-  //       })
-  //       .catch((err) => {
-  //         reject(err);
-  //       })
-  //       .finally(() => {
-  //         return result;
-  //       });
-  //   });
-  // }
 }

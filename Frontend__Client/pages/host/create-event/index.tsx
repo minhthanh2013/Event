@@ -14,6 +14,7 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import { BasicInfo, Speakers, Date } from "./CreateEventForm";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { Multer } from 'multer';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -55,31 +56,41 @@ function a11yProps(index: number) {
 const CreateEvent = (props) => {
   const [data, setData] = useState({})
   const [image, setImage] = useState<string | ArrayBuffer | null>();
-
-  console.log(data);
+  const [imageFile, setImageFile] = useState<Multer.File | null>();
   const onImageChange = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
       let reader = new FileReader();
       reader.onload = (e) => {
+        setImageFile(event.target.files[0]);
         setImage(e?.target?.result);
-        setData({ ...data, image: event.target.files[0] })
       };
-
       reader.readAsDataURL(event.target.files[0]);
     }
   };
   const [value, setValue] = React.useState(0);
 
   const apiCall = async (data) => {
-    const res = await fetch("/api/conference/create-new", {
+    const resData = await fetch("/api/conference/create-new", {
       method: "POST",
-      body: JSON.stringify(data),
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
+      body: JSON.stringify(data),
     });
-    const result = await res.json();
-    console.log(result);
+    const resDataJson = await resData.json();
+    console.log(81, resDataJson);
+    if(resData.status === 200) {
+      let body = new FormData()
+      body.append('file',imageFile)
+      await fetch(`/api/cloudinary/update-image/${props?.tempDecode?.sub}`, {
+        method: "POST",
+        body,
+      });
+      // TODO: Thiếu date.
+      // const result = await res.json();
+      // console.log(result);
+    }
+
   }
 
   
@@ -199,8 +210,8 @@ export async function getServerSideProps(ctx: any) {
     for (let i = 0; i < rawCookie.length; i++) {
       if (rawCookie[i].includes("OursiteJWT")) {
         let cookies = rawCookie[i];
-        let token = cookies.split("=")[0];
-        let value = cookies.split("=")[1];
+        let token = cookies.split("=")[0].trim();
+        let value = cookies.split("=")[1].trim();
         let tempDecode = JSON.parse(Buffer.from(value.split('.')[1], 'base64').toString());
         return {
           props: {

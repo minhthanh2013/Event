@@ -2,6 +2,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import e from 'express';
+import { IPaginationOptions, Pagination, paginate } from 'nestjs-typeorm-paginate';
 import { resolve } from 'path';
 import { Observable, from } from 'rxjs';
 import { ConferenceEntity } from 'src/conference/models/conference.entity';
@@ -66,9 +67,7 @@ export class CombosessionService {
       arrayOfIdsAndDateResult.push(arrayOfIdsAndDate[i]);
     }
     if (limit > arrayOfIdsAndDate.length) {
-      console.log(limit)
       limit = arrayOfIdsAndDate.length;
-      console.log(limit)
     }
     return new Promise((resolve, reject) => {
       const comboSessionDto: ComboSessionDto[] = [];
@@ -164,16 +163,23 @@ export class CombosessionService {
             console.log("here")
             response.status = true;
             response.data = comboSessionDto;
-            console.log(164, response)
             // resolve(response);
           }
         }
       }).catch((error2) => {
-        console.log(169, error2)
-        reject("Fail to get list of combo by host id");
+        reject("Fail to get list of combo by host id" + error2 );
       }).finally(()=>{
         resolve(response);
       })
     })
+  }
+  async paginate(options: IPaginationOptions, search: string): Promise<Pagination<ComboSessionEntity>> {
+    const queryBuilder = this.comboSessionRepository.createQueryBuilder('combosession');
+    if (search !== '') {
+      queryBuilder.where('combosession.combo_name LIKE :search', {
+        search: `%${search}%`,
+    });
+    }
+    return paginate<ComboSessionEntity>(queryBuilder, options);
   }
 }
