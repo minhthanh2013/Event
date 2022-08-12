@@ -32,7 +32,7 @@
   background-color: #ffffff;
   border-radius: 0.75rem;
   box-shadow: 24;
-  padding: 3rem;
+  padding: 2rem;
 }
 
 .speakersIcon {
@@ -48,11 +48,44 @@
 .speakersInfo {
   margin: 0.5rem 0 0.5rem 10rem;
 }
-
+.eventInfo{
+  margin: 0.5rem 0 0.5rem 0.5rem;
+}
 .closeBtn {
   margin-top: 0.75rem;
 }
 
 .dateFields {
   margin: 1.5rem 0 1.5rem 0 !important;
+}
+
+.sketchy {
+  margin-top: 1rem;
+  display: inline-block;
+  border: 3px solid #333333;
+  font-size: 2.5rem;
+  border-radius: 2% 6% 5% 4% / 1% 1% 2% 4%;
+  text-transform: uppercase;
+  letter-spacing: 0.3ch;
+  background: #ffffff;
+  position: relative;
+
+  &::before {
+      content: '';
+      border: 2px solid #C64EFF;
+      display: block;
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate3d(-50%, -50%, 0) scale(1.015) rotate(0.5deg);
+      border-radius: 1% 1% 2% 4% / 2% 6% 5% 4%;
+  }
+}
+
+.totalPrice {
+  margin-left: 5vw;
+  width: 50%;
+  align-self: center;
 }

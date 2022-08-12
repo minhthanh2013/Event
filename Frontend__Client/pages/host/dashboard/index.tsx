@@ -108,6 +108,7 @@ const EventCreate = (props: any) => {
   const [sessions, setSessions] = useState<SessionListProps>();
   const [value, setValue] = React.useState(0);
 
+  console.log(props);
 	useEffect(() => {
 		const fetchConferences = async () => {
 		  const dataResult = await fetch('/api/conference/get-conference-by-host-id/1');

@@ -76,7 +76,7 @@ const Footer = (props: FooterProps) => {
 
         <div className={styles.column}>
           <Typography className={styles.columnTitle}>
-            Contact With Us
+            Contact Us
           </Typography>
           <ul className={styles.columnLink}>
             <li>

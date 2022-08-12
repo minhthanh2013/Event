@@ -39,8 +39,7 @@ export const BasicInfo: React.FC<CreateEventProps> = ({ data, setData, setValue 
   } = useForm();
   const onSubmit = (value: any) => {
     setData({
-      ...data, sessionName: value.sessionName, organizerName: value.organizerName,
-      organizerEmail: value.organizerEmail, totalPrice: value.totalPrice, sessionDescription: value.sessionDescription
+      ...data, combo_name: value.sessionName, discount: value.totalPrice, combo_description: value.sessionDescription
     });
     setValue(1);
   };
@@ -65,31 +64,13 @@ export const BasicInfo: React.FC<CreateEventProps> = ({ data, setData, setValue 
           />
           <TextField
             className={styles.eventFields}
-            id="standard-required"
-            label="Organizer Name"
-            required
-            defaultValue={data ? data.organizerName : undefined}
-            variant="standard"
-            {...register("organizerName")}
-          />
-          <TextField
-            className={styles.eventFields}
-            id="standard-required"
-            label="Organizer Email"
-            required
-            type="email"
-            defaultValue={data ? data.organizerName : undefined}
-            variant="standard"
-            {...register("organizerEmail")}
-          />
-          <TextField
-            className={styles.eventFields}
             required
             id="standard-required"
-            label="Total price"
+            label="Session Discount"
             variant="standard"
             defaultValue={data.totalPrice}
             type="number"
+            InputProps={{ inputProps: { min: 0, max: 100 } }}
             {...register("totalPrice")}
           />
           <TextField
@@ -134,11 +115,11 @@ export const Conferences: React.FC<CreateEventProps> = ({ data, setData, setValu
     formState: { errors },
   } = useForm();
   const [conferences, setConferences] = useState<ConferenceProps>();
-  const [checked, setChecked] = React.useState([0]);
+  const [checked, setChecked] = React.useState([]);
 
   useEffect(() => {
     const fetchConferences = async () => {
-      const dataResult = await fetch('/api/conference/get-conference-by-host-id/' + prop.tempDecode.sub);
+      const dataResult = await fetch('/api/conference/get-conference-by-host-id/1');
       const cateResult = await dataResult.json();
       setConferences(cateResult)
     }
@@ -160,15 +141,23 @@ export const Conferences: React.FC<CreateEventProps> = ({ data, setData, setValu
   };
 
   const onSubmit = (value: any) => {
-    let temp = [...(data.conferenceList ?? [])];
-    temp.push(value);
-    setData({ ...data, conferenceList: temp })
+    const result = conferences?.data.filter(
+      event => {
+        if (checked.includes(event.conference_id)) {
+          return true;
+        }
+        return false;
+      }
+    )
+
+    setData({ ...data, conferenceList: result })
     setOpen(false);
   };
 
   const onFinish = () => {
     setValue(0)
     api({ ...data, hostName: prop.tempDecode.username });
+    //chỉnh lại API
   }
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
@@ -193,28 +182,29 @@ export const Conferences: React.FC<CreateEventProps> = ({ data, setData, setValu
                 align="center"
                 sx={{ fontWeight: "bold" }}
               >
-                Add Conference
+                Choose your Conference
               </Typography>
-              <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
-                {[0, 1, 2, 3].map((value) => {
-                  const labelId = `checkbox-list-label-${value}`;
+              <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
+                {conferences?.data.map((conference) => {
+                  const labelId = `checkbox-list-label-${conference.conference_id}`;
 
                   return (
                     <ListItem
-                      key={value}
+                      key={conference.conference_id}
                       disablePadding
+                      className={styles.sketchy}
                     >
-                      <ListItemButton role={undefined} onClick={handleToggle(value)} dense>
+                      <ListItemButton role={undefined} onClick={handleToggle(conference.conference_id)} dense>
                         <ListItemIcon>
                           <Checkbox
                             edge="start"
-                            checked={checked.indexOf(value) !== -1}
+                            checked={checked.indexOf(conference.conference_id) !== -1}
                             tabIndex={-1}
                             disableRipple
                             inputProps={{ 'aria-labelledby': labelId }}
                           />
                         </ListItemIcon>
-                        <ListItemText id={labelId} primary={`Line item ${value + 1}`} />
+                        <ListItemText id={labelId} primary={`${conference.conference_name}`} secondary={`Price: ${conference.price}`} />
                       </ListItemButton>
                     </ListItem>
                   );
@@ -234,14 +224,15 @@ export const Conferences: React.FC<CreateEventProps> = ({ data, setData, setValu
     );
   };
 
-  const handleDelete = (index: number) => {
-    let temp: ConferenceProps[] = [];
-    let arr: ConferenceProps[] = [];
-    data.speakerList?.forEach((conference) => temp.push(Object.assign({}, conference)));
-    data.speakerList !== undefined ? (arr = temp.splice(index, 1)) : (temp = []);
-    setData({ ...data, conferenceList: temp })
-  };
+  const Total = data.conferenceList?.reduce((result, item) => {
+    let a = item.price;
+    if (typeof item.price === 'string') {
+      a = parseInt(item.price)
+    } return result + a
+  }, 0);
 
+  const Discount = Total - Total * data.discount / 100;
+  console.log(Discount)
   return (
     <>
       {data.conferenceList?.length === undefined || data.conferenceList?.length < 1 ? (
@@ -259,7 +250,7 @@ export const Conferences: React.FC<CreateEventProps> = ({ data, setData, setValu
             variant="contained"
             onClick={handleOpen}
           >
-            Add Conference into your session
+            Add Conference to your session
           </Button>
           <Popup />
         </Grid>
@@ -272,34 +263,37 @@ export const Conferences: React.FC<CreateEventProps> = ({ data, setData, setValu
                 severity="success"
                 icon={false}
                 className={styles.infoBox}
-                action={
-                  <IconButton
-                    className={styles.closeBtn}
-                    aria-label="delete"
-                    color="primary"
-                    size="large"
-                    onClick={() => handleDelete(index)}
-                  >
-                    <CancelIcon fontSize="inherit" />
-                  </IconButton>
-                }
               >
                 <Typography
-                  className={styles.speakersInfo}
+                  className={styles.eventInfo}
                   sx={{ fontWeight: "bold", fontSize: "1rem" }}
                 >
-                  {conference.id}
+                  Conference: {conference.conference_name} <br />
+                  Start date: {conference.date_start_conference} <br />
+                  Price: {conference.price}
                 </Typography>
               </Alert>
             </>
           ))}
+          <TextField
+            label="Total conference price"
+            disabled
+            value={Total}
+            className={styles.totalPrice}
+          />
+            <TextField
+              label="After discount price"
+              disabled
+              value={Discount}
+              className={styles.totalPrice}
+            />
           <Box sx={{ marginTop: "2px", width: "80%", alignSelf: "center" }}>
             <Button
               sx={{ width: "12rem" }}
               variant="outlined"
               onClick={handleOpen}
             >
-              Add Conference
+              Select Conference
             </Button>
             <Button
               sx={{ width: "12rem", float: "right" }}

@@ -40,16 +40,7 @@ interface EventListProps {
   propss: any;
 }
 export const EventList = (props: EventListProps) => {
-  console.log(props.data)
   const [sortType, setSortType] = useState('lastest');
-
-  interface Data {
-    name: string;
-    sold: number;
-    gross: number;
-    date: string;
-    status: string;
-  }
 
   return (
     <>
