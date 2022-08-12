@@ -110,9 +110,9 @@ const Header = (props: any) => {
 								{settings.map((setting) => (
 									<>
 										{' '}
-										<MenuItem key={setting} onClick={handleCloseUserMenu} sx={{ mb: '0.5rem' }}>
+										<MenuItem key={setting} onClick={handleCloseUserMenu} sx={{ mb: '0.5rem', userSelect: 'none' }}>
 											<Box
-												sx={{ width: '350px', height: '75px', display: 'flex', gap: '2rem', alignItems: 'center' }}
+												sx={{ width: '400px', height: '75px', display: 'flex', gap: '2rem', alignItems: 'center' }}
 											>
 												<Box sx={{ width: '25%', height: '100%' }}>
 													<img
@@ -126,18 +126,30 @@ const Header = (props: any) => {
 												<Box
 													className={styles.notification_Content}
 													sx={{
-														width: '75%',
+														width: '50%',
 														height: '100%',
 														display: 'flex',
 														alignContent: 'center',
-														flexDirection: 'column',
+														flexDirection: 'column ',
 														justifyContent: 'center',
 													}}
 												>
 													<Typography component='h3'>Title</Typography>
-													<Typography component='h4'>12:00 am - Thu, Jul 1</Typography>                            
+													<Typography component='h4'>12:00 am - Thu, Jul 1</Typography>
 												</Box>
-                                                
+												<Box
+													display='flex'
+													flexDirection='column'
+													flexGrow={1}
+													sx={{ width: '25%', alignItems: 'flex-start' }}
+												>
+													<IconButton>
+														<NotificationsNoneIcon /> Join
+													</IconButton>
+													<IconButton>
+														<NotificationsNoneIcon /> Record
+													</IconButton>
+												</Box>
 											</Box>
 										</MenuItem>
 										<Divider variant='inset' component='li' sx={{ width: '100%', mx: '0 !important' }} />
