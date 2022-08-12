@@ -82,4 +82,9 @@ export class ConferenceController {
   getByConfId(@Param('id') id: number): Promise<ResponseData> {
     return this.conferenceService.getHostDataByConferenceId(id);
   }
+  @Get('/find-all-by-user-id/:id')
+  getAllByUserId(@Param("id") id: number): Observable<ResponseData> {
+    return from(this.conferenceService.findAllByUserId(id));
+  }
+
 }

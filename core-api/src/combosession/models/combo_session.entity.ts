@@ -22,4 +22,6 @@ export class ComboSessionEntity {
     default: () => 'CURRENT_TIMESTAMP',
   })
   create_at: Date;
+  @Column()
+  discount: number;
 }

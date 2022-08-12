@@ -8,12 +8,16 @@ import { Column, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn
 export class TicketEntity {
   @PrimaryGeneratedColumn()
   ticket_id: number;
+  @Column()
+  buyer_id: number;
   @ManyToOne(() => UserEntity, (buyer) => buyer.tickets)
   @JoinColumn({
     name: "buyer_id",
     referencedColumnName: "user_id"
   })
   buyer: UserEntity;
+  @Column()
+  conference_id: number;
   @OneToOne(
     () => ConferenceEntity,
     (conferenceEntity) => conferenceEntity.conference_id,

@@ -1,3 +1,4 @@
+import { TicketEntity } from 'src/ticket/models/ticket.entity';
 /* eslint-disable prettier/prettier */
 import { Module } from '@nestjs/common';
 import { ConferenceService } from './conference.service';
@@ -16,7 +17,7 @@ import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
 import { CloudinaryModule } from 'src/cloudinary/cloudinary.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([ConferenceEntity, ConferenceTypeEntity, ConferenceCategoryEntity, UserEntity, HostEntity]),
+  imports: [TypeOrmModule.forFeature([ConferenceEntity, ConferenceTypeEntity, ConferenceCategoryEntity, UserEntity, HostEntity, TicketEntity]),
   ZoomModule,
   HttpModule,
   CloudinaryModule,

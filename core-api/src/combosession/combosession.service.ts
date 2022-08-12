@@ -40,7 +40,7 @@ export class CombosessionService {
         combo.combo_id = comboId;
         combo.conference_id = conferenceId;
         combo.combo_name = comboRequestDto.combo_name;
-        console.log(combo);
+        combo.discount = comboRequestDto.discount;
         const a = await this.comboSessionRepository.save(combo);
         if(!a) {
           throw new Error("Error");
@@ -88,7 +88,6 @@ export class CombosessionService {
       .createQueryBuilder('combosession')
       .select('MAX(combosession.combo_id)', 'max');
     const result = await query.getRawOne();
-    console.log(result.max);
     return result.max;
   }
 
@@ -97,7 +96,6 @@ export class CombosessionService {
       .createQueryBuilder('combosession')
       .select('MAX(combosession.id)', 'max');
     const result = await query.getRawOne();
-    console.log(result.max)
     return result.max;
   }
 
@@ -146,7 +144,6 @@ export class CombosessionService {
     return new Promise((resolve, reject) => {
       const conferences: ConferenceEntity[] = [];
       comboEntities.forEach(async comboEntity => {
-        // console.log(44, comboEntity)
         await this.conferenceRepository.findOne({
           where: {
             conference_id: comboEntity.conference_id
@@ -174,7 +171,6 @@ export class CombosessionService {
           conference_id: id
         }
       }).then(tempResult => {
-        console.log(131, tempResult === null)
         if(tempResult === undefined || tempResult === null) {
           reject("fail")
           return 0;
@@ -201,12 +197,10 @@ export class CombosessionService {
           const element = results[index];
           await this.findComboByConferenceId(element.conference_id).then(tempCombo => {
             comboSessionDto.push(tempCombo.data)
-            console.log(159, comboSessionDto)
           }).catch((error) => {
             console.log(error)
           })
           if(index === results.length - 1) {
-            console.log("here")
             response.status = true;
             response.data = comboSessionDto;
             // resolve(response);

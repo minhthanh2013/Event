@@ -11,4 +11,5 @@ export class ComboSessionRequestDto {
   listConferenceIds: number[];
   combo_name: string;
   combo_description: string;
+  discount: number;
 }

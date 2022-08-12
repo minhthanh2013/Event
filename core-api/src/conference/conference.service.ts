@@ -4,9 +4,9 @@ import { InjectDataSource, InjectRepository } from '@nestjs/typeorm';
 import { ConferenceCategoryEntity } from 'src/conferencecategory/models/conference_category.entity';
 import { ConferenceTypeEntity } from 'src/conferencetype/models/conference_type.entity';
 import { HostEntity } from 'src/host/models/host.entity';
-import { ResponseDataPagination } from 'src/responsedata/response-data-pagination.dto';
 import { ResponseData } from 'src/responsedata/response-data.dto';
 import { UserEntity } from 'src/user/models/user.entity';
+import { TicketEntity } from 'src/ticket/models/ticket.entity';
 import { ZoomService } from 'src/zoom/zoom.service';
 import { DataSource, Repository } from 'typeorm';
 import {
@@ -34,6 +34,8 @@ export class ConferenceService {
     private readonly speakerRepository: Repository<UserEntity>,
     @InjectRepository(HostEntity)
     private readonly hostRepository: Repository<HostEntity>,
+    @InjectRepository(TicketEntity)
+    private readonly ticketRepository: Repository<TicketEntity>,
     @InjectDataSource()
     private readonly dataSource: DataSource,
     private readonly zoomService: ZoomService,
@@ -49,6 +51,33 @@ export class ConferenceService {
     }
     return result;
   }
+  findAllByUserId(userId: number): Promise<ResponseData> {
+    const result = new ResponseData();
+    result.data  = [];
+    return new Promise(async (resolve, reject) => {
+    this.ticketRepository.find({
+      where: {
+        buyer_id: userId,
+      }
+    }).then(async (tickets) => {
+      
+        for (let index = 0; index < tickets.length; index++) {
+          const ticket = tickets[index];
+          const conference = await this.conferenceRepository.findOne({where: {conference_id: ticket.conference_id}});
+          if (conference) {
+            result.data.push(conference);
+          }
+        }
+        result.status = result.data.length > 0;
+        resolve(result);
+      
+    }).catch(e => {
+      reject(e);
+    }).finally(() => {
+      return result; });
+    });
+  }
+  
   async getHostDataByConferenceId(id: number): Promise<ResponseData> {
     return new Promise(async (resolve, reject) => {
       await this.findOne(id)

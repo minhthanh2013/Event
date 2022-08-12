@@ -2,7 +2,7 @@
 import { AppBar } from '@material-ui/core'
 import { Box, Button, Menu, MenuItem, Toolbar, Typography } from '@mui/material'
 import IconButton from '@mui/material/IconButton'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Badge from '@mui/material/Badge'
 import MailOutlineIcon from '@mui/icons-material/MailOutline'
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone'
@@ -10,13 +10,54 @@ import Avatar from '@mui/material/Avatar'
 import Link from 'next/link'
 import Divider from '@mui/material/Divider'
 import styles from '../styles/Header.module.scss'
-// interface HeaderProps {}
+interface HeaderProps {
+	props: any;
+}
+interface TicketProps {
+	data: TicketProp[];
+	// conferenceOrganizer: string;
+}
+interface TicketProp {
+	conference_id: number
+	description: string
+	price: number
+	conference_name: number
+	date_start_conference: Date
+	address: string
+	// conferenceOrganizer: string;
+}
 const Header = (props: any) => {
+	const [ticketList, setTicketList] =  useState<TicketProps>()
 	const pages = ['Products', 'Pricing', 'Blog']
 	const settings = ['Profile', 'Account', 'Dashboard', 'Logout', 'Account', 'Dashboard', 'Logout', 'Account', 'Dashboard', 'Logout']
 
 	const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null)
 	const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null)
+// 12:00 am - Thu, Jul 1
+	function parseDate(date: Date) {
+		date = new Date(date)
+		const day = date.getDate()
+		const month = date.getMonth()
+		const year = date.getFullYear()
+		const hour = date.getHours()
+		const min = date.getMinutes()
+		let ampm = hour >= 12 ? 'pm' : 'am';
+		const weekday = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+		let weekDayString = weekday[date.getDay()]
+		let monthString = date.toLocaleString('en-us', { month: 'short' })
+		const dateString = `${hour}:${min} ${ampm} - ${weekDayString}, ${monthString} ${day}`
+		return dateString
+	}
+	useEffect(() => {
+		if (props?.tempDecode?.role === 'user') {
+			const fetchTicketList = async () => {
+				const dataResult = await fetch(`/api/conference/get-conference-by-user-id/${props?.tempDecode?.sub}`)
+				const cateResult = await dataResult.json()
+				setTicketList(cateResult)
+			}
+			fetchTicketList();
+		}
+	}, [props?.tempDecode?.role, props?.tempDecode?.sub])
 
 	const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
 		setAnchorElNav(event.currentTarget)
@@ -55,7 +96,7 @@ const Header = (props: any) => {
 		}
 	}
 	let isLogin = false
-	if (props.token !== undefined) {
+	if (props?.token !== undefined) {
 		isLogin = true
 	}
 	return (
@@ -75,11 +116,11 @@ const Header = (props: any) => {
 					>
 						<Link href='/'>Evenity</Link>
 					</Typography>
-					{!isLogin ? (
+					{isLogin ? (
 						<>
 							<IconButton onClick={handleOpenUserMenu}>
 								<Badge
-									badgeContent={2}
+									badgeContent={ticketList?.data?.length}
 									sx={{
 										color: '#6A35F2',
 										'&  span': {
@@ -107,10 +148,10 @@ const Header = (props: any) => {
 								open={Boolean(anchorElUser)}
 								onClose={handleCloseUserMenu}
 							>
-								{settings.map((setting) => (
+								{ticketList?.data?.map((ticket) => (
 									<>
 										{' '}
-										<MenuItem key={setting} onClick={handleCloseUserMenu} sx={{ mb: '0.5rem', userSelect: 'none' }}>
+										<MenuItem key={ticket?.conference_id} onClick={handleCloseUserMenu} sx={{ mb: '0.5rem', userSelect: 'none' }}>
 											<Box
 												sx={{ width: '400px', height: '75px', display: 'flex', gap: '2rem', alignItems: 'center' }}
 											>
@@ -134,8 +175,8 @@ const Header = (props: any) => {
 														justifyContent: 'center',
 													}}
 												>
-													<Typography component='h3'>Title</Typography>
-													<Typography component='h4'>12:00 am - Thu, Jul 1</Typography>
+													<Typography component='h3'>{ticket?.conference_name}</Typography>
+													<Typography component='h4'>{parseDate(ticket?.date_start_conference)}</Typography>
 												</Box>
 												<Box
 													display='flex'
