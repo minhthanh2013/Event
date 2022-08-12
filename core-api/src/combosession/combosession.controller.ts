@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { ComboSessionEntity } from './models/combo_session.entiy';
+import { ComboSessionEntity } from './models/combo_session.entity';
 import { Body, Controller, DefaultValuePipe, Delete, Get, Param, ParseIntPipe, Patch, Post, Query } from '@nestjs/common';
 import { Pagination } from 'nestjs-typeorm-paginate';
 import { Observable } from 'rxjs';
@@ -7,6 +7,7 @@ import { ResponseData } from 'src/responsedata/response-data.dto';
 import { DeleteResult, UpdateResult } from 'typeorm';
 import { CombosessionService } from './combosession.service';
 import { ComboSession } from './models/combo_session.interface';
+import { ComboSessionRequestDto } from './models/combo_session.dto';
 
 @Controller('combosession')
 export class CombosessionController {
@@ -38,8 +39,8 @@ export class CombosessionController {
     return this.comboSessionService.getLatestXCombos(+limit);
   }
   @Post()
-  create(@Body() comboSession: ComboSession): Observable<ComboSession> {
-    return this.comboSessionService.createSession(comboSession);
+  create(@Body() comboRequestDto: ComboSessionRequestDto) {
+    return this.comboSessionService.createSession(comboRequestDto);
   }
 
   @Patch('id')

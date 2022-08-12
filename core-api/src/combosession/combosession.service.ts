@@ -8,8 +8,8 @@ import { Observable, from } from 'rxjs';
 import { ConferenceEntity } from 'src/conference/models/conference.entity';
 import { ResponseData } from 'src/responsedata/response-data.dto';
 import { DeleteResult, Repository, UpdateResult } from 'typeorm';
-import { ComboSessionDto } from './models/combo_session.dto';
-import { ComboSessionEntity } from './models/combo_session.entiy';
+import { ComboSessionDto, ComboSessionRequestDto } from './models/combo_session.dto';
+import { ComboSessionEntity } from './models/combo_session.entity';
 import { ComboSession } from './models/combo_session.interface';
 import { ComboIdDateDto } from './models/combo_session_id_create_at';
 
@@ -28,8 +28,37 @@ export class CombosessionService {
   findOne(id: number): Observable<ComboSession> {
     return from(this.comboSessionRepository.findOne({where: {combo_id: id}}));
   }
-  createSession(comboSession: ComboSession): Observable<ComboSession> {
-    return from(this.comboSessionRepository.save(comboSession));
+  async createSession(comboRequestDto: ComboSessionRequestDto): Promise<ResponseData> {
+    const result = new ResponseData();
+    const listConferenceIds = comboRequestDto.listConferenceIds;
+    const comboId = parseInt(await this.getLatestIndex()) + 1;;
+    for (let index = 0; index < listConferenceIds.length; index++) {
+        const conferenceId = listConferenceIds[index];
+        const combo = new ComboSessionEntity();
+        combo.id = parseInt(await this.getLatestId()) + 1;
+        combo.combo_description = comboRequestDto.combo_description;
+        combo.combo_id = comboId;
+        combo.conference_id = conferenceId;
+        combo.combo_name = comboRequestDto.combo_name;
+        console.log(combo);
+        const a = await this.comboSessionRepository.save(combo);
+        if(!a) {
+          throw new Error("Error");
+        }
+        if(index === listConferenceIds.length - 1) {
+          return new Promise(async (resolve, reject) => {
+            result.status = true;
+            result.data = await this.findAllSessionsBySessionId(comboId).catch(err => {
+              reject(err);
+              throw err;
+            });
+            resolve(result.data);
+            // return result;
+          })
+        }
+    }
+    
+
   }
   update(id: number, comboSession: ComboSession): Observable<UpdateResult> {
     return from(this.comboSessionRepository.update(id, comboSession));
@@ -54,7 +83,24 @@ export class CombosessionService {
       }
     )
   }
-    
+  async getLatestIndex() {
+    const query = this.comboSessionRepository
+      .createQueryBuilder('combosession')
+      .select('MAX(combosession.combo_id)', 'max');
+    const result = await query.getRawOne();
+    console.log(result.max);
+    return result.max;
+  }
+
+  async getLatestId() {
+    const query = this.comboSessionRepository
+      .createQueryBuilder('combosession')
+      .select('MAX(combosession.id)', 'max');
+    const result = await query.getRawOne();
+    console.log(result.max)
+    return result.max;
+  }
+
   comp(a: ComboIdDateDto, b: ComboIdDateDto) {
     return new Date(b.create_at).getTime() - new Date(a.create_at).getTime();
   }

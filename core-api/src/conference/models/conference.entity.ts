@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 import { AdminEntity } from 'src/admin/models/admin.entity';
 import { AnalyticEntity } from 'src/analytic/models/analytic.entity';
-import { ComboSessionEntity } from 'src/combosession/models/combo_session.entiy';
+import { ComboSessionEntity } from 'src/combosession/models/combo_session.entity';
 import { ConferenceCategoryEntity } from 'src/conferencecategory/models/conference_category.entity';
 import { ConferenceTypeEntity } from 'src/conferencetype/models/conference_type.entity';
 import { HostEntity } from 'src/host/models/host.entity';
