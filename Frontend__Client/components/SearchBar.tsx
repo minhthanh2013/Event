@@ -1,12 +1,16 @@
-import { Box } from "@mui/material";
+import { Box, Button } from "@mui/material";
 import React from "react";
 import { Typography, TextField } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import styles from "../styles/SearchBar.module.css";
+import { useRouter } from "next/router";
 interface SearchBarProps {}
 
 const SearchBar = (props: SearchBarProps) => {
+  const router = useRouter();
+  const [search, setSearch] = React.useState<string>();
   const handleSearch = (e:any) => {
+    router.push("/search-result?page=1&search=" + search);
     e.preventDefault();
   };
   return (
@@ -46,6 +50,7 @@ const SearchBar = (props: SearchBarProps) => {
               label="Looking for something?"
               type="search"
               variant="standard"
+              onChange={(e) => setSearch(e.target.value)}
               sx={{
                 "& label": {
                   color: "#FFFFFF",
@@ -63,7 +68,9 @@ const SearchBar = (props: SearchBarProps) => {
                 "& .MuiInputLabel-root.Mui-focused": { color: "#6A35F2" },
               }}
             />
-            <SearchIcon className={styles.searchIcon} />
+            <Button onClick={handleSearch}>
+              <SearchIcon className={styles.searchIcon} />
+            </Button>
           </form>
         </Box>
       </Box>

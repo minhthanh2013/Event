@@ -1,5 +1,5 @@
 import { Box, FormControl, MenuItem, Select, Typography } from '@mui/material'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import Footer from '../components/Footer'
 import Header from '../components/Header'
 import SearchBar__SearchResult from '../components/SearchBar__SearchResult'
@@ -10,6 +10,7 @@ import SessionList_SearchResult from '../components/SessionList_SearchResult'
 import TicketList_SearchResult from '../components/TicketList__SearchResult'
 import Pagination from '@mui/material/Pagination'
 import Stack from '@mui/material/Stack'
+import { useRouter } from 'next/router'
 interface tempProps {
 	items: TicketProp[];
 	meta: any;
@@ -26,15 +27,18 @@ interface TicketProp {
     // conferenceOrganizer: string;
 }
 
-function SearchResult() {
+function SearchResult(props: any) {
+	const router = useRouter()
 	const temp = 'Vinh Duong Quang'
-	const number = -1
+	// const number = -1
 	const [filter, setFilter] = useState('0')
-	const [inputSearch, setInputSearch] = useState('')
+	const [inputSearch, setInputSearch] = useState(router?.query?.search?.toString() || '')
+	const [number, setNumber] = useState(-1)
 	const [type, setType] = useState('0')
 	const [data, setData] = useState({})
 	const [tempProps, setTempProps] = useState<tempProps>();
 	const [page, setPage] = useState(1)
+
 	const handleChange = (event: any) => {
 		setFilter(event.target.value)
 	}
@@ -43,16 +47,14 @@ function SearchResult() {
 		setPage(value)
 		fetchTicket()
 	}
-
 	const fetchTicket = async () => {
 		try {
 			let request = `/api/conference/filter?page=${page}`;
 			if (inputSearch !== '') {
 				request = `/api/conference/filter?page=${page}&search=${inputSearch}`;
 			}
-			const response = await fetch(`/api/conference/filter?page=${page}`)
+			const response = await fetch(request)
 			const setTemp = await response.json();
-			console.log(44, setTemp);
 			setTempProps(setTemp)
 		} catch (error) {
 			console.log(error)
@@ -61,7 +63,6 @@ function SearchResult() {
 	const fetchSession = async () => {
 		try {
 			const response = await axios.get(`put URL Seesion here`)
-			console.log(response)
 			setData(response)
 		} catch (error) {
 			console.log(error)
@@ -70,13 +71,17 @@ function SearchResult() {
 	useEffect(() => {
 		let isCancelled = true
 		if (isCancelled) {
-			if (type === '0') fetchTicket()
+			if (type === '0'){
+				fetchTicket()
+				console.log(tempProps);
+			} 
 			else fetchSession()
 		}
 		return () => {
 			isCancelled = false
 		}
-	}, [])
+	}, [page])
+
 	return (
 		<>
 			{/* #6A35F2 */}
@@ -84,7 +89,7 @@ function SearchResult() {
 				<Box className={styles.dot__1}></Box>
 				<Box className={styles.dot__2}></Box>
 				<Box className={styles.dot__3}></Box>
-				<Header />
+				<Header {...props}/>
 				<SearchBar__SearchResult inputSearch={inputSearch} setInputSearch={setInputSearch} type={type} setType={setType} />
 				<Box sx={{ width: '71%', mx: 'auto', display: 'flex', flexDirection: 'row-reverse' }}>
 					<FormControl sx={{ m: 1, minWidth: 120 }} size='small'>
@@ -150,5 +155,27 @@ function SearchResult() {
 		</>
 	)
 }
-
+export async function getServerSideProps(ctx: any) {
+  // Fetch data from external API
+  // Pass data to the page via props
+    let raw = null;
+    try{
+      raw = ctx.req.headers.cookie.toString();
+    } catch(e) {
+      return { props: {} }
+    }
+    if(raw.includes(";")) {
+      let rawCookie = raw.split(";")
+      for(let i = 0; i < rawCookie.length; i++) {
+        if(rawCookie[i].includes("OursiteJWT")) {
+          let cookies = rawCookie[i];
+          let token = cookies.split("=")[0];
+          let value = cookies.split("=")[1];
+          let tempDecode = JSON.parse(Buffer.from(value.split('.')[1], 'base64').toString());
+          return {props : {token, value, tempDecode}};
+        }
+      }
+    }
+  return { props: {} }
+}
 export default SearchResult
