@@ -6,16 +6,10 @@ import https from 'https';
 
 
 export default async function (req: NextApiRequest, res: NextApiResponse) {
-    const { page, search } = req.query;
-	let sParameter = '';
-	if(search !== undefined && search !== '') {
-		sParameter = encodeURIComponent(search?.toString().trim())
-	}
+	const { id } = req.query;
 	try {
-		let request = `http://localhost:3000/conference/filter?page=${page}&onlyPublish=true`;
-		if (sParameter !== '') {
-			request = `http://localhost:3000/conference/filter?page=${page}&search=${sParameter}&onlyPublish=true`;
-		}
+		// const request = process.env.BACKEND_PROTOCOL+'://' + process.env.BACKEND_HOST + ':' + process.env.BACKEND_PORT + "/conference/get-x-conferences/6"; 
+		const request = `http://localhost:3000/speaker/${id}`;
 		const response = await axios.get(request);
         res.status(200).json( response.data);
 	} catch (error) {

@@ -13,26 +13,13 @@ import { ComboSessionRequestDto } from './models/combo_session.dto';
 export class CombosessionController {
   constructor(private comboSessionService: CombosessionService) {}
   // Note: This is a temporary solution to get the data from the database.
-  @Get("/:id")
-  getCombo(@Param('id') comboId: number): Promise<ResponseData> {
-    return this.comboSessionService.findAllSessionsBySessionId(comboId);
-  }
   @Get()
   findAll(): Observable<ComboSession[]> {
     return this.comboSessionService.findAllSessions();
   }
-  @Get('/filter')
-  async indexTest(
-    @Query('page', new DefaultValuePipe(1), ParseIntPipe) page = 1,
-    @Query('limit', new DefaultValuePipe(12), ParseIntPipe) limit = 12,
-    @Query('search', new DefaultValuePipe('')) search = '',
-  ): Promise<Pagination<ComboSessionEntity>> {
-    limit = limit > 100 ? 100 : limit;
-    return this.comboSessionService.paginate({
-      page,
-      limit,
-      route: '/combosession/filter',
-    }, search);
+  @Get("id")
+  getCombo(@Param('id') comboId: number): Promise<ResponseData> {
+    return this.comboSessionService.findAllSessionsBySessionId(comboId);
   }
   @Get("/latest-x-combos/:limit")
   getLatestXCombos(@Param('limit') limit: number): Promise<ResponseData> {
@@ -48,7 +35,7 @@ export class CombosessionController {
     return this.comboSessionService.update(+id, comboSession);
   }
 
-  @Delete(':id')
+  @Delete('id')
   remove(@Param('id') id: number): Observable<DeleteResult> {
     return this.comboSessionService.remove(+id);
   } 

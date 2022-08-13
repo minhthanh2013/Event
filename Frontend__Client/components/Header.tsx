@@ -16,6 +16,7 @@ import ListItemIcon from '@mui/material/ListItemIcon'
 import LogoutIcon from '@mui/icons-material/Logout'
 
 import ConfirmationNumberIcon from '@mui/icons-material/ConfirmationNumber'
+import { format } from 'date-fns'
 interface HeaderProps {
 	props: any
 }
@@ -30,6 +31,8 @@ interface TicketProp {
 	conference_name: number
 	date_start_conference: Date
 	address: string
+	conference_type: string;
+	zoom_meeting_id: string;
 	// conferenceOrganizer: string;
 }
 const Header = (props: any) => {
@@ -48,15 +51,15 @@ const Header = (props: any) => {
 	function parseDate(date: Date) {
 		date = new Date(date)
 		const day = date.getDate()
-		const month = date.getMonth()
-		const year = date.getFullYear()
 		const hour = date.getHours()
+		const stringHour = (date.getHours() < 10 ? '0' : '') + date.getHours();
 		const min = date.getMinutes()
+		const stringMin = (date.getMinutes() < 10 ? '0' : '') + date.getMinutes();
 		let ampm = hour >= 12 ? 'pm' : 'am'
 		const weekday = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
 		let weekDayString = weekday[date.getDay()]
 		let monthString = date.toLocaleString('en-us', { month: 'short' })
-		const dateString = `${hour}:${min} ${ampm} - ${weekDayString}, ${monthString} ${day}`
+		const dateString = `${stringHour}:${stringMin} ${ampm} - ${weekDayString}, ${monthString} ${day}`
 		return dateString
 	}
 	useEffect(() => {
@@ -219,10 +222,14 @@ const Header = (props: any) => {
 													<Typography component='h4'>{parseDate(ticket?.date_start_conference)}</Typography>
 												</Box>
 												<Box display='flex' flexDirection='column' sx={{ width: '25%', alignItems: 'flex-start' }}>
-													<IconButton sx={{ display: 'flex', gap: '0.5rem', color: '#C64EFF' }}>
+													{ticket?.conference_type === '1' && ticket?.zoom_meeting_id !== null && (
+														<IconButton sx={{ display: 'flex', gap: '0.5rem', color: '#C64EFF' }}>
 														<PlayCircleOutlineOutlinedIcon />
-														<Typography>Join</Typography>
-													</IconButton>
+														<Link href={`/zoom/join-by-zoom-id/${ticket?.zoom_meeting_id}`} passHref>
+															<Typography>Join</Typography>
+														</Link>
+														</IconButton>
+													)}
 													<IconButton sx={{ display: 'flex', gap: '0.5rem', color: '#C64EFF' }}>
 														<ReplayOutlinedIcon />
 														<Typography>Record</Typography>

@@ -12,8 +12,9 @@ interface SessionListProp {
 	comboSessionId: number;
 	comboSessionPrice: number;
 	comboSessionName: string;
-	comboSessionDescription: string;
+	combo_description: string;
 	conferenceList: TicketProp[];
+	discount: number;
 }
 
 interface TicketProp {
@@ -25,6 +26,7 @@ interface TicketProp {
 	address: string;
 }
 const SessionList_SearchResult = (props : any) => {
+	console.log(28, props);
 	const [sessionList, setSessionList] = useState<SessionListProps>()
 	useEffect(() => {
 		const fetchSessionList = async () => {
@@ -44,7 +46,7 @@ const SessionList_SearchResult = (props : any) => {
 					</Box>
 					<Grid container rowSpacing={8} columnSpacing={8} marginTop={0} sx={{ position: 'relative' }}>
 						{sessionList?.data?.map((dataItem) => (
-							<Grid item lg={4} md={6} sm={12} key={dataItem.comboSessionId}>
+							<Grid item lg={4} md={6} sm={12} key={dataItem.id}>
 								<Link href={'/session/' + dataItem.comboSessionId}>
 									<TicketSession data={dataItem} props={props} />
 								</Link>

@@ -3,7 +3,7 @@ import dynamic from "next/dynamic"
 import { useRouter } from "next/router";
 
 const DynamicComponentWithNoSSR = dynamic(
-    () => import('../../components/ZoomV2'),
+    () => import('../../../components/ZoomV2'),
     { 
       ssr: false
     }
@@ -27,25 +27,25 @@ interface ZoomProp {
 }
 const Zoom = (props: ZoomProps) => {
     const router = useRouter();
-    const { id } = router.query;
+    const { uuid } = router.query;
     const [zoomProp, setZoomProp] = useState<ZoomProp>();
     useEffect(() => {
-        const fetchZoomProps = async () => {
-            const response = await fetch(`/api/zoom/get-meeting-details/${id}`);
+      const fetchZoomInfo = async () => {
+        const response1 = await fetch(`/api/speaker/${uuid}`);
+        const cateResult1 = await response1.json();
+        const response = await fetch(`/api/zoom/get-meeting-details/${cateResult1.zoom_meeting_id}`);
             const cateResult = await response.json();
-            const jwt = props.jwtToken;
             let tempZoomProps = {
-                meetingNumber: id.toString(),
-                userName: jwt.tempDecode.username.toString(),
-                userEmail: cateResult.host_email.toString(),
-                role: jwt.tempDecode.role.toString() === 'host' ? 1 : 0,
+                meetingNumber: cateResult1.zoom_meeting_id.toString(),
+                userName: cateResult1.speaker_name,
+                userEmail: cateResult1.speaker_email.toString(),
+                role: 1 ,
                 password: cateResult.password.toString()
             };
             setZoomProp(tempZoomProps);
-            // const dataResult = await fetch('/api/combo/get-by-host/1');
-          }
-          fetchZoomProps();
-    }, [])
+      }
+      fetchZoomInfo();
+    }, [uuid])
 
     return (
         <>          

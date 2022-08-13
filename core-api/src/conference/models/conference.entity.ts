@@ -107,7 +107,7 @@ export class ConferenceEntity {
   @ManyToOne(() => SpeakerEntity, (speaker) => speaker.conferences)
   @JoinColumn({
     name: "speaker_id",
-    referencedColumnName: "user_id"
+    referencedColumnName: "conference_id"
   })
   speaker: SpeakerEntity;
 
@@ -127,8 +127,8 @@ export class ConferenceEntity {
   current_quantity: number;
   @Column()
   status_ticket: string;
-  // @Column()
-  // orgnizerName: string;
+  @Column()
+  organizer_name: string;
   @Column()
   zoom_meeting_id: string;
 }
