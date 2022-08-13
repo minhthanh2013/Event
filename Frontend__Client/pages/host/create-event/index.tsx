@@ -1,5 +1,4 @@
 import React, { useState, ChangeEvent } from "react";
-import Header from "../../../components/Header";
 import Box from "@mui/material/Box";
 import Footer from "../../../components/Footer";
 import Typography from "@mui/material/Typography";
@@ -15,6 +14,7 @@ import Tab from "@mui/material/Tab";
 import { BasicInfo, Speakers, Date } from "./CreateEventForm";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Multer } from 'multer';
+import HeaderHost from "../../../components/Header__Host";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -114,7 +114,7 @@ const CreateEvent = (props) => {
         <Box className={styles.dot__1}></Box>
         <Box className={styles.dot__2}></Box>
         <Box className={styles.dot__3}></Box>
-        <Header {...props}/>
+        <HeaderHost {...props}/>
 
         <Typography variant="h3" component="div" className={styles.header}>
           Event Dashboard

@@ -1,7 +1,7 @@
 import React, { useState, ChangeEvent } from "react";
-import HeaderHost from "../../../components/Header__Host";
+import HeaderHost from "../../../../components/Header__Host";
 import Box from "@mui/material/Box";
-import Footer from "../../../components/Footer";
+import Footer from "../../../../components/Footer";
 import Typography from "@mui/material/Typography";
 import styles from "../../../styles/EventDashboard.module.scss";
 import Card from "@mui/material/Card";
@@ -12,9 +12,10 @@ import Button from "@mui/material/Button";
 import Image from "next/image";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
-import { BasicInfo, Conferences } from "./CreateSessionForm";
+import { BasicInfo, Speakers, Date } from "./CreateEventForm";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Multer } from 'multer';
+import { useRouter } from "next/router";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -54,47 +55,52 @@ function a11yProps(index: number) {
 }
 
 const CreateEvent = (props) => {
-  const [data, setData] = useState({})
-  const [image, setImage] = useState<string | ArrayBuffer | null>();
-  const [imageFile, setImageFile] = useState<Multer.File | null>();
+  const router = useRouter();
+  const { id } = router.query;
 
+  const [data, setData] = useState({}) // set API vô state này luôn
+
+  const [image, setImage] = useState<string | ArrayBuffer | null>(); // set image url vô state này luôn
+  
+  const [imageFile, setImageFile] = useState<Multer.File | null>();
   const onImageChange = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
       let reader = new FileReader();
       reader.onload = (e) => {
-        setImage(e?.target?.result);
         setImageFile(event.target.files[0]);
-        setData({ ...data, image: event.target.files[0] })
+        setImage(e?.target?.result);
       };
-
       reader.readAsDataURL(event.target.files[0]);
     }
   };
   const [value, setValue] = React.useState(0);
 
+  //gọi api post để sửa trong đây
   const apiCall = async (data) => {
-    const res = await fetch("/api/combo/create-new", {
+    console.log(data);
+    const resData = await fetch("/api/conference/create-new", {
       method: "POST",
-      body: JSON.stringify(data),
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
+      body: JSON.stringify(data),
     });
-    const result = await res.json();
-    if (res.status === 200) {
+    const resDataJson = await resData.json();
+    console.log(81, resDataJson);
+    if(resData.status === 200) {
       let body = new FormData()
       body.append('file',imageFile)
-      await fetch(`/api/cloudinary/update-image-session/${props?.tempDecode?.sub}`, {
+      await fetch(`/api/cloudinary/update-image/${props?.tempDecode?.sub}`, {
         method: "POST",
         body,
       });
     }
   }
+
   //change tabs; value = tabs value
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
-
   return (
     <>
       <Box
@@ -112,7 +118,7 @@ const CreateEvent = (props) => {
         <HeaderHost {...props}/>
 
         <Typography variant="h3" component="div" className={styles.header}>
-          Session Dashboard
+          Event Dashboard
         </Typography>
         <Grid container spacing={0} direction="column" alignItems="center">
           <Card className={styles.imageInput}>
@@ -170,13 +176,17 @@ const CreateEvent = (props) => {
                 indicatorColor="primary"
               >
                 <Tab label="Basic Information" {...a11yProps(0)} />
-                <Tab label="Conference" {...a11yProps(1)} />
+                <Tab label="Speakers" {...a11yProps(1)} />
+                <Tab label="Date and time" {...a11yProps(2)} />
               </Tabs>
               <TabPanel value={value} index={0}>
-                <BasicInfo data={data} setData={setData} setValue={setValue} api={apiCall} prop={props} />
+                <BasicInfo data={data} setData={setData} setValue={setValue} api={apiCall} prop={props}/>
               </TabPanel>
               <TabPanel value={value} index={1}>
-                <Conferences data={data} setData={setData} setValue={setValue} api={apiCall} prop={props} />
+                <Speakers data={data} setData={setData} setValue={setValue} api={apiCall} prop={props} />
+              </TabPanel>
+              <TabPanel value={value} index={2}>
+                <Date data={data} setData={setData} setValue={setValue} api={apiCall} prop={props}/>
               </TabPanel>
             </ThemeProvider>
           </Box>
@@ -202,8 +212,8 @@ export async function getServerSideProps(ctx: any) {
     for (let i = 0; i < rawCookie.length; i++) {
       if (rawCookie[i].includes("OursiteJWT")) {
         let cookies = rawCookie[i];
-        let token = cookies.split("=")[0];
-        let value = cookies.split("=")[1];
+        let token = cookies.split("=")[0].trim();
+        let value = cookies.split("=")[1].trim();
         let tempDecode = JSON.parse(Buffer.from(value.split('.')[1], 'base64').toString());
         return {
           props: {

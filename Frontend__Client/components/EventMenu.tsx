@@ -5,13 +5,27 @@ import Menu from '@mui/material/Menu';
 import MenuItem from "@mui/material/MenuItem";
 import React, { useState } from "react";
 
+interface ConferenceProp {
+	conference_id: number;
+	description: string;
+	price: number;
+	conference_name: number;
+	date_start_conference: Date;
+	address: string;
+  ticket_quantity: number;
+  current_quantity: number;
+  status_ticket: string;
+  conference_type: string;
+	// conferenceOrganizer: string;
+}
 interface props {
     id: number;
     hostId: number;
+    event: ConferenceProp
 }
 
 
-const EventMenu: React.FC<props> = ({id, hostId}) => {
+const EventMenu: React.FC<props> = ({id, hostId, event}) => {
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -43,12 +57,25 @@ const EventMenu: React.FC<props> = ({id, hostId}) => {
                 open={open}
                 onClose={handleClose}
             >
-                <Link href={`/event/${id.toString()}`} passHref >
-                    <MenuItem onClick={handleClose}>View</MenuItem>
-                </Link>
-                <MenuItem onClick={handleClose}>Edit</MenuItem>
-                <MenuItem onClick={publishButton}>Publish</MenuItem>
-                <MenuItem onClick={handleClose}>Delete</MenuItem>
+                {(event?.status_ticket === "published" || event?.status_ticket === "pending") ? 
+                (
+                    <Link href={`/event/${id.toString()}`} passHref >
+                        <MenuItem onClick={handleClose}>View</MenuItem>
+                    </Link>
+                ) : (
+                    <>
+                    <Link href={`/event/${id.toString()}`} passHref >
+                        <MenuItem onClick={handleClose}>View</MenuItem>
+                    </Link>
+                    <Link href={`/event/${id.toString()}`} passHref >
+                        <MenuItem onClick={handleClose}>Edit</MenuItem>
+                    </Link>
+                    
+                    <MenuItem onClick={publishButton}>Publish</MenuItem>
+                    <MenuItem onClick={handleClose}>Delete</MenuItem>
+                    </>
+                )
+                }
             </Menu>
         </>
     )

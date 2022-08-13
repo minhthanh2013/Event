@@ -1,5 +1,5 @@
 import React, { useState, ChangeEvent, useEffect } from "react";
-import Header from "../../../components/Header";
+import HeaderHost from "../../../components/Header__Host";
 import Box from "@mui/material/Box";
 import Footer from "../../../components/Footer";
 import Typography from "@mui/material/Typography";
@@ -143,7 +143,7 @@ const EventCreate = (props: any) => {
         <Box className={styles.dot__1}></Box>
         <Box className={styles.dot__2}></Box>
         <Box className={styles.dot__3}></Box>
-        <Header {...props}/>
+        <HeaderHost {...props}/>
 
         <Grid container spacing={2}>
           <Grid item xs={2} md={2}>

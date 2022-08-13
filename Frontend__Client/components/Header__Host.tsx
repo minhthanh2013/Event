@@ -32,7 +32,7 @@ interface TicketProp {
 	address: string
 	// conferenceOrganizer: string;
 }
-const Header = (props: any) => {
+const HeaderHost = (props: any) => {
 	const [ticketList, setTicketList] = useState<TicketProps>()
 	const pages = ['Products', 'Pricing', 'Blog']
 	const settings = ['Profile', 'Account', 'Dashboard', 'Logout', 'Account', 'Dashboard', 'Logout', 'Account', 'Dashboard', 'Logout']
@@ -114,7 +114,7 @@ const Header = (props: any) => {
 		}
 	}
 	let isLogin = false
-	if (props?.token !== undefined && props?.tempDecode?.role === "user") {
+	if (props?.token !== undefined) {
 		isLogin = true
 	}
 	return (
@@ -316,4 +316,4 @@ const Header = (props: any) => {
 	)
 }
 
-export default Header
+export default HeaderHost

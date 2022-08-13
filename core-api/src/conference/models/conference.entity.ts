@@ -127,6 +127,8 @@ export class ConferenceEntity {
   current_quantity: number;
   @Column()
   status_ticket: string;
+  // @Column()
+  // orgnizerName: string;
   @Column()
   zoom_meeting_id: string;
 }

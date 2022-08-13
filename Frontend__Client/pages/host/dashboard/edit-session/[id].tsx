@@ -1,7 +1,6 @@
 import React, { useState, ChangeEvent } from "react";
-import HeaderHost from "../../../components/Header__Host";
 import Box from "@mui/material/Box";
-import Footer from "../../../components/Footer";
+import Footer from "../../../../components/Footer";
 import Typography from "@mui/material/Typography";
 import styles from "../../../styles/EventDashboard.module.scss";
 import Card from "@mui/material/Card";
@@ -15,6 +14,7 @@ import Tab from "@mui/material/Tab";
 import { BasicInfo, Conferences } from "./CreateSessionForm";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Multer } from 'multer';
+import HeaderHost from "../../../../components/Header__Host";
 
 interface TabPanelProps {
   children?: React.ReactNode;
