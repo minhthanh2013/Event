@@ -14,4 +14,8 @@ export class PaymentService {
   createPaymentLink(paymentDto: PaymentDto): Observable<ResponseData> {
     return this.paymentClient.send({ cmd: 'CHECKOUT'}, paymentDto)
   }
+
+  newSubscription(): Observable<ResponseData> {
+    return this.paymentClient.send({ cmd: 'SUBSCRIPTION'}, {})
+  }
 }

@@ -14,7 +14,7 @@ import { AppService } from './app.service';
     StripeModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({
-        apiKey: configService.get('STRIPE_KEY'),
+        apiKey: configService.get('STRIPE_TEST_KEY'),
         apiVersion: '2020-08-27'
       }),
       inject: [ConfigService]

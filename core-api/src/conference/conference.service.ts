@@ -1,6 +1,10 @@
 import { EmailService } from 'src/email/email.service';
 import { Observable } from 'rxjs';
-import { SubmitConferenceRequestDto } from './models/conference.dto';
+import {
+  SubmitConferenceRequestDto,
+  ConferenceRequestDto,
+  ConferenceResponseDto
+} from './models/conference.dto';
 /* eslint-disable prettier/prettier */
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectDataSource, InjectRepository } from '@nestjs/typeorm';
@@ -12,10 +16,6 @@ import { UserEntity } from 'src/user/models/user.entity';
 import { TicketEntity } from 'src/ticket/models/ticket.entity';
 import { ZoomService } from 'src/zoom/zoom.service';
 import { DataSource, Repository } from 'typeorm';
-import {
-  ConferenceRequestDto,
-  ConferenceResponseDto,
-} from './models/conference.dto';
 import { ConferenceEntity } from './models/conference.entity';
 import { ScheduleZoomDto } from './models/create.zoom.dto';
 import {

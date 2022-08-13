@@ -36,6 +36,30 @@ export class AppService {
     return responseData
   }
 
+  async newSubscription(): Promise<ResponseData> {
+    const responseData = new ResponseData()
+    const param: Stripe.Checkout.SessionCreateParams = {
+      mode: 'subscription',
+      payment_method_types: ['card'],
+      line_items: [
+        {
+          quantity: 1,
+          price: process.env.PREMIUM_PLAN_ID_TEST,
+        }
+      ],
+      success_url: `${process.env.MOCK_URL}`,
+      cancel_url: `${process.env.MOCK_URL}`,
+    }
+    try {
+      const result = await this.stripeClient.checkout.sessions.create(param)
+      responseData.data = result.url
+    } catch(err) {
+      responseData.status = false
+      console.log(err)
+    }
+    return responseData
+  }
+
   async demoNewSubscription(): Promise<string> {
     const param: Stripe.Checkout.SessionCreateParams = {
       mode: 'subscription',
@@ -43,7 +67,7 @@ export class AppService {
       line_items: [
         {
           quantity: 1,
-          price: process.env.PREMIUM_PLAN_ID
+          price: 'price_1L8UvGLHHzSNpGj2LAmyoQmt',
         }
       ],
       success_url: `${process.env.MOCK_URL}/success`,

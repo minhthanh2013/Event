@@ -4,3 +4,7 @@ export class PaymentDto {
     ticketName: string;
     ticketQuantity: number;
 }
+
+export class SubscriptionDto {
+    status: boolean
+}

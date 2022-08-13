@@ -1,11 +1,29 @@
-import React from "react";
+import React, { useState } from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import Grid from "@material-ui/core/Grid";
 import Button from "@mui/material/Button";
 import Tick from "@mui/icons-material/Done";
+import { useRouter } from "next/router";
+
+interface ResponseData {
+  status: boolean,
+  data: string,
+}
 
 export const Subcriptions = () => {
+
+  const [subscription, setSubscription] = useState<ResponseData>()
+  const router = useRouter()
+  const newSubscription = async () => {
+    const data = await fetch("/api/payment/", {
+      method: 'POST'
+    })
+    const result = await data.json()
+    setSubscription(result) 
+    console.log(subscription)
+    const url = subscription.data
+    router.push(url)
+  }
   return (
     <>
       <Box>
@@ -99,6 +117,7 @@ export const Subcriptions = () => {
             <Button
               variant="contained"
               sx={{ width: "100%", padding: "1rem", margin: "1.2rem 0" }}
+              onClick={newSubscription}
             >
               Get started
             </Button>
@@ -136,3 +155,4 @@ export const Subcriptions = () => {
     </>
   );
 };
+

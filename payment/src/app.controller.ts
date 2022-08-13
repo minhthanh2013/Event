@@ -2,7 +2,7 @@ import { Controller, Get } from '@nestjs/common';
 import { MessagePattern } from '@nestjs/microservices';
 import { from, Observable } from 'rxjs';
 import { AppService } from './app.service';
-import { PaymentDto, ResponseData } from './payment/payment.dto';
+import { PaymentDto, ResponseData, SubscriptionDto } from './payment/payment.dto';
 
 @Controller()
 export class AppController {
@@ -19,7 +19,7 @@ export class AppController {
   }
 
   @MessagePattern({cmd: 'SUBSCRIPTION'})
-  subscriptNewPlan(): Observable<string> {
-    return from(this.appService.demoNewSubscription())
+  subscriptNewPlan(): Observable<ResponseData> {
+    return from(this.appService.newSubscription())
   }
 }
