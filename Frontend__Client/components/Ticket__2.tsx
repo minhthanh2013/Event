@@ -38,7 +38,7 @@ const Ticket__2 = (props: TicketProps) => {
 			setImageProp(cateResult.url)
 		}
 		const parseDate = () => {
-			const date = new Date(props.data.date_start_conference)
+			const date = new Date(props.data?.date_start_conference)
 			setYear(date.getFullYear().toString())
 			setMonth(date.getMonth().toString())
 			setMonthString(date.toLocaleString('en-us', { month: 'short' }))
@@ -74,7 +74,7 @@ const Ticket__2 = (props: TicketProps) => {
                             <CardContent className={styles.ticketContent}>
                                 <Box component="div">
                                     <Typography gutterBottom component="h2">
-                                        {monthString?.toUpperCase()}
+                                        {monthString?.toUpperCase() || "MONTH"}
                                     </Typography>
                                     <Typography gutterBottom component="p">
                                     {day}
@@ -82,11 +82,11 @@ const Ticket__2 = (props: TicketProps) => {
                                 </Box>
                                 <Box component="div">
                                     <Typography component="h2">
-                                    {props.data.conference_name}
+                                    {props.data?.conference_name || "Conference"}
                                     </Typography>
                                     <Typography component="h3">{weekDay}, {monthString} {day}, {hour}:{min} {timePeriod?.toUpperCase()}</Typography>
                                     <Typography component="h4">
-                                    {props.data.address != undefined ? props.data.address : 'Zoom'}
+                                    {props.data?.address != undefined ? props.data.address : 'Zoom'}
                                     </Typography>
                                     <Typography component="h5">
                                         By Saigon Classical Music Group
@@ -94,7 +94,7 @@ const Ticket__2 = (props: TicketProps) => {
                                 </Box>
                                 <Box component="div">
                                     <AttachMoneyIcon />
-                                    <Typography>{props.data.price}</Typography>
+                                    <Typography>{props.data?.price}</Typography>
                                 </Box>
                             </CardContent>
                         </Box>
