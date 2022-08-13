@@ -89,6 +89,7 @@ interface SessionListProp {
 	comboSessionName: string;
 	comboSessionDescription: string;
 	conferenceList: TicketProp[];
+  discount: number;
 }
 
 interface TicketProp {
@@ -111,13 +112,13 @@ const EventCreate = (props: any) => {
   console.log(props);
 	useEffect(() => {
 		const fetchConferences = async () => {
-		  const dataResult = await fetch('/api/conference/get-conference-by-host-id/1');
+		  const dataResult = await fetch(`/api/conference/get-conference-by-host-id/${props.tempDecode.sub}`);
 		  const cateResult = await dataResult.json();
 		  setConferences(cateResult)
 		}
     
     const fetchSessions = async () => {
-		  const dataResult = await fetch('/api/combo/get-by-host/1');
+		  const dataResult = await fetch(`/api/combo/get-by-host/${props.tempDecode.sub}`);
 		  const cateResult = await dataResult.json();
 		  setSessions(cateResult)
 		}

@@ -14,7 +14,7 @@ import {
 import { from, Observable } from 'rxjs';
 import { ResponseData } from 'src/responsedata/response-data.dto';
 import { ConferenceService } from './conference.service';
-import { ConferenceRequestDto } from './models/conference.dto';
+import { ConferenceRequestDto, SubmitConferenceRequestDto } from './models/conference.dto';
 import { Pagination } from 'nestjs-typeorm-paginate';
 import { ConferenceEntity } from './models/conference.entity';
 
@@ -86,5 +86,8 @@ export class ConferenceController {
   getAllByUserId(@Param("id") id: number): Observable<ResponseData> {
     return from(this.conferenceService.findAllByUserId(id));
   }
-
+  @Post('/submit-conference')
+  submitConference(@Body() submitConference: SubmitConferenceRequestDto): Promise<ResponseData> {
+    return this.conferenceService.submitConference(submitConference);
+  }
 }

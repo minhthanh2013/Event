@@ -13,7 +13,7 @@ import { ComboSessionRequestDto } from './models/combo_session.dto';
 export class CombosessionController {
   constructor(private comboSessionService: CombosessionService) {}
   // Note: This is a temporary solution to get the data from the database.
-  @Get("id")
+  @Get("/:id")
   getCombo(@Param('id') comboId: number): Promise<ResponseData> {
     return this.comboSessionService.findAllSessionsBySessionId(comboId);
   }

@@ -14,6 +14,7 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import { BasicInfo, Conferences } from "./CreateSessionForm";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { Multer } from 'multer';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -55,12 +56,14 @@ function a11yProps(index: number) {
 const CreateEvent = (props) => {
   const [data, setData] = useState({})
   const [image, setImage] = useState<string | ArrayBuffer | null>();
+  const [imageFile, setImageFile] = useState<Multer.File | null>();
 
   const onImageChange = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
       let reader = new FileReader();
       reader.onload = (e) => {
         setImage(e?.target?.result);
+        setImageFile(event.target.files[0]);
         setData({ ...data, image: event.target.files[0] })
       };
 
@@ -70,7 +73,7 @@ const CreateEvent = (props) => {
   const [value, setValue] = React.useState(0);
 
   const apiCall = async (data) => {
-    const res = await fetch("/api/conference/create-new", {
+    const res = await fetch("/api/combo/create-new", {
       method: "POST",
       body: JSON.stringify(data),
       headers: {
@@ -99,7 +102,7 @@ const CreateEvent = (props) => {
         <Box className={styles.dot__1}></Box>
         <Box className={styles.dot__2}></Box>
         <Box className={styles.dot__3}></Box>
-        <Header />
+        <Header {...props}/>
 
         <Typography variant="h3" component="div" className={styles.header}>
           Session Dashboard

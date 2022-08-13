@@ -1,5 +1,8 @@
+import { EmailService } from 'src/email/email.service';
+import { Observable } from 'rxjs';
+import { SubmitConferenceRequestDto } from './models/conference.dto';
 /* eslint-disable prettier/prettier */
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectDataSource, InjectRepository } from '@nestjs/typeorm';
 import { ConferenceCategoryEntity } from 'src/conferencecategory/models/conference_category.entity';
 import { ConferenceTypeEntity } from 'src/conferencetype/models/conference_type.entity';
@@ -39,6 +42,7 @@ export class ConferenceService {
     @InjectDataSource()
     private readonly dataSource: DataSource,
     private readonly zoomService: ZoomService,
+    private readonly emailService: EmailService,
   ) {}
 
   async findAllConferences(): Promise<ResponseData> {
@@ -284,7 +288,6 @@ export class ConferenceService {
   }
 
   async paginate(options: IPaginationOptions, search: string): Promise<Pagination<ConferenceEntity>> {
-    console.log(258, search)
     const queryBuilder = this.conferenceRepository.createQueryBuilder('conference');
     queryBuilder.orderBy('conference.create_at', 'DESC') // Or whatever you need to do
     if (search !== '') {
@@ -295,4 +298,28 @@ export class ConferenceService {
   }
     return paginate<ConferenceEntity>(queryBuilder, options);
   }
+  async submitConference(conferenceSubmitDto: SubmitConferenceRequestDto): Promise<ResponseData> {
+    const conference = await this.conferenceRepository.findOne({
+      where: { 
+        conference_id: conferenceSubmitDto.conferenceId,
+        host_id: conferenceSubmitDto.hostId,
+        status_ticket: "draft"
+      }
+    })
+    if(!conference) {
+      throw new NotFoundException('Conference not found with conference id: ' + conferenceSubmitDto.conferenceId + " and host id: " + conferenceSubmitDto.hostId);
+    }
+    conference.status_ticket = "pending";
+    const result = new ResponseData();
+    const newConference = await this.conferenceRepository.save(conference);
+    if(newConference) {
+      result.status = true;
+      result.data = newConference;
+      const host = await this.hostRepository.findOne({where: {host_id: conferenceSubmitDto.hostId}});
+      this.emailService.sendEmailToHostAfterSubmitConference(host.email);
+      return result;
+    }
+    
+  }
+
 }

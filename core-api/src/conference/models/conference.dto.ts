@@ -39,3 +39,8 @@ export class HostCreatedConferenceResponseDto {
     statusTicket: string;
     ticketType: string;
 }
+
+export class SubmitConferenceRequestDto {
+    hostId: number;
+    conferenceId: number;
+}

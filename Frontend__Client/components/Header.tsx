@@ -148,6 +148,18 @@ const Header = (props: any) => {
 								open={Boolean(anchorElUser)}
 								onClose={handleCloseUserMenu}
 							>
+								{ticketList?.data.length === 0 || ticketList === undefined && (
+									<>
+									<MenuItem key={0} onClick={handleCloseUserMenu} sx={{ mb: '0.5rem', userSelect: 'none' }}>
+										<Box
+											sx={{ width: '400px', height: '75px', display: 'flex', gap: '2rem', alignItems: 'center' }}
+										>
+											<Typography component='h3'>You dont have any tickets</Typography>
+										</Box>
+									</MenuItem>
+									<Divider variant='inset' component='li' sx={{ width: '100%', mx: '0 !important' }} />
+								</>
+								)}
 								{ticketList?.data?.map((ticket) => (
 									<>
 										{' '}

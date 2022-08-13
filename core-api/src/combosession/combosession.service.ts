@@ -12,7 +12,7 @@ import { ComboSessionDto, ComboSessionRequestDto } from './models/combo_session.
 import { ComboSessionEntity } from './models/combo_session.entity';
 import { ComboSession } from './models/combo_session.interface';
 import { ComboIdDateDto } from './models/combo_session_id_create_at';
-
+import { NotFoundException } from '@nestjs/common';
 @Injectable()
 export class CombosessionService {
   constructor(
@@ -149,7 +149,7 @@ export class CombosessionService {
             conference_id: comboEntity.conference_id
           }
         }).then(result => {
-          comboSessionDto.comboSessionPrice += result.price;
+          comboSessionDto.comboSessionPrice += parseInt(result.price.toString());
           conferences.push(result);
           if(conferences.length == comboEntities.length) {
             comboSessionDto.conferenceList = conferences;
@@ -163,54 +163,88 @@ export class CombosessionService {
     });
   }
 
-  findComboByConferenceId(id: number): Promise<ResponseData> {
-    const result = new ResponseData();
-    return new Promise(async (resolve, reject) => {
-      await this.comboSessionRepository.findOne({
+  async findCombosByConferenceId(id: number): Promise<ResponseData> {
+    let result = new ResponseData();
+    result.data = [];
+    return new Promise<ResponseData>(async (resolve, reject) => {
+      await this.comboSessionRepository.find({
         where: {
           conference_id: id
         }
-      }).then(tempResult => {
-        if(tempResult === undefined || tempResult === null) {
-          reject("fail")
-          return 0;
+      }).then(async tempResults => {
+        if(tempResults.length === 0) {
+          reject("Fail to get list of conferences by id "+ id)
+          throw new NotFoundException("Fail to get list of conferences by id "+ id);
         }
-        this.findAllSessionsBySessionId(tempResult.combo_id).then(temp => {
-          result.data = temp;
-          result.status = true;
-          resolve(result)
-        })
+        for (let index = 0; index < tempResults.length; index++) {
+          const tempResult = tempResults[index];
+          await this.findAllSessionsBySessionId(tempResult.combo_id)
+          .then(async temp => {
+            await result.data.push(temp.data);
+            if(index === tempResults.length - 1) {
+              const update = new ResponseData();
+              const tempMap = new Map();
+              result.data.forEach(element => {
+                tempMap.set(element.comboSessionId, element);
+              });
+              update.status = true;
+              update.data = [...tempMap.values()];
+              result = update;
+              resolve(result);
+            }
+          })
+        }
+      }).catch((e) => {
+       reject(e);
       })
+    }).then((result) => {
+      return result;
+    }).catch((e) => {
+      throw new NotFoundException(e);
     })
   }
 
   getComboByHostId(id: number): Promise<ResponseData> {
     const response = new ResponseData();
-    return new Promise((resolve, reject) => {
+    return new Promise<ResponseData>((resolve, reject) => {
       this.conferenceRepository.find({
         where: {
           host_id: id
         }
       }).then(async results => {
+        if(results.length === 0) {
+          throw new NotFoundException("Fail to get list of conferences by host id "+ id);
+        }
         const comboSessionDto: ComboSessionDto[] = [];
         for (let index = 0; index < results.length; index++) {
           const element = results[index];
-          await this.findComboByConferenceId(element.conference_id).then(tempCombo => {
-            comboSessionDto.push(tempCombo.data)
-          }).catch((error) => {
-            console.log(error)
-          })
-          if(index === results.length - 1) {
-            response.status = true;
-            response.data = comboSessionDto;
-            // resolve(response);
+          try {
+            const tempCombos = await this.findCombosByConferenceId(element.conference_id)
+          if(tempCombos.data.length === 0) {
+            reject("Fail find combos by conference id: " + element.conference_id)
+          }
+          tempCombos.data.forEach(tempCombo => {
+            comboSessionDto.push(tempCombo)
+          });
+          } catch(e) {
+            console.log(e);
           }
         }
+        if(comboSessionDto.length !== 0) { 
+            response.status = true;
+            response.data = comboSessionDto;
+            resolve(response);
+        } else {
+          throw new NotFoundException("Fail to get list of combos by host id "+ id);
+        }
       }).catch((error2) => {
-        reject("Fail to get list of combo by host id" + error2 );
-      }).finally(()=>{
-        resolve(response);
+        // Loi tu conferenceRepository.find
+        reject(error2);
       })
+    }).then((response) => {
+      return response;
+    }).catch((e) => {
+      throw e;
     })
   }
   async paginate(options: IPaginationOptions, search: string): Promise<Pagination<ComboSessionEntity>> {

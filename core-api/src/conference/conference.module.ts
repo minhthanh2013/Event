@@ -1,3 +1,4 @@
+import { EmailService } from 'src/email/email.service';
 import { TicketEntity } from 'src/ticket/models/ticket.entity';
 /* eslint-disable prettier/prettier */
 import { Module } from '@nestjs/common';
@@ -32,7 +33,7 @@ import { CloudinaryModule } from 'src/cloudinary/cloudinary.module';
       }
     ])
 ],
-  providers: [ConferenceService, ZoomService, CloudinaryService],
+  providers: [ConferenceService, ZoomService, CloudinaryService, EmailService],
   controllers: [ConferenceController],
 })
 export class ConferenceModule {}

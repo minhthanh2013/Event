@@ -30,6 +30,7 @@ interface SessionListProp {
 	comboSessionName: string;
 	comboSessionDescription: string;
 	conferenceList: TicketProp[];
+  discount: number;
 }
 
 interface TicketProp {
@@ -152,14 +153,14 @@ export const Sessions = (props: SessionProps) => {
             </TableHead>
             <TableBody>
               {props?.data?.map((row) => (
-                <TableRow key={row.data.comboSessionName} sx={{ width: "100%" }}>
+                <TableRow key={row?.comboSessionId} sx={{ width: "100%" }}>
                   <TableCell component="th" scope="row">
-                    <Typography sx={{ fontWeight: "bold" }}>{row.data.comboSessionName}</Typography>
+                    <Typography sx={{ fontWeight: "bold" }}>{row?.comboSessionName}</Typography>
                   </TableCell>
-                  <TableCell align="right">{getTotalTicketSold(row?.data?.conferenceList)}/{getTotalTicket(row?.data?.conferenceList)}</TableCell>
-                  <TableCell align="right">${getTotalPrice(row?.data?.conferenceList)}</TableCell>
+                  <TableCell align="right">{getTotalTicketSold(row?.conferenceList)}/{getTotalTicket(row?.conferenceList)}</TableCell>
+                  <TableCell align="right">${getTotalPrice(row?.conferenceList)}</TableCell>
                   <TableCell align="right" sx={{ width: "15rem" }}>
-                    {row?.data?.conferenceList?.length}
+                    {row?.conferenceList?.length}
                     <IconButton sx={{ color: "rgba(106, 53, 242, 0.77)", marginLeft: "2rem"}} onClick={handleClick}>
                       <MenuIcon />
                     </IconButton>
@@ -169,9 +170,10 @@ export const Sessions = (props: SessionProps) => {
                       open={open}
                       onClose={handleClose}
                     >
-                      <MenuItem onClick={handleClose}>View</MenuItem>
+                      <Link href={`/session/${row?.comboSessionId}`} passHref>
+                        <MenuItem onClick={handleClose}>View</MenuItem>
+                      </Link>
                       <MenuItem onClick={handleClose}>Edit</MenuItem>
-                      <MenuItem onClick={handleClose}>Publish</MenuItem>
                       <MenuItem onClick={handleClose}>Delete</MenuItem>
                     </Menu>
                     </TableCell>

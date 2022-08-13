@@ -64,4 +64,23 @@ export class EmailService {
         console.error(error)
     })
   }
+
+  async sendEmailToHostAfterSubmitConference(email: string, ) {
+    sgMail.setApiKey(this.configService.get("SENDGRID_API_KEY"))
+    const msg = {
+    to: email, // Change to your recipient
+    from: 'minhthanhd013@gmail.com', // Change to your verified sender
+    subject: 'Confirm conference submission',
+    text: 'Hi there, your conference has been submitted',
+    html: 'Please wait untill your conference is approved by admin. Thank you for choosing our service. We hope you enjoy our service. Have a good day.',
+    }
+    sgMail
+    .send(msg)
+    .then(() => {
+        console.log('Email sent')
+    })
+    .catch((error) => {
+        console.error(error)
+    })
+  }
 }
