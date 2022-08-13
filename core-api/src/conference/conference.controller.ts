@@ -31,13 +31,14 @@ export class ConferenceController {
     @Query('page', new DefaultValuePipe(1), ParseIntPipe) page = 1,
     @Query('limit', new DefaultValuePipe(12), ParseIntPipe) limit = 12,
     @Query('search', new DefaultValuePipe('')) search = '',
+    @Query('onlyPublish', new DefaultValuePipe('false')) onlyPublish = 'false',
   ): Promise<Pagination<ConferenceEntity>> {
     limit = limit > 100 ? 100 : limit;
     return this.conferenceService.paginate({
       page,
       limit,
       route: '/conference/filter',
-    }, search);
+    }, search, onlyPublish);
   }
   @Get('/:id')
   findOne(@Param('id') id: string): Observable<ResponseData> {

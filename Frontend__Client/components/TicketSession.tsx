@@ -13,6 +13,7 @@ interface SessionProp {
 	comboSessionName: string;
 	comboSessionDescription: string;
 	conferenceList: TicketProp[];
+	discount: number;
 }
 
 interface TicketProp {
@@ -22,6 +23,7 @@ interface TicketProp {
 	conference_name: number;
 	date_start_conference: Date;
 	address: string;
+	organizerName: string;
 }
 
 interface TicketSessionProps {

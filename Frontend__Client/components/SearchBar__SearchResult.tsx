@@ -13,17 +13,25 @@ interface SearchBarProps {
 	setInputSearchTemp: any
 	typeTemp: string
 	inputSearchTemp: string
+
+	typeRef: any
 }
 
 const SearchBar__SearchResult = (props: SearchBarProps) => {
+	
 	const handleSearch = (e: any) => {
 		e.preventDefault()
 	}
+	let temp = '';
 	const handleChangeType = (event: any) => {
-		props.setTypeTemp(event.target.value)
+		// props.setTypeTemp(event.target.value)
+		// temp = event.target.value;
+		props.setType(event.target.value)
 	}
+
 	const handleOnClick = (event: any) => {
-		props.setType(props.typeTemp)
+		props.setType(props.typeRef.current.value)
+		// props.setType(props.typeTemp)
 		props.setInputSearch(props.inputSearchTemp)
 	}
 	return (
@@ -78,6 +86,7 @@ const SearchBar__SearchResult = (props: SearchBarProps) => {
 									id='demo-simple-select'
 									value={props.type}
 									onChange={handleChangeType}
+									ref={props.typeRef}
 									sx={{
 										'& .MuiSelect-select:before': { color: '#6A35F2', borderBottomColor: '#6A35F2' },
 										'& .MuiSelect-iconStandard': { color: '#6A35F2' },

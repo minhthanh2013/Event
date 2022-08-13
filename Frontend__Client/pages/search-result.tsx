@@ -11,6 +11,7 @@ import TicketList_SearchResult from '../components/TicketList__SearchResult'
 import Pagination from '@mui/material/Pagination'
 import Stack from '@mui/material/Stack'
 import { useRouter } from 'next/router'
+
 interface tempProps {
 	items: TicketProp[]
 	meta: any

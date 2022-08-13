@@ -7,7 +7,7 @@ import { resolve } from 'path';
 import { Observable, from } from 'rxjs';
 import { ConferenceEntity } from 'src/conference/models/conference.entity';
 import { ResponseData } from 'src/responsedata/response-data.dto';
-import { DeleteResult, Repository, UpdateResult } from 'typeorm';
+import { DeleteResult, Like, Repository, UpdateResult } from 'typeorm';
 import { ComboSessionDto, ComboSessionRequestDto } from './models/combo_session.dto';
 import { ComboSessionEntity } from './models/combo_session.entity';
 import { ComboSession } from './models/combo_session.interface';
@@ -106,6 +106,9 @@ export class CombosessionService {
   async getLatestXCombos(limit: number): Promise<ResponseData> {
     let arrayOfIdsAndDate = (await this.findAllComoIds())
     arrayOfIdsAndDate = arrayOfIdsAndDate.sort(this.comp);
+    if(limit === 0) {
+      limit = arrayOfIdsAndDate.length;
+    }
     const arrayOfIdsAndDateResult = [];
     for(let i = 0; i < limit; i++){
       arrayOfIdsAndDateResult.push(arrayOfIdsAndDate[i]);
@@ -141,6 +144,7 @@ export class CombosessionService {
     comboSessionDto.comboSessionDescription = comboEntities[0].combo_description;
     comboSessionDto.comboSessionName = comboEntities[0].combo_name;
     comboSessionDto.comboSessionPrice = 0;
+    comboSessionDto.discount = comboEntities[0].discount;
     return new Promise((resolve, reject) => {
       const conferences: ConferenceEntity[] = [];
       comboEntities.forEach(async comboEntity => {
@@ -246,14 +250,5 @@ export class CombosessionService {
     }).catch((e) => {
       throw e;
     })
-  }
-  async paginate(options: IPaginationOptions, search: string): Promise<Pagination<ComboSessionEntity>> {
-    const queryBuilder = this.comboSessionRepository.createQueryBuilder('combosession');
-    if (search !== '') {
-      queryBuilder.where('combosession.combo_name LIKE :search', {
-        search: `%${search}%`,
-    });
-    }
-    return paginate<ComboSessionEntity>(queryBuilder, options);
   }
 }

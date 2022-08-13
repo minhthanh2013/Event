@@ -15,6 +15,7 @@ interface TicketProp {
 	conference_name: number;
 	date_start_conference: Date;
 	address: string;
+	organizer_name: string;
 }
 
 interface TicketProps {
@@ -92,7 +93,7 @@ const Ticket = (props: TicketProps) => {
 									{props.data.address != undefined ? props.data.address : 'Zoom'}
 								</Typography>
 								<Typography component="h5">
-									By Saigon Classical Music Group
+									By {props.data?.organizer_name || 'Zoom'}
 								</Typography>
 							</Box>
 							<Box component="div">

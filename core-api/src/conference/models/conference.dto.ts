@@ -28,6 +28,13 @@ export class SpeakerList {
     nameSpeaker: string;
 }
 
+export class SpeakerRequestDto {
+    speaker_name: string;
+    speaker_email: string;
+    conference_id: number;
+    is_accepted: boolean;
+    uuid: string;
+}
 export class HostCreatedConferenceResponseDto {
     conferenceId: number;
     conferenceName: string;

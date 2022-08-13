@@ -119,7 +119,7 @@ export const Conferences: React.FC<CreateEventProps> = ({ data, setData, setValu
 
   useEffect(() => {
     const fetchConferences = async () => {
-      const dataResult = await fetch('/api/conference/get-conference-by-host-id/1');
+      const dataResult = await fetch('/api/conference/get-conference-by-host-id/' + prop?.tempDecode?.sub);
       const cateResult = await dataResult.json();
       setConferences(cateResult)
     }
