@@ -6,7 +6,7 @@ const Test = () => {
 	return (
 		<>
 			{/* <SearchResult /> */}
-			<TicketList_SearchResult/>
+			<PurchaseModal/>
 		</>
 	)
 }
