@@ -7,14 +7,28 @@ import React, { useState } from "react";
 
 interface props {
     id: number;
+    hostId: number;
 }
 
-const EventMenu: React.FC<props> = ({id}) => {
+
+const EventMenu: React.FC<props> = ({id, hostId}) => {
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         setAnchorEl(event.currentTarget);
     };
+    const publishButton = async () => {
+        const data = {conferenceId: id, hostId: hostId};
+        const resData = await fetch("/api/conference/submit-conference", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+          });
+          console.log(resData);
+          setAnchorEl(null);
+    }
     const handleClose = () => {
         setAnchorEl(null);
     };
@@ -33,7 +47,7 @@ const EventMenu: React.FC<props> = ({id}) => {
                     <MenuItem onClick={handleClose}>View</MenuItem>
                 </Link>
                 <MenuItem onClick={handleClose}>Edit</MenuItem>
-                <MenuItem onClick={handleClose}>Publish</MenuItem>
+                <MenuItem onClick={publishButton}>Publish</MenuItem>
                 <MenuItem onClick={handleClose}>Delete</MenuItem>
             </Menu>
         </>

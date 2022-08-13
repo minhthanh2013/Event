@@ -99,7 +99,7 @@ export const EventList = (props: EventListProps) => {
                   <TableCell align="right">${row?.price || "0"}</TableCell>
                   <TableCell align="right">{row.status_ticket?.toUpperCase()}</TableCell>
                   <TableCell sx={{ width: "2rem" }}>
-                    <EventMenu id={row.conference_id}/>
+                    <EventMenu id={row.conference_id} hostId={props.propss.tempDecode.sub} />
                   </TableCell>
                 </TableRow>
               ))}

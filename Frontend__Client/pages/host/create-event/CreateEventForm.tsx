@@ -337,11 +337,8 @@ export const Date: React.FC<CreateEventProps> = ({ data, setData, setValue, api,
   const [ticketEnd, setTicketEnd] = useState<Date | null>(null);
 
   const onSubmit = (value: any) => {
-    setData({
-      ...data, dateStartConference: value.dateStartConference, dateStartSell: value.dateStartSell,
-      dateEndSell: value.dateEndSell, conferencePrice: value.conferencePrice, ticketQuantity: value.ticketQuantity
-    });
-    api({ ...data, hostName: prop.tempDecode.username });
+    api({ ...data, dateStartConference: value.dateStartConference, dateStartSell: value.dateStartSell,
+      dateEndSell: value.dateEndSell, conferencePrice: value.conferencePrice, ticketQuantity: value.ticketQuantity, hostName: prop.tempDecode.username });
     setValue(0);
   };
   return (
@@ -359,7 +356,7 @@ export const Date: React.FC<CreateEventProps> = ({ data, setData, setValue, api,
               <Controller
                 name="dateStartConference"
                 control={control}
-                defaultValue={data.dateStartConference}
+                defaultValue={eventStart}
                 render={({ field: { ref, ...rest } }) => (
                   <DatePicker
                     label="Event start date"
@@ -384,7 +381,7 @@ export const Date: React.FC<CreateEventProps> = ({ data, setData, setValue, api,
               <Controller
                 name="dateStartSell"
                 control={control}
-                defaultValue={data.dateStartSell}
+                defaultValue={ticketStart}
                 render={({ field: { ref, ...rest } }) => (
                   <DatePicker
                     label="Ticket sales start"
@@ -409,7 +406,7 @@ export const Date: React.FC<CreateEventProps> = ({ data, setData, setValue, api,
               <Controller
                 name="dateEndSell"
                 control={control}
-                defaultValue={data.dateEndSell} 
+                defaultValue={ticketEnd} 
                 render={({ field: { ref, ...rest } }) => (
                   <DatePicker
                     label="Ticket sales end"
