@@ -62,6 +62,12 @@ export class CloudinaryService {
     const index2 = rawResponse.lastIndexOf("'");
     return rawResponse.slice(index + 1, index2);
   }
+  getComboImage(meetingId: number) {
+    const rawResponse = v2.image("session-"+meetingId+"-avatar")
+    const index = rawResponse.indexOf("'");
+    const index2 = rawResponse.lastIndexOf("'");
+    return rawResponse.slice(index + 1, index2);
+  }
 
   getVideo(meetingId: number) {
     let rawResponse = v2.video("conference-"+meetingId+"-record")

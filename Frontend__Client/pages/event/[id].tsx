@@ -12,6 +12,8 @@ import SessionList from '../../components/SessionList'
 import styles from '../../styles/Event.module.scss'
 import DetailBanner from '../../components/DetailBanner'
 import DetailContent from '../../components/DetailContent'
+import Typography from '@mui/material/Typography';
+
 
 // export const getStaticPaths = async () => {
 //     const res = await fetch('api/event')
@@ -45,6 +47,7 @@ interface TicketProp {
 	date_start_conference: Date
 	address: string
 	host_id: number;
+	status_ticket: string;
 	// conferenceOrganizer: string;
 }
 interface TicketProps {
@@ -69,16 +72,46 @@ const Event = (props: any) => {
 
 	return (
 		<>
-			<Box className={styles.background__wrap}>
-				<Box className={styles.dot__1}></Box>
-				<Header {...props} />
-				{ticketList?.data && <DetailBanner data={ticketList.data} />}
-				{ticketList?.data && <DetailContent data={ticketList.data}/>}
-				{/* <DetailBanner data={ticketList.data}/>
-                <DetailContent data={ticketList.data}/> */}
-			</Box>
+		{ticketList?.data?.status_ticket !== "published" ? 
+		(props?.tempDecode?.sub === ticketList?.data?.host_id && props?.tempDecode?.role === "host" ? (
+			(
+				<>
+					<Box className={styles.background__wrap}>
+					<Box className={styles.dot__1}></Box>
+					<Header {...props} />
+					{ticketList?.data && <DetailBanner data={ticketList.data} />}
+					{ticketList?.data && <DetailContent data={ticketList.data}/>}
+					{/* <DetailBanner data={ticketList.data}/>
+					<DetailContent data={ticketList.data}/> */}
+				</Box>
+				<Footer />
+				</>
+				)
+		) : ((
+			<>
+			<Header {...props}/>
+			<Typography variant="h1" component="div" gutterBottom className={styles.sketchy}>
+        		Sorry, this conference have not been published yet.
+      		</Typography>
 			<Footer />
-		</>
+			</>
+		)) ) : (
+				(
+					<>
+						<Box className={styles.background__wrap}>
+						<Box className={styles.dot__1}></Box>
+						<Header {...props} />
+						{ticketList?.data && <DetailBanner data={ticketList.data} />}
+						{ticketList?.data && <DetailContent data={ticketList.data}/>}
+						{/* <DetailBanner data={ticketList.data}/>
+						<DetailContent data={ticketList.data}/> */}
+					</Box>
+					<Footer />
+					</>
+				)
+			) 
+		}
+		</>	
 	)
 }
 

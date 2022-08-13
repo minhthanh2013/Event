@@ -70,6 +70,7 @@ const CreateEvent = (props) => {
   const [value, setValue] = React.useState(0);
 
   const apiCall = async (data) => {
+    console.log(data);
     const resData = await fetch("/api/conference/create-new", {
       method: "POST",
       headers: {
@@ -86,9 +87,9 @@ const CreateEvent = (props) => {
         method: "POST",
         body,
       });
-      // TODO: Thiếu date.
-      // const result = await res.json();
-      // console.log(result);
+    //   // TODO: Thiếu date.
+    //   // const result = await res.json();
+    //   // console.log(result);
     }
 
   }

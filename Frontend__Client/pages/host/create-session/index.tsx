@@ -81,7 +81,14 @@ const CreateEvent = (props) => {
       },
     });
     const result = await res.json();
-    console.log(result);
+    if (res.status === 200) {
+      let body = new FormData()
+      body.append('file',imageFile)
+      await fetch(`/api/cloudinary/update-image-session/${props?.tempDecode?.sub}`, {
+        method: "POST",
+        body,
+      });
+    }
   }
   //change tabs; value = tabs value
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {

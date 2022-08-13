@@ -30,6 +30,10 @@ export class CloudinaryController {
     getImageUrl(@Param('imageId') imageId: number) {
         return this.cloudinaryService.getImage(imageId);
     }
+    @Get('get-combo-image/:imageId')
+    getComboImageUrl(@Param('imageId') imageId: number) {
+        return this.cloudinaryService.getComboImage(imageId);
+    }
 
     @Get('get-conference-record/:recordId')
     getRecordUrl(@Param('recordId') videoId: number) {

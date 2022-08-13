@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
@@ -31,6 +31,15 @@ interface TicketSessionProps {
 }
 
 const TicketSession = (props: TicketSessionProps) => {
+	const [imageProp, setImageProp] = useState<string>()
+	useEffect(() => {
+		const fetchImage = async () => {
+			const dataResult = await fetch(`/api/combo/get-combo-image/${props.data.comboSessionId}`);
+			const cateResult = await dataResult.json();
+			setImageProp(cateResult.url)
+		}
+		fetchImage();
+	})
 	const getPrice = ( session: SessionProp) => {
 		// 9:00 PM – Saturday, Dec 10,{" "}
 		let totalPrice = 0;
@@ -47,7 +56,7 @@ const TicketSession = (props: TicketSessionProps) => {
 						<CardMedia
 							component='img'
 							height='250'
-							src={'https://images.pexels.com/photos/2306281/pexels-photo-2306281.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'}
+							src={imageProp || 'https://images.pexels.com/photos/2306281/pexels-photo-2306281.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'}
 							alt='Event'
 						/>
 						<CardContent className={styles.ticketContent}>
