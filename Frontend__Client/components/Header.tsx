@@ -12,7 +12,10 @@ import Divider from '@mui/material/Divider'
 import styles from '../styles/Header.module.scss'
 import PlayCircleOutlineOutlinedIcon from '@mui/icons-material/PlayCircleOutlineOutlined'
 import ReplayOutlinedIcon from '@mui/icons-material/ReplayOutlined'
+import ListItemIcon from '@mui/material/ListItemIcon'
+import LogoutIcon from '@mui/icons-material/Logout'
 
+import ConfirmationNumberIcon from '@mui/icons-material/ConfirmationNumber'
 interface HeaderProps {
 	props: any
 }
@@ -34,8 +37,13 @@ const Header = (props: any) => {
 	const pages = ['Products', 'Pricing', 'Blog']
 	const settings = ['Profile', 'Account', 'Dashboard', 'Logout', 'Account', 'Dashboard', 'Logout', 'Account', 'Dashboard', 'Logout']
 
+	// notification
 	const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null)
 	const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null)
+	//avatar
+	const [anchorElAvatar, setAnchorElAvatar] = React.useState<null | HTMLElement>(null)
+	const open = Boolean(anchorElAvatar)
+
 	// 12:00 am - Thu, Jul 1
 	function parseDate(date: Date) {
 		date = new Date(date)
@@ -75,6 +83,13 @@ const Header = (props: any) => {
 
 	const handleCloseUserMenu = () => {
 		setAnchorElUser(null)
+	}
+
+	const handleClickAvatar = (event: React.MouseEvent<HTMLElement>) => {
+		setAnchorElAvatar(event.currentTarget)
+	}
+	const handleCloseAvatar = () => {
+		setAnchorElAvatar(null)
 	}
 
 	function stringToColor(string: any) {
@@ -220,9 +235,62 @@ const Header = (props: any) => {
 								))}
 							</Menu>
 
-							<IconButton>
+							<IconButton
+								onClick={handleClickAvatar}
+								size='small'
+								sx={{ ml: 2 }}
+								aria-controls={open ? 'account-menu' : undefined}
+								aria-haspopup='true'
+								aria-expanded={open ? 'true' : undefined}
+							>
 								<Avatar {...stringAvatar(props?.tempDecode?.username || 'No user')} />
 							</IconButton>
+							<Menu
+								anchorEl={anchorElAvatar}
+								id='account-menu'
+								open={open}
+								onClose={handleCloseAvatar}
+								onClick={handleCloseAvatar}
+								PaperProps={{
+									elevation: 0,
+									sx: {
+										overflow: 'visible',
+										filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
+										mt: 1.5,
+										'& .MuiAvatar-root': {
+											width: 32,
+											height: 32,
+											ml: -0.5,
+											mr: 1,
+										},
+										'&:before': {
+											content: '""',
+											display: 'block',
+											position: 'absolute',
+											top: 0,
+											right: 14,
+											width: 10,
+											height: 10,
+											bgcolor: 'background.paper',
+											transform: 'translateY(-50%) rotate(45deg)',
+											zIndex: 0,
+										},
+									},
+								}}
+								transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+								anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+							>
+								<MenuItem sx={{ display: 'flex', gap: '0.5rem', justifyContent: 'space-between', color: '#6A35F2' }}>
+									<Avatar sx={{ color: '#6A35F2', bgcolor: 'white' }} /> Profile
+								</MenuItem>
+								<MenuItem sx={{ display: 'flex', gap: '0.5rem', justifyContent: 'space-between', color: '#6A35F2' }}>
+									<ConfirmationNumberIcon /> Tickets
+								</MenuItem>
+								<MenuItem sx={{ display: 'flex', gap: '0.5rem', justifyContent: 'space-between', color: '#6A35F2' }}>
+									<LogoutIcon />
+									Logout
+								</MenuItem>
+							</Menu>
 						</>
 					) : (
 						<>
