@@ -18,20 +18,17 @@ import { useState } from 'react'
 const validationSchema = yup.object({
 	email: yup.string().email('Enter a valid email').required('Email is required'),
 	password: yup.string().required('Password is required'),
-	first_name: yup.string().required('firstname is required'),
-	last_name: yup.string().required('lastname is required'),
 	user_name: yup.string().required('username is required'),
 })
 
 const Register = (props: Props) => {
+	console.log(27, "here")
 	const [errorMessage, setErrorMessage] = useState<string>('');
 
 	const router = useRouter();
 
 	const formik = useFormik({
 		initialValues: {
-			last_name: '',
-			first_name: '',
 			email: '',
 			password: '',
 			user_name: '',
@@ -39,21 +36,20 @@ const Register = (props: Props) => {
 		validationSchema: validationSchema,
 		onSubmit: async (values: any) => {
 
-			let host = null;
+			let admin = null;
             try {
-                host = await axios.post("/api/auth/host/register", values);
+				console.log(values);
+                admin = await axios.post("/api/auth/admin/register", values);
             } catch (error) {
                 console.log(error)
             }
             // const user = await axios.post("http://"+"localhost"+":"+"3000"+"/user/signin", values);
             
-            if(host !== null && host.status === 200) {
-                router.push('/');
+            if(admin !== null && admin.status === 200) {
+                router.push('/admin/dashboard');
             } else {
                 setErrorMessage("Username or email already exists");
             }
-
-			alert(JSON.stringify(values, null, 5))
 		},
 	})
 	return (
@@ -127,28 +123,6 @@ const Register = (props: Props) => {
 									error={formik.touched.email && Boolean(formik.errors.email)}
 									helperText={formik.touched.email && formik.errors.email}
 									sx={{ '& input': { marginLeft: '1.5rem' } }}
-								/>
-								<TextField
-									fullWidth
-									id='first_name'
-									name='first_name'
-									label='First Name'
-									value={formik.values.first_name}
-									onChange={formik.handleChange}
-									error={formik.touched.first_name && Boolean(formik.errors.first_name)}
-									helperText={formik.touched.first_name && formik.errors.first_name}
-									sx={{ my: '2rem', '& input': { marginLeft: '1.5rem' } }}
-								/>
-								<TextField
-									fullWidth
-									id='last_name'
-									name='last_name'
-									label='Last Name'
-									value={formik.values.last_name}
-									onChange={formik.handleChange}
-									error={formik.touched.last_name && Boolean(formik.errors.last_name)}
-									helperText={formik.touched.last_name && formik.errors.last_name}
-									sx={{ mb: '1.5rem', '& input': {marginLeft:'1.5rem'}}}
 								/>
 
 								<Button variant='contained' size='medium' type='submit'>

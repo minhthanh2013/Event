@@ -30,20 +30,23 @@ interface SessionListProp {
   comboSessionPrice: number;
   comboSessionName: string;
   comboSessionDescription: string;
-  conferenceList: TicketProp[];
+  conferenceList: ConferenceProp[];
   discount: number;
 }
 
-interface TicketProp {
+
+interface ConferenceProp {
   conference_id: number;
   description: string;
-  price: string;
+  price: number;
   conference_name: number;
-  date_start_conference: Date;
+  date_start_conference: string;
   address: string;
-  ticket_quantity: string;
-  current_quantity: string;
+  ticket_quantity: number;
+  current_quantity: number;
   status_ticket: string;
+  conference_type: string;
+  // conferenceOrganizer: string;
 }
 
 export const Sessions = (props: SessionProps) => {
@@ -79,29 +82,29 @@ export const Sessions = (props: SessionProps) => {
     setAnchorEl(null);
   };
 
-  const getTotalPrice = (conferenceList: TicketProp[]) => {
+  const getTotalPrice = (conferenceList: ConferenceProp[]) => {
     // 9:00 PM – Saturday, Dec 10,{" "}
     let totalPrice = 0;
     conferenceList?.forEach((item) => {
-      totalPrice += parseInt(item.price);
+      totalPrice += parseInt(item.price.toString());
     });
     return totalPrice;
   }
 
-  const getTotalTicket = (conferenceList: TicketProp[]) => {
+  const getTotalTicket = (conferenceList: ConferenceProp[]) => {
     // 9:00 PM – Saturday, Dec 10,{" "}
     let totalPrice = 0;
     conferenceList?.forEach((item) => {
-      totalPrice += parseInt(item.ticket_quantity);
+      totalPrice += parseInt(item.ticket_quantity.toString());
     });
     return totalPrice;
   }
 
-  const getTotalTicketSold = (conferenceList: TicketProp[]) => {
+  const getTotalTicketSold = (conferenceList: ConferenceProp[]) => {
     // 9:00 PM – Saturday, Dec 10,{" "}
     let totalPrice = 0;
     conferenceList?.forEach((item) => {
-      totalPrice += parseInt(item.current_quantity);
+      totalPrice += parseInt(item.current_quantity.toString());
     });
     return totalPrice;
   }

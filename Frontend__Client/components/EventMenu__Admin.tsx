@@ -22,25 +22,34 @@ interface props {
     id: number;
     hostId: number;
     event: ConferenceProp
+    props: any;
 }
 
 
-const EventMenu: React.FC<props> = ({id, hostId, event}) => {
+const EventMenuAdmin: React.FC<props> = ({id, hostId, event, props}) => {
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         setAnchorEl(event.currentTarget);
     };
     const publishButton = async () => {
-        const data = {conferenceId: id, hostId: hostId};
-        const resData = await fetch("/api/conference/submit-conference", {
+        const resData = await fetch("/api/admin/verify-conference/"+id, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
+              "Authorization": "Bearer " + props.value
             },
-            body: JSON.stringify(data),
           });
-          console.log(resData);
+          setAnchorEl(null);
+    }
+    const deleteButton = async () => {
+        const resData = await fetch("/api/admin/delete-conference/"+id, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": "Bearer " + props.value
+            },
+          });
           setAnchorEl(null);
     }
     const handleClose = () => {
@@ -67,18 +76,17 @@ const EventMenu: React.FC<props> = ({id, hostId, event}) => {
                     <Link href={`/event/${id.toString()}`} passHref >
                         <MenuItem onClick={handleClose}>View</MenuItem>
                     </Link>
-                    <Link href={`/host/dashboard/edit-event/${id.toString()}`} passHref >
-                        <MenuItem onClick={handleClose}>Edit</MenuItem>
-                    </Link>
-                    
                     <MenuItem onClick={publishButton}>Publish</MenuItem>
-                    <MenuItem onClick={handleClose}>Delete</MenuItem>
+                    <MenuItem onClick={deleteButton}>Delete</MenuItem>
                     </>
                 )
                 }
+                    
+                
+                
             </Menu>
         </>
     )
 }
 
-export default EventMenu;
+export default EventMenuAdmin;

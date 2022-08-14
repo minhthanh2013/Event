@@ -1,7 +1,5 @@
 import React, { useState, ChangeEvent, useEffect } from "react";
-import HeaderHost from "../../components/Header__Host";
 import Box from "@mui/material/Box";
-import Footer from "../../components/Footer";
 import Typography from "@mui/material/Typography";
 import styles from "../../../styles/EventDashboard.module.scss";
 import Card from "@mui/material/Card";
@@ -19,6 +17,8 @@ import { Users } from "./UserList";
 import { EventList } from "./EventList";
 import { Sessions } from "./SessionList";
 import FilterList from "@mui/icons-material/FilterList";
+import HeaderHost from "../../../components/Header__Host";
+import Footer from "../../../components/Footer";
 
 interface EventCreate { }
 
@@ -99,87 +99,25 @@ const EventCreate = (props: any) => {
     const [sessionsAfterFilter, setSessionsAfterFilter] = useState<SessionListProps>();
     const [sessions, setSessions] = useState<SessionListProps>();
     const [value, setValue] = React.useState(0);
-
-    console.log(props);
-
-    const fakeDataAllConference = [
-        {
-            conference_id: 1,
-            description: 'description',
-            price: 100,
-            conference_name: 1,
-            date_start_conference: '11/10/2020',
-            address: 'address',
-            ticket_quantity: 12,
-            current_quantity: 10,
-            status_ticket: 'pending',
-            conference_type: '1',
-        },
-        {
-            conference_id: 2,
-            description: 'description',
-            price: 100,
-            conference_name: 2,
-            date_start_conference: '11/10/2020',
-            address: 'address',
-            ticket_quantity: 12,
-            current_quantity: 10,
-            status_ticket: 'published',
-            conference_type: '1',
-        },
-        {
-            conference_id: 3,
-            description: 'description',
-            price: 100,
-            conference_name: 3,
-            date_start_conference: '11/10/2020',
-            address: 'address',
-            ticket_quantity: 12,
-            current_quantity: 10,
-            status_ticket: 'pending',
-            conference_type: '1',
-        }
-    ]
-    const fakeDataAllSessions = [
-        {
-            comboSessionId: 1,
-            comboSessionPrice: 20000,
-            comboSessionName: "combo 1 from host 1",
-            comboSessionDescription: "None",
-            conferenceList: fakeDataAllConference,
-            discount: 10
-        },
-        {
-            comboSessionId: 2,
-            comboSessionPrice: 20000,
-            comboSessionName: "combo 2 from host 1",
-            comboSessionDescription: "None",
-            conferenceList: fakeDataAllConference,
-            discount: 10
-        },
-        {
-            comboSessionId: 3,
-            comboSessionPrice: 20000,
-            comboSessionName: "combo 3 from host 2",
-            comboSessionDescription: "None",
-            conferenceList: fakeDataAllConference,
-            discount: 10
-        }
-    ]
     useEffect(() => {
+        console.log(props);
         // khúc này dùng API, set API cho cả 2 state là confenences và conferencesAfterFilter, tương tự với sessions và user. Xem lại Field, xem khúc đỏ dưới dòng 306
-        setConferences({
-            status: false, data: fakeDataAllConference
-        });
-        setConferencesAfterFilter({
-            status: false, data: fakeDataAllConference
-        });
-        setSessions({
-            status: false, data: fakeDataAllSessions
-        });
-        setSessionsAfterFilter({
-            status: false, data: fakeDataAllSessions
-        });
+        const fetchConferencesData = async () => {
+            const response = await fetch("http://localhost:8080/api/conference/get-all");
+            const data = await response.json();
+            setConferences(data);
+            setConferencesAfterFilter(data);
+        }
+        const fetchCombosData = async () => {
+            const response = await fetch("http://localhost:8080/api/combo/get-latest-x?id=0");
+            const data = await response.json();
+
+            setSessions(data);
+            setSessionsAfterFilter(data);
+        }
+        fetchConferencesData();
+        fetchCombosData();
+    
         // Ở đây chưa có state [users, setUsers] = ... cũng như UserProps vì t không biết field của Users
         // Tạo interface như trên nhưng dành cho Users => state [users, setUsers] = useState<UserProps>();
         // Nhớ tạo state usersAfterFilter rồi copy 2 cái t làm sẵn cho m, hiện tại nó là fe của Subcriptions

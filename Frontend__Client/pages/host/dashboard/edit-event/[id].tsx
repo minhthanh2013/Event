@@ -1,9 +1,9 @@
-import React, { useState, ChangeEvent } from "react";
+import React, { useState, ChangeEvent, useEffect } from "react";
 import HeaderHost from "../../../../components/Header__Host";
 import Box from "@mui/material/Box";
 import Footer from "../../../../components/Footer";
 import Typography from "@mui/material/Typography";
-import styles from "../../../styles/EventDashboard.module.scss";
+import styles from "../../../../styles/EventDashboard.module.scss";
 import Card from "@mui/material/Card";
 import CardActionArea from "@mui/material/CardActionArea";
 import CardContent from "@mui/material/CardContent";
@@ -53,7 +53,19 @@ function a11yProps(index: number) {
     "aria-controls": `simple-tabpanel-${index}`,
   };
 }
-
+interface ConferenceProp {
+	conference_id: number;
+	description: string;
+	price: number;
+	conference_name: number;
+	date_start_conference: Date;
+	address: string;
+  ticket_quantity: number;
+  current_quantity: number;
+  status_ticket: string;
+  conference_type: string;
+	// conferenceOrganizer: string;
+}
 const CreateEvent = (props) => {
   const router = useRouter();
   const { id } = router.query;
@@ -63,6 +75,19 @@ const CreateEvent = (props) => {
   const [image, setImage] = useState<string | ArrayBuffer | null>(); // set image url vô state này luôn
   
   const [imageFile, setImageFile] = useState<Multer.File | null>();
+
+  const [ ConferenceProp, SetConferenceProp] = useState<ConferenceProp>();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const res = await fetch(`/api/conference/${id}`);
+      const data = await res.json();
+      setData(data.data);
+    }
+    fetchData();
+  } , [id]);
+  
+
   const onImageChange = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
       let reader = new FileReader();
@@ -77,7 +102,6 @@ const CreateEvent = (props) => {
 
   //gọi api post để sửa trong đây
   const apiCall = async (data) => {
-    console.log(data);
     const resData = await fetch("/api/conference/create-new", {
       method: "POST",
       headers: {
@@ -118,7 +142,7 @@ const CreateEvent = (props) => {
         <HeaderHost {...props}/>
 
         <Typography variant="h3" component="div" className={styles.header}>
-          Event Dashboard
+          Edit event {id}
         </Typography>
         <Grid container spacing={0} direction="column" alignItems="center">
           <Card className={styles.imageInput}>

@@ -58,7 +58,6 @@ export const EventList = (props: EventListProps) => {
               onChange={(e) => setSortType(e.target.value)}
             >
               <MenuItem value="lastest">Latest</MenuItem>
-              <MenuItem value="sold">Sold</MenuItem>
               <MenuItem value="published">Published</MenuItem>
             </Select>
           </FormControl>

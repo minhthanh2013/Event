@@ -8,9 +8,11 @@ import { AdminService } from './admin.service';
 import { AdminEntity } from './models/admin.entity';
 import { AdminJwtStrategy } from './strategy/admin.jwt.strategy';
 import { ConferenceEntity } from './../conference/models/conference.entity';
+import { HttpModule } from '@nestjs/axios';
 
 @Module({
   imports: [
+    HttpModule,
     forwardRef(() => AdminModule),
     JwtModule.registerAsync({
       imports: [ConfigModule],

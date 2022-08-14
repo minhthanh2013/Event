@@ -20,13 +20,14 @@ import MenuIcon from '@mui/icons-material/MoreVertOutlined';
 import Menu from '@mui/material/Menu';
 import MenuItem from "@mui/material/MenuItem";
 import EventMenu from "../../../components/EventMenu";
+import EventMenuAdmin from "../../../components/EventMenu__Admin";
 
 interface ConferenceProp {
   conference_id: number;
   description: string;
   price: number;
   conference_name: number;
-  date_start_conference: Date;
+  date_start_conference: string;
   address: string;
   ticket_quantity: number;
   current_quantity: number;
@@ -41,6 +42,7 @@ interface EventListProps {
   filter: (props: string) => void;
 }
 export const EventList = (props: EventListProps) => {
+  console.log(22, props.propss)
   const [sortType, setSortType] = useState('all');
 
   return (
@@ -59,6 +61,7 @@ export const EventList = (props: EventListProps) => {
               onChange={(e) => { props.filter(e.target.value); setSortType(e.target.value) }}
             >
               <MenuItem value="all">All</MenuItem>
+              <MenuItem value="draft">Draft</MenuItem>
               <MenuItem value="pending">Pending</MenuItem>
               <MenuItem value="published">Published</MenuItem>
             </Select>
@@ -81,15 +84,15 @@ export const EventList = (props: EventListProps) => {
                   <TableCell component="th" scope="row">
                     <>
                       <Typography sx={{ fontWeight: "bold" }}>{row.conference_name}</Typography>
-                      {row?.conference_type.toString() === "1" ? "Offline" : "Online"} event <br />
+                      {row?.conference_type?.toString() === "1" ? "Offline" : "Online"} event <br />
                       {row.date_start_conference}
                     </>
                   </TableCell>
-                  <TableCell align="right">{row.current_quantity}/{row.ticket_quantity}</TableCell>
+                  <TableCell align="right">{row?.current_quantity}/{row?.ticket_quantity}</TableCell>
                   <TableCell align="right">${row?.price || "0"}</TableCell>
-                  <TableCell align="right">{row.status_ticket?.toUpperCase()}</TableCell>
+                  <TableCell align="right">{row?.status_ticket?.toString().toUpperCase()}</TableCell>
                   <TableCell sx={{ width: "2rem" }}>
-                    <EventMenu id={row.conference_id} hostId={1} event={row} />
+                    <EventMenuAdmin id={row?.conference_id} hostId={1} event={row} props={props.propss}/>
                   </TableCell>
                 </TableRow>
               ))}

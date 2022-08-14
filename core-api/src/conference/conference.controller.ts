@@ -40,7 +40,7 @@ export class ConferenceController {
       route: '/conference/filter',
     }, search, onlyPublish);
   }
-  @Get('/:id')
+  @Get('id')
   findOne(@Param('id') id: string): Observable<ResponseData> {
     return from(this.conferenceService.findOne(+id));
   }
@@ -76,8 +76,11 @@ export class ConferenceController {
     return from(this.conferenceService.getLatestXConferences(+limit));
   }
   @Get('/find-all-by-host-id/:id')
-  getAllByHostId(@Param('id') id: number): Observable<ResponseData> {
-    return from(this.conferenceService.findAllByHostId(+id));
+  getAllByHostId(
+    @Param('id') id: number, 
+    @Query('status', new DefaultValuePipe('')) status = '',
+  ): Observable<ResponseData> {
+    return from(this.conferenceService.findAllByHostId(+id, status));
   }
   @Get('/find-host-by-conference-id/:id')
   getByConfId(@Param('id') id: number): Promise<ResponseData> {
@@ -90,5 +93,20 @@ export class ConferenceController {
   @Post('/submit-conference')
   submitConference(@Body() submitConference: SubmitConferenceRequestDto): Promise<ResponseData> {
     return this.conferenceService.submitConference(submitConference);
+  }
+  @Post('/schedule-zoom-meeting/:id')
+  scheduleZoomMeeting(@Param("id") id: number) {
+    return this.conferenceService.scheduleZoomMeeting(id);
+  }
+  @Get('/find-meeting-by-zoom-meeting-id/:id')
+  findConferenceByZoomMeetingId(@Param("id") id: string) {
+    return this.conferenceService.findMeetingByZoomMeetingId(id);
+  }
+  @Get('find-meeting-by-user-zoom-meeting-id')
+  findConferenceByUserAndZoomMeetingId(
+    @Query('userId', new DefaultValuePipe('')) userId = '',
+    @Query('zoomId', new DefaultValuePipe('')) zoomId = '',
+    ) {
+    return this.conferenceService.findConferenceByUserAndZoomMeetingId(+userId, zoomId);
   }
 }

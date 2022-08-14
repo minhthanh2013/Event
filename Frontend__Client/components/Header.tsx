@@ -311,10 +311,12 @@ const Header = (props: any) => {
 									Sign up
 								</Button>
 							</Link>
+							<Link href={'/host/dashboard'} passHref>
+								<Button variant='text' sx={{ color: '#6A35F2' }}>
+									create an event
+								</Button>
+							</Link>
 
-							<Button variant='text' sx={{ color: '#6A35F2' }}>
-								create an event
-							</Button>
 						</>
 					)}
 				</Toolbar>

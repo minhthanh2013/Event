@@ -27,7 +27,7 @@ import { CloudinaryModule } from 'src/cloudinary/cloudinary.module';
         name: 'ZOOM',
         transport: Transport.TCP,
         options: {
-          host: 'zoom',
+          // host: 'zoom',
           port: 3001,
         }
       }

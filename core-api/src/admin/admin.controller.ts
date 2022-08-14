@@ -9,8 +9,10 @@ import {
   Param,
   Patch,
   Post,
+  Req,
   UseGuards,
 } from '@nestjs/common';
+import { Request } from 'express';
 import { Observable } from 'rxjs/internal/Observable';
 import { DeleteResult, UpdateResult } from 'typeorm';
 import { AdminService } from './admin.service';
@@ -63,7 +65,14 @@ export class AdminController {
   @HttpCode(HttpStatus.OK)
   @Post("verify-conference/:id")
   @UseGuards(AdminJwtGuard)
-  verifyConference(@Param("id") confenrenceId: number) {
-    return this.adminService.verifyConference(confenrenceId);
+  verifyConference(@Param("id") confenrenceId: number, @Req() request: Request) {
+    return this.adminService.verifyConference(confenrenceId, request);
+  }
+
+  @HttpCode(HttpStatus.OK)
+  @Post("delete-conference/:id")
+  @UseGuards(AdminJwtGuard)
+  deleteConference(@Param("id") confenrenceId: number) {
+    return this.adminService.deleteConference(confenrenceId);
   }
 }

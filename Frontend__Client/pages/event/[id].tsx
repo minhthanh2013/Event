@@ -73,7 +73,7 @@ const Event = (props: any) => {
 	return (
 		<>
 		{ticketList?.data?.status_ticket !== "published" ? 
-		(props?.tempDecode?.sub === ticketList?.data?.host_id && props?.tempDecode?.role === "host" ? (
+		(props?.tempDecode?.role === "admin" || props?.tempDecode?.sub === ticketList?.data?.host_id && props?.tempDecode?.role === "host" ? (
 			(
 				<>
 					<Box className={styles.background__wrap}>

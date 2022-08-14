@@ -41,7 +41,7 @@ const Login = (props: Props) => {
             // const user = await axios.post("http://"+"localhost"+":"+"3000"+"/user/signin", values);
             
             if(host !== null && host.status === 200) {
-                router.push('/');
+                router.push('/host/dashboard');
             } else {
                 setErrorMessage("Invalid username or password");
             }

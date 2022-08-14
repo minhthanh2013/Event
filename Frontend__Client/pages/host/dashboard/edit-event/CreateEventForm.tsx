@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import styles from "../../../styles/CreateEventForm.module.scss";
+import styles from "../../../../styles/CreateEventForm.module.scss";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import { Controller, useForm } from "react-hook-form";
@@ -55,6 +55,7 @@ export const BasicInfo: React.FC<CreateEventProps> = ({ data, setData, setValue 
   const [typeList, setTypeList] = useState<TypeProps>()
 
   useEffect(() => {
+    setData(data);
     const fetchDataCate = async () => {
       const dataResult = await fetch("/api/conference-category/get-all");
       const cateResult = await dataResult.json();
@@ -68,7 +69,7 @@ export const BasicInfo: React.FC<CreateEventProps> = ({ data, setData, setValue 
 
     fetchDataType();
     fetchDataCate();
-  }, [])
+  }, [data])
 
   const {
     register,
@@ -98,7 +99,7 @@ export const BasicInfo: React.FC<CreateEventProps> = ({ data, setData, setValue 
             required
             id="standard-required"
             label="Event Name"
-            defaultValue={data.conferenceName}
+            defaultValue={data?.conferenceName}
             variant="standard"
             {...register("conferenceName")}
           />

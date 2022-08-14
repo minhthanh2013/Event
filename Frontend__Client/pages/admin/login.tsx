@@ -32,16 +32,16 @@ const Login = (props: Props) => {
         },
         validationSchema: validationSchema,
         onSubmit: async (values: any) => {
-            let host = null;
+            let admin = null;
             try {
-                host = await axios.post("/api/auth/host/login", values);
+                admin = await axios.post("/api/auth/admin/login", values);
             } catch (error) {
                 console.log(error)
             }
             // const user = await axios.post("http://"+"localhost"+":"+"3000"+"/user/signin", values);
             
-            if(host !== null && host.status === 200) {
-                router.push('/');
+            if(admin !== null && admin.status === 200) {
+                router.push('/admin/dashboard');
             } else {
                 setErrorMessage("Invalid username or password");
             }

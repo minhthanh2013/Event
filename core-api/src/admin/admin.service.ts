@@ -10,6 +10,9 @@ import { Admin } from './models/admin.interface';
 import * as argon from 'argon2';
 import { JwtService } from '@nestjs/jwt';
 import { AdminAuthDto } from './dto/admin.auth';
+import { HttpService } from '@nestjs/axios';
+import { Request, response } from 'express';
+import { firstValueFrom } from 'rxjs';
 @Injectable()
 export class AdminService {
   constructor(
@@ -18,6 +21,7 @@ export class AdminService {
     @InjectRepository(ConferenceEntity)
     private readonly conferenceRepository: Repository<ConferenceEntity>,
     private jwt: JwtService,
+    private readonly httpService: HttpService,
   ) {}
 
   findAllAdmins(): Observable<Admin[]> {
@@ -98,12 +102,53 @@ export class AdminService {
         access_token: token,
     } 
 }
-  async verifyConference(conferenceId: number) {
+  async verifyConference(conferenceId: number, res: Request) {
+    const jwt = res.headers.authorization;
     return new Promise(async (resolve, reject) => {
       await this.conferenceRepository.findOne({where: {conference_id: conferenceId}}).then(async conference => {
         if(conference) {
           conference.isValidated = true;
-          await this.conferenceRepository.save(conference).then(() => {
+          conference.status_ticket = "published";
+          await this.conferenceRepository.save(conference)
+          .then(async (newConference) => {
+            const headersRequest = {
+              headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'Authorization': jwt,
+              },
+            }
+            const a = this.httpService.post("http://localhost:3000/conference/schedule-zoom-meeting/" + newConference.conference_id, { headers: headersRequest });
+            a.subscribe(async (data) => {
+              console.log(data);
+              resolve(data);
+            }).add(() => {
+              console.log("done");
+            })
+            resolve(true);
+          })
+          .catch(error => {
+              reject(error)
+              return error;
+          })
+        } else {
+          reject(false);
+        }
+      }).then((response) => {
+        // console.log(response);
+      })
+      .catch(error => {
+        reject(error);
+      }
+      )
+    });
+  }
+
+  async deleteConference(conferenceId: number) {
+    return new Promise(async (resolve, reject) => {
+      await this.conferenceRepository.findOne({where: {conference_id: conferenceId}}).then(async conference => {
+        if(conference && conference.status_ticket === "draft") {
+          await this.conferenceRepository.remove(conference).then(() => {
             resolve(true);})
             .catch(error => {
               reject(error)
