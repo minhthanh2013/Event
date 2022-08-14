@@ -4,7 +4,7 @@ import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/commo
 import { Queue } from 'bull';
 import { Observable } from 'rxjs';
 import { UpdateResult, DeleteResult } from 'typeorm';
-import { Ticket } from './models/ticket.interface';
+import { BuySessionDto, Ticket } from './models/ticket.interface';
 import { TicketService } from './ticket.service';
 
 @Controller('ticket')
@@ -38,5 +38,11 @@ export class TicketController {
   @Delete(':id')
   remove(@Param('id') id: number): Observable<DeleteResult> {
     return this.ticketService.remove(+id);
+  }
+  @Post('buy-session')
+  async buySession(@Body() session: BuySessionDto) {
+    await this.ticketQueue.add('buy-session', {
+      sessionDto: session
+    })
   }
 }

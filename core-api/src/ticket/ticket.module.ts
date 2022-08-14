@@ -11,6 +11,7 @@ import { ConferenceEntity } from 'src/conference/models/conference.entity';
 import { PaymentEntity } from 'src/payment/models/payment.entity';
 import { EmailModule } from './../email/email.module';
 import { EmailService } from './../email/email.service';
+import { ComboSessionEntity } from 'src/combosession/models/combo_session.entity';
 
 @Module({
   imports: [
@@ -18,7 +19,7 @@ import { EmailService } from './../email/email.service';
     BullModule.registerQueue({
       name: 'ticket',
     }),
-    TypeOrmModule.forFeature([TicketEntity, UserEntity, ConferenceEntity, PaymentEntity]),
+    TypeOrmModule.forFeature([TicketEntity, UserEntity, ConferenceEntity, PaymentEntity, ComboSessionEntity]),
   ],
   controllers: [TicketController],
   providers: [TicketService, TicketProcessor, EmailService], 

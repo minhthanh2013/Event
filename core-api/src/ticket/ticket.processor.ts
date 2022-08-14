@@ -1,3 +1,4 @@
+import { BuySessionDto } from './models/ticket.interface';
 /* eslint-disable prettier/prettier */
 import { Process, Processor } from '@nestjs/bull';
 import { Job } from 'bull';
@@ -6,7 +7,10 @@ import { TicketService } from './ticket.service';
 
 @Processor('ticket')
 export class TicketProcessor {
-  constructor(private ticketService: TicketService) {}
+  constructor(
+    private ticketService: TicketService
+    
+    ) {}
 
   @Process('create')
   async handleBuyTicket(job: Job) {
@@ -17,5 +21,14 @@ export class TicketProcessor {
     ticket.payment_id = job.data.ticketBody.payment_id;
     console.log('create ticket');
     await this.ticketService.create(ticket);
+  }
+
+  @Process('buy-session')
+  async handleBuySession(job: Job) {
+    const buy: BuySessionDto =  {} as BuySessionDto;
+    buy.buyer_id = job.data.sessionDto.buyer_id;
+    buy.combo_id = job.data.sessionDto.combo_id;
+    buy.payment_id = job.data.sessionDto.payment_id;
+    this.ticketService.buySession(buy);
   }
 }

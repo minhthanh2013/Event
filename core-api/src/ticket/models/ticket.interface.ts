@@ -5,3 +5,10 @@ export interface Ticket {
   conference_id?: number;
   payment_id?: number;
 }
+
+export interface BuySessionDto {
+  combo_id: number;
+  buyer_id?: number;
+  conference_id?: number;
+  payment_id?: number;
+}

@@ -100,7 +100,7 @@ const CreateEvent = (props) => {
     <>
       <Box
         sx={{
-          background: "#F1EFEF",
+          background: "#ffffff",
           width: "100%",
           marginBottom: "10rem",
           overflow: "hidden",
