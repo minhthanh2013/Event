@@ -40,9 +40,9 @@ export class ConferenceController {
       route: '/conference/filter',
     }, search, onlyPublish);
   }
-  @Get('/:id')
-  findOne(@Param('id') id: string): Observable<ResponseData> {
-    return from(this.conferenceService.findOne(+id));
+  @Get(':id')
+  findOne(@Param('id') id: number): Observable<ResponseData> {
+    return from(this.conferenceService.findOne(id));
   }
   @Post('/create-new')
   create(@Body() conference: ConferenceRequestDto): Observable<ResponseData> {
@@ -102,7 +102,7 @@ export class ConferenceController {
   findConferenceByZoomMeetingId(@Param("id") id: string) {
     return this.conferenceService.findMeetingByZoomMeetingId(id);
   }
-  @Get('find-meeting-by-user-zoom-meeting-id')
+  @Get('/find-meeting-by/user-zoom-meeting-id')
   findConferenceByUserAndZoomMeetingId(
     @Query('userId', new DefaultValuePipe('')) userId = '',
     @Query('zoomId', new DefaultValuePipe('')) zoomId = '',

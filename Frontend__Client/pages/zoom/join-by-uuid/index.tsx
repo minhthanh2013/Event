@@ -33,8 +33,9 @@ const Zoom = (props: ZoomProps) => {
       const fetchZoomInfo = async () => {
         const response1 = await fetch(`/api/speaker/${uuid}`);
         const cateResult1 = await response1.json();
+        console.log(36, cateResult1);
         const response = await fetch(`/api/zoom/get-meeting-details/${cateResult1.zoom_meeting_id}`);
-            const cateResult = await response.json();
+        const cateResult = await response.json();
             let tempZoomProps = {
                 meetingNumber: cateResult1.zoom_meeting_id.toString(),
                 userName: cateResult1.speaker_name,
@@ -56,26 +57,28 @@ const Zoom = (props: ZoomProps) => {
     )
 }
 export async function getServerSideProps(ctx: any) {
-    // Fetch data from external API
-    // Pass data to the page via props
-      let raw = null;
-      try{
-        raw = ctx.req.headers.cookie.toString();
-      } catch(e) {
-        return {props : {}};
-      }
-      if(raw.includes(";")) {
-        let rawCookie = raw.split(";")
-        for(let i = 0; i < rawCookie.length; i++) {
-          if(rawCookie[i].includes("OursiteJWT")) {
-            let cookies = rawCookie[i];
-            let token1 = cookies.split("=")[0].trim();
-            let value1 = cookies.split("=")[1];
-            let tempDecode1 = JSON.parse(Buffer.from(value1.split('.')[1], 'base64').toString());
-            return {props : {jwtToken: {token: token1, value :value1, tempDecode: tempDecode1}}};
-          }
-        }
-      }
-      return {props : {}};
+  // Fetch data from external API
+  // Pass data to the page via props
+  let raw = null;
+  try {
+    raw = ctx.req.cookies;
+  } catch (e) {
+    return { props: {} }
   }
+  try { 
+    if (raw.OursiteJWT.toString()) {
+      let token = "OursiteJWT"
+      let value = raw.OursiteJWT.toString();
+      let tempDecode = JSON.parse(Buffer.from(value.split('.')[1], 'base64').toString());
+      return {
+        props: {
+          token, value,
+          tempDecode
+        }
+      };
+    } return { props: {} }
+  } catch (error) {
+    return { props: {} }
+  }
+}
 export default Zoom

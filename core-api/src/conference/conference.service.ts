@@ -145,8 +145,6 @@ export class ConferenceService {
       const data = await this.conferenceRepository.save(newConference);
       result.status = data !== undefined;
       result.data = data;
-      //     emailSpeaker: string;
-    // nameSpeaker: string;
       for (let index = 0; index < conference.speakerList.length; index++) {
         const speaker: SpeakerRequestDto = new SpeakerRequestDto();
         speaker.conference_id = data.conference_id;
@@ -156,7 +154,7 @@ export class ConferenceService {
         const myuuid = uuidv4();
         speaker.uuid = myuuid;
         await this.speakerRepository.save(speaker);
-        this.emailService.sendEmailToSpeakerAfterConferenceIsSchedule(speaker.speaker_name, speaker.speaker_email, data.conference_name, data.date_start_conference, `http://localhost:8080/zoom/join-by-uuid/${myuuid}`);
+        this.emailService.sendEmailToSpeakerAfterConferenceIsSchedule(speaker.speaker_name, speaker.speaker_email, data.conference_name, data.date_start_conference, `http://localhost:8080/zoom/join-by-uuid/${myuuid}`, data.address, data.conference_type == 1);
       }
       if (data.conference_type == 2) {
         // TODO only schedule when admin is submit.
@@ -396,8 +394,6 @@ export class ConferenceService {
     }
   }
   async findConferenceByUserAndZoomMeetingId(userId: number, meetingId: string) {
-    console.log(userId);
-    console.log(meetingId);
     const conference = await this.conferenceRepository.findOne({
       where: {
         zoom_meeting_id: meetingId,

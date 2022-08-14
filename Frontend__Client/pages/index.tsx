@@ -38,24 +38,26 @@ const Home: NextPage = props  => {
 export async function getServerSideProps(ctx: any) {
   // Fetch data from external API
   // Pass data to the page via props
-    let raw = null;
-    try{
-      raw = ctx.req.headers.cookie.toString();
-    } catch(e) {
-      return { props: {} }
-    }
-    if(raw.includes(";")) {
-      let rawCookie = raw.split(";")
-      for(let i = 0; i < rawCookie.length; i++) {
-        if(rawCookie[i].includes("OursiteJWT")) {
-          let cookies = rawCookie[i];
-          let token = cookies.split("=")[0];
-          let value = cookies.split("=")[1];
-          let tempDecode = JSON.parse(Buffer.from(value.split('.')[1], 'base64').toString());
-          return {props : {token, value, tempDecode}};
+  let raw = null;
+  try {
+    raw = ctx.req.cookies;
+  } catch (e) {
+    return { props: {} }
+  }
+  try { 
+    if (raw.OursiteJWT.toString()) {
+      let token = "OursiteJWT"
+      let value = raw.OursiteJWT.toString();
+      let tempDecode = JSON.parse(Buffer.from(value.split('.')[1], 'base64').toString());
+      return {
+        props: {
+          token, value,
+          tempDecode
         }
-      }
-    }
-  return { props: {} }
+      };
+    } return { props: {} }
+  } catch (error) {
+    return { props: {} }
+  }
 }
 export default Home

@@ -24,6 +24,7 @@ export class HostService {
     return from(this.hostRepository.findOne({where: {host_id: id}}));
   }
   async signinHost(dto: HostAuthDto) {
+    console.log(27, "Here")
        // find the user by email
        const host = await this.hostRepository.findOne({
         where: {

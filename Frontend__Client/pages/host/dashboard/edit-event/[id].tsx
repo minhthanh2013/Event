@@ -227,28 +227,25 @@ export async function getServerSideProps(ctx: any) {
   // Pass data to the page via props
   let raw = null;
   try {
-    raw = ctx.req.headers.cookie.toString();
+    raw = ctx.req.cookies;
   } catch (e) {
     return { props: {} }
   }
-  if (raw.includes(";")) {
-    let rawCookie = raw.split(";")
-    for (let i = 0; i < rawCookie.length; i++) {
-      if (rawCookie[i].includes("OursiteJWT")) {
-        let cookies = rawCookie[i];
-        let token = cookies.split("=")[0].trim();
-        let value = cookies.split("=")[1].trim();
-        let tempDecode = JSON.parse(Buffer.from(value.split('.')[1], 'base64').toString());
-        return {
-          props: {
-            token, value,
-            tempDecode
-          }
-        };
-      }
-    }
+  try { 
+    if (raw.OursiteJWT.toString()) {
+      let token = "OursiteJWT"
+      let value = raw.OursiteJWT.toString();
+      let tempDecode = JSON.parse(Buffer.from(value.split('.')[1], 'base64').toString());
+      return {
+        props: {
+          token, value,
+          tempDecode
+        }
+      };
+    } return { props: {} }
+  } catch (error) {
+    return { props: {} }
   }
-  return { props: {} }
 }
 
 export default CreateEvent;

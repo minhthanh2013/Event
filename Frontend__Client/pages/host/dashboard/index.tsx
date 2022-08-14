@@ -252,8 +252,7 @@ export async function getServerSideProps(ctx: any) {
   } catch (e) {
     return { props: {} }
   }
-  try {
-    
+  try { 
     if (raw.OursiteJWT.toString()) {
       let token = "OursiteJWT"
       let value = raw.OursiteJWT.toString();

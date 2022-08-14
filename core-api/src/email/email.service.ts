@@ -83,19 +83,20 @@ export class EmailService {
         console.error(error)
     })
   }
-  async sendEmailToSpeakerAfterConferenceIsSchedule(speakerName: string, email: string, confName: string, dateStart: Date, zoomLink: string) {
+  async sendEmailToSpeakerAfterConferenceIsSchedule(speakerName: string, email: string, confName: string, dateStart: Date, zoomLink: string, address: string, isOfflineConf: boolean) {
     sgMail.setApiKey(this.configService.get("SENDGRID_API_KEY"))
     const msg = {
     to: email, // Change to your recipient
     from: 'minhthanhd013@gmail.com', // Change to your verified sender
     subject: 'Confirm speaker invitation',
-    text: `Hi there, you have been invited as a speaker to ${confName}`,
+    text: `Hi ${speakerName}, you have been invited as a speaker to ${confName}`,
     html: `
     <p>Hi ${email}. You have been invited as a speaker to ${confName}</p>
-    <p>Please join the conference at ${dateStart}</p>
-    <p>You can join the conference by clicking the link below</p>
-    <a href="${zoomLink}">Join the conference</a>
-    We hope you enjoy our service. Have a good day
+    ${isOfflineConf ? `<p>You can access your conference on ${dateStart}</p>` : 
+    `<p>You can join the conference by clicking the link below</p>
+    <a href="${zoomLink}">Join the conference</a>`}
+    <p>Conference address: ${address}</p>
+    <p>Thank you for choosing our service. We hope you enjoy our service. Have a good day.</p>
     .`,
     }
     sgMail

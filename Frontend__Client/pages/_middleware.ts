@@ -6,141 +6,173 @@ const adminSecret = process.env.ADMIN_JWT_SECRET as string;
 const userSecret = process.env.USER_JWT_SECRET as string;
 
 export default async function middleware(req: NextRequest) {
-    // const { nextUrl: { query } } = req;
-    // const param = req.nextUrl.searchParams.get('id');
-    // console.log(10, req.nextUrl.searchParams)
-    // const { pathname, origin } = req.nextUrl
-    const { origin } = req.nextUrl
-
-    const jwt = req.cookies.OursiteJWT.toString();
-
-    const url = req.url;
-
-    if (url === `${origin}/user/login`) {
-        if (jwt) {
-            try {
-                verify(jwt, userSecret);
-                return NextResponse.redirect(`${origin}/`);
-            } catch (error) {
-                console.log(error);
-                return NextResponse.next();
-            }
-        }
-    }
-
-    if (url === `${origin}/host/login`) {
-        console.log(jwt, hostSecret)
-        console.log(verify(jwt, hostSecret))
-        if (jwt) {
-            try {
-                verify(jwt, hostSecret);
-                return NextResponse.redirect(`${origin}/host/dashboard`);
-            } catch (error) {
-                return NextResponse.next();
-            }
-        }
-    }
-    if (url === `${origin}/admin/login`) {
-        if (jwt) {
-            try {
-                verify(jwt, adminSecret);
-                return NextResponse.redirect(`${origin}/admin/dashboard`);
-            } catch (error) {
-                return NextResponse.next();
-            }
-        }
-    }
-
-    if (url === `${origin}/user/register`) {
-        if (jwt) {
-            try {
-                verify(jwt, adminSecret);
-                return NextResponse.redirect(`${origin}/`);
-            } catch (error) {
-                return NextResponse.next();
-            }
-        }
-    }
-
-    if (url === `${origin}/host/register`) {
-        if (jwt) {
-            try {
-                verify(jwt, adminSecret);
-                return NextResponse.redirect(`${origin}/host/dashboard`);
-            } catch (error) {
-                return NextResponse.next();
-            }
-        }
-    }
-
-    if (url === `${origin}/admin/register`) {
-        if (jwt) {
-            try {
-                verify(jwt, adminSecret);
-                return NextResponse.redirect(`${origin}/admin/dashboard`);
-            } catch (error) {
-                return NextResponse.next();
-            }
-        }
-    }
-
-    if (url.includes("/host") && (url !== "/host/login") && (url !== "/host/register")) {
-        console.log(95, jwt, hostSecret)
-        console.log(verify(jwt, hostSecret))
+    const param = req.nextUrl.searchParams;
+    const jwt = req.cookies.OursiteJWT;
+    const {pathname} = req.nextUrl;
+    // USER
+    if (pathname === "/user/login") {
         if (jwt === undefined) {
-            return NextResponse.redirect(`${origin}/host/login`);
+          return NextResponse.next();
         }
         try {
-            verify(jwt, hostSecret);
-            return NextResponse.next();
+          verify(jwt, userSecret);
+          req.nextUrl.pathname = "/";
+          return NextResponse.redirect(req.nextUrl);
         } catch (error) {
-            return NextResponse.redirect(`${origin}/host/login`);
+            return NextResponse.next();
         }
-    }
+      }
 
-    if (url.includes("/admin") && !url.includes("/admin/login") && !url.includes("/admin/register")) {
+      if (pathname.startsWith("/user/") && (pathname !== "/user/login")) {
         if (jwt === undefined) {
-            return NextResponse.redirect(`${origin}/admin/login`);
+            req.nextUrl.pathname = "/user/login";
+            return NextResponse.redirect(req.nextUrl);
         }
         try {
-            verify(jwt, adminSecret);
+          verify(jwt, userSecret);
+          req.nextUrl.pathname = "/";
+          return NextResponse.next();
+        } catch (error) {
+            req.nextUrl.pathname = "/user/login";
+            return NextResponse.redirect(req.nextUrl);
+        }
+      }
+
+      // ADMIN 
+      if (pathname === "/host/login") {
+        if (jwt === undefined) {
+          return NextResponse.next();
+        }
+        try {
+          verify(jwt, hostSecret);
+          req.nextUrl.pathname = "/host/dashboard";
+          return NextResponse.redirect(req.nextUrl);
+        } catch (error) {
+            return NextResponse.next();
+        }
+      }
+
+      if (pathname.startsWith("/host/") && (pathname !== "/host/login")) {
+        if (jwt === undefined) {
+            req.nextUrl.pathname = "/host/login";
+            return NextResponse.redirect(req.nextUrl);
+        }
+        try {
+          verify(jwt, hostSecret);
+          req.nextUrl.pathname = "/host/dashboard";
+          return NextResponse.next();
+        } catch (error) {
+            req.nextUrl.pathname = "/host/login";
+            return NextResponse.redirect(req.nextUrl);
+        }
+      }
+
+      // ADMIN 
+      if (pathname === "/admin/login") {
+        if (jwt === undefined) {
+          return NextResponse.next();
+        }
+        try {
+          verify(jwt, adminSecret);
+          req.nextUrl.pathname = "/admin/dashboard";
+          return NextResponse.redirect(req.nextUrl);
+        } catch (error) {
+            return NextResponse.next();
+        }
+      }
+
+      if (pathname.startsWith("/admin/") && (pathname !== "/admin/login")) {
+        if (jwt === undefined) {
+            req.nextUrl.pathname = "/admin/login";
+            return NextResponse.redirect(req.nextUrl);
+        }
+        try {
+          verify(jwt, adminSecret);
+          req.nextUrl.pathname = "/admin/dashboard";
+          return NextResponse.next();
+        } catch (error) {
+            req.nextUrl.pathname = "/admin/login";
+            return NextResponse.redirect(req.nextUrl);
+        }
+      }
+
+      // ZOOM 
+      if(param.has("id") && pathname === `/zoom/join-by-zoom-id`) {
+        if (jwt === undefined) {
+            req.nextUrl.pathname = "/";
+            return NextResponse.redirect(req.nextUrl);
+        }
+        try {
+            let tempDecode1 = JSON.parse(Buffer.from(jwt.split('.')[1], 'base64').toString());
+            const role = tempDecode1.role;
+            const userId = tempDecode1.sub;
+            const meetingId = param.get('id').toString();
+            let dataResult = null;
+            let cateResult = null;
+            if(role === 'host') {
+                try {
+                    verify(jwt, hostSecret);
+                    let dataResult = await fetch(`http:localhost:8080/api/conference/get-conference-by-zoom-meeting-id/${meetingId}`);
+                    let cateResult = await dataResult.json();
+                    if(await cateResult.conference_id !== undefined) {
+                        return NextResponse.next();
+                    } else {
+                        req.nextUrl.pathname = "/";
+                        return NextResponse.redirect(req.nextUrl);
+                    }
+                } catch (error) {
+                    req.nextUrl.pathname = "/";
+                    return NextResponse.redirect(req.nextUrl);
+                }
+            } else if (role === "user") {
+                try {
+                    verify(jwt, userSecret);
+                    let dataResult = await fetch(`http://localhost:8080/api/conference/get-conference-by-user-zoom-meeting-id?userId=${userId}&zoomId=${meetingId}`);
+                    let cateResult = await dataResult.json();
+                    if(cateResult.ticket_id !== undefined) {
+                        return NextResponse.next();
+                    } else {
+                        req.nextUrl.pathname = "/";
+                        return NextResponse.redirect(req.nextUrl);
+                    }
+                } catch (error) {
+                    req.nextUrl.pathname = "/";
+                    return NextResponse.redirect(req.nextUrl);
+                }
+            }
+        } catch (error) {
+            req.nextUrl.pathname = "/";
+            return NextResponse.redirect(req.nextUrl);
+         }
+      }
+
+      if(param.has("uuid") && pathname === `/zoom/join-by-zoom-id`) {
+        try {
+            const uuid = param.get('uuid');
+            let dataResult = null;
+            let cateResult = null;
+            
+                try {
+                    let dataResult = await fetch('/api/speaker/' + uuid);
+                    let cateResult = await dataResult.json();
+                } catch (error) {
+                    req.nextUrl.pathname = "/";
+                    return NextResponse.redirect(req.nextUrl);
+                }
+                if(cateResult.length === 0) {
+                    req.nextUrl.pathname = "/";
+                    return NextResponse.redirect(req.nextUrl);
+                }
+            
             return NextResponse.next();
         } catch (error) {
-            return NextResponse.redirect(`${origin}/admin/login`);
-        }
-    }
+            req.nextUrl.pathname = "/";
+            return NextResponse.redirect(req.nextUrl);
+         }
+      }
 
-    // if(url === `${origin}/zoom/join-by-zoom-id?id=${param}`) {
-    //     if (jwt === undefined) {
-    //         return NextResponse.redirect(`${origin}/`);
-    //     }
-    //     try {
-    //         verify(jwt, userSecret);
-    //         let tempDecode1 = JSON.parse(Buffer.from(jwt.split('.')[1], 'base64').toString());
-    //         const role = tempDecode1.role;
-    //         const id = tempDecode1.id;
-    //         const meetingId = param;
-    //         if(role === 'host') {
-    //             const dataResult = await fetch('/api/get-conference-by-zoom-meeting-id/' + meetingId);
-    //             const cateResult = await dataResult.json();
-
-
-    //         }
-    //         return NextResponse.next();
-    //     } catch (error) {
-    //         return NextResponse.redirect(`${origin}/admin/login`);
-    //      }
-    //     // try {
-    //     //     verify(jwt, adminSecret);
-    //     //     return NextResponse.next();
-    //     // } catch (error) {
-    //     //     return NextResponse.redirect(`${origin}/admin/login`);
-    //     //  }
-    // }
-
-
-    // return NextResponse.next();
-
+      // Else
+      return NextResponse.next();
 }
 export const config = {
     matcher: ['/user/:path*', '/admin/:path*', '/host/:path*', '/zoom/:path*'],
