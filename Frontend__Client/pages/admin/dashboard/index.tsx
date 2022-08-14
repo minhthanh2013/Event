@@ -13,7 +13,6 @@ import EventIcon from "@mui/icons-material/Event";
 import SessionsIcon from "@mui/icons-material/EmojiEvents";
 import SubscriptionsIcon from "@mui/icons-material/ShopTwo";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { Users } from "./UserList";
 import { EventList } from "./EventList";
 import { Sessions } from "./SessionList";
 import FilterList from "@mui/icons-material/FilterList";
@@ -117,7 +116,7 @@ const EventCreate = (props: any) => {
         }
         fetchConferencesData();
         fetchCombosData();
-    
+
         // Ở đây chưa có state [users, setUsers] = ... cũng như UserProps vì t không biết field của Users
         // Tạo interface như trên nhưng dành cho Users => state [users, setUsers] = useState<UserProps>();
         // Nhớ tạo state usersAfterFilter rồi copy 2 cái t làm sẵn cho m, hiện tại nó là fe của Subcriptions
@@ -156,7 +155,7 @@ const EventCreate = (props: any) => {
         <>
             <Box
                 sx={{
-                    background: "#F1EFEF",
+                    background: "#ffffff",
                     width: "100%",
                     overflow: "hidden",
                     position: "relative",
@@ -220,27 +219,6 @@ const EventCreate = (props: any) => {
                                     }
                                     {...a11yProps(1)}
                                 />
-                                <Tab
-                                    label={
-                                        <>
-                                            <Box
-                                                sx={{
-                                                    display: "flex",
-                                                    alignItems: "start",
-                                                    flexDirection: "row",
-                                                    justifyContent: "center",
-                                                    marginLeft: "20px",
-                                                }}
-                                            >
-                                                <SubscriptionsIcon sx={{ marginRight: "0.5rem" }} />
-                                                <Typography sx={{ fontWeight: "bold" }}>
-                                                    User
-                                                </Typography>
-                                            </Box>
-                                        </>
-                                    }
-                                    {...a11yProps(2)}
-                                />
                             </Tabs>
                         </ThemeProvider>
                     </Grid>
@@ -253,11 +231,6 @@ const EventCreate = (props: any) => {
                         <TabPanel value={value} index={1}>
                             <Box sx={{ marginLeft: "3rem" }}>
                                 <Sessions data={sessionsAfterFilter?.data} propss={props} filter={filterSessions} />
-                            </Box>
-                        </TabPanel>
-                        <TabPanel value={value} index={2}>
-                            <Box sx={{ marginLeft: "3rem" }}>
-                                <Users data={sessions?.data} propss={props} filter={filterUsers} />
                             </Box>
                         </TabPanel>
                     </Grid>
@@ -274,25 +247,25 @@ export async function getServerSideProps(ctx: any) {
     // Pass data to the page via props
     let raw = null;
     try {
-      raw = ctx.req.cookies;
+        raw = ctx.req.cookies;
     } catch (e) {
-      return { props: {} }
+        return { props: {} }
     }
-    try { 
-      if (raw.OursiteJWT.toString()) {
-        let token = "OursiteJWT"
-        let value = raw.OursiteJWT.toString();
-        let tempDecode = JSON.parse(Buffer.from(value.split('.')[1], 'base64').toString());
-        return {
-          props: {
-            token, value,
-            tempDecode
-          }
-        };
-      } return { props: {} }
+    try {
+        if (raw.OursiteJWT.toString()) {
+            let token = "OursiteJWT"
+            let value = raw.OursiteJWT.toString();
+            let tempDecode = JSON.parse(Buffer.from(value.split('.')[1], 'base64').toString());
+            return {
+                props: {
+                    token, value,
+                    tempDecode
+                }
+            };
+        } return { props: {} }
     } catch (error) {
-      return { props: {} }
+        return { props: {} }
     }
-  }
+}
 
 export default EventCreate;
