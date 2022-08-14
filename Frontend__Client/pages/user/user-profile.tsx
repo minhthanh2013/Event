@@ -65,22 +65,7 @@ const UserProfile = () => {
 								</FormControl>
 							</Box>
 
-							<Box sx={{ display: 'flex', gap: '6rem', mb: '5rem', justifyContent: 'space-evenly' }}>
-								<FormControl variant='standard' sx={{ width: '400px' }}>
-									<InputLabel sx={{ fontSize: '1.4rem' }}>Card Number</InputLabel>
-									<Input id='component-simple' sx={{ fontSize: '1.4rem' }} />
-								</FormControl>
-								<Box sx={{ width: '400px', display: 'flex', justifyContent: 'space-between' }}>
-									<FormControl variant='standard' sx={{ width: '170px' }}>
-										<InputLabel sx={{ fontSize: '1.4rem' }}>Valid Date</InputLabel>
-										<Input id='component-simple' sx={{ fontSize: '1.4rem' }} />
-									</FormControl>
-									<FormControl variant='standard' sx={{ width: '170px' }}>
-										<InputLabel sx={{ fontSize: '1.4rem' }}>CVV</InputLabel>
-										<Input id='component-simple' sx={{ fontSize: '1.4rem' }} />
-									</FormControl>
-								</Box>
-							</Box>
+					
 
 							<Box sx={{ display: 'flex', gap: '3rem', justifyContent: 'center' }}>
 								<Button variant='outlined' sx={{ color: '#4F3398', borderColor: '#4F3398', width: '130px' }} size='large'>
