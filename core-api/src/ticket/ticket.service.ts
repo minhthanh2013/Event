@@ -1,7 +1,9 @@
+import { BuySessionDto } from './models/ticket.interface';
 /* eslint-disable prettier/prettier */
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { from, Observable } from 'rxjs';
+import { ComboSessionEntity } from 'src/combosession/models/combo_session.entity';
 import { ConferenceEntity } from 'src/conference/models/conference.entity';
 import { EmailService } from 'src/email/email.service';
 import { PaymentEntity } from 'src/payment/models/payment.entity';
@@ -15,6 +17,8 @@ export class TicketService {
   constructor(
     @InjectRepository(TicketEntity)
     private readonly ticketRepository: Repository<TicketEntity>,
+    @InjectRepository(ComboSessionEntity)
+    private readonly comboRepository: Repository<ComboSessionEntity>,
     @InjectRepository(ConferenceEntity)
     private readonly conferenceRepository:  Repository<ConferenceEntity>,
     @InjectRepository(UserEntity)
@@ -73,5 +77,16 @@ export class TicketService {
   }
   remove(id: number): Observable<DeleteResult> {
     return from(this.ticketRepository.delete(id));
+  }
+  buySession(buy: BuySessionDto) {
+    this.comboRepository.find({where: {combo_id: buy.combo_id}}).then(combos => {
+      combos.forEach(combo => {
+        const ticket: Ticket =  {} as Ticket;
+        ticket.buyer_id = buy.buyer_id;
+        ticket.conference_id = combo.conference_id;
+        ticket.payment_id = buy.payment_id;
+        this.create(ticket);
+      });
+    })
   }
 }
