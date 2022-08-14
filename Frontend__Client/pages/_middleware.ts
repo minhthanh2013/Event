@@ -10,11 +10,9 @@ export default async function middleware(req: NextRequest) {
     // const param = req.nextUrl.searchParams.get('id');
     // console.log(10, req.nextUrl.searchParams)
     // const { pathname, origin } = req.nextUrl
-    console.log(13, req);
     const { origin } = req.nextUrl
-    const { cookies } = req;
 
-    const jwt = cookies.OursiteJWT;
+    const jwt = req.cookies.OursiteJWT.toString();
 
     const url = req.url;
 
@@ -31,6 +29,8 @@ export default async function middleware(req: NextRequest) {
     }
 
     if (url === `${origin}/host/login`) {
+        console.log(jwt, hostSecret)
+        console.log(verify(jwt, hostSecret))
         if (jwt) {
             try {
                 verify(jwt, hostSecret);
@@ -84,7 +84,9 @@ export default async function middleware(req: NextRequest) {
         }
     }
 
-    if (url.includes("/host") && !url.includes("/host/login") && !url.includes("/host/register")) {
+    if (url.includes("/host") && (url !== "/host/login") && (url !== "/host/register")) {
+        console.log(95, jwt, hostSecret)
+        console.log(verify(jwt, hostSecret))
         if (jwt === undefined) {
             return NextResponse.redirect(`${origin}/host/login`);
         }
@@ -137,7 +139,7 @@ export default async function middleware(req: NextRequest) {
     // }
 
 
-    return NextResponse.next();
+    // return NextResponse.next();
 
 }
 export const config = {
