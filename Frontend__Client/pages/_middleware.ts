@@ -106,33 +106,33 @@ export default async function middleware(req: NextRequest) {
     }
 }
 
-if(url === `${origin}/zoom/join-by-zoom-id?id=${param}`) {
-    if (jwt === undefined) {
-        return NextResponse.redirect(`${origin}/`);
-    }
-    try {
-        verify(jwt, userSecret);
-        let tempDecode1 = JSON.parse(Buffer.from(jwt.split('.')[1], 'base64').toString());
-        const role = tempDecode1.role;
-        const id = tempDecode1.id;
-        const meetingId = param;
-        if(role === 'host') {
-            const dataResult = await fetch('/api/get-conference-by-zoom-meeting-id/' + meetingId);
-            const cateResult = await dataResult.json();
+// if(url === `${origin}/zoom/join-by-zoom-id?id=${param}`) {
+//     if (jwt === undefined) {
+//         return NextResponse.redirect(`${origin}/`);
+//     }
+//     try {
+//         verify(jwt, userSecret);
+//         let tempDecode1 = JSON.parse(Buffer.from(jwt.split('.')[1], 'base64').toString());
+//         const role = tempDecode1.role;
+//         const id = tempDecode1.id;
+//         const meetingId = param;
+//         if(role === 'host') {
+//             const dataResult = await fetch('/api/get-conference-by-zoom-meeting-id/' + meetingId);
+//             const cateResult = await dataResult.json();
             
             
-        }
-        return NextResponse.next();
-    } catch (error) {
-        return NextResponse.redirect(`${origin}/admin/login`);
-     }
-    // try {
-    //     verify(jwt, adminSecret);
-    //     return NextResponse.next();
-    // } catch (error) {
-    //     return NextResponse.redirect(`${origin}/admin/login`);
-    //  }
-}
+//         }
+//         return NextResponse.next();
+//     } catch (error) {
+//         return NextResponse.redirect(`${origin}/admin/login`);
+//      }
+//     // try {
+//     //     verify(jwt, adminSecret);
+//     //     return NextResponse.next();
+//     // } catch (error) {
+//     //     return NextResponse.redirect(`${origin}/admin/login`);
+//     //  }
+// }
 
 
 return NextResponse.next();
