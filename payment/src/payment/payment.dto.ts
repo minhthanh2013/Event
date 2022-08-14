@@ -10,5 +10,5 @@ export class ResponseData {
 }
 
 export class SubscriptionDto {
-    status: boolean
+    id: number
 }

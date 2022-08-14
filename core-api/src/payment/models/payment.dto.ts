@@ -6,5 +6,5 @@ export class PaymentDto {
 }
 
 export class SubscriptionDto {
-    status: boolean
+    id: number
 }

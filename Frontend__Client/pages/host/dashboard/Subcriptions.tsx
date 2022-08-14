@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
@@ -14,16 +14,22 @@ export const Subcriptions = () => {
 
   const [subscription, setSubscription] = useState<ResponseData>()
   const router = useRouter()
-  const newSubscription = async () => {
-    const data = await fetch("/api/payment/", {
-      method: 'POST'
-    })
-    const result = await data.json()
-    setSubscription(result) 
-    console.log(subscription)
-    const url = subscription.data
+  useEffect(() => {
+    const newSubscription = async () => {
+      const data = await fetch("/api/payment/", {
+        method: 'POST'
+      })
+      const result = await data.json()
+      setSubscription(result)
+    }
+
+    newSubscription();
+  }, [])
+  const navigate = () => {
+    const url = subscription?.data
     router.push(url)
   }
+
   return (
     <>
       <Box>
@@ -117,7 +123,7 @@ export const Subcriptions = () => {
             <Button
               variant="contained"
               sx={{ width: "100%", padding: "1rem", margin: "1.2rem 0" }}
-              onClick={newSubscription}
+              onClick={navigate}
             >
               Get started
             </Button>

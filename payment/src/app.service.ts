@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectStripe } from 'nestjs-stripe';
 import Stripe from 'stripe';
-import { PaymentDto, ResponseData } from './payment/payment.dto';
+import { PaymentDto, ResponseData, SubscriptionDto } from './payment/payment.dto';
 
 @Injectable()
 export class AppService {
@@ -38,6 +38,14 @@ export class AppService {
 
   async newSubscription(): Promise<ResponseData> {
     const responseData = new ResponseData()
+    const id = 2
+    const accountParam: Stripe.AccountCreateParams = {
+      type: 'custom',
+      capabilities: {
+        card_payments: {requested: true},
+        transfers: {requested: true}
+      }
+     }
     const param: Stripe.Checkout.SessionCreateParams = {
       mode: 'subscription',
       payment_method_types: ['card'],
@@ -50,8 +58,12 @@ export class AppService {
       success_url: `${process.env.MOCK_URL}`,
       cancel_url: `${process.env.MOCK_URL}`,
     }
+    
     try {
       const result = await this.stripeClient.checkout.sessions.create(param)
+      const acc = await this.stripeClient.accounts.create(accountParam)
+      console.log(acc)
+      // const resul1 = await this.stripeClient.accounts.retrieve('acct_1L7fYzLHHzSNpGj2')
       responseData.data = result.url
     } catch(err) {
       responseData.status = false

@@ -3,7 +3,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { Observable } from 'rxjs';
 import { ResponseData } from 'src/responsedata/response-data.dto';
-import { PaymentDto } from './models/payment.dto';
+import { PaymentDto, SubscriptionDto } from './models/payment.dto';
 
 @Injectable()
 export class PaymentService {
