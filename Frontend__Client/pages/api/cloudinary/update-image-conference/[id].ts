@@ -17,7 +17,7 @@ export default async function (req , res) {
 		const form = new formidable.IncomingForm();
 		form.parse(req, async function (err, fields, files) {
 			return res.status(201).send(await uploadImageToCloudinary(files.file.filepath));
-		  });
+		});
 		
 
 	} catch (error) {

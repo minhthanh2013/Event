@@ -10,22 +10,23 @@ export class ConferenceResponseDto {
 
 export class ConferenceRequestDto {
     conferenceName: string;
+    conferenceAddress: string;
+    organizerName: string;
     hostName: string;
-    conferenceTypeId: number;
-    conferenceCategoryId: number;
+    conferenceType: number;
+    conferenceCategory: number;
     conferenceDescription: string;
     speakerList: SpeakerList[];
     dateStartConference: Date;
     dateStartSell: Date;
     dateEndSell: Date;
-    dateEndConference: Date;
     ticketQuantity: number;
     conferencePrice: number;
 }
 
 export class SpeakerList {
-    emailSpeaker: string;
-    nameSpeaker: string;
+    email: string;
+    name: string;
 }
 
 export class SpeakerRequestDto {

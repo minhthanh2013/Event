@@ -77,7 +77,7 @@ export const BasicInfo: React.FC<CreateEventProps> = ({ data, setData, setValue 
   } = useForm();
   const onSubmit = (value: any) => {
     setData({
-      ...data, conferenceName: value.conferenceName, organizerName: value.organizerName,
+      ...data, conferenceName: value.conferenceName, conferenceAddress: value.conferenceAddress, organizerName: value.organizerName,
       conferenceType: value.conferenceType, conferenceCategory: value.conferenceCategory, conferenceDescription: value.conferenceDescription
     });
     setValue(1);
@@ -100,6 +100,15 @@ export const BasicInfo: React.FC<CreateEventProps> = ({ data, setData, setValue 
             defaultValue={data.conferenceName}
             variant="standard"
             {...register("conferenceName")}
+          />
+          <TextField
+            className={styles.eventFields}
+            id="standard-required"
+            label="Address"
+            required
+            defaultValue={data.conferenceAddress}
+            variant="standard"
+            {...register("conferenceAddress")}
           />
           <TextField
             className={styles.eventFields}

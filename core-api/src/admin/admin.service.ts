@@ -1,3 +1,6 @@
+import { ComboSessionEntity } from 'src/combosession/models/combo_session.entity';
+import { EmailService } from 'src/email/email.service';
+import { SpeakerEntity } from 'src/speaker/models/speaker.entity';
 import { ConferenceEntity } from './../conference/models/conference.entity';
 /* eslint-disable prettier/prettier */
 import { ConflictException, ForbiddenException, Injectable } from '@nestjs/common';
@@ -20,8 +23,13 @@ export class AdminService {
     private readonly adminRepository: Repository<AdminEntity>,
     @InjectRepository(ConferenceEntity)
     private readonly conferenceRepository: Repository<ConferenceEntity>,
+    @InjectRepository(ComboSessionEntity)
+    private readonly comboRepository: Repository<ComboSessionEntity>,
+    @InjectRepository(SpeakerEntity)
+    private readonly speakerRepository: Repository<SpeakerEntity>,
     private jwt: JwtService,
     private readonly httpService: HttpService,
+    private readonly emailService: EmailService,
   ) {}
 
   findAllAdmins(): Observable<Admin[]> {
@@ -93,7 +101,6 @@ export class AdminService {
         role,
     }
 
-    
     const token = await this.jwt.signAsync(
         payload,
     );
@@ -148,12 +155,20 @@ export class AdminService {
     return new Promise(async (resolve, reject) => {
       await this.conferenceRepository.findOne({where: {conference_id: conferenceId}}).then(async conference => {
         if(conference && conference.status_ticket === "draft") {
-          await this.conferenceRepository.remove(conference).then(() => {
-            resolve(true);})
-            .catch(error => {
-              reject(error)
-              return error;
+          const combo = await this.comboRepository.find({where: {conference_id: conferenceId}});
+          await this.comboRepository.remove(combo).then(async () => {
+          // await this.conferenceRepository.remove(conference).then(async () => {
+            const resultDeleteSpeakers = await this.speakerRepository.find({where: {conference_id: conferenceId}});
+            // await this.speakerRepository.remove(resultDeleteSpeakers);
+            resultDeleteSpeakers.forEach(async (speaker) => {
+              await this.speakerRepository.remove(speaker);
+              this.emailService.sendEmailToSpeakersAfterDeleteConference(speaker.speaker_email, conference.conference_name)
             })
+            this.conferenceRepository.remove(conference)
+            resolve(true)
+          })
+;
+          // })
         } else {
           reject(false);
         }

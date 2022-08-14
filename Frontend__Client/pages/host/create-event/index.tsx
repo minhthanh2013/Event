@@ -79,22 +79,17 @@ const CreateEvent = (props) => {
       body: JSON.stringify(data),
     });
     const resDataJson = await resData.json();
-    console.log(81, resDataJson);
+    console.log(resDataJson);
     if(resData.status === 200) {
       let body = new FormData()
       body.append('file',imageFile)
-      await fetch(`/api/cloudinary/update-image/${props?.tempDecode?.sub}`, {
+      const imageUploadResult = await fetch(`/api/cloudinary/update-image-conference/${resDataJson.data.conference_id}`, {
         method: "POST",
         body,
       });
-    //   // TODO: Thiếu date.
-    //   // const result = await res.json();
-    //   // console.log(result);
+      console.log(90, imageUploadResult);
     }
-
   }
-
-  
 
   //change tabs; value = tabs value
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {

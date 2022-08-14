@@ -81,10 +81,11 @@ const CreateEvent = (props) => {
       },
     });
     const result = await res.json();
+    console.log(result);
     if (res.status === 200) {
       let body = new FormData()
       body.append('file',imageFile)
-      await fetch(`/api/cloudinary/update-image-session/${props?.tempDecode?.sub}`, {
+      await fetch(`/api/cloudinary/update-image-session/${result.data.comboSessionId}`, {
         method: "POST",
         body,
       });

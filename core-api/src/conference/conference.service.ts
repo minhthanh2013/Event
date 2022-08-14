@@ -149,8 +149,8 @@ export class ConferenceService {
         const speaker: SpeakerRequestDto = new SpeakerRequestDto();
         speaker.conference_id = data.conference_id;
         speaker.is_accepted = false;
-        speaker.speaker_email = conference.speakerList[index].emailSpeaker;
-        speaker.speaker_name = conference.speakerList[index].nameSpeaker;
+        speaker.speaker_email = conference.speakerList[index].email;
+        speaker.speaker_name = conference.speakerList[index].name;
         const myuuid = uuidv4();
         speaker.uuid = myuuid;
         await this.speakerRepository.save(speaker);
@@ -158,22 +158,22 @@ export class ConferenceService {
       }
       if (data.conference_type == 2) {
         // TODO only schedule when admin is submit.
-        const zoomDto: ScheduleZoomDto = new ScheduleZoomDto();
-        zoomDto.conferenceId = data.conference_id;
-        zoomDto.conferenceName = data.conference_name;
-        zoomDto.hostName = conference.hostName;
-        const conferenceCategor =
-          await this.conferenceCategoryRepository.findOne({
-            where: {
-              category_id: data.conference_category,
-            },
-          });
-        zoomDto.conferenceCategory = conferenceCategor.category_name;
-        zoomDto.dateStartConference = data.date_start_conference;
-        const scheduleZoomResult = await this.zoomService.createConference(
-          zoomDto,
-        );
-        console.log(scheduleZoomResult);
+        // const zoomDto: ScheduleZoomDto = new ScheduleZoomDto();
+        // zoomDto.conferenceId = data.conference_id;
+        // zoomDto.conferenceName = data.conference_name;
+        // zoomDto.hostName = conference.hostName;
+        // const conferenceCategor =
+        //   await this.conferenceCategoryRepository.findOne({
+        //     where: {
+        //       category_id: data.conference_category,
+        //     },
+        //   });
+        // zoomDto.conferenceCategory = conferenceCategor.category_name;
+        // zoomDto.dateStartConference = data.date_start_conference;
+        // const scheduleZoomResult = await this.zoomService.createConference(
+        //   zoomDto,
+        // );
+        // console.log(scheduleZoomResult);
       }
       return result;
     });
@@ -255,20 +255,24 @@ export class ConferenceService {
     entity.host = await this.hostRepository.findOne({
       where: { user_name: dto.hostName },
     });
+    entity.address = dto.conferenceAddress;
     entity.date_start_conference = dto.dateStartConference;
     entity.date_start_sell = dto.dateStartSell;
     entity.date_end_sell = dto.dateEndSell;
     entity.date_end_conference = dto.dateStartConference;
     entity.ticket_quantity = dto.ticketQuantity;
+    entity.price = dto.conferencePrice;
+    entity.description = dto.conferenceDescription;
+    entity.organizer_name = dto.organizerName;
     this.conferenceCategoryRepository
       .findOne({
-        where: { category_id: dto.conferenceCategoryId },
+        where: { category_id: dto.conferenceCategory },
       })
       .then((value) => (entity.conference_category = value.category_id));
 
     this.conferenceTypeRepository
       .findOne({
-        where: { type_id: dto.conferenceTypeId },
+        where: { type_id: dto.conferenceType },
       })
       .then((value) => (entity.conference_type = value.type_id));
     return entity;

@@ -1,9 +1,9 @@
 import { Avatar, Box, Button, FormControl, IconButton, Input, InputLabel, Typography } from '@mui/material'
 import React from 'react'
-import Header from '../components/Header'
-import PurchaseModal from '../components/PurchaseModal'
-import TicketList_SearchResult from '../components/TicketList__SearchResult'
-import SearchResult from './search-result'
+import Header from '../../components/Header'
+import PurchaseModal from '../../components/PurchaseModal'
+import TicketList_SearchResult from '../../components/TicketList__SearchResult'
+import SearchResult from '../search-result'
 import Divider from '@mui/material/Divider'
 const UserProfile = () => {
 	function stringToColor(string: any) {
@@ -102,4 +102,30 @@ const UserProfile = () => {
 		</>
 	)
 }
+
+export async function getServerSideProps(ctx: any) {
+	// Fetch data from external API
+	// Pass data to the page via props
+	let raw = null;
+	try {
+	  raw = ctx.req.cookies;
+	} catch (e) {
+	  return { props: {} }
+	}
+	try { 
+	  if (raw.OursiteJWT.toString()) {
+		let token = "OursiteJWT"
+		let value = raw.OursiteJWT.toString();
+		let tempDecode = JSON.parse(Buffer.from(value.split('.')[1], 'base64').toString());
+		return {
+		  props: {
+			token, value,
+			tempDecode
+		  }
+		};
+	  } return { props: {} }
+	} catch (error) {
+	  return { props: {} }
+	}
+  }
 export default UserProfile

@@ -90,7 +90,7 @@ export const EventList = (props: EventListProps) => {
                   <TableCell component="th" scope="row">
                     <>
                       <Typography sx={{ fontWeight: "bold" }}>{row.conference_name}</Typography>
-                      {row?.conference_type.toString() === "1" ? "Offline" : "Online"} event <br />
+                      {row?.conference_type?.toString() === "1" ? "Offline" : "Online"} event <br />
                       {row.date_start_conference}
                     </>
                   </TableCell>

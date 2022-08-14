@@ -83,19 +83,40 @@ export class EmailService {
         console.error(error)
     })
   }
+
+
+  async sendEmailToSpeakersAfterDeleteConference(email: string, confName: string) {
+    sgMail.setApiKey(this.configService.get("SENDGRID_API_KEY"))
+    const msg = {
+    to: email, // Change to your recipient
+    from: 'minhthanhd013@gmail.com', // Change to your verified sender
+    subject: 'Delete conference notification',
+    text: `Delete conference notification`,
+    html: `<p>Hi, due to some reasons, ${confName} conference has been deleted.</p>
+    <p>Therefore your link to the conference wont be available. Sorry because of this inconvenience.</p>`,
+    }
+    sgMail
+    .send(msg)
+    .then(() => {
+        console.log('Email sent')
+    })
+    .catch((error) => {
+        console.error(error)
+    })
+  }
+
   async sendEmailToSpeakerAfterConferenceIsSchedule(speakerName: string, email: string, confName: string, dateStart: Date, zoomLink: string, address: string, isOfflineConf: boolean) {
     sgMail.setApiKey(this.configService.get("SENDGRID_API_KEY"))
     const msg = {
     to: email, // Change to your recipient
     from: 'minhthanhd013@gmail.com', // Change to your verified sender
     subject: 'Confirm speaker invitation',
-    text: `Hi ${speakerName}, you have been invited as a speaker to ${confName}`,
+    text: `Hi ${speakerName}, you have been invited as a speaker to ${confName} conference.`,
     html: `
     <p>Hi ${email}. You have been invited as a speaker to ${confName}</p>
     ${isOfflineConf ? `<p>You can access your conference on ${dateStart}</p>` : 
     `<p>You can join the conference by clicking the link below</p>
     <a href="${zoomLink}">Join the conference</a>`}
-    <p>Conference address: ${address}</p>
     <p>Thank you for choosing our service. We hope you enjoy our service. Have a good day.</p>
     .`,
     }
