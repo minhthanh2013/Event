@@ -1,4 +1,3 @@
-import { Conference } from './../../dist/src/conference/models/conference.interface.d';
 import { SpeakerEntity } from 'src/speaker/models/speaker.entity';
 /* eslint-disable prettier/prettier */
 import { EmailService } from 'src/email/email.service';
