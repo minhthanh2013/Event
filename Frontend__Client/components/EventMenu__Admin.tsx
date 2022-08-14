@@ -66,7 +66,7 @@ const EventMenuAdmin: React.FC<props> = ({id, hostId, event, props}) => {
                 open={open}
                 onClose={handleClose}
             >
-                {(event?.status_ticket === "published" || event?.status_ticket === "pending") ? 
+                {(event?.status_ticket === "published") ? 
                 (
                     <Link href={`/event/${id.toString()}`} passHref >
                         <MenuItem onClick={handleClose}>View</MenuItem>

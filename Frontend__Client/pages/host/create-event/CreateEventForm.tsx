@@ -105,6 +105,7 @@ export const BasicInfo: React.FC<CreateEventProps> = ({ data, setData, setValue 
             className={styles.eventFields}
             id="standard-required"
             label="Organizer Name"
+            required
             defaultValue={data ? data.organizerName : undefined}
             variant="standard"
             {...register("organizerName")}

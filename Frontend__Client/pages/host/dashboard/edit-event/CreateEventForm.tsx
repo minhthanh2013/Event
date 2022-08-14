@@ -53,9 +53,9 @@ interface CategoryProps {
 export const BasicInfo: React.FC<CreateEventProps> = ({ data, setData, setValue }) => {
   const [categoryList, setCategoryList] = useState<CategoryProps>()
   const [typeList, setTypeList] = useState<TypeProps>()
-
+  console.log(data);
+  const defaultData = data;
   useEffect(() => {
-    setData(data);
     const fetchDataCate = async () => {
       const dataResult = await fetch("/api/conference-category/get-all");
       const cateResult = await dataResult.json();
@@ -69,7 +69,7 @@ export const BasicInfo: React.FC<CreateEventProps> = ({ data, setData, setValue 
 
     fetchDataType();
     fetchDataCate();
-  }, [data])
+  }, [])
 
   const {
     register,
@@ -79,11 +79,12 @@ export const BasicInfo: React.FC<CreateEventProps> = ({ data, setData, setValue 
   const onSubmit = (value: any) => {
     // nếu nó tạo thừa field thì xóa ...data đi
     setData({
-      ...data, conferenceName: value.conferenceName, organizerName: value.organizerName,
+      ...data, conference_name: value.conference_name, organizerName: value.organizerName,
       conferenceType: value.conferenceType, conferenceCategory: value.conferenceCategory, conferenceDescription: value.conferenceDescription
     });
     setValue(1);
   };
+  
   return (
     <>
       <Grid
@@ -94,65 +95,68 @@ export const BasicInfo: React.FC<CreateEventProps> = ({ data, setData, setValue 
         alignItems="center"
       >
         <form onSubmit={handleSubmit(onSubmit)}>
-          <TextField
+          <>
+        {data.conference_name && <TextField
             className={styles.eventFields}
             required
             id="standard-required"
             label="Event Name"
-            defaultValue={data?.conferenceName}
+            defaultValue={data.conference_name}
             variant="standard"
-            {...register("conferenceName")}
-          />
-          <TextField
+            {...register("conference_name")}
+          />}
+          {data.organizer_name && <TextField
             className={styles.eventFields}
             id="standard-required"
             label="Organizer Name"
-            defaultValue={data ? data.organizerName : undefined}
+            defaultValue={data.organizer_name}
             variant="standard"
-            {...register("organizerName")}
-          />
+            {...register("organizer_name")}
+          />}
 
-          <FormControl className={styles.select}>
+          {data.conference_type && <FormControl className={styles.select}>
             <InputLabel id="select-type">Type</InputLabel>
             <Select
               className={styles.selectType}
               required
               labelId="select-type"
-              defaultValue={data.conferenceType}
+              defaultValue={data.conference_type}
               label="Type"
-              {...register("conferenceType")}
+              {...register("conference_type")}
             >
               {typeList?.data?.map((dataItem) => (
                 <MenuItem key={dataItem.type_id} value={dataItem.type_id}>{dataItem.type_name}</MenuItem>
               ))}
             </Select>
-          </FormControl>
+          </FormControl>}
 
-          <FormControl className={styles.select} style={{ marginRight: "0" }}>
+          {data.conference_category && <FormControl className={styles.select} style={{ marginRight: "0" }}>
             <InputLabel id="select-category">Category</InputLabel>
             <Select
               required
               labelId="select-category"
-              defaultValue={data.conferenceCategory}
+              defaultValue={data.conference_category}
               label="Category"
-              {...register("conferenceCategory")}
+              {...register("conference_category")}
             >
               {categoryList?.data?.map((dataItem) => (
                 <MenuItem key={dataItem.category_id} value={dataItem.category_id}>{dataItem.category_name}</MenuItem>
               ))}
             </Select>
-          </FormControl>
+          </FormControl>}
 
-          <TextField
+          { data.description && <TextField
             className={styles.eventFields}
             label="Description"
-            defaultValue={data.conferenceDescription}
+            defaultValue={data.description}
             multiline
             {...register("conferenceDescription")}
-          />
+          />}
+
           <Button className={styles.nextBtn} variant="contained" type="submit">
             Next
           </Button>
+          </>
         </form>
       </Grid>
     </>
@@ -339,8 +343,8 @@ export const Date: React.FC<CreateEventProps> = ({ data, setData, setValue, api,
   const [ticketEnd, setTicketEnd] = useState<Date | null>(null);
 
   const onSubmit = (value: any) => {
-    api({ ...data, dateStartConference: value.dateStartConference, dateStartSell: value.dateStartSell,
-      dateEndSell: value.dateEndSell, conferencePrice: value.conferencePrice, ticketQuantity: value.ticketQuantity, hostName: prop.tempDecode.username });
+    api({ ...data, date_start_conference: value.date_start_conference, date_start_sell: value.date_start_sell,
+      date_end_sell: value.date_end_sell, price: value.price, ticket_quantity: value.ticket_quantity, hostName: prop.tempDecode.username });
     setValue(0);
   };
   return (
@@ -358,12 +362,12 @@ export const Date: React.FC<CreateEventProps> = ({ data, setData, setValue, api,
               <Controller
                 name="dateStartConference"
                 control={control}
-                defaultValue={data.dateStartConference ? data.dateStartConference : eventStart}
+                defaultValue={data?.date_start_conference}
                 render={({ field: { ref, ...rest } }) => (
                   <DatePicker
                     label="Event start date"
                     inputFormat="dd/MM/yyyy"
-                    value={data.dateStartConference}
+                    value={data.date_start_conference}
                     disablePast
                     inputRef={ref}
                     onChange={(newValue: Date | null) => {
@@ -383,12 +387,12 @@ export const Date: React.FC<CreateEventProps> = ({ data, setData, setValue, api,
               <Controller
                 name="dateStartSell"
                 control={control}
-                defaultValue={data.dateStartSell ? data.dateStartSell : ticketStart}
+                defaultValue={data?.date_start_sell}
                 render={({ field: { ref, ...rest } }) => (
                   <DatePicker
                     label="Ticket sales start"
                     inputFormat="dd/MM/yyyy"
-                    value={data.dateStartSell}
+                    value={data.date_start_sell}
                     disablePast
                     inputRef={ref}
                     onChange={(newValue: Date | null) => {
@@ -408,7 +412,7 @@ export const Date: React.FC<CreateEventProps> = ({ data, setData, setValue, api,
               <Controller
                 name="dateEndSell"
                 control={control}
-                defaultValue={data.dateEndSell ? data.dateEndSell : ticketEnd} 
+                defaultValue={data?.dateEndSell} 
                 render={({ field: { ref, ...rest } }) => (
                   <DatePicker
                     label="Ticket sales end"
@@ -433,26 +437,28 @@ export const Date: React.FC<CreateEventProps> = ({ data, setData, setValue, api,
             </Stack>
           </LocalizationProvider>
 
-          <TextField
+          {data.price && <TextField
             className={styles.eventFields}
             required
             id="standard-required"
             label="Ticket price"
             variant="standard"
-            defaultValue={data.conferencePrice}
+            defaultValue={data.price}
+            value={data?.price || ''}
             type="number"
-            {...register("conferencePrice")}
-          />
-          <TextField
+            {...register("price")}
+          />}
+          {data.ticket_quantity && <TextField
             className={styles.eventFields}
             required
             id="standard-required"
             label="Ticket quantity"
             variant="standard"
             type="number"
-            defaultValue={data.ticketQuantity}
-            {...register("ticketQuantity")}
-          />
+            defaultValue={data.ticket_quantity}
+            value={data?.ticket_quantity || ''}
+            {...register("ticket_quantity")}
+          />}
           <Button className={styles.nextBtn} variant="contained" type="submit">
             Submit
           </Button>

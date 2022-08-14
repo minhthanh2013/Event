@@ -40,7 +40,7 @@ export class ConferenceController {
       route: '/conference/filter',
     }, search, onlyPublish);
   }
-  @Get('id')
+  @Get('/:id')
   findOne(@Param('id') id: string): Observable<ResponseData> {
     return from(this.conferenceService.findOne(+id));
   }
