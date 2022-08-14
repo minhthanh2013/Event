@@ -60,17 +60,17 @@ function a11yProps(index: number) {
 }
 
 interface ConferenceProp {
-	conference_id: number;
-	description: string;
-	price: number;
-	conference_name: number;
-	date_start_conference: Date;
-	address: string;
+  conference_id: number;
+  description: string;
+  price: number;
+  conference_name: number;
+  date_start_conference: Date;
+  address: string;
   ticket_quantity: number;
   current_quantity: number;
   status_ticket: string;
   conference_type: string;
-	// conferenceOrganizer: string;
+  // conferenceOrganizer: string;
 }
 
 interface ConferenceProps {
@@ -80,25 +80,25 @@ interface ConferenceProps {
 
 // Session props
 interface SessionListProps {
-	status: boolean;
-	data: SessionListProp[];
+  status: boolean;
+  data: SessionListProp[];
 }
 interface SessionListProp {
-	comboSessionId: number;
-	comboSessionPrice: number;
-	comboSessionName: string;
-	comboSessionDescription: string;
-	conferenceList: TicketProp[];
+  comboSessionId: number;
+  comboSessionPrice: number;
+  comboSessionName: string;
+  comboSessionDescription: string;
+  conferenceList: TicketProp[];
   discount: number;
 }
 
 interface TicketProp {
-	conference_id: number;
-	description: string;
-	price: string;
-	conference_name: number;
-	date_start_conference: Date;
-	address: string;
+  conference_id: number;
+  description: string;
+  price: string;
+  conference_name: number;
+  date_start_conference: Date;
+  address: string;
   ticket_quantity: string;
   current_quantity: string;
   status_ticket: string;
@@ -110,21 +110,21 @@ const EventCreate = (props: any) => {
   const [value, setValue] = React.useState(0);
 
   console.log(props);
-	useEffect(() => {
-		const fetchConferences = async () => {
-		  const dataResult = await fetch(`/api/conference/get-conference-by-host-id/${props.tempDecode.sub}`);
-		  const cateResult = await dataResult.json();
-		  setConferences(cateResult)
-		}
-    
+  useEffect(() => {
+    const fetchConferences = async () => {
+      const dataResult = await fetch(`/api/conference/get-conference-by-host-id/${props.tempDecode.sub}`);
+      const cateResult = await dataResult.json();
+      setConferences(cateResult)
+    }
+
     const fetchSessions = async () => {
-		  const dataResult = await fetch(`/api/combo/get-by-host/${props.tempDecode.sub}`);
-		  const cateResult = await dataResult.json();
-		  setSessions(cateResult)
-		}
-		fetchConferences();
+      const dataResult = await fetch(`/api/combo/get-by-host/${props.tempDecode.sub}`);
+      const cateResult = await dataResult.json();
+      setSessions(cateResult)
+    }
+    fetchConferences();
     fetchSessions();
-	  }, []);
+  }, []);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
@@ -143,7 +143,7 @@ const EventCreate = (props: any) => {
         <Box className={styles.dot__1}></Box>
         <Box className={styles.dot__2}></Box>
         <Box className={styles.dot__3}></Box>
-        <HeaderHost {...props}/>
+        <HeaderHost {...props} />
 
         <Grid container spacing={2}>
           <Grid item xs={2} md={2}>
@@ -221,12 +221,12 @@ const EventCreate = (props: any) => {
           <Grid item xs={10} md={10}>
             <TabPanel value={value} index={0}>
               <Box sx={{ marginLeft: "3rem" }}>
-                <EventList data={conferences?.data} propss={props}/>
+                <EventList data={conferences?.data} propss={props} />
               </Box>
             </TabPanel>
             <TabPanel value={value} index={1}>
               <Box sx={{ marginLeft: "3rem" }}>
-                <Sessions data={sessions?.data} propss={props}/>
+                <Sessions data={sessions?.data} propss={props} />
               </Box>
             </TabPanel>
             <TabPanel value={value} index={2}>
@@ -246,30 +246,28 @@ const EventCreate = (props: any) => {
 export async function getServerSideProps(ctx: any) {
   // Fetch data from external API
   // Pass data to the page via props
-    let raw = null;
-    try{
-      raw = ctx.req.headers.cookie.toString();
-    } catch(e) {
-      return { props: {} }
-    }
-    if(raw.includes(";")) {
-      let rawCookie = raw.split(";")
-      for(let i = 0; i < rawCookie.length; i++) {
-        if(rawCookie[i].includes("OursiteJWT")) {
-          let cookies = rawCookie[i];
-          let token = cookies.split("=")[0];
-          let value = cookies.split("=")[1];
-          let tempDecode = JSON.parse(Buffer.from(value.split('.')[1], 'base64').toString());
-          return {
-            props : {
-            token, value,
-            tempDecode
-          }
-          };
+  let raw = null;
+  try {
+    raw = ctx.req.cookies;
+  } catch (e) {
+    return { props: {} }
+  }
+  try {
+    
+    if (raw.OursiteJWT.toString()) {
+      let token = "OursiteJWT"
+      let value = raw.OursiteJWT.toString();
+      let tempDecode = JSON.parse(Buffer.from(value.split('.')[1], 'base64').toString());
+      return {
+        props: {
+          token, value,
+          tempDecode
         }
-      }
-    }
-  return { props: {} }
+      };
+    } return { props: {} }
+  } catch (error) {
+    return { props: {} }
+  }
 }
 
 export default EventCreate;
