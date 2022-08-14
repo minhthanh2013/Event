@@ -7,9 +7,11 @@ const userSecret = process.env.USER_JWT_SECRET as string;
 
 export default async function middleware(req: NextRequest) {
     // const { nextUrl: { query } } = req;
-    const param = req.nextUrl.searchParams.get('id');
-    console.log(10, req.nextUrl.searchParams)
-    const { pathname, origin } = req.nextUrl
+    
+    // const param = req.nextUrl.searchParams.get('id');
+    // console.log(10, req.nextUrl.searchParams)
+    // const { pathname, origin } = req.nextUrl
+
     const {cookies} = req;
 
     const jwt = cookies.OursiteJWT;
