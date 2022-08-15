@@ -265,6 +265,18 @@ export class CombosessionService {
         reject(error2);
       })
     }).then((response) => {
+      if(response.data  !== null ) {
+        const update = new ResponseData();
+        const tempMap = new Map();
+        response.data.forEach(element => {
+          tempMap.set(element.comboSessionId, element);
+        });
+        update.status = true;
+        update.data = [...tempMap.values()];
+        response = update;
+      } else {
+        response.status = false;
+      }
       return response;
     }).catch((e) => {
       throw e;

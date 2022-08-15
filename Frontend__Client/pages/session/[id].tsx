@@ -21,6 +21,11 @@ interface TicketProp {
 	conference_name: number;
 	date_start_conference: Date;
 	address: string;
+	ticket_quantity: number;
+	current_quantity: number;
+	status_ticket: string;
+	conference_type: string;
+	organizerName: string;
 }
 
 interface SessionProps {
@@ -44,7 +49,7 @@ const Session = (props: SessionProps) => {
             <Box className={styles.background__wrap}>
                 <Box className={styles.dot__1}></Box>
                 <Header {...props}/>
-                {sessionProps?.data && <DetailBannerSession nameProp={sessionProps?.data?.comboSessionName} />}
+                {sessionProps?.data && <DetailBannerSession nameProp={sessionProps?.data?.comboSessionName} comboDescription={sessionProps?.data?.comboSessionDescription}/>}
                 {sessionProps?.data && <DetailContentSession data={sessionProps?.data} />}
             </Box>
             <Footer/>

@@ -29,6 +29,7 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
             buildBody.discount = obj.discount;
             buildBody.combo_description = obj.combo_description;
             buildBody.listConferenceIds = obj.conferenceList.map(x => x.conference_id);
+            console.log(32, buildBody);
             const response = await axios.post(request, buildBody);
             res.status(200).json(response.data);
         } catch (error) {

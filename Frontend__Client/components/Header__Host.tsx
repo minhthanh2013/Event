@@ -280,16 +280,17 @@ const HeaderHost = (props: any) => {
 								transformOrigin={{ horizontal: 'right', vertical: 'top' }}
 								anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
 							>
-								<MenuItem sx={{ display: 'flex', gap: '0.5rem', justifyContent: 'space-between', color: '#6A35F2' }}>
-									<Avatar sx={{ color: '#6A35F2', bgcolor: 'white' }} /> Profile
-								</MenuItem>
-								<MenuItem sx={{ display: 'flex', gap: '0.5rem', justifyContent: 'space-between', color: '#6A35F2' }}>
-									<ConfirmationNumberIcon /> Tickets
-								</MenuItem>
-								<MenuItem sx={{ display: 'flex', gap: '0.5rem', justifyContent: 'space-between', color: '#6A35F2' }}>
-									<LogoutIcon />
-									Logout
-								</MenuItem>
+								<Link passHref href={'/host/profile'}>
+									<MenuItem sx={{ display: 'flex', gap: '0.5rem', justifyContent: 'space-between', color: '#6A35F2' }}>
+										<Avatar sx={{ color: '#6A35F2', bgcolor: 'white' }} /> Profile
+									</MenuItem>
+								</Link>
+								<Link passHref href={'/host/logout'}>
+									<MenuItem sx={{ display: 'flex', gap: '0.5rem', justifyContent: 'space-between', color: '#6A35F2' }}>
+										<LogoutIcon />
+										Logout
+									</MenuItem>
+								</Link>
 							</Menu>
 						</>
 					) : (

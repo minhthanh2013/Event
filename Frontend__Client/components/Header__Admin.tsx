@@ -16,7 +16,6 @@ import ListItemIcon from '@mui/material/ListItemIcon'
 import LogoutIcon from '@mui/icons-material/Logout'
 
 import ConfirmationNumberIcon from '@mui/icons-material/ConfirmationNumber'
-import { format } from 'date-fns'
 interface HeaderProps {
 	props: any
 }
@@ -31,12 +30,9 @@ interface TicketProp {
 	conference_name: number
 	date_start_conference: Date
 	address: string
-	conference_type: string;
-	zoom_meeting_id: string;
-	isValiated: boolean;
 	// conferenceOrganizer: string;
 }
-const Header = (props: any) => {
+const HeaderAdmin = (props: any) => {
 	const [ticketList, setTicketList] = useState<TicketProps>()
 	const pages = ['Products', 'Pricing', 'Blog']
 	const settings = ['Profile', 'Account', 'Dashboard', 'Logout', 'Account', 'Dashboard', 'Logout', 'Account', 'Dashboard', 'Logout']
@@ -52,27 +48,17 @@ const Header = (props: any) => {
 	function parseDate(date: Date) {
 		date = new Date(date)
 		const day = date.getDate()
+		const month = date.getMonth()
+		const year = date.getFullYear()
 		const hour = date.getHours()
-		const stringHour = (date.getHours() < 10 ? '0' : '') + date.getHours();
 		const min = date.getMinutes()
-		const stringMin = (date.getMinutes() < 10 ? '0' : '') + date.getMinutes();
 		let ampm = hour >= 12 ? 'pm' : 'am'
 		const weekday = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
 		let weekDayString = weekday[date.getDay()]
 		let monthString = date.toLocaleString('en-us', { month: 'short' })
-		const dateString = `${stringHour}:${stringMin} ${ampm} - ${weekDayString}, ${monthString} ${day}`
+		const dateString = `${hour}:${min} ${ampm} - ${weekDayString}, ${monthString} ${day}`
 		return dateString
 	}
-	useEffect(() => {
-		if (props?.tempDecode?.role === 'user') {
-			const fetchTicketList = async () => {
-				const dataResult = await fetch(`/api/conference/get-conference-by-user-id/${props?.tempDecode?.sub}`)
-				const cateResult = await dataResult.json()
-				setTicketList(cateResult)
-			}
-			fetchTicketList()
-		}
-	}, [props?.tempDecode?.role, props?.tempDecode?.sub])
 
 	const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
 		setAnchorElNav(event.currentTarget)
@@ -118,7 +104,7 @@ const Header = (props: any) => {
 		}
 	}
 	let isLogin = false
-	if (props?.token !== undefined && props?.tempDecode?.role === "user") {
+	if (props?.token !== undefined) {
 		isLogin = true
 	}
 	return (
@@ -223,20 +209,14 @@ const Header = (props: any) => {
 													<Typography component='h4'>{parseDate(ticket?.date_start_conference)}</Typography>
 												</Box>
 												<Box display='flex' flexDirection='column' sx={{ width: '25%', alignItems: 'flex-start' }}>
-													{ticket?.conference_type === '2' && ticket?.zoom_meeting_id !== null && (
-														<IconButton sx={{ display: 'flex', gap: '0.5rem', color: '#C64EFF' }}>
+													<IconButton sx={{ display: 'flex', gap: '0.5rem', color: '#C64EFF' }}>
 														<PlayCircleOutlineOutlinedIcon />
-														<Link href={`/zoom/join-by-zoom-id/${ticket?.zoom_meeting_id}`} passHref>
-															<Typography>Join</Typography>
-														</Link>
-														</IconButton>
-													)}
-													{ticket?.conference_type === '2' && ticket?.isValiated === false && (
-														<IconButton sx={{ display: 'flex', gap: '0.5rem', color: '#C64EFF' }}>
-															<ReplayOutlinedIcon />
-															<Typography>Record</Typography>
-														</IconButton>
-													)}					
+														<Typography>Join</Typography>
+													</IconButton>
+													<IconButton sx={{ display: 'flex', gap: '0.5rem', color: '#C64EFF' }}>
+														<ReplayOutlinedIcon />
+														<Typography>Record</Typography>
+													</IconButton>
 												</Box>
 											</Box>
 										</MenuItem>
@@ -290,21 +270,14 @@ const Header = (props: any) => {
 								transformOrigin={{ horizontal: 'right', vertical: 'top' }}
 								anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
 							>
-								<Link passHref href={'/user/profile'}>
+								<MenuItem sx={{ display: 'flex', gap: '0.5rem', justifyContent: 'space-between', color: '#6A35F2' }}>
+									<Avatar sx={{ color: '#6A35F2', bgcolor: 'white' }} /> Profile
+								</MenuItem>
+								<Link passHref href={'/admin/logout'}>
 									<MenuItem sx={{ display: 'flex', gap: '0.5rem', justifyContent: 'space-between', color: '#6A35F2' }}>
-										<Avatar sx={{ color: '#6A35F2', bgcolor: 'white' }} /> Profile
+										<LogoutIcon />
+										Logout
 									</MenuItem>
-								</Link>
-								<Link passHref href={'/user/ticket'}>
-								<MenuItem sx={{ display: 'flex', gap: '0.5rem', justifyContent: 'space-between', color: '#6A35F2' }}>
-									<ConfirmationNumberIcon /> Tickets
-								</MenuItem>
-								</Link>
-								<Link passHref href={'/user/logout'}>
-								<MenuItem sx={{ display: 'flex', gap: '0.5rem', justifyContent: 'space-between', color: '#6A35F2' }}>
-									<LogoutIcon />
-									Logout
-								</MenuItem>
 								</Link>
 							</Menu>
 						</>
@@ -320,12 +293,10 @@ const Header = (props: any) => {
 									Sign up
 								</Button>
 							</Link>
-							<Link href={'/host/dashboard'} passHref>
-								<Button variant='text' sx={{ color: '#6A35F2' }}>
-									create an event
-								</Button>
-							</Link>
 
+							<Button variant='text' sx={{ color: '#6A35F2' }}>
+								create an event
+							</Button>
 						</>
 					)}
 				</Toolbar>
@@ -334,4 +305,4 @@ const Header = (props: any) => {
 	)
 }
 
-export default Header
+export default HeaderAdmin

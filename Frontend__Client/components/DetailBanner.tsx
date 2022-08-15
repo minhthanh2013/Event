@@ -6,6 +6,7 @@ import AddIcon from '@mui/icons-material/Add';
 import Button from '@mui/material/Button';
 import Image from 'next/image';
 import { useState, useEffect } from 'react';
+import { splitNum } from '../GlobalFunction/SplitNumber';
 const imageURL = "https://images.pexels.com/photos/2306281/pexels-photo-2306281.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
 
 interface TicketProp {
@@ -16,6 +17,7 @@ interface TicketProp {
 	date_start_conference: Date;
 	address: string;
 	host_id: number;
+	organizerName: string;
 	// conferenceOrganizer: string;
 }
 
@@ -71,14 +73,14 @@ const DetailBanner = (props: TicketProps) => {
                         <Box>
                             <Box>
                                 <Typography component="h2">{props.data.conference_name}</Typography>
-                                <Typography component="h3">By Style-Republik</Typography>
+                                <Typography component="h3">By {props.data.organizerName}</Typography>
                                 <Typography component="h4">{props.data.address}</Typography>
                             </Box>
                             <Box>
                                 <Typography component="h2">Date & Time</Typography>
                                 <Typography component="h3">{weekDay}, {monthString} {day}, {year} at {hour}:{min} {timePeriod}</Typography>
                                 <Button variant="text" className={styles.button__1}><AddIcon/>Add to calendar</Button>
-                                <Button variant="contained" className={styles.button__2}>Buy ticket (${props.data.price})</Button>
+                                <Button variant="contained" className={styles.button__2}>Buy ticket ({`${splitNum(props.data.price)} VNĐ`})</Button>
                                 <Button variant="outlined" className={styles.button__3} disabled>Buy record ($ 5.00)</Button>
                             </Box>
                         </Box>

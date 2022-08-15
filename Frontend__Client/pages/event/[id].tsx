@@ -48,6 +48,7 @@ interface TicketProp {
 	address: string
 	host_id: number;
 	status_ticket: string;
+	organizerName: string;
 	// conferenceOrganizer: string;
 }
 interface TicketProps {
@@ -63,6 +64,7 @@ const Event = (props: any) => {
 		const fetchTicketList = async () => {
 			const dataResult = await fetch(`/api/conference/${id}`)
 			const cateResult = await dataResult.json()
+			console.log(67, cateResult)
 			setTicketList(cateResult)
 		}
 		fetchTicketList().catch(() => {

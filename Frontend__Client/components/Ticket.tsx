@@ -7,6 +7,7 @@ import { CardActionArea } from "@mui/material";
 import styles from "../styles/Ticket.module.scss";
 import Box from "@mui/material/Box";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
+import { splitNum } from "../GlobalFunction/SplitNumber";
 
 interface TicketProp {
 	conference_id: number;
@@ -97,8 +98,8 @@ const Ticket = (props: TicketProps) => {
 								</Typography>
 							</Box>
 							<Box component="div">
-								<AttachMoneyIcon />
-								<Typography>{props.data.price}</Typography>
+								{/* <AttachMoneyIcon /> */}
+								<Typography>{`${splitNum(props.data.price)} VNĐ`}</Typography>
 							</Box>
 						</CardContent>
 					</CardActionArea>

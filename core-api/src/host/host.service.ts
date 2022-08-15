@@ -6,7 +6,7 @@ import { from, Observable } from 'rxjs';
 import * as argon from 'argon2';
 import { Repository } from 'typeorm';
 import { HostEntity } from './models/host.entity';
-import { Host } from './models/host.interface';
+import { Host, HostResponseDto } from './models/host.interface';
 import { HostAuthDto } from './dto/host.auth';
 
 @Injectable()
@@ -20,11 +20,18 @@ export class HostService {
   findAllHosts(): Observable<Host[]> {
     return from(this.hostRepository.find());
   }
-  findOne(id: number): Observable<Host> {
-    return from(this.hostRepository.findOne({where: {host_id: id}}));
+  async findOne(id: number): Promise<HostResponseDto> {
+    const host = await this.hostRepository.findOne({where: {host_id: id}});
+    delete host.password;
+    const response: HostResponseDto =  {} as HostResponseDto;
+    response.host_id = host.host_id;
+    response.user_name = host.user_name;
+    response.email = host.email;
+    response.firstName = host.first_name;
+    response.lastName = host.last_name;
+    return response;
   }
   async signinHost(dto: HostAuthDto) {
-    console.log(27, "Here")
        // find the user by email
        const host = await this.hostRepository.findOne({
         where: {

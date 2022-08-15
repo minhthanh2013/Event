@@ -10,6 +10,8 @@ import AccessAlarmIcon from '@mui/icons-material/AccessAlarm'
 import LocationOnIcon from '@mui/icons-material/LocationOn'
 import { Pagination, Navigation } from 'swiper'
 import Box from '@material-ui/core/Box'
+import { splitNum } from '../GlobalFunction/SplitNumber'
+
 
 interface CarouselSlideProps {
 	status: boolean
@@ -214,7 +216,8 @@ const CarouselSlide = (props: any) => {
 										}}
 										variant='outlined'
 									>
-										Buy ticket ($ {list?.price ? list.price : '0'})
+										{/* `${splitNum(Total)} VNĐ` || '' */}
+										Buy ticket ({list?.price ?  `${splitNum(list.price)} VNĐ` : '0'})
 									</Button>
 								</Box>
 							</Box>

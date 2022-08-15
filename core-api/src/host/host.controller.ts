@@ -13,7 +13,7 @@ import { Observable } from 'rxjs';
 import { HostAuthDto } from './dto/host.auth';
 import { HostJwtGuard } from './guard/host.jwt.guard';
 import { HostService } from './host.service';
-import { Host } from './models/host.interface';
+import { Host, HostResponseDto } from './models/host.interface';
 
 @Controller('host')
 export class HostController {
@@ -26,7 +26,7 @@ export class HostController {
   }
   @Get(':id')
   @UseGuards(HostJwtGuard)
-  findOne(@Param('id') id: string): Observable<Host> {
+  findOne(@Param('id') id: string): Promise<HostResponseDto> {
     return this.hostService.findOne(+id);
   }
   @Post('signup')

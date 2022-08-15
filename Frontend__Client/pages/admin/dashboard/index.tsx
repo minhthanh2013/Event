@@ -18,6 +18,7 @@ import { Sessions } from "./SessionList";
 import FilterList from "@mui/icons-material/FilterList";
 import HeaderHost from "../../../components/Header__Host";
 import Footer from "../../../components/Footer";
+import HeaderAdmin from "../../../components/Header__Admin";
 
 interface EventCreate { }
 
@@ -165,7 +166,7 @@ const EventCreate = (props: any) => {
                 <Box className={styles.dot__1}></Box>
                 <Box className={styles.dot__2}></Box>
                 <Box className={styles.dot__3}></Box>
-                <HeaderHost {...props} />
+                <HeaderAdmin {...props} />
 
                 <Grid container spacing={2}>
                     <Grid item xs={2} md={2}>

@@ -9,6 +9,7 @@ import Link from 'next/link';
 const imageURL = "https://images.pexels.com/photos/2306281/pexels-photo-2306281.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
 interface DetailBannerSessionProps {
     nameProp: string
+    comboDescription: string
     // props: any;
 }
 const DetailBannerSession = (props: DetailBannerSessionProps) => {
@@ -26,7 +27,7 @@ const DetailBannerSession = (props: DetailBannerSessionProps) => {
                         <Box>
                             <Box>
                                 <Typography component="h2">{props.nameProp}</Typography>
-                                <Typography component="h3">By Style-Republik</Typography>
+                                <Typography component="h3">{props?.comboDescription || 'No description'}</Typography>
                             </Box>
                             
                         </Box>

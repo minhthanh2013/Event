@@ -1,19 +1,19 @@
 import { Box, Card, CardActionArea, CardContent, CardMedia, FormControl, Grid, MenuItem, Select, Stack, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import Pagination from '@mui/material/Pagination'
-import Header from '../components/Header'
-import PurchaseModal from '../components/PurchaseModal'
-import TicketList_SearchResult from '../components/TicketList__SearchResult'
-import SearchResult from './search-result'
+import Header from '../../components/Header'
+import PurchaseModal from '../../components/PurchaseModal'
+import TicketList_SearchResult from '../../components/TicketList__SearchResult'
+import SearchResult from '../search-result'
 import Divider from '@mui/material/Divider'
 import FilterListIcon from '@mui/icons-material/FilterList'
 import styles from '../styles/Ticket__2.module.scss'
 import { min } from 'date-fns'
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney'
-import Ticket__2 from '../components/Ticket__2'
+import Ticket__2 from '../../components/Ticket__2'
 import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
-import Combo__2 from '../components/Combo__2'
+import Combo__2 from '../../components/Combo__2'
 interface TabPanelProps {
 	children?: React.ReactNode
 	index: number
@@ -162,11 +162,11 @@ const UserTicket = (props: any) => {
 
 	let timeOnly = false;
 	useEffect(() => {
-		if(!timeOnly) {
+		// if(!timeOnly) {
 			fetchConferences();
-			timeOnly = true;
-		}
-	}, [value])
+			// timeOnly = true;
+		// }
+	}, [])
 	return (
 		<>
 			<Header />

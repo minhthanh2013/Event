@@ -17,7 +17,7 @@ export class CombosessionController {
   findAll(): Observable<ComboSession[]> {
     return this.comboSessionService.findAllSessions();
   }
-  @Get("id")
+  @Get(":id")
   getCombo(@Param('id') comboId: number): Promise<ResponseData> {
     return this.comboSessionService.findAllSessionsBySessionId(comboId);
   }

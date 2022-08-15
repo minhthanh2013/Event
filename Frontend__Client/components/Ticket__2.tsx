@@ -18,6 +18,7 @@ interface TicketProp {
 	current_quantity: number;
 	status_ticket: string;
 	conference_type: string;
+	organizerName: string;
 }
 interface TicketProps {
 	data: TicketProp
@@ -93,7 +94,7 @@ const Ticket__2 = (props: TicketProps) => {
 											? props.data.address
 											: '227 Nguyễn Văn Cừ, Phường 4, Quận 5, Thành phố Hồ Chí Minh'}
 									</Typography>
-									<Typography component='h5'>By Saigon Classical Music Group</Typography>
+									<Typography component='h5'>By {props.data.organizerName}</Typography>
 								</Box>
 								<Box component='div'>
 									<AttachMoneyIcon />
