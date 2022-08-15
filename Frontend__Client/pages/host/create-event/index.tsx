@@ -58,8 +58,8 @@ const CreateEvent = (props) => {
   const [data, setData] = useState({})
   const [image, setImage] = useState<string | ArrayBuffer | null>();
   const [imageFile, setImageFile] = useState<Multer.File | null>();
-  const [popUp, setPopUp] = useState("0")
-  const [status, setStatus] = useState<string>("0")
+  const [popUp, setPopUp] = useState("0");
+  const [status, setStatus] = useState("0");
 
   const onImageChange = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
@@ -72,10 +72,12 @@ const CreateEvent = (props) => {
     }
   };
   const [value, setValue] = React.useState(0);
+  // redirect after successfully create 
   const router = useRouter();
   const redirect = () => {
     router.push("/host/dashboard")
   }
+
   const apiCall = async (data) => {
     const resData = await fetch("/api/conference/create-new", {
       method: "POST",
