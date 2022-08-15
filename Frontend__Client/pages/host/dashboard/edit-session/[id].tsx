@@ -110,7 +110,7 @@ const CreateEvent = (props) => {
       });
       setStatus("1");
       setPopUp("1");
-      setTimeout(redirect, 3000);
+      setTimeout(redirect, 2000);
     } else {
       setStatus("0");
       setPopUp("1");

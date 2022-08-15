@@ -138,7 +138,7 @@ const CreateEvent = (props) => {
     if (resData.status === 200) {
       setStatus("1");
       setPopUp("1");
-      setTimeout(redirect, 3000);
+      setTimeout(redirect, 2000);
     } else {
       setStatus("0");
       setPopUp("1");

@@ -78,8 +78,8 @@ const CreateEvent = (props) => {
   const [value, setValue] = React.useState(0);
 
   const router = useRouter();
-  const redirect = () => {
-    router.push("/host/dashboard")
+  function refreshPage() {
+    window.location.reload();
   }
 
   const apiCall = async (data) => {
@@ -92,19 +92,19 @@ const CreateEvent = (props) => {
     });
     const result = await res.json();
     console.log(result);
-    if (res.status === 200) {
-      let body = new FormData()
-      body.append('file', imageFile)
-      await fetch(`/api/cloudinary/update-image-session/${result.data.comboSessionId}`, {
-        method: "POST",
-        body,
-      });
-    }
+    // if (res.status === 200) {
+    //   let body = new FormData()
+    //   body.append('file', imageFile)
+    //   await fetch(`/api/cloudinary/update-image-session/${result.data.comboSessionId}`, {
+    //     method: "POST",
+    //     body,
+    //   });
+    // }
 
     if (res.status === 200) {
       setStatus("1");
       setPopUp("1");
-      setTimeout(redirect, 3000);
+      setTimeout(refreshPage, 2000);
     } else {
       setStatus("0");
       setPopUp("1");

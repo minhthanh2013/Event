@@ -70,6 +70,7 @@ interface ConferenceProp {
     current_quantity: number;
     status_ticket: string;
     conference_type: string;
+    host_id: number;
     // conferenceOrganizer: string;
 }
 

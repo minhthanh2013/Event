@@ -14,12 +14,10 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import Link from 'next/link'
-import IconButton from '@mui/material/IconButton';
-import MenuIcon from '@mui/icons-material/MoreVertOutlined';
-import Menu from '@mui/material/Menu';
 import MenuItem from "@mui/material/MenuItem";
 import { splitNum } from "../../../GlobalFunction/SplitNumber"
 import TextField from "@mui/material/TextField";
+import { SessionMenu } from "../../../components/SessionMenu";
 
 interface SessionProps {
   data: SessionListProp[];
@@ -53,24 +51,6 @@ interface ConferenceProp {
 
 export const Sessions = (props: SessionProps) => {
   const [sortType, setSortType] = useState('all');
-
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const open = Boolean(anchorEl);
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-  const handleDeleteSession = async (comboId: number) => {
-    const resData = await fetch(`/api/combo/delete-combo/${comboId}`, {
-      method: "DELETE",
-    });
-    if (resData.status === 200) {
-      // TODO: hanle notification
-    }
-    setAnchorEl(null);
-  };
 
   const getTotalPrice = (conferenceList: ConferenceProp[]) => {
     let totalPrice = 0;
@@ -189,24 +169,7 @@ export const Sessions = (props: SessionProps) => {
                   <TableCell align="right">{splitNum(getTotalPrice(row?.conferenceList))} VNĐ</TableCell>
                   <TableCell align="right" sx={{ width: "15rem" }}>
                     {row?.conferenceList?.length}
-                    <IconButton sx={{ color: "rgba(106, 53, 242, 0.77)", marginLeft: "2rem" }} onClick={handleClick}>
-                      <MenuIcon />
-                    </IconButton>
-                    <Menu
-                      id="basic-menu"
-                      anchorEl={anchorEl}
-                      open={open}
-                      onClose={handleClose}
-                    >
-                      <Link href={`/session/${row?.comboSessionId}`} passHref>
-                        <MenuItem onClick={handleClose}>View</MenuItem>
-                      </Link>
-                      <Link href={`/host/dashboard/edit-session/${row?.comboSessionId}`} passHref >
-                        <MenuItem onClick={handleClose}>Edit</MenuItem>
-                    </Link>
-                      <MenuItem onClick={() => { handleDeleteSession(row?.comboSessionId) }}>Delete</MenuItem>
-                      {/* (row?.comboSessionId?.toString()) */}
-                    </Menu>
+                    <SessionMenu event={row} />
                   </TableCell>
                 </TableRow>
               ))}

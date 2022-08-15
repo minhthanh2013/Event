@@ -4,6 +4,7 @@ import MenuIcon from '@mui/icons-material/MoreVertOutlined';
 import Menu from '@mui/material/Menu';
 import MenuItem from "@mui/material/MenuItem";
 import React, { useState } from "react";
+import { PopUp } from "../components/AlertPop-up";
 
 interface ConferenceProp {
     conference_id: number;
@@ -20,18 +21,23 @@ interface ConferenceProp {
 }
 interface props {
     id: number;
-    hostId: number;
     event: ConferenceProp
     props: any;
 }
 
 
-const EventMenuAdmin: React.FC<props> = ({ id, hostId, event, props }) => {
+const EventMenuAdmin: React.FC<props> = ({ id, event, props }) => {
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+    const [popUp, setPopUp] = useState("0");
+    const [status, setStatus] = useState("0");
+
     const open = Boolean(anchorEl);
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         setAnchorEl(event.currentTarget);
     };
+    function refreshPage() {
+        window.location.reload();
+    }
     const publishButton = async () => {
         const resData = await fetch("/api/admin/verify-conference/" + id, {
             method: "POST",
@@ -50,6 +56,14 @@ const EventMenuAdmin: React.FC<props> = ({ id, hostId, event, props }) => {
                 "Authorization": "Bearer " + props.value
             },
         });
+        if (resData.status === 200) {
+            setStatus("1");
+            setPopUp("1");
+            setTimeout(refreshPage, 2000);
+        } else {
+            setStatus("0");
+            setPopUp("1");
+        }
         setAnchorEl(null);
     }
     const cancelButton = async () => {
@@ -64,6 +78,7 @@ const EventMenuAdmin: React.FC<props> = ({ id, hostId, event, props }) => {
     };
     return (
         <>
+            <PopUp status={status} popUp={popUp} onClick={() => setPopUp("0")} />
             <IconButton sx={{ color: "rgba(106, 53, 242, 0.77)" }} onClick={handleClick}>
                 <MenuIcon />
             </IconButton>

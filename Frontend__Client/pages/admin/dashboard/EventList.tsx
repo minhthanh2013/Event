@@ -131,7 +131,7 @@ export const EventList = (props: EventListProps) => {
                   <TableCell align="right">{row?.host_id}</TableCell>
                   <TableCell align="right">{row?.status_ticket?.toString().toUpperCase()}</TableCell>
                   <TableCell sx={{ width: "2rem" }}>
-                    <EventMenuAdmin id={row?.conference_id} hostId={1} event={row} props={props.propss} />
+                    <EventMenuAdmin id={row?.conference_id} event={row} props={props.propss} />
                   </TableCell>
                 </TableRow>
               ))}
