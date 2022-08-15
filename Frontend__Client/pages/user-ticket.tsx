@@ -14,14 +14,13 @@ import Ticket__2 from '../components/Ticket__2'
 import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
 import Combo__2 from '../components/Combo__2'
-
 interface TabPanelProps {
 	children?: React.ReactNode
 	index: number
 	value: number
 }
 
-function TabPanel(props: TabPanelProps) {
+function TabPanel__Ticket(props: TabPanelProps) {
 	const { children, value, index, ...other } = props
 
 	return (
@@ -33,13 +32,49 @@ function TabPanel(props: TabPanelProps) {
 			{...other}
 		>
 			{value === index && (
-				<Box sx={{ p: 3 }}>
-					<Typography>{children}</Typography>
-				</Box>
+			
+					<Box flexGrow={1} sx={{ height: '1100px', width: '650px', mx: 'auto', mb: 5 }}>
+							<Grid container rowSpacing={8}>
+								{[1, 2, 3, 4].map((dataItem) => (
+									<Grid item sm={12} key={dataItem}>
+										<Ticket__2 data={undefined} />
+									</Grid>
+								))}
+							</Grid>
+						</Box> 
+				
 			)}
 		</div>
 	)
 }
+
+
+function TabPanel__Combo(props: TabPanelProps) {
+	const { children, value, index, ...other } = props
+
+	return (
+		<div
+			role='tabpanel'
+			hidden={value !== index}
+			id={`vertical-tabpanel-${index}`}
+			aria-labelledby={`vertical-tab-${index}`}
+			{...other}
+		>
+			{value === index && (
+				<Box flexGrow={1} sx={{ height: 'auto', width: '650px', mx: 'auto', mb: 5 }}>
+				<Grid container rowSpacing={8}>
+					{[1, 2, 3, 4].map((dataItem) => (
+						<Grid item sm={12} key={dataItem}>
+							<Combo__2 data={undefined} props={undefined} />
+						</Grid>
+					))}
+				</Grid>
+			</Box>
+			)}
+		</div>
+	)
+}
+
 
 function a11yProps(index: number) {
 	return {
@@ -112,35 +147,18 @@ const UserTicket = () => {
 						value={value}
 						onChange={handleChangeTab}
 						aria-label='Vertical tabs example'
-						sx={{ borderRight: 1, borderColor: 'divider', width: '10%' }}
+						sx={{ borderRight: 1, borderColor: 'divider', width: '10%', mr:'15%'}}
 					>
 						<Tab label='Ticket' {...a11yProps(0)} />
 						<Tab label='Combo' {...a11yProps(1)} />
 					</Tabs>
-					<TabPanel value={value} index={0}>
-						<Box flexGrow={1} sx={{ height: '1100px', width: '60%', mx: 'auto', mb: 5 }}>
-							<Grid container rowSpacing={8}>
-								{[1, 2, 3, 4].map((dataItem) => (
-									// eslint-disable-next-line react/jsx-key
-									<Grid item sm={12}>
-										<Ticket__2 data={undefined} />
-									</Grid>
-								))}
-							</Grid>
-						</Box>
-					</TabPanel>
-					<TabPanel value={value} index={1}>
-						<Box flexGrow={1} sx={{ height: 'auto', width: '60%', mx: 'auto', mb: 5 }}>
-							<Grid container rowSpacing={8}>
-								{[1, 2, 3, 4].map((dataItem) => (
-									// eslint-disable-next-line react/jsx-key
-									<Grid item sm={12}>
-										<Combo__2 data={undefined} props={undefined} />
-									</Grid>
-								))}
-							</Grid>
-						</Box>
-					</TabPanel>
+					<TabPanel__Ticket value={value} index={0} >
+						
+						
+					</TabPanel__Ticket>
+					<TabPanel__Combo value={value} index={1}>
+				
+					</TabPanel__Combo>
 				</Box>
 
 				<Box sx={{ width: '85%', mx: 'auto', mb: 10 }}>
