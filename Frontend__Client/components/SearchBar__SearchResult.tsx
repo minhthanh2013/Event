@@ -14,7 +14,7 @@ interface SearchBarProps {
 	typeTemp: string
 	inputSearchTemp: string
 
-	typeRef: any
+	// typeRef: any
 }
 
 const SearchBar__SearchResult = (props: SearchBarProps) => {
