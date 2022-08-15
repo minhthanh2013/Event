@@ -1,5 +1,5 @@
 import { Avatar, Box, Button, FormControl, IconButton, Input, InputAdornment, InputLabel, Typography } from '@mui/material'
-import React from 'react'
+import React, { useEffect } from 'react'
 import Header from '../../components/Header'
 import Divider from '@mui/material/Divider'
 import Visibility from '@mui/icons-material/Visibility'
@@ -11,6 +11,7 @@ import { useState } from 'react'
 import Alert from '@mui/material/Alert'
 import CloseIcon from '@mui/icons-material/Close';
 import Collapse from '@mui/material/Collapse';
+import { useRouter } from 'next/router'
 
 const schema = yup.object().shape({
     email: yup.string().email().required(),
@@ -25,12 +26,14 @@ interface State {
     showPassword: boolean
 }
 
-const UserProfile = () => {
+const UserProfile = (props: any) => {
+    const router = useRouter()
+    const [data, setData] = useState<State>();
     const [values, setValues] = React.useState<State>({
-        firstName: 'bỏ cái cái data vô đây' || '',
+        firstName:  '',
         password: '',
-        lastName: 'bỏ cái cái data vô đây',
-        email: 'data@gmeow.com',
+        lastName: '',
+        email: '',
         showPassword: false,
     })
 
@@ -38,8 +41,31 @@ const UserProfile = () => {
     const [isSuccess, setIsSuccess] = useState(false)
     const [isErrorEmail, setIsErrorEmail] = useState(false)
     const [openErrorEmail, setOpenErrorEmail] = React.useState(true)
+    const forceUpdate = React.useReducer(() => ({}), {})[1] as () => void
+    useEffect(() => {
+        const fetchConferences = async () => {
+			// Fetch conference by user id
+            const config = {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer '+props.value.toString(),
+                },
+            }
+			const dataResult = await fetch(`/api/user/${props.tempDecode.sub}`, config);
+			const cateResult = await dataResult.json();
+			setValues(cateResult)
+		}
+        fetchConferences();
+    }, []);
     const handleEdit = () => {
         setIsEdit(!isEdit)
+    }
+
+    const handleCancel = () => {
+        setIsEdit(!isEdit)
+        // console.log(64)
+        // forceUpdate;
+        router.push('/user/profile');
     }
 
     const handleChange = (prop: keyof State) => (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -87,7 +113,7 @@ const UserProfile = () => {
     }
     return (
         <>
-            <Header />
+            <Header {...props} />
             <Divider sx={{ borderColor: '#4F3398' }} />
             <Box sx={{ width: '80vw', mx: 'auto' }}>
                 <Box sx={{ display: 'flex', justifyContent: 'center', mt: 6, mb: 7 }}>
@@ -96,7 +122,7 @@ const UserProfile = () => {
                 <Box sx={{ display: 'flex', height: 'auto' }}>
                     <Box sx={{ width: '30%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                         <IconButton>
-                            <Avatar {...stringAvatar('Vinh dương' || 'No user')} sx={{ width: 250, height: 250 }} />
+                            <Avatar {...stringAvatar(`${values.firstName}`)} sx={{ width: 250, height: 250 }} />
                         </IconButton>
                     </Box>
                     <Box sx={{ width: '70%' }}>
@@ -108,7 +134,8 @@ const UserProfile = () => {
                                         disabled={!isEdit}
                                         id='component-simple'
                                         sx={{ fontSize: '1.4rem' }}
-                                        defaultValue={values.firstName}
+                                        // defaultValue={values.firstName}
+                                        value={values.firstName}
                                         onChange={handleChange('firstName')}
                                     />
                                 </FormControl>
@@ -119,6 +146,7 @@ const UserProfile = () => {
                                         id='component-simple'
                                         sx={{ fontSize: '1.4rem' }}
                                         value={values.lastName}
+                                        // defaultValue={values.lastName}
                                         onChange={handleChange('lastName')}
                                     />
                                 </FormControl>
@@ -131,6 +159,7 @@ const UserProfile = () => {
                                         id='component-simple'
                                         sx={{ fontSize: '1.4rem' }}
                                         value={values.email}
+                                        // defaultValue={values.email}
                                         onChange={handleChange('email')}
                                         disabled={!isEdit}
                                     />
@@ -188,7 +217,7 @@ const UserProfile = () => {
                                             variant='outlined'
                                             sx={{ color: '#4F3398', borderColor: '#4F3398', width: '130px' }}
                                             size='large'
-                                            onClick={handleEdit}
+                                            onClick={handleCancel}
                                         >
                                             Cancel
                                         </Button>
@@ -250,3 +279,4 @@ export async function getServerSideProps(ctx: any) {
     }
 }
 export default UserProfile
+

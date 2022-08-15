@@ -24,7 +24,6 @@ export class TicketController {
   }
 
   @Post()
-  // async create(@Body() ticket: Ticket) {
   async create(@Body() ticket: Ticket) {
     console.log('Added to queue')
     await this.ticketQueue.add('create', {
@@ -41,7 +40,8 @@ export class TicketController {
   }
   @Post('buy-session')
   async buySession(@Body() session: BuySessionDto) {
-    await this.ticketQueue.add('buy-session', {
+    console.log('Added to queue')
+    await this.ticketQueue.add('buysession', {
       sessionDto: session
     })
   }

@@ -9,3 +9,11 @@ export class User {
   create_at?: Date;
   update_at?: Date;
 }
+/* eslint-disable prettier/prettier */
+export class UserResponseDto {
+  user_id?: number;
+  user_name: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+}

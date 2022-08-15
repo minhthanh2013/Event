@@ -23,11 +23,12 @@ export class TicketProcessor {
     await this.ticketService.create(ticket);
   }
 
-  @Process('buy-session')
+  @Process('buysession')
   async handleBuySession(job: Job) {
+    console.log("Here")
     const buy: BuySessionDto =  {} as BuySessionDto;
     buy.buyer_id = job.data.sessionDto.buyer_id;
-    buy.combo_id = job.data.sessionDto.combo_id;
+    buy.session_id = job.data.sessionDto.combo_id;
     buy.payment_id = job.data.sessionDto.payment_id;
     this.ticketService.buySession(buy);
   }

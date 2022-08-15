@@ -38,7 +38,20 @@ export default async function middleware(req: NextRequest) {
         }
       }
 
-      // ADMIN 
+      // HOST
+      if (pathname === "/host") {
+        if (jwt === undefined) {
+          req.nextUrl.pathname = "/host/login";
+          return NextResponse.redirect(req.nextUrl);
+        }
+        try {
+          verify(jwt, adminSecret);
+          req.nextUrl.pathname = "/host/dashboard";
+          return NextResponse.redirect(req.nextUrl);
+        } catch (error) {
+            return NextResponse.next();
+        }
+      }
       if (pathname === "/host/login") {
         if (jwt === undefined) {
           return NextResponse.next();
@@ -68,6 +81,19 @@ export default async function middleware(req: NextRequest) {
       }
 
       // ADMIN 
+      if (pathname === "/admin") {
+        if (jwt === undefined) {
+          req.nextUrl.pathname = "/admin/login";
+          return NextResponse.redirect(req.nextUrl);
+        }
+        try {
+          verify(jwt, adminSecret);
+          req.nextUrl.pathname = "/admin/dashboard";
+          return NextResponse.redirect(req.nextUrl);
+        } catch (error) {
+            return NextResponse.next();
+        }
+      }
       if (pathname === "/admin/login") {
         if (jwt === undefined) {
           return NextResponse.next();

@@ -7,7 +7,7 @@ import { from } from 'rxjs/internal/observable/from';
 import { Repository } from 'typeorm';
 import { UserAuthDto } from './dto/user.auth';
 import { UserEntity } from './models/user.entity';
-import { User } from './models/user.interface';
+import { User, UserResponseDto } from './models/user.interface';
 import * as argon from 'argon2';
 @Injectable()
 export class UserService {
@@ -21,8 +21,18 @@ export class UserService {
     return from(this.userRepository.find());
   }
 
-  findOne(id: number): Observable<User> {
-    return from(this.userRepository.findOne({where: {user_id: id}}));
+  async findOne(id: number): Promise<UserResponseDto> {
+    const user = await this.userRepository.findOne({where: {user_id: id}});
+    delete user.password;
+    delete user.create_at;
+    delete user.update_at;
+    const response: UserResponseDto =  {} as UserResponseDto;
+    response.user_id = user.user_id;
+    response.user_name = user.user_name;
+    response.email = user.email;
+    response.firstName = user.first_name;
+    response.lastName = user.last_name;
+    return response;
   }
 
   async signinUser(dto: UserAuthDto) {

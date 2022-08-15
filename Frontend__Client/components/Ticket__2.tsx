@@ -8,12 +8,16 @@ import styles from '../styles/Ticket__2.module.scss'
 import Box from '@mui/material/Box'
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney'
 interface TicketProp {
-	conference_id: number
-	description: string
-	price: number
-	conference_name: number
-	date_start_conference: Date
-	address: string
+	conference_id: number;
+	description: string;
+	price: number;
+	conference_name: number;
+	date_start_conference: Date;
+	address: string;
+	ticket_quantity: number;
+	current_quantity: number;
+	status_ticket: string;
+	conference_type: string;
 }
 interface TicketProps {
 	data: TicketProp

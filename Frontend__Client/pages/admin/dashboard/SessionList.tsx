@@ -62,6 +62,15 @@ export const Sessions = (props: SessionProps) => {
   const handleClose = () => {
     setAnchorEl(null);
   };
+  const handleDeleteSession = async (comboId: number) => {
+    const resData = await fetch(`/api/combo/delete-combo/${comboId}`, {
+      method: "DELETE",
+    });
+    if (resData.status === 200) {
+      // TODO: hanle notification
+    }
+    setAnchorEl(null);
+  };
 
   const getTotalPrice = (conferenceList: ConferenceProp[]) => {
     let totalPrice = 0;
@@ -182,7 +191,8 @@ export const Sessions = (props: SessionProps) => {
                       <Link href={`/session/${row?.comboSessionId}`} passHref>
                         <MenuItem onClick={handleClose}>View</MenuItem>
                       </Link>
-                      <MenuItem onClick={handleClose}>Delete</MenuItem>
+                      <MenuItem onClick={ () => {handleDeleteSession(row?.comboSessionId)}}>Delete</MenuItem>
+                      {/* (row?.comboSessionId?.toString()) */}
                     </Menu>
                   </TableCell>
                 </TableRow>

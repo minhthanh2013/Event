@@ -1,5 +1,5 @@
 import { Box, Card, CardActionArea, CardContent, CardMedia, FormControl, Grid, MenuItem, Select, Stack, Typography } from '@mui/material'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Pagination from '@mui/material/Pagination'
 import Header from '../components/Header'
 import PurchaseModal from '../components/PurchaseModal'
@@ -18,9 +18,43 @@ interface TabPanelProps {
 	children?: React.ReactNode
 	index: number
 	value: number
+	conf?: ConferenceProp[]
+	comb?: SessionProp[]
+	// conf: ConferenceProp[];
+}
+interface ConferenceProp {
+	conference_id: number;
+	description: string;
+	price: number;
+	conference_name: number;
+	date_start_conference: Date;
+	address: string;
+	ticket_quantity: number;
+	current_quantity: number;
+	status_ticket: string;
+	conference_type: string;
+	// conferenceOrganizer: string;
 }
 
+interface SessionProp {
+	comboSessionId: number;
+	comboSessionPrice: number;
+	comboSessionName: string;
+	comboSessionDescription: string;
+	conferenceList: ConferenceProp[];
+	discount: number;
+}
+
+interface EventListProps {
+  data: ConferenceProp[];
+}
+
+interface EventListProps__2 {
+	data: SessionProp[];
+  }
+
 function TabPanel__Ticket(props: TabPanelProps) {
+	console.log(42, props)
 	const { children, value, index, ...other } = props
 
 	return (
@@ -33,11 +67,11 @@ function TabPanel__Ticket(props: TabPanelProps) {
 		>
 			{value === index && (
 			
-					<Box flexGrow={1} sx={{ height: '1100px', width: '650px', mx: 'auto', mb: 5 }}>
+					<Box flexGrow={1} sx={{ height: '1100px', width: '1000px', mx: 'auto', mb: 5 }}>
 							<Grid container rowSpacing={8}>
-								{[1, 2, 3, 4].map((dataItem) => (
-									<Grid item sm={12} key={dataItem}>
-										<Ticket__2 data={undefined} />
+								{props?.conf?.map((dataItem) => (
+									<Grid item sm={12} key={dataItem.conference_id}>
+										<Ticket__2 data={dataItem} />
 									</Grid>
 								))}
 							</Grid>
@@ -47,11 +81,8 @@ function TabPanel__Ticket(props: TabPanelProps) {
 		</div>
 	)
 }
-
-
 function TabPanel__Combo(props: TabPanelProps) {
 	const { children, value, index, ...other } = props
-
 	return (
 		<div
 			role='tabpanel'
@@ -63,9 +94,9 @@ function TabPanel__Combo(props: TabPanelProps) {
 			{value === index && (
 				<Box flexGrow={1} sx={{ height: 'auto', width: '650px', mx: 'auto', mb: 5 }}>
 				<Grid container rowSpacing={8}>
-					{[1, 2, 3, 4].map((dataItem) => (
-						<Grid item sm={12} key={dataItem}>
-							<Combo__2 data={undefined} props={undefined} />
+					{props?.comb?.map((dataItem) => (
+						<Grid item sm={12} key={dataItem.comboSessionId}>
+							<Combo__2 data={dataItem} props={undefined} />
 						</Grid>
 					))}
 				</Grid>
@@ -83,13 +114,19 @@ function a11yProps(index: number) {
 	}
 }
 
-const UserTicket = () => {
+const UserTicket = (props: any) => {
+	console.log(71, props)
 	const [page, setPage] = useState(1)
-
 	//Tab
 	const [value, setValue] = React.useState(0)
 
 	const [filter, setFilter] = useState('0')
+
+	const [ticketList, setTicketList] = useState<EventListProps>()
+
+	
+	const [sessionList, setSessionList] = useState<EventListProps__2>()
+
 
 	const handleChange = (event: any) => {
 		setFilter(event.target.value)
@@ -101,8 +138,35 @@ const UserTicket = () => {
 
 	const handlePaginationChange = async (event, value) => {
 		setPage(value)
+		if(value === '0') {
+			fetchConferences();
+		} else {
+			fetchSessions();
+		}
 		// fetchTicket()
 	}
+
+
+	const fetchConferences = async () => {
+		// Fetch conference by user id
+		const dataResult = await fetch(`/api/conference/get-conference-by-user-id/${props.tempDecode.sub}`);
+		const cateResult = await dataResult.json();
+		setTicketList(cateResult)
+	}
+	const fetchSessions = async () => {
+		// Fetch conference by user id
+		const dataResult = await fetch(`/api/combo/get-latest-x?id=0`);
+		const cateResult = await dataResult.json();
+		setSessionList(cateResult)
+	}
+
+	let timeOnly = false;
+	useEffect(() => {
+		if(!timeOnly) {
+			fetchConferences();
+			timeOnly = true;
+		}
+	}, [value])
 	return (
 		<>
 			<Header />
@@ -152,12 +216,9 @@ const UserTicket = () => {
 						<Tab label='Ticket' {...a11yProps(0)} />
 						<Tab label='Combo' {...a11yProps(1)} />
 					</Tabs>
-					<TabPanel__Ticket value={value} index={0} >
-						
-						
+					<TabPanel__Ticket value={value} index={0} conf={ticketList?.data}>
 					</TabPanel__Ticket>
-					<TabPanel__Combo value={value} index={1}>
-				
+					<TabPanel__Combo value={value} index={1} comb={sessionList?.data}>
 					</TabPanel__Combo>
 				</Box>
 
@@ -182,5 +243,29 @@ const UserTicket = () => {
 		</>
 	)
 }
-
+export async function getServerSideProps(ctx: any) {
+	// Fetch data from external API
+	// Pass data to the page via props
+	let raw = null;
+	try {
+	  raw = ctx.req.cookies;
+	} catch (e) {
+	  return { props: {} }
+	}
+	try { 
+	  if (raw.OursiteJWT.toString()) {
+		let token = "OursiteJWT"
+		let value = raw.OursiteJWT.toString();
+		let tempDecode = JSON.parse(Buffer.from(value.split('.')[1], 'base64').toString());
+		return {
+		  props: {
+			token, value,
+			tempDecode
+		  }
+		};
+	  } return { props: {} }
+	} catch (error) {
+	  return { props: {} }
+	}
+  }
 export default UserTicket

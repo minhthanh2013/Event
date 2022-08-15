@@ -1,3 +1,4 @@
+import { TicketEntity } from './../ticket/models/ticket.entity';
 /* eslint-disable prettier/prettier */
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -13,6 +14,7 @@ import { ComboSessionEntity } from './models/combo_session.entity';
 import { ComboSession } from './models/combo_session.interface';
 import { ComboIdDateDto } from './models/combo_session_id_create_at';
 import { NotFoundException } from '@nestjs/common';
+import { ResponseError } from '@sendgrid/mail';
 @Injectable()
 export class CombosessionService {
   constructor(
@@ -20,6 +22,8 @@ export class CombosessionService {
     private readonly comboSessionRepository: Repository<ComboSessionEntity>,
     @InjectRepository(ConferenceEntity)
     private readonly conferenceRepository: Repository<ConferenceEntity>,
+    @InjectRepository(TicketEntity)
+    private readonly ticketRepository: Repository<TicketEntity>,
   ) {}
 
   findAllSessions(): Observable<ComboSession[]> {
@@ -63,8 +67,22 @@ export class CombosessionService {
   update(id: number, comboSession: ComboSession): Observable<UpdateResult> {
     return from(this.comboSessionRepository.update(id, comboSession));
   }
-  remove(id: number): Observable<DeleteResult> {
-    return from(this.comboSessionRepository.delete(id));
+  remove(id: number): ResponseData {
+    this.comboSessionRepository.find({where: {combo_id: id}})
+    .then(results => {
+      results.forEach(result => {
+        this.comboSessionRepository.remove(result).catch((err1) => {
+          throw err1;
+        });
+      });
+    }).catch(err => {
+      throw new NotFoundException("Cannot find combo sessions with id: " + id, err);
+    });
+    const finalRes = new ResponseData();
+    finalRes.status = true;
+    finalRes.data = "Successfully deleted";
+    return finalRes;
+    
   }
   async findAllComoIds(): Promise<ComboIdDateDto[]> {
     return this.comboSessionRepository.find({
@@ -251,4 +269,50 @@ export class CombosessionService {
       throw e;
     })
   }
+  
+  async getComboByUserId(id: number): Promise<ResponseData> {
+    let response = new ResponseData();
+    const tickets = await this.ticketRepository.find({where: {
+      buyer_id: id
+    }})
+    const comboSessionDtos: ComboSessionDto[] = [];
+    await Promise.all(
+      tickets.map(async (ticket) => {
+        const conferenceId = ticket.conference_id;
+        if(ticket.session_id.toString() !== '0') {
+          try {
+            const tempCombos = await this.findCombosByConferenceId(conferenceId);
+              if (tempCombos.data === 0) {
+                throw new NotFoundException("Fail find combos by conference id: " + conferenceId + ", user id: " + id);
+              }
+              tempCombos.data.forEach((tempCombo: ComboSessionDto) => {
+                comboSessionDtos.push(tempCombo);
+                response.data = comboSessionDtos;
+              });
+          } catch (error) {
+            console.log(295, error);
+          }
+        }
+      }
+      )
+    )
+
+    if (response.data === undefined) {
+      throw new NotFoundException("Fail to get list of combos by user id " + id);
+    }
+    if(response.data  !== null ) {
+      const update = new ResponseData();
+      const tempMap = new Map();
+      response.data.forEach(element => {
+        tempMap.set(element.comboSessionId, element);
+      });
+      update.status = true;
+      update.data = [...tempMap.values()];
+      response = update;
+    } else {
+      response.status = false;
+    }
+
+    return response;
+}
 }

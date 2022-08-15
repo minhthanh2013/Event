@@ -27,6 +27,7 @@ export const Subcriptions = () => {
   }, [])
   const navigate = () => {
     const url = subscription?.data
+    console.log(url)
     router.push(url)
   }
 
@@ -78,7 +79,21 @@ export const Subcriptions = () => {
               <Typography
                 sx={{ margin: "1rem 0 1rem 0.5rem", fontStyle: "italic" }}
               >
-                Create 20 events
+                Create 10 Events
+              </Typography>
+            </Box>
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                flexDirection: "row",
+              }}
+            >
+              <Tick color="success" />
+              <Typography
+                sx={{ margin: "1rem 0 1rem 0.5rem", fontStyle: "italic" }}
+              >
+                Create 5 Sessions
               </Typography>
             </Box>
           </Box>

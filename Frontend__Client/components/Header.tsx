@@ -287,9 +287,11 @@ const Header = (props: any) => {
 								transformOrigin={{ horizontal: 'right', vertical: 'top' }}
 								anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
 							>
-								<MenuItem sx={{ display: 'flex', gap: '0.5rem', justifyContent: 'space-between', color: '#6A35F2' }}>
-									<Avatar sx={{ color: '#6A35F2', bgcolor: 'white' }} /> Profile
-								</MenuItem>
+								<Link passHref href={'/user/profile'}>
+									<MenuItem sx={{ display: 'flex', gap: '0.5rem', justifyContent: 'space-between', color: '#6A35F2' }}>
+										<Avatar sx={{ color: '#6A35F2', bgcolor: 'white' }} /> Profile
+									</MenuItem>
+								</Link>
 								<MenuItem sx={{ display: 'flex', gap: '0.5rem', justifyContent: 'space-between', color: '#6A35F2' }}>
 									<ConfirmationNumberIcon /> Tickets
 								</MenuItem>

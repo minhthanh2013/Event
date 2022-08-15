@@ -38,4 +38,6 @@ export class TicketEntity {
     referencedColumnName: "payment_id"
   })
   payment: PaymentEntity;
+  @Column()
+  session_id: number;
 }

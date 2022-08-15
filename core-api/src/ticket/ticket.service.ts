@@ -1,6 +1,6 @@
 import { BuySessionDto } from './models/ticket.interface';
 /* eslint-disable prettier/prettier */
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, ConflictException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { from, Observable } from 'rxjs';
 import { ComboSessionEntity } from 'src/combosession/models/combo_session.entity';
@@ -35,6 +35,7 @@ export class TicketService {
     return from(this.ticketRepository.findOne({where: {ticket_id: id}}));
   }
   async create(ticket: Ticket): Promise<Ticket> {
+    console.log(ticket);
     const buyer = await this.userRepository.findOne({
       where: {
         user_id: ticket.buyer_id,
@@ -54,6 +55,10 @@ export class TicketService {
     });
     newTicket.date_buy = new Date();
     newTicket.ticket_id = ticket.ticket_id;
+    if(ticket.session_id !== undefined || ticket.session_id !== null) {
+      newTicket.session_id = ticket.session_id;
+    }
+    console.log(newTicket);
     const conferenceEntity = await this.conferenceRepository.findOne({
       where: {
         conference_id: ticket.conference_id,
@@ -79,13 +84,18 @@ export class TicketService {
     return from(this.ticketRepository.delete(id));
   }
   buySession(buy: BuySessionDto) {
-    this.comboRepository.find({where: {combo_id: buy.combo_id}}).then(combos => {
+    this.comboRepository.find({where: {combo_id: buy.session_id}}).then(combos => {
       combos.forEach(combo => {
         const ticket: Ticket =  {} as Ticket;
         ticket.buyer_id = buy.buyer_id;
         ticket.conference_id = combo.conference_id;
         ticket.payment_id = buy.payment_id;
-        this.create(ticket);
+        ticket.session_id = buy.session_id;
+        try {
+          this.create(ticket);
+        } catch (error) {
+          throw new ConflictException('Fail to buy session', error);
+        }
       });
     })
   }
