@@ -76,6 +76,7 @@ function SearchResult(props: any) {
 		}
 	}
 	useEffect(() => {
+		console.log(inputSearch)
 		let isCancelled = true
 		if (isCancelled) {
 			if (type === '0') {

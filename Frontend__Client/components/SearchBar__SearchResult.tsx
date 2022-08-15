@@ -30,7 +30,7 @@ const SearchBar__SearchResult = (props: SearchBarProps) => {
 	}
 
 	const handleOnClick = (event: any) => {
-		props.setType(props.typeRef.current.value)
+		// props.setType(props.typeRef.current.value)
 		// props.setType(props.typeTemp)
 		props.setInputSearch(props.inputSearchTemp)
 	}
@@ -86,7 +86,7 @@ const SearchBar__SearchResult = (props: SearchBarProps) => {
 									id='demo-simple-select'
 									value={props.type}
 									onChange={handleChangeType}
-									ref={props.typeRef}
+									// ref={props.typeRef}
 									sx={{
 										'& .MuiSelect-select:before': { color: '#6A35F2', borderBottomColor: '#6A35F2' },
 										'& .MuiSelect-iconStandard': { color: '#6A35F2' },
@@ -108,7 +108,7 @@ const SearchBar__SearchResult = (props: SearchBarProps) => {
 								</Select>
 							</FormControl>
 						</Box>
-						<SearchIcon type='submit' onClick={handleOnClick} className={styles.searchIcon} />
+						<SearchIcon onClick={handleOnClick} className={styles.searchIcon} />
 					</form>
 				</Box>
 			</Box>
