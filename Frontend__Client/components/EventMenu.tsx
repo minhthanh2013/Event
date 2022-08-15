@@ -10,7 +10,7 @@ interface ConferenceProp {
     description: string;
     price: number;
     conference_name: number;
-    date_start_conference: string;
+    date_start_conference: Date;
     address: string;
     ticket_quantity: number;
     current_quantity: number;

@@ -98,9 +98,9 @@ const EventCreate = (props: any) => {
     const [sessionsAfterFilter, setSessionsAfterFilter] = useState<SessionListProps>();
     const [sessions, setSessions] = useState<SessionListProps>();
     const [value, setValue] = React.useState(0);
+    
     useEffect(() => {
         console.log(props);
-        // khúc này dùng API, set API cho cả 2 state là confenences và conferencesAfterFilter, tương tự với sessions và user. Xem lại Field, xem khúc đỏ dưới dòng 306
         const fetchConferencesData = async () => {
             const response = await fetch("http://localhost:8080/api/conference/get-all");
             const data = await response.json();

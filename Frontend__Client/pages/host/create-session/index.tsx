@@ -58,6 +58,7 @@ const CreateEvent = (props) => {
   const [image, setImage] = useState<string | ArrayBuffer | null>();
   const [imageFile, setImageFile] = useState<Multer.File | null>();
 
+  console.log(data);
   const onImageChange = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
       let reader = new FileReader();
@@ -84,7 +85,7 @@ const CreateEvent = (props) => {
     console.log(result);
     if (res.status === 200) {
       let body = new FormData()
-      body.append('file',imageFile)
+      body.append('file', imageFile)
       await fetch(`/api/cloudinary/update-image-session/${result.data.comboSessionId}`, {
         method: "POST",
         body,
@@ -110,7 +111,7 @@ const CreateEvent = (props) => {
         <Box className={styles.dot__1}></Box>
         <Box className={styles.dot__2}></Box>
         <Box className={styles.dot__3}></Box>
-        <HeaderHost {...props}/>
+        <HeaderHost {...props} />
 
         <Typography variant="h3" component="div" className={styles.header}>
           Session Dashboard
@@ -198,7 +199,7 @@ export async function getServerSideProps(ctx: any) {
   } catch (e) {
     return { props: {} }
   }
-  try { 
+  try {
     if (raw.OursiteJWT.toString()) {
       let token = "OursiteJWT"
       let value = raw.OursiteJWT.toString();

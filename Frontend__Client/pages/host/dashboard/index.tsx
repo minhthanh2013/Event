@@ -97,7 +97,7 @@ interface TicketProp {
   description: string;
   price: string;
   conference_name: number;
-  date_start_conference: Date;
+  date_start_conference: string;
   address: string;
   ticket_quantity: string;
   current_quantity: string;
@@ -106,29 +106,48 @@ interface TicketProp {
 //
 const EventCreate = (props: any) => {
   const [conferences, setConferences] = useState<ConferenceProps>();
+  const [conferencesAfterFilter, setConferencesAfterFilter] = useState<ConferenceProps>();
   const [sessions, setSessions] = useState<SessionListProps>();
+  const [sessionsAfterFilter, setSessionsAfterFilter] = useState<SessionListProps>();
   const [value, setValue] = React.useState(0);
 
-  console.log(props);
   useEffect(() => {
     const fetchConferences = async () => {
       const dataResult = await fetch(`/api/conference/get-conference-by-host-id/${props.tempDecode.sub}`);
       const cateResult = await dataResult.json();
       setConferences(cateResult)
+      setConferencesAfterFilter(cateResult);
     }
 
     const fetchSessions = async () => {
       const dataResult = await fetch(`/api/combo/get-by-host/${props.tempDecode.sub}`);
       const cateResult = await dataResult.json();
       setSessions(cateResult)
+      setSessionsAfterFilter(cateResult);
     }
     fetchConferences();
     fetchSessions();
-  }, []);
+  }, [props.tempDecode.sub]);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
+
+  const filterConferences = (props: string) => {
+    if (props === 'all') {
+      setConferencesAfterFilter(conferences)
+    } else {
+      setConferencesAfterFilter({ status: true, data: conferences?.data?.filter(data => data.status_ticket === props) });
+    }
+  };
+  const filterSessions = (props: string) => {
+    if (props === 'all') {
+      setConferencesAfterFilter(conferences)
+    } else {
+      setConferencesAfterFilter({ status: true, data: conferences?.data?.filter(data => data.status_ticket === props) });
+    }
+  };
+
   return (
     <>
       <Box
@@ -221,12 +240,12 @@ const EventCreate = (props: any) => {
           <Grid item xs={10} md={10}>
             <TabPanel value={value} index={0}>
               <Box sx={{ marginLeft: "3rem" }}>
-                <EventList data={conferences?.data} propss={props} />
+                <EventList data={conferencesAfterFilter?.data} propss={props} filter={filterConferences} />
               </Box>
             </TabPanel>
             <TabPanel value={value} index={1}>
               <Box sx={{ marginLeft: "3rem" }}>
-                <Sessions data={sessions?.data} propss={props} />
+                <Sessions data={sessionsAfterFilter?.data} propss={props} filter={filterSessions} />
               </Box>
             </TabPanel>
             <TabPanel value={value} index={2}>
@@ -252,7 +271,7 @@ export async function getServerSideProps(ctx: any) {
   } catch (e) {
     return { props: {} }
   }
-  try { 
+  try {
     if (raw.OursiteJWT.toString()) {
       let token = "OursiteJWT"
       let value = raw.OursiteJWT.toString();

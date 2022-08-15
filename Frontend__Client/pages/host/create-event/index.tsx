@@ -80,9 +80,9 @@ const CreateEvent = (props) => {
     });
     const resDataJson = await resData.json();
     console.log(resDataJson);
-    if(resData.status === 200) {
+    if (resData.status === 200) {
       let body = new FormData()
-      body.append('file',imageFile)
+      body.append('file', imageFile)
       const imageUploadResult = await fetch(`/api/cloudinary/update-image-conference/${resDataJson.data.conference_id}`, {
         method: "POST",
         body,
@@ -109,7 +109,7 @@ const CreateEvent = (props) => {
         <Box className={styles.dot__1}></Box>
         <Box className={styles.dot__2}></Box>
         <Box className={styles.dot__3}></Box>
-        <HeaderHost {...props}/>
+        <HeaderHost {...props} />
 
         <Typography variant="h3" component="div" className={styles.header}>
           Event Dashboard
@@ -174,13 +174,13 @@ const CreateEvent = (props) => {
                 <Tab label="Date and time" {...a11yProps(2)} />
               </Tabs>
               <TabPanel value={value} index={0}>
-                <BasicInfo data={data} setData={setData} setValue={setValue} api={apiCall} prop={props}/>
+                <BasicInfo data={data} setData={setData} setValue={setValue} api={apiCall} prop={props} />
               </TabPanel>
               <TabPanel value={value} index={1}>
                 <Speakers data={data} setData={setData} setValue={setValue} api={apiCall} prop={props} />
               </TabPanel>
               <TabPanel value={value} index={2}>
-                <Date data={data} setData={setData} setValue={setValue} api={apiCall} prop={props}/>
+                <Date data={data} setData={setData} setValue={setValue} api={apiCall} prop={props} />
               </TabPanel>
             </ThemeProvider>
           </Box>
@@ -201,7 +201,7 @@ export async function getServerSideProps(ctx: any) {
   } catch (e) {
     return { props: {} }
   }
-  try { 
+  try {
     if (raw.OursiteJWT.toString()) {
       let token = "OursiteJWT"
       let value = raw.OursiteJWT.toString();
