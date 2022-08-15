@@ -52,6 +52,12 @@ const EventMenuAdmin: React.FC<props> = ({ id, hostId, event, props }) => {
         });
         setAnchorEl(null);
     }
+    const cancelButton = async () => {
+        //API here
+
+        setAnchorEl(null);
+    }
+
     const handleClose = () => {
         setAnchorEl(null);
     };
@@ -85,9 +91,8 @@ const EventMenuAdmin: React.FC<props> = ({ id, hostId, event, props }) => {
                                     <MenuItem onClick={handleClose}>View</MenuItem>
                                 </Link>
                                 <MenuItem onClick={publishButton}>Publish</MenuItem>
-                                <MenuItem onClick={deleteButton}>Delete</MenuItem>
+                                <MenuItem onClick={cancelButton}>Cancel</MenuItem>
                             </>)
-
                     )
                 }
 
