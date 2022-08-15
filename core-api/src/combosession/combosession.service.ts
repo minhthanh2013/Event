@@ -171,6 +171,7 @@ export class CombosessionService {
             conference_id: comboEntity.conference_id
           }
         }).then(result => {
+          console.log(174, result)
           comboSessionDto.comboSessionPrice += parseInt(result.price.toString());
           conferences.push(result);
           if(conferences.length == comboEntities.length) {

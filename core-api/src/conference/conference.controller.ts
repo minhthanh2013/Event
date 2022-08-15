@@ -109,4 +109,8 @@ export class ConferenceController {
     ) {
     return this.conferenceService.findConferenceByUserAndZoomMeetingId(+userId, zoomId);
   }
+  @Get('/find-all/host')
+  getAllHost(): Promise<ResponseData> {
+    return this.conferenceService.getAllHost();
+  }
 }

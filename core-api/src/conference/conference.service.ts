@@ -415,5 +415,13 @@ export class ConferenceService {
     })
     return ticket;
   }
-
+  async getAllHost(): Promise<ResponseData> {
+    const result = new ResponseData();
+    const host = await this.hostRepository.find();
+    result.status = host.length > 0;
+    if (host.length > 0) {
+      result.data = host;
+    }
+    return result;
+  }
 }

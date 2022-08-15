@@ -83,7 +83,7 @@ const UserProfile = (props: any) => {
         console.log(values)
 
         //nếu trả về lỗi thì setIsErrorEmail(true)
-        setIsErrorEmail(true)
+        // setIsErrorEmail(true)
         //nếu trả thành công thì setIsSuccess(true)
     }
     const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {

@@ -24,4 +24,6 @@ export class HostEntity {
   conferences: ConferenceEntity[]
   @OneToMany(() => SubscriptionEntity, (subscription) => subscription.host)
   subscriptions: SubscriptionEntity[]
+  @Column()
+  host_type: string;
 }
