@@ -62,9 +62,9 @@ const Register = (props: Props) => {
 				<Box className={styles.right}>
 					<Firework />
 					<Box className={styles.redirect}>
-						<Typography component='h3'>Hello, Friend!</Typography>
+						<Typography component='h3'>Hi, Friend!</Typography>
 						<Typography component='h4'>Enter your personal details and start your journey with us.</Typography>
-						<Link href='/account/login' passHref>
+						<Link href='/user/login' passHref>
 							<Button variant='contained' size='medium' type='button'>
 								Go To Sign in
 							</Button>
@@ -73,24 +73,7 @@ const Register = (props: Props) => {
 				</Box>
 				<Box className={styles.left}>
 					<Box className={styles.container__left}>
-						<Typography component='h2'>Sign Up</Typography>
-						<Box className={styles.iconLogin__section}>
-							<IconButton>
-								<FcGoogle />
-							</IconButton>
-							<IconButton
-								style={{
-									color: '#3C5A99',
-								}}
-							>
-								<BsFacebook />
-							</IconButton>
-						</Box>
-						<Box className={styles.or__section}>
-							<hr />
-							<p>or</p>
-							<hr />
-						</Box>
+						<Typography component='h2'>Sign Up User</Typography>
 						{(errorMessage !=='') && <Typography component='h4'>{errorMessage}</Typography>}
 						<Box className={styles.form__section}>
 							<form onSubmit={formik.handleSubmit} className={styles.mainForm}>

@@ -53,8 +53,9 @@ const EventMenuAdmin: React.FC<props> = ({ id, hostId, event, props }) => {
         setAnchorEl(null);
     }
     const cancelButton = async () => {
-        //API here
-
+        const resData = await fetch("/api/conference/cancel-conference/" + id, {
+            method: "POST",
+        });
         setAnchorEl(null);
     }
 

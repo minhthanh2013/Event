@@ -51,19 +51,6 @@ const Login = (props: any) => {
                         <Typography component="h2">
                             Sign in to Evenity
                         </Typography>
-                        <Box className={styles.iconLogin__section}>
-                            <IconButton>
-                                <FcGoogle />
-                            </IconButton>
-                            <IconButton style={{ color: "#3C5A99" }}>
-                                <BsFacebook />
-                            </IconButton>
-                        </Box>
-                        <Box className={styles.or__section}>
-                            <hr />
-                            <p>or</p>
-                            <hr />
-                        </Box>
                         {(errorMessage !=='') && <Typography component='h4'>{errorMessage}</Typography>}
                         <Box className={styles.form__section}>
                             <form onSubmit={formik.handleSubmit} className={styles.mainForm}>
@@ -99,7 +86,7 @@ const Login = (props: any) => {
                     <Box className={styles.redirect}>
                         <Typography component="h3">Welcome Back!</Typography>
                         <Typography component="h4">To keep connected with us please log in with your personal info.</Typography>
-                        <Link href="register" passHref>
+                        <Link href="/user/register" passHref>
                             <Button variant='contained' size='medium' type="button">Create New Account</Button>
                         </Link>
                     </Box>

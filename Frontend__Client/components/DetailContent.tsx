@@ -4,13 +4,20 @@ import LocationOnIcon from '@mui/icons-material/LocationOn'
 import { useEffect, useState } from 'react';
 
 interface TicketProp {
-	conference_id: number;
-    description: string;
-	price: number;
-	conference_name: number;
-	date_start_conference: Date;
+	conferenceAddress: string
+	conferenceCategory: number
+	conferenceDescription: string
+	conferenceName: string
+	conferencePrice: number
+	conferenceType: number
+	organizerName: string
+	ticketQuantity: number
+
+	status_ticket: string;
+	host_id: number
+	conference_id: number
 	address: string;
-	host_id: number;
+	date_start_conference: Date
 	// conferenceOrganizer: string;
 }
 
@@ -42,7 +49,7 @@ const DetailContent = (props: TicketProps) => {
 	useEffect(() => {
 		
 		const fetchHostDetails = async () => {
-			console.log()
+			console.log(props)
 			const dataResult = await fetch ('/api/conference/get-host-by-conference-id/' + props?.data?.host_id);
 			const cateResult = await dataResult.json();
 			setHost(cateResult);
@@ -76,7 +83,7 @@ const DetailContent = (props: TicketProps) => {
 							<Typography component='h3'>Description</Typography>
 							<Box>
 								<Typography component='span'>
-									{props.data?.description || 'No description'}
+									{props.data?.conferenceDescription || 'No description'}
 								</Typography>
 							</Box>
 						</Box>

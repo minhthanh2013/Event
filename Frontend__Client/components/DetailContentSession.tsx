@@ -44,7 +44,7 @@ const DetailContentSession = (props: DetailContentSessionProp) => {
                         </Box>
                     </Box>
                     <Box className={styles.eventList__section}>
-                        <Typography component="h3">Event List</Typography>
+                    <Typography component="h3">Event list</Typography>
                         <Grid container rowSpacing={8}  marginTop={0}>
                             {props?.data?.conferenceList?.map((dataItem) => (
                                 // eslint-disable-next-line react/jsx-key
@@ -53,11 +53,6 @@ const DetailContentSession = (props: DetailContentSessionProp) => {
                                 </Grid>
                             ))}
                         </Grid>
-                    </Box>
-
-                    <Box className={styles.info__section}>
-                        <Typography component="h3">How can I contact the organizer with any question?</Typography>
-                        <Typography component="p">Please visit <a href="#">https://www.rmit.edu.vn/</a> and refer to the FAQ section for all questions and contact information. </Typography>
                     </Box>
                 </Box>
 

@@ -60,6 +60,7 @@ function SearchResult(props: any) {
 			}
 			const response = await fetch(request)
 			const setTemp = await response.json()
+			
 			setTempProps(setTemp)
 			setNumber(tempProps?.meta?.totalItems)
 			console.log(tempProps)
@@ -69,8 +70,10 @@ function SearchResult(props: any) {
 	}
 	const fetchSession = async () => {
 		try {
-			const response = await axios.get(`put URL Seesion here`)
-			setData(response)
+			const response = await fetch("/api/combo/get-latest-x?id=0");
+			const setTemp = await response.json()
+			console.log(75, setTemp)
+			setTempProps(setTemp)
 		} catch (error) {
 			console.log(error)
 		}
@@ -82,12 +85,13 @@ function SearchResult(props: any) {
 			if (type === '0') {
 				fetchTicket()
 				console.log(tempProps)
+				console.log(type)
 			} else fetchSession()
 		}
 		return () => {
 			isCancelled = false
 		}
-	}, [page, inputSearch])
+	}, [page, inputSearch, type])
 
 	return (
 		<>

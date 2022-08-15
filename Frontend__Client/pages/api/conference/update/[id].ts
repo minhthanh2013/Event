@@ -5,18 +5,12 @@ import axios from 'axios'
 import https from 'https';
 
 export default async function (req: NextApiRequest, res: NextApiResponse) {
-    const id = req.query.id;
+	const { id } = req.query;
 	try {
-        const config = {
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': req.headers.authorization,
-            },
-        }
 		// const request = process.env.BACKEND_PROTOCOL+'://' + process.env.BACKEND_HOST + ':' + process.env.BACKEND_PORT + "/conference/create-new"; 
-        const request = "http://localhost:3000/admin/verify-conference/"+id; 
-        console.log("fe-here")
-        const response = await axios.post(request, req.body, config);
+        const request = `http://localhost:3000/conference/${id}`; 
+		console.log(12, req.body);
+        const response = await axios.patch(request, req.body);
         res.status(200).json(response.data);
 	} catch (error) {
 		// console.log(error);

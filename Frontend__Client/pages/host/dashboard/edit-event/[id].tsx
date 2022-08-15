@@ -55,19 +55,26 @@ function a11yProps(index: number) {
   };
 }
 interface ConferenceProp {
-  conference_id: number;
-  description: string;
-  price: number;
-  conference_name: number;
-  date_start_conference: Date;
-  address: string;
-  ticket_quantity: number;
-  current_quantity: number;
-  status_ticket: string;
-  conference_type: string;
-  // conferenceOrganizer: string;
+	conferenceName: string;
+  conferenceAddress: string;
+  organizerName: string;
+  conferenceType: string;
+  conferenceCategory: string;
+  conferenceDescription: string;
+  speakerList: SpeakerList[]
+  dateStartConference: Date;
+  dateEndConference: Date;
+  dateEndSell: Date;
+  ticketQuantity: number,
+  conferencePrice: number
+	// conferenceOrganizer: string;
+}
+interface SpeakerList{
+  name: string;
+  email: string;
 }
 const CreateEvent = (props) => {
+
   const router = useRouter();
   const { id } = router.query;
 
@@ -86,6 +93,7 @@ const CreateEvent = (props) => {
     const fetchData = async () => {
       const res = await fetch(`/api/conference/${id}`);
       const data = await res.json();
+      console.log(86, data)
       setData(data.data);
     }
     fetchData();
@@ -109,8 +117,8 @@ const CreateEvent = (props) => {
 
   //gọi api post để sửa trong đây
   const apiCall = async (data) => {
-    const resData = await fetch("/api/conference/create-new", {
-      method: "POST",
+    const resData = await fetch(`/api/conference/update/${id}`, {
+      method: "PATCH",
       headers: {
         "Content-Type": "application/json",
       },

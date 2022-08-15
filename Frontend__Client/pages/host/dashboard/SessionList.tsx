@@ -201,6 +201,9 @@ export const Sessions = (props: SessionProps) => {
                       <Link href={`/session/${row?.comboSessionId}`} passHref>
                         <MenuItem onClick={handleClose}>View</MenuItem>
                       </Link>
+                      <Link href={`/host/dashboard/edit-session/${row?.comboSessionId}`} passHref >
+                        <MenuItem onClick={handleClose}>Edit</MenuItem>
+                    </Link>
                       <MenuItem onClick={() => { handleDeleteSession(row?.comboSessionId) }}>Delete</MenuItem>
                       {/* (row?.comboSessionId?.toString()) */}
                     </Menu>

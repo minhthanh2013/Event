@@ -6,7 +6,8 @@ import {
   SubmitConferenceRequestDto,
   ConferenceRequestDto,
   ConferenceResponseDto,
-  SpeakerRequestDto
+  SpeakerRequestDto,
+  SpeakerList
 } from './models/conference.dto';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectDataSource, InjectRepository } from '@nestjs/typeorm';
@@ -125,11 +126,17 @@ export class ConferenceService {
     const data = await this.conferenceRepository.findOne({
       where: { conference_id: id },
     });
-
+    const dto = await this.convertEntityToDto(data);
     result.status = data !== undefined;
-    if (result.status === true) {
-      result.data = data;
-    }
+    result.data = dto;
+    // ConferenceRequestDto
+    // if (data) {
+    //   const speakers = this.speakerRepository.find({where: {conference_id: data.conference_id}});
+    // }
+    // result.status = data !== undefined;
+    // if (result.status === true) {
+    //   result.data = data;
+    // }
     return result;
   }
   async createConference(
@@ -230,12 +237,45 @@ export class ConferenceService {
     }
     return result;
   }
-  convertEntityToDto(entity: ConferenceEntity): ConferenceResponseDto {
-    const dto = new ConferenceResponseDto();
-    dto.conferenceAddress = entity.address;
-    dto.conferenceDateStart = entity.date_start_conference;
-    dto.conferencePrice = entity.price;
+  async convertEntityToDto(entity: ConferenceEntity): Promise<ConferenceRequestDto> {
+    const dto = new ConferenceRequestDto();
+    // conferenceName: string;
+    // conferenceAddress: string;
+    // organizerName: string;
+    // hostName: string;
+    // conferenceType: number;
+    // conferenceCategory: number;
+    // conferenceDescription: string;
+    // speakerList: SpeakerList[];
+    // dateStartConference: Date;
+    // dateStartSell: Date;
+    // dateEndSell: Date;
+    // ticketQuantity: number;
+    // conferencePrice: number;
     dto.conferenceName = entity.conference_name;
+    dto.conferenceAddress = entity.address;
+    dto.organizerName = entity.organizer_name;
+    dto.conferenceType = entity.conference_type;
+    dto.conferenceCategory = entity.conference_category;
+    dto.conferenceDescription = entity.description;
+    dto.status_ticket = entity.status_ticket;
+    dto.host_id = entity.host_id
+    dto.conference_id = entity.conference_id
+    dto.address = entity.address
+    dto.date_start_conference = entity.date_start_conference
+    dto.speakerList = [];
+    const speakers = await this.speakerRepository.find({where: {conference_id: entity.conference_id}});
+    (speakers).forEach(element => {
+      const speaker = new SpeakerList();
+      speaker.name = element.speaker_name;
+      speaker.email = element.speaker_email;
+      dto.speakerList.push(speaker);
+    });
+    dto.dateStartConference = entity.date_start_conference;
+    dto.dateStartSell = entity.date_start_sell;
+    dto.dateEndSell = entity.date_end_sell;
+    dto.ticketQuantity = entity.ticket_quantity;
+    dto.conferencePrice = entity.price;
     return dto;
   }
 
@@ -332,7 +372,6 @@ export class ConferenceService {
     });
     }
     if(onlyPublish === 'true') {
-      console.log("Here");
       queryBuilder.andWhere('conference.status_ticket = :status', {
         status: 'published',
     });
@@ -359,6 +398,26 @@ export class ConferenceService {
       result.data = newConference;
       const host = await this.hostRepository.findOne({where: {host_id: conferenceSubmitDto.hostId}});
       this.emailService.sendEmailToHostAfterSubmitConference(host.email);
+      return result;
+    }
+  }
+
+  async cancelConference(id: number): Promise<ResponseData> {
+    const conference = await this.conferenceRepository.findOne({
+      where: { 
+        conference_id: id,
+        status_ticket: "pending"
+      }
+    })
+    if(!conference) {
+      throw new NotFoundException('Conference not found with conference id: ' + id);
+    }
+    conference.status_ticket = "draft";
+    const result = new ResponseData();
+    const newConference = await this.conferenceRepository.save(conference);
+    if(newConference) {
+      result.status = true;
+      result.data = newConference;
       return result;
     }
   }

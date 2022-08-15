@@ -22,6 +22,18 @@ export default async function middleware(req: NextRequest) {
             return NextResponse.next();
         }
       }
+      if (pathname === "/user/register") {
+        if (jwt === undefined) {
+          return NextResponse.next();
+        }
+        try {
+          verify(jwt, userSecret);
+          req.nextUrl.pathname = "/";
+          return NextResponse.redirect(req.nextUrl);
+        } catch (error) {
+            return NextResponse.next();
+        }
+      }
 
       if (pathname.startsWith("/user/") && (pathname !== "/user/login")) {
         if (jwt === undefined) {
@@ -64,6 +76,18 @@ export default async function middleware(req: NextRequest) {
             return NextResponse.next();
         }
       }
+      if (pathname === "/host/register") {
+        if (jwt === undefined) {
+          return NextResponse.next();
+        }
+        try {
+          verify(jwt, hostSecret);
+          req.nextUrl.pathname = "/host/dashboard";
+          return NextResponse.redirect(req.nextUrl);
+        } catch (error) {
+            return NextResponse.next();
+        }
+      }
 
       if (pathname.startsWith("/host/") && (pathname !== "/host/login")) {
         if (jwt === undefined) {
@@ -95,6 +119,18 @@ export default async function middleware(req: NextRequest) {
         }
       }
       if (pathname === "/admin/login") {
+        if (jwt === undefined) {
+          return NextResponse.next();
+        }
+        try {
+          verify(jwt, adminSecret);
+          req.nextUrl.pathname = "/admin/dashboard";
+          return NextResponse.redirect(req.nextUrl);
+        } catch (error) {
+            return NextResponse.next();
+        }
+      }
+      if (pathname === "/admin/register") {
         if (jwt === undefined) {
           return NextResponse.next();
         }

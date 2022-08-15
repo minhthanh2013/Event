@@ -9,9 +9,9 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
 	const { id } = req.query;
 	try {
 		// const request = process.env.BACKEND_PROTOCOL+'://' + process.env.BACKEND_HOST + ':' + process.env.BACKEND_PORT + "/conference/get-x-conferences/6"; 
-		const request = `http://localhost:3000/conference/find-host-by/conference-id/${id}`;
-		const response = await axios.get(request);
-        res.status(200).json(response.data.data);
+		const request = `http://localhost:3000/conference/cancel-conference/${id}`;
+		const response = await axios.post(request);
+        res.status(200).json( response.data);
 	} catch (error) {
         console.log(error);
 		res.status(200).json(null);

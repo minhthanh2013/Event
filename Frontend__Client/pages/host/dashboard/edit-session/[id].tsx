@@ -1,8 +1,8 @@
-import React, { useState, ChangeEvent } from "react";
+import React, { useState, ChangeEvent, useEffect } from "react";
 import Box from "@mui/material/Box";
 import Footer from "../../../../components/Footer";
 import Typography from "@mui/material/Typography";
-import styles from "../../../styles/EventDashboard.module.scss";
+import styles from "../../../../styles/EventDashboard.module.scss";
 import Card from "@mui/material/Card";
 import CardActionArea from "@mui/material/CardActionArea";
 import CardContent from "@mui/material/CardContent";
@@ -56,6 +56,8 @@ function a11yProps(index: number) {
 }
 
 const CreateEvent = (props) => {
+  const router = useRouter();
+  const { id } = router.query;
   const [data, setData] = useState({})
   const [image, setImage] = useState<string | ArrayBuffer | null>();
   const [imageFile, setImageFile] = useState<Multer.File | null>();
@@ -66,6 +68,15 @@ const CreateEvent = (props) => {
   const redirect = () => {
     router.push("/host/dashboard")
   }
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const res = await fetch(`/api/combo/${id}`);
+      const data = await res.json();
+      setData(data.data);
+    }
+    fetchData();
+  } , [id]);
 
   const onImageChange = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
@@ -82,8 +93,8 @@ const CreateEvent = (props) => {
   const [value, setValue] = React.useState(0);
 
   const apiCall = async (data) => {
-    const res = await fetch("/api/combo/create-new", {
-      method: "POST",
+    const res = await fetch(`/api/combo/update/${id}`, {
+      method: "PATCH",
       body: JSON.stringify(data),
       headers: {
         'Content-Type': 'application/json',

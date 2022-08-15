@@ -82,7 +82,7 @@ export class ConferenceController {
   ): Observable<ResponseData> {
     return from(this.conferenceService.findAllByHostId(+id, status));
   }
-  @Get('/find-host-by-conference-id/:id')
+  @Get('/find-host-by/conference-id/:id')
   getByConfId(@Param('id') id: number): Promise<ResponseData> {
     return this.conferenceService.getHostDataByConferenceId(id);
   }
@@ -93,6 +93,10 @@ export class ConferenceController {
   @Post('/submit-conference')
   submitConference(@Body() submitConference: SubmitConferenceRequestDto): Promise<ResponseData> {
     return this.conferenceService.submitConference(submitConference);
+  }
+  @Post('/cancel-conference/:id')
+  cancelConference(@Param("id") id: number): Promise<ResponseData> {
+    return this.conferenceService.cancelConference(id);
   }
   @Post('/schedule-zoom-meeting/:id')
   scheduleZoomMeeting(@Param("id") id: number) {

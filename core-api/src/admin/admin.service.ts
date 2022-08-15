@@ -111,6 +111,7 @@ export class AdminService {
 }
   async verifyConference(conferenceId: number, res: Request) {
     const jwt = res.headers.authorization;
+    console.log(114, jwt);
     return new Promise(async (resolve, reject) => {
       await this.conferenceRepository.findOne({where: {conference_id: conferenceId}}).then(async conference => {
         if(conference) {
@@ -125,14 +126,19 @@ export class AdminService {
                 'Authorization': jwt,
               },
             }
-            const a = this.httpService.post("http://localhost:3000/conference/schedule-zoom-meeting/" + newConference.conference_id, { headers: headersRequest });
-            a.subscribe(async (data) => {
-              console.log(data);
-              resolve(data);
-            }).add(() => {
-              console.log("done");
-            })
-            resolve(true);
+            if(newConference?.conference_type?.toString() === '2') {
+              console.log(133, 'here')
+              const a = this.httpService.post("http://localhost:3000/conference/schedule-zoom-meeting/" + newConference.conference_id, headersRequest );
+              a.subscribe(async (data) => {
+                console.log(data);
+                resolve(data);
+              }).add(() => {
+                console.log("done");
+              })
+              resolve(true);
+            } else {
+              resolve(false);
+            }
           })
           .catch(error => {
               reject(error)
