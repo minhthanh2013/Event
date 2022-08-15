@@ -35,6 +35,7 @@ interface ConferenceProp {
   current_quantity: number;
   status_ticket: string;
   conference_type: string;
+  host_id: number;
   // conferenceOrganizer: string;
 }
 
@@ -109,6 +110,7 @@ export const EventList = (props: EventListProps) => {
                 <TableCell align="right" sx={{ color: "#ffffff" }}>Sold</TableCell>
                 <TableCell align="right" sx={{ color: "#ffffff" }}>Gross</TableCell>
                 <TableCell align="right" sx={{ color: "#ffffff" }}>Ticket price</TableCell>
+                <TableCell align="right" sx={{ color: "#ffffff" }}>Host</TableCell>
                 <TableCell align="right" sx={{ color: "#ffffff" }}>Status</TableCell>
                 <TableCell align="right"></TableCell>
               </TableRow>
@@ -126,6 +128,7 @@ export const EventList = (props: EventListProps) => {
                   <TableCell align="right">{row?.current_quantity}/{row?.ticket_quantity}</TableCell>
                   <TableCell align="right">{splitNum(Gross(row))} VNĐ</TableCell>
                   <TableCell align="right">{splitNum(row?.price) || "0"} VNĐ</TableCell>
+                  <TableCell align="right">{row?.host_id}</TableCell>
                   <TableCell align="right">{row?.status_ticket?.toString().toUpperCase()}</TableCell>
                   <TableCell sx={{ width: "2rem" }}>
                     <EventMenuAdmin id={row?.conference_id} hostId={1} event={row} props={props.propss} />

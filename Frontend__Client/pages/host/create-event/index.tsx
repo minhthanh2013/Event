@@ -15,6 +15,8 @@ import { BasicInfo, Speakers, Date } from "./CreateEventForm";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Multer } from 'multer';
 import HeaderHost from "../../../components/Header__Host";
+import { PopUp } from "../../../components/AlertPop-up";
+import { useRouter } from "next/router";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -52,11 +54,13 @@ function a11yProps(index: number) {
     "aria-controls": `simple-tabpanel-${index}`,
   };
 }
-
 const CreateEvent = (props) => {
   const [data, setData] = useState({})
   const [image, setImage] = useState<string | ArrayBuffer | null>();
   const [imageFile, setImageFile] = useState<Multer.File | null>();
+  const [popUp, setPopUp] = useState("0")
+  const [status, setStatus] = useState<string>("0")
+
   const onImageChange = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
       let reader = new FileReader();
@@ -68,9 +72,11 @@ const CreateEvent = (props) => {
     }
   };
   const [value, setValue] = React.useState(0);
-
+  const router = useRouter();
+  const redirect = () => {
+    router.push("/host/dashboard")
+  }
   const apiCall = async (data) => {
-    console.log(data);
     const resData = await fetch("/api/conference/create-new", {
       method: "POST",
       headers: {
@@ -79,15 +85,23 @@ const CreateEvent = (props) => {
       body: JSON.stringify(data),
     });
     const resDataJson = await resData.json();
-    console.log(resDataJson);
+    // if (resData.status === 200) {
+    //   let body = new FormData()
+    //   body.append('file', imageFile)
+    //   const imageUploadResult = await fetch(`/api/cloudinary/update-image-conference/${resDataJson.data.conference_id}`, {
+    //     method: "POST",
+    //     body,
+    //   });
+    //   console.log(90, imageUploadResult);
+    // }
+
     if (resData.status === 200) {
-      let body = new FormData()
-      body.append('file', imageFile)
-      const imageUploadResult = await fetch(`/api/cloudinary/update-image-conference/${resDataJson.data.conference_id}`, {
-        method: "POST",
-        body,
-      });
-      console.log(90, imageUploadResult);
+      setStatus("1");
+      setPopUp("1");
+      setTimeout(redirect, 3000);
+    } else {
+      setStatus("0");
+      setPopUp("1");
     }
   }
 
@@ -110,6 +124,7 @@ const CreateEvent = (props) => {
         <Box className={styles.dot__2}></Box>
         <Box className={styles.dot__3}></Box>
         <HeaderHost {...props} />
+        <PopUp status={status} popUp={popUp} onClick={() => setPopUp("0")} />
 
         <Typography variant="h3" component="div" className={styles.header}>
           Event Dashboard
