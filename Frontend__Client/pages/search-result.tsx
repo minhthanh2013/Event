@@ -33,6 +33,8 @@ function SearchResult(props: any) {
 	const temp = 'Vinh Duong Quang'
 	const [filter, setFilter] = useState('0')
 
+	const typeRef = useRef(null)
+
 	// inside SearchBar__SearchResult
 	const [inputSearch, setInputSearch] = useState(router?.query?.search?.toString() || '')
 	const [inputSearchTemp, setInputSearchTemp] = useState('')
@@ -50,7 +52,6 @@ function SearchResult(props: any) {
 
 	const handlePaginationChange = async (event, value) => {
 		setPage(value)
-		fetchTicket()
 	}
 	const fetchTicket = async () => {
 		try {
@@ -60,32 +61,27 @@ function SearchResult(props: any) {
 			}
 			const response = await fetch(request)
 			const setTemp = await response.json()
-			
+
 			setTempProps(setTemp)
-			setNumber(tempProps?.meta?.totalItems)
-			console.log(tempProps)
+			setNumber(setTemp.meta.totalItems)
 		} catch (error) {
 			console.log(error)
 		}
 	}
 	const fetchSession = async () => {
 		try {
-			const response = await fetch("/api/combo/get-latest-x?id=0");
-			const setTemp = await response.json()
-			console.log(75, setTemp)
-			setTempProps(setTemp)
+			const response = await axios.get(`/api/combo/get-latest-x?id=0`)
+			setData(response)
+			console.log(response.data.data.length)
 		} catch (error) {
 			console.log(error)
 		}
 	}
 	useEffect(() => {
-		console.log(inputSearch)
 		let isCancelled = true
 		if (isCancelled) {
-			if (type === '0') {
+			if (type == '0') {
 				fetchTicket()
-				console.log(tempProps)
-				console.log(type)
 			} else fetchSession()
 		}
 		return () => {
@@ -110,6 +106,7 @@ function SearchResult(props: any) {
 					setInputSearchTemp={setInputSearchTemp}
 					typeTemp={typeTemp}
 					inputSearchTemp={inputSearchTemp}
+					typeRef={typeRef}
 				/>
 				<Box sx={{ width: '71%', mx: 'auto', display: 'flex', flexDirection: 'row-reverse' }}>
 					<FormControl sx={{ m: 1, minWidth: 120 }} size='small'>
@@ -130,21 +127,30 @@ function SearchResult(props: any) {
 					</FormControl>
 				</Box>
 				<Box sx={{ width: '85%', mx: 'auto', mt: 5 }}>
-					{inputSearch !== '' && (
+					{type == '0' && inputSearch !== '' && (
 						<Typography component='h3' sx={{ lineHeight: '3.4rem', fontWeight: '600', fontSize: '1.6rem' }}>
 							“{inputSearch}” tickets
 						</Typography>
 					)}
-
-					{(number !== -1 || number !== undefined) && (
+					{type == '0' && number !== -1 && number != undefined && (
 						<Typography component='h4' sx={{ fontWeight: '500', lineHeight: '2rem', fontSize: '1rem' }}>
-							{number} results on Evenity
+							{tempProps?.meta.totalItems} results on Evenity
+						</Typography>
+					)}
+					{type == '1' && inputSearch !== '' && (
+						<Typography component='h3' sx={{ lineHeight: '3.4rem', fontWeight: '600', fontSize: '1.6rem' }}>
+							“{inputSearch}” tickets
+						</Typography>
+					)}
+					{type == '1' && (
+						<Typography component='h4' sx={{ fontWeight: '500', lineHeight: '2rem', fontSize: '1rem' }}>
+							{data.data?.data?.length} results on Evenity
 						</Typography>
 					)}
 				</Box>
 				<Box sx={{ width: '85%', mx: 'auto' }} flexGrow={1}>
-					{type === '0' && <TicketList_SearchResult data={tempProps?.items}></TicketList_SearchResult>}
-					{type === '1' && <SessionList_SearchResult data={data}></SessionList_SearchResult>}
+					{type == '0' && <TicketList_SearchResult data={tempProps?.items}></TicketList_SearchResult>}
+					{type == '1' && <SessionList_SearchResult data={data}></SessionList_SearchResult>}
 				</Box>
 				<Box sx={{ width: '85%', mx: 'auto', mb: 5 }}>
 					<Stack spacing={2}>
