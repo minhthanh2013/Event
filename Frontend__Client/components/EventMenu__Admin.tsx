@@ -17,7 +17,7 @@ interface ConferenceProp {
     status_ticket: string;
     conference_type: string;
     // conferenceOrganizer: string;
-  }
+}
 interface props {
     id: number;
     hostId: number;
@@ -26,32 +26,38 @@ interface props {
 }
 
 
-const EventMenuAdmin: React.FC<props> = ({id, hostId, event, props}) => {
+const EventMenuAdmin: React.FC<props> = ({ id, hostId, event, props }) => {
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         setAnchorEl(event.currentTarget);
     };
     const publishButton = async () => {
-        const resData = await fetch("/api/admin/verify-conference/"+id, {
+        const resData = await fetch("/api/admin/verify-conference/" + id, {
             method: "POST",
             headers: {
-              "Content-Type": "application/json",
-              "Authorization": "Bearer " + props.value
+                "Content-Type": "application/json",
+                "Authorization": "Bearer " + props.value
             },
-          });
-          setAnchorEl(null);
+        });
+        setAnchorEl(null);
     }
     const deleteButton = async () => {
-        const resData = await fetch("/api/admin/delete-conference/"+id, {
+        const resData = await fetch("/api/admin/delete-conference/" + id, {
             method: "POST",
             headers: {
-              "Content-Type": "application/json",
-              "Authorization": "Bearer " + props.value
+                "Content-Type": "application/json",
+                "Authorization": "Bearer " + props.value
             },
-          });
-          setAnchorEl(null);
+        });
+        setAnchorEl(null);
     }
+    const cancelButton = async () => {
+        //API here
+
+        setAnchorEl(null);
+    }
+
     const handleClose = () => {
         setAnchorEl(null);
     };
@@ -66,24 +72,32 @@ const EventMenuAdmin: React.FC<props> = ({id, hostId, event, props}) => {
                 open={open}
                 onClose={handleClose}
             >
-                {(event?.status_ticket === "published") ? 
-                (
-                    <Link href={`/event/${id.toString()}`} passHref >
-                        <MenuItem onClick={handleClose}>View</MenuItem>
-                    </Link>
-                ) : (
-                    <>
-                    <Link href={`/event/${id.toString()}`} passHref >
-                        <MenuItem onClick={handleClose}>View</MenuItem>
-                    </Link>
-                    <MenuItem onClick={publishButton}>Publish</MenuItem>
-                    <MenuItem onClick={deleteButton}>Delete</MenuItem>
-                    </>
-                )
+                {(event?.status_ticket === "published") ?
+                    (
+                        <Link href={`/event/${id.toString()}`} passHref >
+                            <MenuItem onClick={handleClose}>View</MenuItem>
+                        </Link>
+                    ) : (
+                        (event?.status_ticket === "draft") ? (
+                            <>
+                                <Link href={`/event/${id.toString()}`} passHref >
+                                    <MenuItem onClick={handleClose}>View</MenuItem>
+                                </Link>
+                                <MenuItem onClick={deleteButton}>Delete</MenuItem>
+                            </>
+                        ) : (
+                            <>
+                                <Link href={`/event/${id.toString()}`} passHref >
+                                    <MenuItem onClick={handleClose}>View</MenuItem>
+                                </Link>
+                                <MenuItem onClick={publishButton}>Publish</MenuItem>
+                                <MenuItem onClick={cancelButton}>Cancel</MenuItem>
+                            </>)
+                    )
                 }
-                    
-                
-                
+
+
+
             </Menu>
         </>
     )
