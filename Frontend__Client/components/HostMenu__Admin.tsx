@@ -58,7 +58,13 @@ const EventMenuAdmin: React.FC<props> = ({ host, props }) => {
 
     const unbanButton = async () => {
         // unban API here
-
+        const resData = await fetch("/api/host/unban-host?id=" + host.host_id, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${props.value}`
+            },
+        });
         if (resData.status === 200) {
             setStatus("1");
             setPopUp("1");
@@ -91,7 +97,7 @@ const EventMenuAdmin: React.FC<props> = ({ host, props }) => {
                 open={open}
                 onClose={handleClose}
             >
-                {host.host_type === "ban" ? (
+                {host?.host_type === "ban" ? (
                     <>
                         <MenuItem onClick={viewButton}>View</MenuItem>
                         <MenuItem onClick={unbanButton}>Unban</MenuItem>

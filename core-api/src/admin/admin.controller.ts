@@ -87,4 +87,10 @@ export class AdminController {
   banHost(@Param('id') hostId: string) {
     return this.adminService.banHost(hostId);
   }
+  @HttpCode(HttpStatus.OK)
+  @Post('unban-host/:id')
+  @UseGuards(AdminJwtGuard)
+  unbanHost(@Param('id') hostId: string) {
+    return this.adminService.unbanHost(hostId);
+  }
 }

@@ -212,4 +212,15 @@ export class AdminService {
     }
     return response;
   }
+  async unbanHost(id: string): Promise<ResponseData> {
+    const response = new ResponseData();
+    try {
+      response.status = (await this.hostRepository.update(id, { host_type: "free" })).affected == 1;
+      response.data = null;
+    } catch (error) {
+      response.data = null;
+      response.status = false;
+    }
+    return response;
+  }
 }
