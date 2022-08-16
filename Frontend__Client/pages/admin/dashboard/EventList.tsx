@@ -35,14 +35,25 @@ interface ConferenceProp {
   current_quantity: number;
   status_ticket: string;
   conference_type: string;
-  host_id: number;
+  host_id: string;
   // conferenceOrganizer: string;
+}
+interface hostProps {
+  host_id: string,
+  user_name: string,
+  email: string,
+  first_name: string,
+  last_name: string,
+  create_at: Date,
+  update_at: Date,
+  host_type: string
 }
 
 interface EventListProps {
   data: ConferenceProp[];
   propss: any;
   filter: (props: string) => void;
+  host: hostProps[];
 }
 
 export const EventList = (props: EventListProps) => {
@@ -75,6 +86,11 @@ export const EventList = (props: EventListProps) => {
   }, 0);
   const Income = Total * 10 / 100;
   const Total_debt = Total * 90 / 100;
+
+  const hostById = (hostList: hostProps[], hostId: string) => {
+    const result = hostList?.find(h => h.host_id.toString() === hostId)
+    return result?.user_name;
+  }
 
   return (
     <>
@@ -126,7 +142,7 @@ export const EventList = (props: EventListProps) => {
                 <TableCell align="right" sx={{ color: "#ffffff" }}>Sold</TableCell>
                 <TableCell align="right" sx={{ color: "#ffffff" }}>Gross</TableCell>
                 <TableCell align="right" sx={{ color: "#ffffff" }}>Ticket price</TableCell>
-                <TableCell align="right" sx={{ color: "#ffffff" }}>Host</TableCell>
+                <TableCell align="right" sx={{ color: "#ffffff" }}>Created by</TableCell>
                 <TableCell align="right" sx={{ color: "#ffffff" }}>Status</TableCell>
                 <TableCell align="right"></TableCell>
               </TableRow>
@@ -144,7 +160,7 @@ export const EventList = (props: EventListProps) => {
                   <TableCell align="right">{row?.current_quantity}/{row?.ticket_quantity}</TableCell>
                   <TableCell align="right">{splitNum(Gross(row))} VNĐ</TableCell>
                   <TableCell align="right">{splitNum(row?.price) || "0"} VNĐ</TableCell>
-                  <TableCell align="right">{row?.host_id}</TableCell>
+                  <TableCell align="right">{hostById(props?.host, row?.host_id)}</TableCell>
                   <TableCell align="right">{row?.status_ticket?.toString().toUpperCase()}</TableCell>
                   <TableCell sx={{ width: "2rem" }}>
                     <EventMenuAdmin id={row?.conference_id} event={row} props={props.propss} />

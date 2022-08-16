@@ -80,7 +80,7 @@ const DetailBanner = (props: TicketProps) => {
                         <Box>
                             <Box>
                                 <Typography component="h2">{props.data?.conferenceName || 'conferenceName'}</Typography>
-                                <Typography component="h3">By {props.data?.organizerName || 'HCMUS'}</Typography>
+                                <Typography component="h3">At {props.data?.organizerName || 'HCMUS'}</Typography>
                                 <Typography component="h4">{props.data?.address}</Typography>
                             </Box>
                             <Box>

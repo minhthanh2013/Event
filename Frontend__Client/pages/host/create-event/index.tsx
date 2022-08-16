@@ -74,8 +74,8 @@ const CreateEvent = (props) => {
   const [value, setValue] = React.useState(0);
   // redirect after successfully create 
   const router = useRouter();
-  function refreshPage() {
-    window.location.reload();
+  const redirect = () => {
+    router.push("/host/dashboard")
   }
 
   const apiCall = async (data) => {
@@ -105,7 +105,7 @@ const CreateEvent = (props) => {
     if (resData.status === 200) {
       setStatus("1");
       setPopUp("1");
-      setTimeout(refreshPage, 2000);
+      setTimeout(redirect, 2000);
     } else {
       setStatus("0");
       setPopUp("1");

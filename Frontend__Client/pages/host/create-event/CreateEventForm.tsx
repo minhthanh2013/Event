@@ -349,11 +349,12 @@ export const DateForm: React.FC<CreateEventProps> = ({ data, setData, setValue, 
   const [ticketEnd, setTicketEnd] = useState<Date | null>(null);
 
   const onSubmit = (value: any) => {
-    // api({ ...data, dateStartConference: value.dateStartConference, dateStartSell: value.dateStartSell,
-    //   dateEndSell: value.dateEndSell, conferencePrice: value.conferencePrice, ticketQuantity: value.ticketQuantity, hostName: prop.tempDecode.username });
     setData({
       ...data, dateStartConference: value.dateStartConference, dateStartSell: value.dateStartSell,
       dateEndSell: value.dateEndSell, conferencePrice: value.conferencePrice, ticketQuantity: value.ticketQuantity, hostName: prop.tempDecode.username
+    });
+    api({
+      ...data, hostName: prop.tempDecode.username
     });
     console.log(`submit`);
   };
@@ -395,7 +396,7 @@ export const DateForm: React.FC<CreateEventProps> = ({ data, setData, setValue, 
                     minDate: value => {
                       const today = new Date();
                       const dateValue = new Date(value.toString());
-                      return dateValue.getDate() >= today.getDate();
+                      return dateValue.getDate() + 1 >= today.getDate();
                     },
                   }
                 }}
@@ -443,7 +444,6 @@ export const DateForm: React.FC<CreateEventProps> = ({ data, setData, setValue, 
               <Controller
                 name="dateEndSell"
                 control={control}
-                defaultValue={ticketEnd}
                 render={({ field: { ...rest } }) => (
                   <DatePicker
                     label="Ticket sales end"

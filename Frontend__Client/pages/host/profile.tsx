@@ -182,7 +182,7 @@ const HostProfile = (props: any) => {
                                                 }
                                                 sx={{ mb: 2 }}
                                             >
-                                                Bỏ cái lỗi email ở đây
+                                                Invalid Email!
                                             </Alert>
                                         </Collapse>
                                     )}

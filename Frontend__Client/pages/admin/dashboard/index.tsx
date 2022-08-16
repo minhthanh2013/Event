@@ -274,12 +274,12 @@ const EventCreate = (props: any) => {
                     <Grid item xs={10} md={10}>
                         <TabPanel value={value} index={0}>
                             <Box sx={{ marginLeft: "3rem" }}>
-                                <EventList data={conferencesAfterFilter?.data} propss={props} filter={filterConferences} />
+                                <EventList data={conferencesAfterFilter?.data} propss={props} filter={filterConferences} host={host?.data} />
                             </Box>
                         </TabPanel>
                         <TabPanel value={value} index={1}>
                             <Box sx={{ marginLeft: "3rem" }}>
-                                <Sessions data={sessionsAfterFilter?.data} propss={props} filter={filterSessions} />
+                                <Sessions data={sessionsAfterFilter?.data} propss={props} filter={filterSessions} host={host?.data} />
                             </Box>
                         </TabPanel>
                         <TabPanel value={value} index={2}>

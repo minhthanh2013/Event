@@ -295,7 +295,7 @@ const HeaderAdmin = (props: any) => {
 							</Link>
 
 							<Button variant='text' sx={{ color: '#6A35F2' }}>
-								create an event
+								Host Section
 							</Button>
 						</>
 					)}

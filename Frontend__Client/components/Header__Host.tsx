@@ -169,7 +169,7 @@ const HeaderHost = (props: any) => {
 								open={Boolean(anchorElUser)}
 								onClose={handleCloseUserMenu}
 							>
-								{ticketList?.data.length === 0 ||
+								{ticketList?.data?.length === 0 ||
 									(ticketList === undefined && (
 										<>
 											<MenuItem key={0} onClick={handleCloseUserMenu} sx={{ mb: '0.5rem', userSelect: 'none' }}>
@@ -222,18 +222,18 @@ const HeaderHost = (props: any) => {
 													<Typography component='h4'>{parseDate(ticket?.date_start_conference)}</Typography>
 												</Box>
 												<Box display='flex' flexDirection='column' sx={{ width: '25%', alignItems: 'flex-start' }}>
-												{ticket?.conference_type === '2' && ticket?.zoom_meeting_id !== null && (
+													{ticket?.conference_type === '2' && ticket?.zoom_meeting_id !== null && (
 														<IconButton sx={{ display: 'flex', gap: '0.5rem', color: '#C64EFF' }}>
-														<PlayCircleOutlineOutlinedIcon />
-														<Link href={`/zoom/join-by-zoom-id?id=${ticket?.zoom_meeting_id}`} passHref>
-															<Typography>Join</Typography>
-														</Link>
+															<PlayCircleOutlineOutlinedIcon />
+															<Link href={`/zoom/join-by-zoom-id?id=${ticket?.zoom_meeting_id}`} passHref>
+																<Typography>Join</Typography>
+															</Link>
 														</IconButton>
 													)}
 													{ticket?.conference_type === '2' && ticket?.isValidated === false && (
 														<IconButton sx={{ display: 'flex', gap: '0.5rem', color: '#C64EFF' }}>
-														<ReplayOutlinedIcon />
-														<Typography>Record</Typography>
+															<ReplayOutlinedIcon />
+															<Typography>Record</Typography>
 														</IconButton>
 													)}
 
@@ -317,7 +317,7 @@ const HeaderHost = (props: any) => {
 							</Link>
 
 							<Button variant='text' sx={{ color: '#6A35F2' }}>
-								create an event
+								Host Section
 							</Button>
 						</>
 					)}

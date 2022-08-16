@@ -23,8 +23,18 @@ interface SessionProps {
   data: SessionListProp[];
   propss: any;
   filter: (props: string) => void;
+  host: hostProps[];
 }
-
+interface hostProps {
+  host_id: string,
+  user_name: string,
+  email: string,
+  first_name: string,
+  last_name: string,
+  create_at: Date,
+  update_at: Date,
+  host_type: string
+}
 interface SessionListProp {
   comboSessionId: number;
   comboSessionPrice: number;
@@ -32,9 +42,8 @@ interface SessionListProp {
   comboSessionDescription: string;
   conferenceList: ConferenceProp[];
   discount: number;
+  host_id: string;
 }
-
-
 interface ConferenceProp {
   conference_id: number;
   description: string;
@@ -107,6 +116,11 @@ export const Sessions = (props: SessionProps) => {
   const Income = Total * 10 / 100;
   const Total_debt = TotalAfterDiscount * 10 / 100;
 
+  const hostById = (hostList: hostProps[], hostId: string) => {
+    const result = hostList.find(h => h.host_id.toString() === hostId)
+    return result?.user_name;
+  }
+
   return (
     <>
       <Box sx={{ marginLeft: "0" }}>
@@ -162,7 +176,8 @@ export const Sessions = (props: SessionProps) => {
                 <TableCell align="right" sx={{ color: "#ffffff" }}>Gross</TableCell>
                 <TableCell align="right" sx={{ color: "#ffffff" }}>Session Price</TableCell>
                 <TableCell align="right" sx={{ color: "#ffffff" }}>Host's discount</TableCell>
-                <TableCell align="right" sx={{ color: "#ffffff", paddingRight: "3rem" }}>Number of Event</TableCell>
+                <TableCell align="right" sx={{ color: "#ffffff" }}>Created by</TableCell>
+                <TableCell align="right" sx={{ color: "#ffffff", paddingRight: "3rem" }}>Total Event</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -175,7 +190,8 @@ export const Sessions = (props: SessionProps) => {
                   <TableCell align="right">{splitNum(getTotalGross(row?.conferenceList))} VNĐ</TableCell>
                   <TableCell align="right">{splitNum(getTotalPrice(row?.conferenceList))} VNĐ</TableCell>
                   <TableCell align="right">{(row?.discount)}%</TableCell>
-                  <TableCell align="right" sx={{ width: "15rem" }}>
+                  <TableCell align="right">{hostById(props?.host, row?.host_id)}</TableCell>
+                  <TableCell align="right">
                     {row?.conferenceList?.length}
                     <SessionMenu event={row} />
                   </TableCell>
