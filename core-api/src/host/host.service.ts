@@ -61,6 +61,9 @@ export class HostService {
     if (await this.hostRepository.findOne({where: {user_name: host.user_name}})) {
       throw new ConflictException('Username already exists');
     }
+    if (await this.hostRepository.findOne({where: {email: host.email}})) {
+      throw new ConflictException('Email already exists');
+    }
     const hash = await argon.hash(host.password);
     host.password = hash;
     const tempHost = await this.hostRepository.save(host);

@@ -51,7 +51,7 @@ export class ConferenceService {
   async findAllConferences(): Promise<ResponseData> {
     const result = new ResponseData();
     const data = await this.conferenceRepository.find();
-    if (data.length >= 1) {
+    if (data !== undefined && data.length >= 1) {
       result.data = data;
     } else {
       result.status = false;
@@ -98,7 +98,9 @@ export class ConferenceService {
         .then((result) => {
           if (!result.status) {
             reject('Fail to get host by conference id: ' + id);
-            return null;
+            const resultData = new ResponseData();
+            resultData.data = [];
+            resultData.status = false;
           }
           this.hostRepository
             .findOne({
@@ -212,7 +214,7 @@ export class ConferenceService {
       .from(ConferenceEntity, 'conferences')
       .limit(limit)
       .getMany();
-    if (data.length >= 1) {
+    if (data.length !== undefined && data.length >= 1) {
       result.data = data;
     } else {
       result.status = false;
@@ -230,7 +232,7 @@ export class ConferenceService {
         },
       },
     });
-    if (data2.length >= 1) {
+    if (data2 !== undefined && data2.length >=1) {
       result.data = data2;
     } else {
       result.status = false;
@@ -355,11 +357,13 @@ export class ConferenceService {
           host_id: id,
         },
       });
+      // console.log(360, tempResult)
     }
-    result.status = tempResult.length > 1;
-    if (tempResult.length > 1) {
+    result.status = tempResult !== undefined;
+    if (tempResult !== undefined && tempResult.length >= 1) {
       result.data = tempResult;
     }
+    console.log(366, result)
     return result;
   }
 
@@ -477,8 +481,8 @@ export class ConferenceService {
   async getAllHost(): Promise<ResponseData> {
     const result = new ResponseData();
     const host = await this.hostRepository.find();
-    result.status = host.length > 0;
-    if (host.length > 0) {
+    result.status = host == undefined;
+    if (host !== undefined && host.length >= 1) {
       result.data = host;
     }
     return result;

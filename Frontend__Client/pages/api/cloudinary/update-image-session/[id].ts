@@ -1,4 +1,5 @@
 /* eslint-disable import/no-anonymous-default-export */
+
 import { UploadApiResponse, UploadApiErrorResponse, v2 } from 'cloudinary';
 import formidable from "formidable";
 export const config = {
@@ -21,7 +22,7 @@ export default async function (req , res) {
 		
 
 	} catch (error) {
-		console.log(error);
+		throw new Error("Please provide conference image before hitting submit")
 	}
 	async function uploadImage(
 		file: string,

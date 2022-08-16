@@ -83,6 +83,11 @@ const CreateEvent = (props) => {
   }
 
   const apiCall = async (data) => {
+    if(imageFile === undefined) {
+      setStatus("0");
+      setPopUp("1");
+      return;
+    }
     const res = await fetch("/api/combo/create-new", {
       method: "POST",
       body: JSON.stringify(data),
@@ -91,15 +96,14 @@ const CreateEvent = (props) => {
       },
     });
     const result = await res.json();
-    console.log(result);
-    // if (res.status === 200) {
-    //   let body = new FormData()
-    //   body.append('file', imageFile)
-    //   await fetch(`/api/cloudinary/update-image-session/${result.data.comboSessionId}`, {
-    //     method: "POST",
-    //     body,
-    //   });
-    // }
+    if (res.status === 200) {
+      let body = new FormData()
+      body.append('file', imageFile)
+      await fetch(`/api/cloudinary/update-image-session/${result.data.comboSessionId}`, {
+        method: "POST",
+        body,
+      });
+    }
 
     if (res.status === 200) {
       setStatus("1");

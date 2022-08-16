@@ -79,6 +79,11 @@ const CreateEvent = (props) => {
   }
 
   const apiCall = async (data) => {
+    if(imageFile === undefined) {
+      setStatus("0");
+      setPopUp("1");
+      return;
+    }
     const resData = await fetch("/api/conference/create-new", {
       method: "POST",
       headers: {
@@ -87,15 +92,15 @@ const CreateEvent = (props) => {
       body: JSON.stringify(data),
     });
     const resDataJson = await resData.json();
-    // if (resData.status === 200) {
-    //   let body = new FormData()
-    //   body.append('file', imageFile)
-    //   const imageUploadResult = await fetch(`/api/cloudinary/update-image-conference/${resDataJson.data.conference_id}`, {
-    //     method: "POST",
-    //     body,
-    //   });
-    //   console.log(90, imageUploadResult);
-    // }
+    if (resData.status === 200) {
+      let body = new FormData()
+      body.append('file', imageFile)
+      const imageUploadResult = await fetch(`/api/cloudinary/update-image-conference/${resDataJson.data.conference_id}`, {
+        method: "POST",
+        body,
+      });
+      console.log(90, imageUploadResult);
+    }
 
     if (resData.status === 200) {
       setStatus("1");

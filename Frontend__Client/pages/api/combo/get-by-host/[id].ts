@@ -1,3 +1,4 @@
+import { HttpCode } from '@nestjs/common';
 /* eslint-disable import/no-anonymous-default-export */
 import { serialize } from 'cookie'
 import { NextApiResponse, NextApiRequest } from 'next'
@@ -10,10 +11,20 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
 	try {
 		// const request = process.env.BACKEND_PROTOCOL+'://' + process.env.BACKEND_HOST + ':' + process.env.BACKEND_PORT + "/conference/get-x-conferences/6"; 
 		const request = `http://localhost:3000/combosession/find-combo-by-host-id/${id}`;
+		console.log(request);
 		const response = await axios.get(request);
+		console.log(15, response)
+		if(response.data.statusCode === 404) {
+			res.status(404).json({
+				message: 'Not Found',
+				data: []
+			});
+		}
         res.status(200).json(response.data);
 	} catch (error) {
-        console.log(error);
-		res.status(200).json(null);
+		res.status(404).json({
+			message: 'Not Found',
+			data: []
+		});
 	}
 }

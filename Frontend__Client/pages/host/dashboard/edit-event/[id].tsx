@@ -125,8 +125,7 @@ const CreateEvent = (props) => {
       body: JSON.stringify(data),
     });
     const resDataJson = await resData.json();
-    console.log(81, resDataJson);
-    if (resData.status === 200) {
+    if (resData.status === 200 && imageFile !== undefined) {
       let body = new FormData()
       body.append('file', imageFile)
       await fetch(`/api/cloudinary/update-image/${props?.tempDecode?.sub}`, {

@@ -21,7 +21,7 @@ export default async function (req , res) {
 		
 
 	} catch (error) {
-		console.log(error);
+		throw new Error("Please provide conference image before hitting submit")
 	}
 	async function uploadImage(
 		file: string,

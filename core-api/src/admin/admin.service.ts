@@ -78,6 +78,9 @@ export class AdminService {
     if (await this.adminRepository.findOne({where: {user_name: dto.user_name}})) {
       throw new ConflictException('Username already exists');
     }
+    if (await this.adminRepository.findOne({where: {email: dto.email}})) {
+      throw new ConflictException('Email already exists');
+    }
     const hash = await argon.hash(dto.password);
     // save the new user in the db
     try{
@@ -87,7 +90,6 @@ export class AdminService {
       newAdmin.password = dto.password;
       newAdmin.admin_id = dto.admin_id;
       newAdmin.email = dto.email;
-      console.log(newAdmin)
       const admin = await this.adminRepository.save(newAdmin);
       return this.signToken(admin.admin_id, admin.email, 'admin');
     } catch(error) {

@@ -16,6 +16,9 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
 		const response = await axios.get(request);
         res.status(200).json(response.data);
 	} catch (error) {
-		// console.log(error);
+		res.status(404).json({
+			message: 'Not Found',
+			data: []
+		});
 	}
 }

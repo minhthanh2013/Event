@@ -227,60 +227,61 @@ export class CombosessionService {
     })
   }
 
-  getComboByHostId(id: number): Promise<ResponseData> {
+  async getComboByHostId(id: number): Promise<ResponseData> {
+    console.log(231, "here")
     const response = new ResponseData();
-    return new Promise<ResponseData>((resolve, reject) => {
-      this.conferenceRepository.find({
-        where: {
-          host_id: id
-        }
-      }).then(async results => {
-        if(results.length === 0) {
-          throw new NotFoundException("Fail to get list of conferences by host id "+ id);
-        }
-        const comboSessionDto: ComboSessionDto[] = [];
-        for (let index = 0; index < results.length; index++) {
-          const element = results[index];
-          try {
-            const tempCombos = await this.findCombosByConferenceId(element.conference_id)
-          if(tempCombos.data.length === 0) {
-            reject("Fail find combos by conference id: " + element.conference_id)
+    try {let response_1 = await new Promise<ResponseData>((resolve, reject) => {
+        this.conferenceRepository.find({
+          where: {
+            host_id: id
           }
-          tempCombos.data.forEach(tempCombo => {
-            comboSessionDto.push(tempCombo)
-          });
-          } catch(e) {
-            console.log(e);
+        }).then(async (results) => {
+          if (results.length === 0) {
+            throw new NotFoundException("Fail to get list of conferences by host id " + id);
           }
-        }
-        if(comboSessionDto.length !== 0) { 
+          const comboSessionDto: ComboSessionDto[] = [];
+          for (let index = 0; index < results.length; index++) {
+            const element = results[index];
+            try {
+              const tempCombos = await this.findCombosByConferenceId(element.conference_id);
+              if (tempCombos.data.length === 0) {
+                reject("Fail find combos by conference id: " + element.conference_id);
+              }
+              tempCombos.data.forEach(tempCombo => {
+                comboSessionDto.push(tempCombo);
+              });
+            } catch (e) {
+              console.log(e);
+            }
+          }
+          if (comboSessionDto.length !== 0) {
             response.status = true;
             response.data = comboSessionDto;
             resolve(response);
-        } else {
-          throw new NotFoundException("Fail to get list of combos by host id "+ id);
-        }
-      }).catch((error2) => {
-        // Loi tu conferenceRepository.find
-        reject(error2);
-      })
-    }).then((response) => {
-      if(response.data  !== null ) {
+          } else {
+            throw new NotFoundException("Fail to get list of combos by host id " + id);
+          }
+        }).catch((error2) => {
+          // Loi tu conferenceRepository.find
+          reject(error2);
+        });
+      });
+      if (response_1.data !== null) {
         const update = new ResponseData();
         const tempMap = new Map();
-        response.data.forEach(element => {
-          tempMap.set(element.comboSessionId, element);
+        response_1.data.forEach(element_1 => {
+          tempMap.set(element_1.comboSessionId, element_1);
         });
         update.status = true;
         update.data = [...tempMap.values()];
-        response = update;
+        response_1 = update;
       } else {
-        response.status = false;
+        response_1.status = false;
       }
-      return response;
-    }).catch((e) => {
-      throw e;
-    })
+      return response_1;
+    } catch (e_1) {
+      throw e_1;
+    }
   }
   
   async getComboByUserId(id: number): Promise<ResponseData> {

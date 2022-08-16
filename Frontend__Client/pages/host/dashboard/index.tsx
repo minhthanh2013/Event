@@ -115,6 +115,13 @@ const EventCreate = (props: any) => {
     const fetchConferences = async () => {
       const dataResult = await fetch(`/api/conference/get-conference-by-host-id/${props.tempDecode.sub}`);
       const cateResult = await dataResult.json();
+      if(cateResult.status === 'false') {
+        setConferences({
+          status: false,
+          data: [],
+        });
+        return;
+      }
       setConferences(cateResult)
       setConferencesAfterFilter(cateResult);
     }

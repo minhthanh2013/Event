@@ -52,8 +52,6 @@ const Register = (props: Props) => {
             } else {
                 setErrorMessage("Username or email already exists");
             }
-
-			alert(JSON.stringify(values, null, 5))
 		},
 	})
 	return (
