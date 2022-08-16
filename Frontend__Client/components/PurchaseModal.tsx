@@ -15,36 +15,38 @@ interface modalProps {
 	handleToggle: any
 	data: TicketProp;
 }
+interface TicketProps {
+	data: TicketProp;
+	setTotal: (props: number) => void;
+}
 interface TicketProp {
-    conferenceAddress: string
-    conferenceCategory: number
-    conferenceDescription: string
-    conferenceName: string
-    conferencePrice: number
-    conferenceType: number
-    organizerName: string
-    ticketQuantity: number
-    status_ticket: string
-    host_id: number
-    conference_id: number
-    address: string
-    date_start_conference: Date
+	conferenceAddress: string
+	conferenceCategory: number
+	conferenceDescription: string
+	conferenceName: string
+	conferencePrice: number
+	conferenceType: number
+	organizerName: string
+	ticketQuantity: number
+	status_ticket: string
+	host_id: number
+	conference_id: number
+	address: string
+	date_start_conference: Date
 
-    // conferenceOrganizer: string;
+	// conferenceOrganizer: string;
 }
-const handleChangeQuantity = (event: React.ChangeEvent<HTMLInputElement>) => {
-	console.log(event.target.value);
-	// setSelectedValue(event.target.value)
-}
+
 const PurchaseModal = (props: modalProps) => {
 	const [selectedValue, setSelectedValue] = useState('a')
-	const [total, setTotal] = useState(0);
+	const [total, setTotal] = useState(parseInt(props?.data?.conferencePrice));
+
 	const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		setSelectedValue(event.target.value)
 	}
 	return (
 		<>
-			<Box className={styles.container} sx={{position:'absolute', top:'50%', left:'50%', transform: 'translate(-50%, -50%)'}}>
+			<Box className={styles.container} sx={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }}>
 				<Box className={styles.leftWrap}>
 					<Box className={styles.leftWrap__top}>
 						<Typography component='h3'>{props?.data?.conferenceName}</Typography>
@@ -52,7 +54,7 @@ const PurchaseModal = (props: modalProps) => {
 						<Divider variant='middle' />
 					</Box>
 					<Box className={styles.leftWrap__body}>
-						<TicketInModal data={props?.data}/>
+						<TicketInModal data={props?.data} setTotal={setTotal} />
 					</Box>
 					<Box className={styles.leftWrap__bottom}>
 						<Typography>Total</Typography>
@@ -99,11 +101,14 @@ const PurchaseModal = (props: modalProps) => {
 	)
 }
 
-export const TicketInModal = (data: TicketProp) => {
+export const TicketInModal: React.FC<TicketProps> = ({ data, setTotal }) => {
 	const [age, setAge] = useState('')
-	const handleChange = (event: SelectChangeEvent) => {
-		setAge(event.target.value as string)
+
+	const handleChange = (event: any) => {
+		const price = parseInt(event.target.value) * data.conferencePrice;
+		setTotal(price);
 	}
+
 	return (
 		<>
 			<Box className={styles.ticketContainer}>
@@ -115,13 +120,14 @@ export const TicketInModal = (data: TicketProp) => {
 						alt='Live from space album cover'
 					/>
 					<Box className={styles.ticketContent}>
-						<Typography component='h3'>{data?.data?.conferenceName}</Typography>
-						<Typography component='h4'>{splitNum(data?.data?.conferencePrice)} VNĐ</Typography>
+						<Typography component='h3'>{data?.conferenceName}</Typography>
+						<Typography component='h4'>{splitNum(data?.conferencePrice)} VNĐ</Typography>
 						<Typography component='h5'>Sales end in 2 days</Typography>
 					</Box>
 					<Box>
 						<FormControl variant='standard' className={styles.ticketNumber}>
-							<TextField type='number' size='small' defaultValue={1} onChange={handleChangeQuantity}/>
+							<TextField type='number' disabled size='small' defaultValue={1} onChange={(event) => handleChange(event)}
+								InputProps={{ inputProps: { min: 1, max: 10 } }} />
 						</FormControl>
 					</Box>
 				</Card>
