@@ -80,7 +80,7 @@ export const SessionMenu: React.FC<props> = ({ event }) => {
                 <Link href={`/session/${event.comboSessionId}`} passHref>
                     <MenuItem onClick={handleClose}>View</MenuItem>
                 </Link>
-                <MenuItem onClick={() => { handleDeleteSession(event.comboSessionId) }}>Delete</MenuItem>
+                {/* <MenuItem onClick={() => { handleDeleteSession(event.comboSessionId) }}>Delete</MenuItem> */}
             </Menu>
         </>
     )

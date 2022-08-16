@@ -11,10 +11,11 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import EventIcon from "@mui/icons-material/Event";
 import SessionsIcon from "@mui/icons-material/EmojiEvents";
-import SubscriptionsIcon from "@mui/icons-material/ShopTwo";
+import UserIcon from '@mui/icons-material/AssignmentInd';
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { EventList } from "./EventList";
 import { Sessions } from "./SessionList";
+import { UserList } from "./UserList";
 import FilterList from "@mui/icons-material/FilterList";
 import HeaderHost from "../../../components/Header__Host";
 import Footer from "../../../components/Footer";
@@ -93,14 +94,32 @@ interface SessionListProp {
     discount: number;
 }
 
+interface HostList {
+    status: boolean;
+    data: HostListProp[];
+}
+interface HostListProp {
+    host_id: string,
+    user_name: string,
+    email: string,
+    first_name: string,
+    last_name: string,
+    create_at: Date,
+    update_at: Date,
+    host_type: string,
+}
+
 //
 const EventCreate = (props: any) => {
     const [conferences, setConferences] = useState<ConferenceProps>();
     const [conferencesAfterFilter, setConferencesAfterFilter] = useState<ConferenceProps>();
     const [sessionsAfterFilter, setSessionsAfterFilter] = useState<SessionListProps>();
     const [sessions, setSessions] = useState<SessionListProps>();
+    const [host, setHost] = useState<HostList>();
+    const [hostAfterFilter, setHostAfterFilter] = useState<HostList>();
+
     const [value, setValue] = React.useState(0);
-    
+
     useEffect(() => {
         console.log(props);
         const fetchConferencesData = async () => {
@@ -116,12 +135,18 @@ const EventCreate = (props: any) => {
             setSessions(data);
             setSessionsAfterFilter(data);
         }
+        const fetchHostData = async () => {
+            // const response = await fetch("http://localhost:8080/api/combo/get-latest-x?id=0");
+            // const data = await response.json();
+            // API get host here
+
+            setHost(data);
+            setHostAfterFilter(data);
+        }
         fetchConferencesData();
         fetchCombosData();
 
-        // Ở đây chưa có state [users, setUsers] = ... cũng như UserProps vì t không biết field của Users
-        // Tạo interface như trên nhưng dành cho Users => state [users, setUsers] = useState<UserProps>();
-        // Nhớ tạo state usersAfterFilter rồi copy 2 cái t làm sẵn cho m, hiện tại nó là fe của Subcriptions
+
     }, []);
 
     const handleChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -147,9 +172,9 @@ const EventCreate = (props: any) => {
     //chỉnh field status_ticket thành field lưu trữ type người dùng là host hay admin
     const filterUsers = (props: string) => {
         if (props === 'all') {
-            setConferencesAfterFilter(conferences)
+            setHostAfterFilter(host)
         } else {
-            setConferencesAfterFilter({ status: true, data: conferences?.data?.filter(data => data.status_ticket === props) });
+            setHostAfterFilter({ status: true, data: host?.data?.filter(data => data.host_type === props) });
         }
     };
 
@@ -221,6 +246,27 @@ const EventCreate = (props: any) => {
                                     }
                                     {...a11yProps(1)}
                                 />
+                                <Tab
+                                    label={
+                                        <>
+                                            <Box
+                                                sx={{
+                                                    display: "flex",
+                                                    alignItems: "start",
+                                                    flexDirection: "row",
+                                                    justifyContent: "center",
+                                                    marginLeft: "20px",
+                                                }}
+                                            >
+                                                <UserIcon sx={{ marginRight: "0.5rem" }} />
+                                                <Typography sx={{ fontWeight: "bold" }}>
+                                                    Host List
+                                                </Typography>
+                                            </Box>
+                                        </>
+                                    }
+                                    {...a11yProps(1)}
+                                />
                             </Tabs>
                         </ThemeProvider>
                     </Grid>
@@ -233,6 +279,11 @@ const EventCreate = (props: any) => {
                         <TabPanel value={value} index={1}>
                             <Box sx={{ marginLeft: "3rem" }}>
                                 <Sessions data={sessionsAfterFilter?.data} propss={props} filter={filterSessions} />
+                            </Box>
+                        </TabPanel>
+                        <TabPanel value={value} index={2}>
+                            <Box sx={{ marginLeft: "3rem" }}>
+                                <UserList data={hostAfterFilter?.data} propss={props} filter={filterUsers} />
                             </Box>
                         </TabPanel>
                     </Grid>
