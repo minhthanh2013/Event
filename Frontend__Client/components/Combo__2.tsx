@@ -64,7 +64,7 @@ const Combo__2 = (props: TicketSessionProps) => {
 							<CardMedia
 								className={styles.ticketImage}
 								component='img'
-								src='https://images.pexels.com/photos/2306281/pexels-photo-2306281.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'
+								src={imageProp || 'https://images.pexels.com/photos/2306281/pexels-photo-2306281.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'}
 								alt='Event'
 							/>
 							<CardContent className={styles.ticketContent}>

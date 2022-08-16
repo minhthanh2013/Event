@@ -1,19 +1,19 @@
-import { Box, Card, CardActionArea, CardContent, CardMedia, FormControl, Grid, MenuItem, Select, Stack, Typography } from '@mui/material'
+import { Box, Card, CardActionArea, CardContent, CardMedia, FormControl, Grid, Link, MenuItem, Select, Stack, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import Pagination from '@mui/material/Pagination'
-import Header from '../components/Header'
-import PurchaseModal from '../components/PurchaseModal'
-import TicketList_SearchResult from '../components/TicketList__SearchResult'
-import SearchResult from './search-result'
+import Header from '../../components/Header'
+import PurchaseModal from '../../components/PurchaseModal'
+import TicketList_SearchResult from '../../components/TicketList__SearchResult'
+import SearchResult from '../search-result'
 import Divider from '@mui/material/Divider'
 import FilterListIcon from '@mui/icons-material/FilterList'
 import styles from '../styles/Ticket__2.module.scss'
 import { min } from 'date-fns'
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney'
-import Ticket__2 from '../components/Ticket__2'
+import Ticket__2 from '../../components/Ticket__2'
 import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
-import Combo__2 from '../components/Combo__2'
+import Combo__2 from '../../components/Combo__2'
 
 interface ConferenceProp {
 	conference_id: number
@@ -26,7 +26,7 @@ interface ConferenceProp {
 	current_quantity: number
 	status_ticket: string
 	conference_type: string
-	// conferenceOrganizer: string;
+	organizerName: string;
 }
 
 interface EventListProps {
@@ -38,9 +38,10 @@ const UserTicket = (props: any) => {
 
 	const [filter, setFilter] = useState('0')
 
-	const [ticketList, setTicketList] = useState<EventListProps>()
 
-	console.log(props)
+	const [ticketList, setTicketList] = useState<EventListProps>()
+	
+
 	const handleChange = (event: any) => {
 		setFilter(event.target.value)
 	}
@@ -57,6 +58,7 @@ const UserTicket = (props: any) => {
 		setTicketList(cateResult)
 	}
 
+
 	let timeOnly = false
 	useEffect(() => {
 		// if(!timeOnly) {
@@ -66,7 +68,7 @@ const UserTicket = (props: any) => {
 	}, [])
 	return (
 		<>
-			<Header />
+			<Header {...props}/>
 			<Divider sx={{ borderColor: '#4F3398' }} />
 			<Box sx={{ dislay: 'flex', flexDirection: 'column' }}>
 				<Box sx={{ display: 'flex', justifyContent: 'space-between', width: '80%', mx: 'auto', my: 6 }}>
@@ -75,11 +77,6 @@ const UserTicket = (props: any) => {
 							Tickets
 						</Typography>
 
-						{/* {filter == '1' && (
-							<Typography variant='h5' component='h2' sx={{ color: '#4F3398' }}>
-								Combo
-							</Typography>
-						)} */}
 					</Box>
 					<Box>
 						<FormControl sx={{ m: 1, minWidth: 120 }} size='small'>
@@ -103,11 +100,18 @@ const UserTicket = (props: any) => {
 				{/* Vertical Tab */}
 				<Box flexGrow={1} sx={{ height: '1100px', width: '1000px', mx: 'auto', mb: 5 }}>
 					<Grid container rowSpacing={8}>
-						{props?.conf?.map((dataItem) => (
+						{ticketList?.data?.map((dataItem) => (
 							<Grid item sm={12} key={dataItem.conference_id}>
-								<Ticket__2 data={dataItem} />
+								<Link href={'/event/' + dataItem.conference_id}>
+									<Ticket__2 data={dataItem} />
+								</Link>
 							</Grid>
 						))}
+						{ticketList?.data?.length === 0 && (
+							<Typography variant='h5' component='h2' sx={{ color: '#4F3398', fontWeight: '700', fontSize: '2rem' }}>
+								You dont have any ticket yet.
+							</Typography>
+						)}
 					</Grid>
 				</Box>
 

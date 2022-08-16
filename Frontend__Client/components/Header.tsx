@@ -302,7 +302,7 @@ const Header = (props: any) => {
 										<ConfirmationNumberIcon /> Tickets
 									</MenuItem>
 								</Link>
-								<Link passHref href={'/user/ticket'}>
+								<Link passHref href={'/user/combo'}>
 									<MenuItem sx={{ display: 'flex', gap: '0.5rem', justifyContent: 'space-between', color: '#6A35F2' }}>
 										<LocalActivityIcon /> Combo
 									</MenuItem>

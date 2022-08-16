@@ -1,19 +1,19 @@
-import { Box, Card, CardActionArea, CardContent, CardMedia, FormControl, Grid, MenuItem, Select, Stack, Typography } from '@mui/material'
+import { Box, Card, CardActionArea, CardContent, CardMedia, FormControl, Grid, Link, MenuItem, Select, Stack, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import Pagination from '@mui/material/Pagination'
-import Header from '../components/Header'
-import PurchaseModal from '../components/PurchaseModal'
-import TicketList_SearchResult from '../components/TicketList__SearchResult'
-import SearchResult from './search-result'
+import Header from '../../components/Header'
+import PurchaseModal from '../../components/PurchaseModal'
+import TicketList_SearchResult from '../../components/TicketList__SearchResult'
+import SearchResult from '../search-result'
 import Divider from '@mui/material/Divider'
 import FilterListIcon from '@mui/icons-material/FilterList'
 import styles from '../styles/Ticket__2.module.scss'
 import { min } from 'date-fns'
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney'
-import Ticket__2 from '../components/Ticket__2'
+import Ticket__2 from '../../components/Ticket__2'
 import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
-import Combo__2 from '../components/Combo__2'
+import Combo__2 from '../../components/Combo__2'
 
 interface ConferenceProp {
 	conference_id: number
@@ -58,7 +58,7 @@ const UserCombo = (props: any) => {
 
 	const fetchSessions = async () => {
 		// Fetch conference by user id
-		const dataResult = await fetch(`/api/combo/get-latest-x?id=0`)
+		const dataResult = await fetch(`/api/combo/get-by-user/${props?.tempDecode?.sub}`)
 		const cateResult = await dataResult.json()
 		setSessionList(cateResult)
 	}
@@ -72,7 +72,7 @@ const UserCombo = (props: any) => {
 	}, [])
 	return (
 		<>
-			<Header />
+			<Header {...props}/>
 			<Divider sx={{ borderColor: '#4F3398' }} />
 			<Box sx={{ dislay: 'flex', flexDirection: 'column' }}>
 				<Box sx={{ display: 'flex', justifyContent: 'space-between', width: '80%', mx: 'auto', my: 6 }}>
@@ -80,12 +80,6 @@ const UserCombo = (props: any) => {
 						<Typography variant='h5' component='h2' sx={{ color: '#4F3398', fontWeight: '700', fontSize: '2rem' }}>
 							Combos
 						</Typography>
-
-						{/* {filter == '1' && (
-							<Typography variant='h5' component='h2' sx={{ color: '#4F3398' }}>
-								Combo
-							</Typography>
-						)} */}
 					</Box>
 					<Box>
 						<FormControl sx={{ m: 1, minWidth: 120 }} size='small'>
@@ -109,30 +103,19 @@ const UserCombo = (props: any) => {
 				{/* Vertical Tab */}
 				<Box flexGrow={1} sx={{ height: 'auto', width: '1000px', mx: 'auto', mb: 5 }}>
 					<Grid container rowSpacing={8}>
-						{[1, 2, 3, 4].map((dataItem) => (
+						{sessionList?.data?.map((dataItem) => (
 							<Grid item sm={12} key={dataItem.comboSessionId}>
-								<Combo__2 data={dataItem} props={undefined} />
+								<Link href={'/session/' + dataItem.comboSessionId}> 
+									<Combo__2 data={dataItem} props={undefined} />
+								</Link>
 							</Grid>
 						))}
+						{sessionList?.data?.length === 0 && (
+							<Typography variant='h5' component='h2' sx={{ color: '#4F3398', fontWeight: '700', fontSize: '2rem' }}>
+								You dont have any combo yet.
+							</Typography>
+						)}
 					</Grid>
-				</Box>
-
-				<Box sx={{ width: '85%', mx: 'auto', mb: 10 }}>
-					<Stack spacing={2}>
-						<Pagination
-							count={10}
-							variant='outlined'
-							onChange={handlePaginationChange}
-							sx={{
-								display: 'flex',
-								justifyContent: 'center',
-								'& *': { borderColor: '#6A35F2 !important', color: '#6A35F2 !important' },
-								'.css-lqq3n7-MuiButtonBase-root-MuiPaginationItem-root.Mui-selected': {
-									backgroundColor: 'rgba(206, 147, 216, 0.24) !important',
-								},
-							}}
-						/>
-					</Stack>
 				</Box>
 			</Box>
 		</>
