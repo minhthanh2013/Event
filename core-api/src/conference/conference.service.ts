@@ -9,7 +9,7 @@ import {
   SpeakerRequestDto,
   SpeakerList
 } from './models/conference.dto';
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectDataSource, InjectRepository } from '@nestjs/typeorm';
 import { ConferenceCategoryEntity } from 'src/conferencecategory/models/conference_category.entity';
 import { ConferenceTypeEntity } from 'src/conferencetype/models/conference_type.entity';
@@ -483,4 +483,19 @@ export class ConferenceService {
     }
     return result;
   }
+  async deleteConference(id: number): Promise<ResponseData> {
+    const conference = this.conferenceRepository.findOne({where: {conference_id: id}});
+    if(!conference) {
+      throw new NotFoundException('Conference not found with conference id: ' + id);
+    }
+    if((await conference).status_ticket === 'draft') {
+      const result = new ResponseData();
+      await this.conferenceRepository.delete({conference_id: id});
+      result.status = true;
+      return result;
+    } else {
+      throw new BadRequestException('Can not delete conference with status: ' + (await conference).status_ticket);
+    }
+  }
+    
 }

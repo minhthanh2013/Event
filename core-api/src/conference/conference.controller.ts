@@ -117,4 +117,9 @@ export class ConferenceController {
   getAllHost(): Promise<ResponseData> {
     return this.conferenceService.getAllHost();
   }
+  @Post('/delete-conference/:id')
+  deleteConference(@Param("id") id: number): Promise<ResponseData> {
+    return this.conferenceService.deleteConference(id);
+  }
+  
 }
