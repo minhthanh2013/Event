@@ -55,7 +55,7 @@ const DetailContent = (props: TicketProps) => {
 			setHost(cateResult);
 		}
 		const parseDate = () => {
-			const date = new Date(props.data.date_start_conference)
+			const date = new Date(props.data?.date_start_conference)
 			setYear(date.getFullYear().toString())
 			setMonth(date.getMonth().toString())
 			setMonthString(date.toLocaleString('en-us', { month: 'short' }))
@@ -96,8 +96,8 @@ const DetailContent = (props: TicketProps) => {
 								loading='lazy'
 							></iframe>
 							{/* <Box component='img' src='https://i.stack.imgur.com/HILmr.png'></Box> */}
-							<Typography component='h4'>{props.data?.address ? "Zoom" : props.data.address }</Typography>
-							<Typography component='span'>{props.data?.address ? "Zoom" : props.data.address }</Typography>
+							<Typography component='h4'>{props.data?.address ? "Zoom" : props.data?.address }</Typography>
+							<Typography component='span'>{props.data?.address ? "Zoom" : props.data?.address }</Typography>
 						</Box>
 					</Box>
 					<Box className={styles.info__section}>

@@ -9,12 +9,17 @@ $color-text3: white;
 .container {
     
    
-    width: 90vw;
+    width: 75vw;
     margin-top: 3rem;
     margin-inline: auto;
     background-color: rgb(137, 81, 81);
     display: flex;
-    position: relative;
+    position: absolute;
+    top: 60%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    transition: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    
 }
 
 .leftWrap {

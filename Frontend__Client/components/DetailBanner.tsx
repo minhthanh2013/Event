@@ -30,6 +30,7 @@ interface TicketProp {
 interface TicketProps {
 	data: TicketProp;
 	// conferenceOrganizer: string;
+	handleToggle: any
 }
 
 const weekday = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
@@ -47,7 +48,7 @@ const DetailBanner = (props: TicketProps) => {
 	const [timePeriod, setTimePeriod] = useState<string>()
 	useEffect(() => {
 		const parseDate = () => {
-			const date = new Date(props.data.date_start_conference)
+			const date = new Date(props.data?.date_start_conference)
 			setYear(date.getFullYear().toString())
 			setMonth(date.getMonth().toString())
 			setMonthString(date.toLocaleString('en-us', { month: 'short' }))
@@ -78,15 +79,15 @@ const DetailBanner = (props: TicketProps) => {
                         </Link>
                         <Box>
                             <Box>
-                                <Typography component="h2">{props.data.conferenceName}</Typography>
-                                <Typography component="h3">By {props.data.organizerName}</Typography>
-                                <Typography component="h4">{props.data.address}</Typography>
+                                <Typography component="h2">{props.data?.conferenceName || 'conferenceName'}</Typography>
+                                <Typography component="h3">By {props.data?.organizerName || 'HCMUS'}</Typography>
+                                <Typography component="h4">{props.data?.address}</Typography>
                             </Box>
                             <Box>
                                 <Typography component="h2">Date & Time</Typography>
                                 <Typography component="h3">{weekDay}, {monthString} {day}, {year} at {hour}:{min} {timePeriod}</Typography>
                                 <Button variant="text" className={styles.button__1}><AddIcon/>Add to calendar</Button>
-                                <Button variant="contained" className={styles.button__2}>Buy ticket ({`${splitNum(props.data.conferencePrice)} VNĐ`})</Button>
+                                <Button variant="contained" className={styles.button__2} onClick={props.handleToggle}>Buy ticket ({`${splitNum(props.data?.conferencePrice)} VNĐ`})</Button>
                                 <Button variant="outlined" className={styles.button__3} disabled>Buy record ($ 5.00)</Button>
                             </Box>
                         </Box>

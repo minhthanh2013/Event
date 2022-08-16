@@ -9,7 +9,11 @@ import CloseIcon from '@mui/icons-material/Close'
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet'
 import CreditCardIcon from '@mui/icons-material/CreditCard'
 import ArrowRightAltIcon from '@mui/icons-material/ArrowRightAlt'
-const PurchaseModal = () => {
+
+interface modalProps {
+	handleToggle: any
+}
+const PurchaseModal = (props: modalProps) => {
 	const [selectedValue, setSelectedValue] = useState('a')
 	const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		setSelectedValue(event.target.value)
@@ -17,7 +21,7 @@ const PurchaseModal = () => {
 
 	return (
 		<>
-			<Box className={styles.container}>
+			<Box className={styles.container} sx={{position:'absolute', top:'50%', left:'50%', transform: 'translate(-50%, -50%)'}}>
 				<Box className={styles.leftWrap}>
 					<Box className={styles.leftWrap__top}>
 						<Typography component='h3'>British Boarding Schools Show, Ho Chi Minh</Typography>
@@ -38,7 +42,7 @@ const PurchaseModal = () => {
 				<Box className={styles.rightWrap}>
 					<Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
 						<IconButton aria-label='delete'>
-							<CloseIcon sx={{ color: 'white', width: '1.5em', height: '1.5em' }} onClick={() => {}} />
+							<CloseIcon sx={{ color: 'white', width: '1.5em', height: '1.5em' }} onClick={props.handleToggle} />
 						</IconButton>
 					</Box>
 					<Box className={styles.content} sx={{ width: '80%', height: '85%', pt: '1rem', pb: '3rem', mx: 'auto' }} display='flex' flexDirection='column'>
