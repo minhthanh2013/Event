@@ -70,7 +70,7 @@ export const EventList = (props: EventListProps) => {
     }
     return result + a * b;
   }, 0);
-
+  const Income = Total * 90 / 100;
   return (
     <>
       <Box sx={{ marginLeft: "0" }}>
@@ -97,6 +97,13 @@ export const EventList = (props: EventListProps) => {
             disabled
             type="string"
             value={`${splitNum(Total)} VNĐ` || ''}
+            sx={{ marginRight: "2rem" }}
+          />
+          <TextField
+            label="Total income"
+            disabled
+            type="string"
+            value={`${splitNum(Income)} VNĐ` || ''}
           />
           <Button
             variant="outlined"

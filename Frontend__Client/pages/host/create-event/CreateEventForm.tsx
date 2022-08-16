@@ -19,6 +19,8 @@ import IconButton from "@mui/material/IconButton";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { ErrorMessage } from '@hookform/error-message';
+
 type Data = {
   [key: string]: any;
 }
@@ -280,7 +282,7 @@ export const Speakers: React.FC<CreateEventProps> = ({ data, setData, setValue }
         </Grid>
       ) : (
         <Stack sx={{ width: "100%" }} spacing={2}>
-            {data.speakerList?.map((speaker, index) => (
+          {data.speakerList?.map((speaker, index) => (
             <>
               <Alert
                 key={index}
@@ -334,7 +336,7 @@ export const Speakers: React.FC<CreateEventProps> = ({ data, setData, setValue }
   );
 };
 
-export const Date: React.FC<CreateEventProps> = ({ data, setData, setValue, api, prop }) => {
+export const DateForm: React.FC<CreateEventProps> = ({ data, setData, setValue, api, prop }) => {
   const {
     register,
     handleSubmit,
@@ -347,9 +349,15 @@ export const Date: React.FC<CreateEventProps> = ({ data, setData, setValue, api,
   const [ticketEnd, setTicketEnd] = useState<Date | null>(null);
 
   const onSubmit = (value: any) => {
-    api({ ...data, dateStartConference: value.dateStartConference, dateStartSell: value.dateStartSell,
-      dateEndSell: value.dateEndSell, conferencePrice: value.conferencePrice, ticketQuantity: value.ticketQuantity, hostName: prop.tempDecode.username });
+    // api({ ...data, dateStartConference: value.dateStartConference, dateStartSell: value.dateStartSell,
+    //   dateEndSell: value.dateEndSell, conferencePrice: value.conferencePrice, ticketQuantity: value.ticketQuantity, hostName: prop.tempDecode.username });
+    setData({
+      ...data, dateStartConference: value.dateStartConference, dateStartSell: value.dateStartSell,
+      dateEndSell: value.dateEndSell, conferencePrice: value.conferencePrice, ticketQuantity: value.ticketQuantity, hostName: prop.tempDecode.username
+    });
+    console.log(`submit`);
   };
+
   return (
     <>
       <Grid
@@ -365,42 +373,45 @@ export const Date: React.FC<CreateEventProps> = ({ data, setData, setValue, api,
               <Controller
                 name="dateStartConference"
                 control={control}
-                defaultValue={eventStart}
-                render={({ field: { ref, ...rest } }) => (
+                render={({ field: { ...rest } }) => (
                   <DatePicker
                     label="Event start date"
                     inputFormat="dd/MM/yyyy"
                     value={data.dateStartConference}
                     disablePast
-                    inputRef={ref}
-                    onChange={(newValue: Date | null) => {
-                      setEventStart(newValue);
-                    }}
                     renderInput={(params) => (
                       <TextField
                         className={styles.dateFields}
-                        required
                         {...params}
                       />
                     )}
                     {...rest}
                   />
                 )}
+                rules={{
+                  required: true,
+                  onChange: (newValue) => { setEventStart(newValue.target.value) },
+                  validate: {
+                    minDate: value => {
+                      const today = new Date();
+                      const dateValue = new Date(value.toString());
+                      return dateValue.getDate() >= today.getDate();
+                    },
+                  }
+                }}
               />
+              <ErrorMessage errors={errors} name="dateStartConference" message="**You can't host an event from the past!" />
+
               <Controller
                 name="dateStartSell"
                 control={control}
-                defaultValue={ticketStart}
-                render={({ field: { ref, ...rest } }) => (
+                render={({ field: { ...rest } }) => (
                   <DatePicker
                     label="Ticket sales start"
                     inputFormat="dd/MM/yyyy"
                     value={data.dateStartSell}
                     disablePast
-                    inputRef={ref}
-                    onChange={(newValue: Date | null) => {
-                      setTicketStart(newValue);
-                    }}
+                    maxDate={eventStart ? eventStart : undefined}
                     renderInput={(params) => (
                       <TextField
                         className={styles.dateFields}
@@ -411,21 +422,36 @@ export const Date: React.FC<CreateEventProps> = ({ data, setData, setValue, api,
                     {...rest}
                   />
                 )}
+                rules={{
+                  required: true,
+                  onChange: (newValue) => { setTicketStart(newValue.target.value) },
+                  validate: {
+                    maxDate: value => {
+                      const dateValue = new Date(value.toString());
+                      return dateValue.getDate() <= eventStart.getDate();
+                    },
+                    minDate: value => {
+                      const today = new Date();
+                      const dateValue = new Date(value.toString());
+                      return dateValue.getDate() >= today.getDate();
+                    },
+                  }
+                }}
               />
+              <ErrorMessage errors={errors} name="dateStartSell" message="**You must sell Ticket before event start!" />
+
               <Controller
                 name="dateEndSell"
                 control={control}
-                defaultValue={ticketEnd} 
-                render={({ field: { ref, ...rest } }) => (
+                defaultValue={ticketEnd}
+                render={({ field: { ...rest } }) => (
                   <DatePicker
                     label="Ticket sales end"
                     inputFormat="dd/MM/yyyy"
                     value={data.dateEndSell}
                     disablePast
-                    inputRef={ref}
-                    onChange={(newValue: Date | null) => {
-                      setTicketEnd(newValue);
-                    }}
+                    minDate={ticketStart ? ticketStart : undefined}
+                    maxDate={eventStart ? eventStart : undefined}
                     renderInput={(params) => (
                       <TextField
                         className={styles.dateFields}
@@ -436,7 +462,21 @@ export const Date: React.FC<CreateEventProps> = ({ data, setData, setValue, api,
                     {...rest}
                   />
                 )}
+                rules={{
+                  required: true,
+                  validate: {
+                    minDate: value => {
+                      const dateValue = new Date(value.toString());
+                      return dateValue.getDate() >= ticketStart.getDate();
+                    },
+                    maxDate: value => {
+                      const dateValue = new Date(value.toString());
+                      return dateValue.getDate() <= eventStart.getDate();
+                    }
+                  }
+                }}
               />
+              <ErrorMessage errors={errors} name="dateEndSell" message="**You must stop selling Ticket before event starts!" />
             </Stack>
           </LocalizationProvider>
 

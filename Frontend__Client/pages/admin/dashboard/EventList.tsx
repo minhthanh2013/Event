@@ -73,6 +73,8 @@ export const EventList = (props: EventListProps) => {
     }
     return result + a * b;
   }, 0);
+  const Income = Total * 10 / 100;
+  const Total_debt = Total * 90 / 100;
 
   return (
     <>
@@ -100,6 +102,20 @@ export const EventList = (props: EventListProps) => {
             disabled
             type="string"
             value={`${splitNum(Total)} VNĐ` || ''}
+            sx={{ marginRight: "2rem" }}
+          />
+          <TextField
+            label="Total income"
+            disabled
+            type="string"
+            value={`${splitNum(Income)} VNĐ` || ''}
+            sx={{ marginRight: "2rem" }}
+          />
+          <TextField
+            label="Total pay for host"
+            disabled
+            type="string"
+            value={`${splitNum(Total_debt)} VNĐ` || ''}
           />
         </Box>
         <TableContainer component={Paper} sx={{ marginTop: "5rem", marginLeft: "5rem", width: "90%" }}>

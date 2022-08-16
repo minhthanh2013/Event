@@ -104,6 +104,7 @@ export const Sessions = (props: SessionProps) => {
     let discountPrice = total * item.discount / 100
     return result + total - discountPrice;
   }, 0);
+  const Income = TotalAfterDiscount * 90 / 100;
 
   return (
     <>
@@ -135,6 +136,13 @@ export const Sessions = (props: SessionProps) => {
             disabled
             type="string"
             value={`${splitNum(TotalAfterDiscount)} VNĐ` || ''}
+            sx={{ marginRight: "2rem" }}
+          />
+          <TextField
+            label="Total income"
+            disabled
+            type="string"
+            value={`${splitNum(Income)} VNĐ` || ''}
           />
           <Button
             variant="outlined"
@@ -155,6 +163,7 @@ export const Sessions = (props: SessionProps) => {
                 <TableCell align="right" sx={{ color: "#ffffff" }}>Sold</TableCell>
                 <TableCell align="right" sx={{ color: "#ffffff" }}>Gross</TableCell>
                 <TableCell align="right" sx={{ color: "#ffffff" }}>Session Price</TableCell>
+                <TableCell align="right" sx={{ color: "#ffffff" }}>Ticket Discount</TableCell>
                 <TableCell align="right" sx={{ color: "#ffffff", paddingRight: "3rem" }}>Number of Event</TableCell>
               </TableRow>
             </TableHead>
@@ -167,6 +176,7 @@ export const Sessions = (props: SessionProps) => {
                   <TableCell align="right">{getTotalTicketSold(row?.conferenceList)}/{getTotalTicket(row?.conferenceList)}</TableCell>
                   <TableCell align="right">{splitNum(getTotalGross(row?.conferenceList))} VNĐ</TableCell>
                   <TableCell align="right">{splitNum(getTotalPrice(row?.conferenceList))} VNĐ</TableCell>
+                  <TableCell align="right">{row?.discount}%</TableCell>
                   <TableCell align="right" sx={{ width: "15rem" }}>
                     {row?.conferenceList?.length}
                     <SessionMenu event={row} />

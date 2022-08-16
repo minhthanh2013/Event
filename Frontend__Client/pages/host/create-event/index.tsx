@@ -11,7 +11,7 @@ import Button from "@mui/material/Button";
 import Image from "next/image";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
-import { BasicInfo, Speakers, Date } from "./CreateEventForm";
+import { BasicInfo, Speakers, DateForm } from "./CreateEventForm";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Multer } from 'multer';
 import HeaderHost from "../../../components/Header__Host";
@@ -79,7 +79,7 @@ const CreateEvent = (props) => {
   }
 
   const apiCall = async (data) => {
-    if(imageFile === undefined) {
+    if (imageFile === undefined) {
       setStatus("0");
       setPopUp("1");
       return;
@@ -192,8 +192,8 @@ const CreateEvent = (props) => {
                 indicatorColor="primary"
               >
                 <Tab label="Basic Information" {...a11yProps(0)} />
-                <Tab label="Speakers" {...a11yProps(1)} />
-                <Tab label="Date and time" {...a11yProps(2)} />
+                {value === 1 || value == 2 ? (<Tab label="Speakers" {...a11yProps(1)} />) : (<Tab disabled label="Speakers" {...a11yProps(1)} />)}
+                {value === 2 ? (<Tab label="Date and time" {...a11yProps(2)} />) : (<Tab disabled label="Date and time" {...a11yProps(2)} />)}
               </Tabs>
               <TabPanel value={value} index={0}>
                 <BasicInfo data={data} setData={setData} setValue={setValue} api={apiCall} prop={props} />
@@ -202,7 +202,7 @@ const CreateEvent = (props) => {
                 <Speakers data={data} setData={setData} setValue={setValue} api={apiCall} prop={props} />
               </TabPanel>
               <TabPanel value={value} index={2}>
-                <Date data={data} setData={setData} setValue={setValue} api={apiCall} prop={props} />
+                <DateForm data={data} setData={setData} setValue={setValue} api={apiCall} prop={props} />
               </TabPanel>
             </ThemeProvider>
           </Box>

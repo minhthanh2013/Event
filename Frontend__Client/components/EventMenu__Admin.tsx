@@ -46,6 +46,14 @@ const EventMenuAdmin: React.FC<props> = ({ id, event, props }) => {
                 "Authorization": "Bearer " + props.value
             },
         });
+        if (resData.status === 200) {
+            setStatus("1");
+            setPopUp("1");
+            setTimeout(refreshPage, 2000);
+        } else {
+            setStatus("0");
+            setPopUp("1");
+        }
         setAnchorEl(null);
     }
     const deleteButton = async () => {
@@ -70,6 +78,14 @@ const EventMenuAdmin: React.FC<props> = ({ id, event, props }) => {
         const resData = await fetch("/api/conference/cancel-conference/" + id, {
             method: "POST",
         });
+        if (resData.status === 200) {
+            setStatus("1");
+            setPopUp("1");
+            setTimeout(refreshPage, 2000);
+        } else {
+            setStatus("0");
+            setPopUp("1");
+        }
         setAnchorEl(null);
     }
 

@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 import { useState } from "react"
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
@@ -103,11 +104,13 @@ export const Sessions = (props: SessionProps) => {
     let discountPrice = total * item.discount / 100
     return result + total - discountPrice;
   }, 0);
+  const Income = Total * 10 / 100;
+  const Total_debt = TotalAfterDiscount * 10 / 100;
 
   return (
     <>
       <Box sx={{ marginLeft: "0" }}>
-        <Typography variant="h3" component="div" sx={{ fontWeight: "bold" }}>
+        <Typography variant="h3" component="div" sx={{ fontWeight: "bold", marginBottom: "1rem" }}>
           Sessions
         </Typography>
         <Box sx={{ marginRight: "5rem", float: "right" }}>
@@ -134,6 +137,20 @@ export const Sessions = (props: SessionProps) => {
             disabled
             type="string"
             value={`${splitNum(TotalAfterDiscount)} VNĐ` || ''}
+            sx={{ marginRight: "2rem" }}
+          />
+          <TextField
+            label="Total income"
+            disabled
+            type="string"
+            value={`${splitNum(Income)} VNĐ` || ''}
+            sx={{ marginRight: "2rem" }}
+          />
+          <TextField
+            label="Total pay for host"
+            disabled
+            type="string"
+            value={`${splitNum(Total_debt)} VNĐ` || ''}
           />
         </Box>
         <TableContainer component={Paper} sx={{ marginTop: "5rem", marginLeft: "5rem", width: "90%" }}>
@@ -144,6 +161,7 @@ export const Sessions = (props: SessionProps) => {
                 <TableCell align="right" sx={{ color: "#ffffff" }}>Sold</TableCell>
                 <TableCell align="right" sx={{ color: "#ffffff" }}>Gross</TableCell>
                 <TableCell align="right" sx={{ color: "#ffffff" }}>Session Price</TableCell>
+                <TableCell align="right" sx={{ color: "#ffffff" }}>Host's discount</TableCell>
                 <TableCell align="right" sx={{ color: "#ffffff", paddingRight: "3rem" }}>Number of Event</TableCell>
               </TableRow>
             </TableHead>
@@ -156,9 +174,10 @@ export const Sessions = (props: SessionProps) => {
                   <TableCell align="right">{getTotalTicketSold(row?.conferenceList)}/{getTotalTicket(row?.conferenceList)}</TableCell>
                   <TableCell align="right">{splitNum(getTotalGross(row?.conferenceList))} VNĐ</TableCell>
                   <TableCell align="right">{splitNum(getTotalPrice(row?.conferenceList))} VNĐ</TableCell>
+                  <TableCell align="right">{(row?.discount)}%</TableCell>
                   <TableCell align="right" sx={{ width: "15rem" }}>
                     {row?.conferenceList?.length}
-                    <SessionMenu event={row}/>
+                    <SessionMenu event={row} />
                   </TableCell>
                 </TableRow>
               ))}

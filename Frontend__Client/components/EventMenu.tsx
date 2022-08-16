@@ -46,13 +46,20 @@ const EventMenu: React.FC<props> = ({ id, hostId, event }) => {
             },
             body: JSON.stringify(data),
         });
-        console.log(resData);
+        if (resData.status === 200) {
+            setStatus("1");
+            setPopUp("1");
+            setTimeout(refreshPage, 2000);
+        } else {
+            setStatus("0");
+            setPopUp("1");
+        }
         setAnchorEl(null);
     }
 
     const deleteButton = async () => {
         //TODO: delete api của host 
-        const resData = await fetch("/api/conference/delete-conference/"+id, {
+        const resData = await fetch("/api/conference/delete-conference/" + id, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
