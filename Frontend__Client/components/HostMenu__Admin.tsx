@@ -6,7 +6,7 @@ import MenuItem from "@mui/material/MenuItem";
 import React, { useState } from "react";
 import { PopUp } from "../components/AlertPop-up";
 
-interface host {
+interface hostProps {
     host_id: string,
     user_name: string,
     email: string,
@@ -18,13 +18,12 @@ interface host {
 }
 
 interface props {
-    id: number;
-    event: host;
+    host: hostProps;
     props: any;
 }
 
 
-const EventMenuAdmin: React.FC<props> = ({ id, event, props }) => {
+const EventMenuAdmin: React.FC<props> = ({ host, props }) => {
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const [popUp, setPopUp] = useState("0");
     const [status, setStatus] = useState("0");
@@ -39,13 +38,27 @@ const EventMenuAdmin: React.FC<props> = ({ id, event, props }) => {
 
     const banButton = async () => {
         // ban API here
-        const resData = await fetch("/api/host/ban-host?id=" + event.host_id, {
+        const resData = await fetch("/api/host/ban-host?id=" + host.host_id, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                "Authorization": `Bearer ${props.value}`  
+                "Authorization": `Bearer ${props.value}`
             },
         });
+        if (resData.status === 200) {
+            setStatus("1");
+            setPopUp("1");
+            setTimeout(refreshPage, 2000);
+        } else {
+            setStatus("0");
+            setPopUp("1");
+        }
+        setAnchorEl(null);
+    }
+
+    const unbanButton = async () => {
+        // unban API here
+
         if (resData.status === 200) {
             setStatus("1");
             setPopUp("1");
@@ -78,8 +91,18 @@ const EventMenuAdmin: React.FC<props> = ({ id, event, props }) => {
                 open={open}
                 onClose={handleClose}
             >
-                <MenuItem onClick={viewButton}>View</MenuItem>
-                <MenuItem onClick={banButton}>Ban</MenuItem>
+                {host.host_type === "ban" ? (
+                    <>
+                        <MenuItem onClick={viewButton}>View</MenuItem>
+                        <MenuItem onClick={unbanButton}>Unban</MenuItem>
+                    </>
+                ) : (
+                    <>
+                        <MenuItem onClick={viewButton}>View</MenuItem>
+                        <MenuItem onClick={banButton}>Ban</MenuItem>
+                    </>
+                )}
+
             </Menu>
         </>
     )

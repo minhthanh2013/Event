@@ -38,7 +38,7 @@ interface EventListProps {
 export const UserList = (props: EventListProps) => {
     const [sortType, setSortType] = useState('all');
 
-    function parseDate(dateString: String) {
+    function parseDate(dateString: Date) {
         const date = new Date(dateString);
         const day = date.getDate()
         const hour = date.getHours()
@@ -75,7 +75,7 @@ export const UserList = (props: EventListProps) => {
                     <Table >
                         <TableHead sx={{ backgroundColor: "#4F3398" }}>
                             <TableRow>
-                                <TableCell sx={{ color: "#ffffff" }}>Users</TableCell>
+                                <TableCell sx={{ color: "#ffffff" }}>Hosts Name</TableCell>
                                 <TableCell align="right" sx={{ color: "#ffffff" }}>Status</TableCell>
                                 <TableCell align="right" sx={{ color: "#ffffff" }}>Expiration Date</TableCell>
                                 <TableCell align="right" sx={{ color: "#ffffff" }}>Number of Event</TableCell>
@@ -85,11 +85,12 @@ export const UserList = (props: EventListProps) => {
                         <TableBody>
                             {props?.data?.map((row) => (
                                 <TableRow key={row.host_id} sx={{ width: "100%" }}>
-                                    <TableCell align="right">{row?.user_name}</TableCell>
-                                    <TableCell align="right">{parseDate(row?.update_at?.toString())}</TableCell>
+                                    <TableCell align="left">{row?.user_name}</TableCell>
+                                    <TableCell align="right">{row?.host_type.toUpperCase()}</TableCell>
+                                    <TableCell align="right">{parseDate(row?.update_at)}</TableCell>
                                     <TableCell align="right">{row?.host_id}</TableCell>
                                     <TableCell sx={{ width: "2rem" }}>
-                                        <HostMenu id={row?.host_id} event={row} props={props.propss} />
+                                        <HostMenu event={row} props={props.propss} />
                                     </TableCell>
                                 </TableRow>
                             ))}
