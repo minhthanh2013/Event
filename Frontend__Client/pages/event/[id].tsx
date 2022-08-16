@@ -40,119 +40,119 @@ import PurchaseModal from '../../components/PurchaseModal'
 // }
 
 interface TicketProp {
-    conferenceAddress: string
-    conferenceCategory: number
-    conferenceDescription: string
-    conferenceName: string
-    conferencePrice: number
-    conferenceType: number
-    organizerName: string
-    ticketQuantity: number
-    status_ticket: string
-    host_id: number
-    conference_id: number
-    address: string
-    date_start_conference: Date
+	conferenceAddress: string
+	conferenceCategory: number
+	conferenceDescription: string
+	conferenceName: string
+	conferencePrice: number
+	conferenceType: number
+	organizerName: string
+	ticketQuantity: number
+	status_ticket: string
+	host_id: number
+	conference_id: number
+	address: string
+	date_start_conference: Date
 
-    // conferenceOrganizer: string;
+	// conferenceOrganizer: string;
 }
 interface TicketProps {
-    data: TicketProp
-    // conferenceOrganizer: string;
+	data: TicketProp
+	// conferenceOrganizer: string;
 }
 
 const Event = (props: any) => {
-    const router = useRouter()
-    const { id } = router.query
-    const [ticketList, setTicketList] = useState<TicketProps>()
+	const router = useRouter()
+	const { id } = router.query
+	const [ticketList, setTicketList] = useState<TicketProps>()
 
-    const [open, setOpen] = useState(false)
+	const [open, setOpen] = useState(false)
 
-    const handleToggle = () => {
-        setOpen(!open)
-        // check cookie hiện tại xem người dùng đã đăng nhập chưa, nếu chưa thì redirect
-    }
-    useEffect(() => {
-        const fetchTicketList = async () => {
-            const dataResult = await fetch(`/api/conference/${id}`)
-            const cateResult = await dataResult.json()
-            console.log(67, cateResult)
-            setTicketList(cateResult)
-        }
-        fetchTicketList().catch(() => {
-            //
-        })
-    }, [id])
+	const handleToggle = () => {
+		setOpen(!open)
+		// check cookie hiện tại xem người dùng đã đăng nhập chưa, nếu chưa thì redirect
+	}
+	useEffect(() => {
+		const fetchTicketList = async () => {
+			const dataResult = await fetch(`/api/conference/${id}`)
+			const cateResult = await dataResult.json()
+			console.log(67, cateResult)
+			setTicketList(cateResult)
+		}
+		fetchTicketList().catch(() => {
+			//
+		})
+	}, [id])
 
-    return (
-        <>
-            {ticketList?.data?.status_ticket !== 'published' ? (
-                props?.tempDecode?.role === 'admin' ||
-                (props?.tempDecode?.sub === ticketList?.data?.host_id && props?.tempDecode?.role === 'host') ? (
-                    <>
-                        <Box className={styles.background__wrap} sx={{ filter: open ? 'blur(10px) ' : 'none' }}>
-                            <Box className={styles.dot__1}></Box>
-                            <Header {...props} />
-                            {ticketList?.data && <DetailBanner data={ticketList.data} handleToggle={handleToggle}/>}
-                            {ticketList?.data && <DetailContent data={ticketList.data} />}
-                            {/* <DetailBanner data={ticketList.data}/>
+	return (
+		<>
+			{ticketList?.data?.status_ticket !== 'published' ? (
+				props?.tempDecode?.role === 'admin' ||
+				(props?.tempDecode?.sub === ticketList?.data?.host_id && props?.tempDecode?.role === 'host') ? (
+					<>
+						<Box className={styles.background__wrap} sx={{ filter: open ? 'blur(10px) ' : 'none' }}>
+							<Box className={styles.dot__1}></Box>
+							<Header {...props} />
+							{ticketList?.data && <DetailBanner data={ticketList.data} handleToggle={handleToggle} />}
+							{ticketList?.data && <DetailContent data={ticketList.data} />}
+							{/* <DetailBanner data={ticketList.data}/>
 					<DetailContent data={ticketList.data}/> */}
-                        </Box>
-						{open && <PurchaseModal handleToggle={handleToggle} data={ticketList.data}/>}
-                        <Footer />
-                    </>
-                ) : (
-                    <>
-                        <Header {...props} />
-                        <Typography variant='h1' component='div' gutterBottom className={styles.sketchy}>
-                            Sorry, this conference have not been published yet.
-                        </Typography>
-                        <Footer />
-                    </>
-                )
-            ) : (
-                <>
-                    <Box className={styles.background__wrap}>
-                        <Box className={styles.dot__1}></Box>
-                        <Header {...props} />
-                        {ticketList?.data && <DetailBanner data={ticketList.data} handleToggle={handleToggle}/>}
-                        {ticketList?.data && <DetailContent data={ticketList.data} />}
-                        {/* <DetailBanner data={ticketList.data}/>
+						</Box>
+						{open && <PurchaseModal handleToggle={handleToggle} data={ticketList.data} />}
+						<Footer />
+					</>
+				) : (
+					<>
+						<Header {...props} />
+						<Typography variant='h1' component='div' gutterBottom className={styles.sketchy}>
+							Sorry, this conference have not been published yet.
+						</Typography>
+						<Footer />
+					</>
+				)
+			) : (
+				<>
+					<Box className={styles.background__wrap} sx={{ filter: open ? 'blur(10px) ' : 'none' }}>
+						<Box className={styles.dot__1}></Box>
+						<Header {...props} />
+						{ticketList?.data && <DetailBanner data={ticketList.data} handleToggle={handleToggle} />}
+						{ticketList?.data && <DetailContent data={ticketList.data} />}
+						{/* <DetailBanner data={ticketList.data}/>
 						<DetailContent data={ticketList.data}/> */}
-                    </Box>
-					{open && <PurchaseModal handleToggle={handleToggle} data={ticketList.data}/>}
-                    <Footer />
-                </>
-            )}
-        </>
-    )
+					</Box>
+					{open && <PurchaseModal handleToggle={handleToggle} data={ticketList.data} />}
+					<Footer />
+				</>
+			)}
+		</>
+	)
 }
 
 export async function getServerSideProps(ctx: any) {
-    // Fetch data from external API
-    // Pass data to the page via props
-    let raw = null
-    try {
-        raw = ctx.req.cookies
-    } catch (e) {
-        return { props: {} }
-    }
-    try {
-        if (raw.OursiteJWT.toString()) {
-            let token = 'OursiteJWT'
-            let value = raw.OursiteJWT.toString()
-            let tempDecode = JSON.parse(Buffer.from(value.split('.')[1], 'base64').toString())
-            return {
-                props: {
-                    token,
-                    value,
-                    tempDecode,
-                },
-            }
-        }
-        return { props: {} }
-    } catch (error) {
-        return { props: {} }
-    }
+	// Fetch data from external API
+	// Pass data to the page via props
+	let raw = null
+	try {
+		raw = ctx.req.cookies
+	} catch (e) {
+		return { props: {} }
+	}
+	try {
+		if (raw.OursiteJWT.toString()) {
+			let token = 'OursiteJWT'
+			let value = raw.OursiteJWT.toString()
+			let tempDecode = JSON.parse(Buffer.from(value.split('.')[1], 'base64').toString())
+			return {
+				props: {
+					token,
+					value,
+					tempDecode,
+				},
+			}
+		}
+		return { props: {} }
+	} catch (error) {
+		return { props: {} }
+	}
 }
 export default Event

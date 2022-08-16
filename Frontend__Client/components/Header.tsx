@@ -14,9 +14,11 @@ import PlayCircleOutlineOutlinedIcon from '@mui/icons-material/PlayCircleOutline
 import ReplayOutlinedIcon from '@mui/icons-material/ReplayOutlined'
 import ListItemIcon from '@mui/material/ListItemIcon'
 import LogoutIcon from '@mui/icons-material/Logout'
-
+import LocalActivityIcon from '@mui/icons-material/LocalActivity'
 import ConfirmationNumberIcon from '@mui/icons-material/ConfirmationNumber'
 import { format } from 'date-fns'
+import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet'
+import AddOutlinedIcon from '@mui/icons-material/AddOutlined'
 interface HeaderProps {
 	props: any
 }
@@ -31,9 +33,9 @@ interface TicketProp {
 	conference_name: number
 	date_start_conference: Date
 	address: string
-	conference_type: string;
-	zoom_meeting_id: string;
-	isValiated: boolean;
+	conference_type: string
+	zoom_meeting_id: string
+	isValiated: boolean
 	// conferenceOrganizer: string;
 }
 const Header = (props: any) => {
@@ -53,9 +55,9 @@ const Header = (props: any) => {
 		date = new Date(date)
 		const day = date.getDate()
 		const hour = date.getHours()
-		const stringHour = (date.getHours() < 10 ? '0' : '') + date.getHours();
+		const stringHour = (date.getHours() < 10 ? '0' : '') + date.getHours()
 		const min = date.getMinutes()
-		const stringMin = (date.getMinutes() < 10 ? '0' : '') + date.getMinutes();
+		const stringMin = (date.getMinutes() < 10 ? '0' : '') + date.getMinutes()
 		let ampm = hour >= 12 ? 'pm' : 'am'
 		const weekday = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
 		let weekDayString = weekday[date.getDay()]
@@ -118,7 +120,7 @@ const Header = (props: any) => {
 		}
 	}
 	let isLogin = false
-	if (props?.token !== undefined && props?.tempDecode?.role === "user") {
+	if (props?.token !== undefined && props?.tempDecode?.role === 'user') {
 		isLogin = true
 	}
 	return (
@@ -225,10 +227,10 @@ const Header = (props: any) => {
 												<Box display='flex' flexDirection='column' sx={{ width: '25%', alignItems: 'flex-start' }}>
 													{ticket?.conference_type === '2' && ticket?.zoom_meeting_id !== null && (
 														<IconButton sx={{ display: 'flex', gap: '0.5rem', color: '#C64EFF' }}>
-														<PlayCircleOutlineOutlinedIcon />
-														<Link href={`/zoom/join-by-zoom-id?id=${ticket?.zoom_meeting_id}`} passHref>
-															<Typography>Join</Typography>
-														</Link>
+															<PlayCircleOutlineOutlinedIcon />
+															<Link href={`/zoom/join-by-zoom-id?id=${ticket?.zoom_meeting_id}`} passHref>
+																<Typography>Join</Typography>
+															</Link>
 														</IconButton>
 													)}
 													{ticket?.conference_type === '2' && ticket?.isValiated === false && (
@@ -236,7 +238,7 @@ const Header = (props: any) => {
 															<ReplayOutlinedIcon />
 															<Typography>Record</Typography>
 														</IconButton>
-													)}					
+													)}
 												</Box>
 											</Box>
 										</MenuItem>
@@ -296,15 +298,63 @@ const Header = (props: any) => {
 									</MenuItem>
 								</Link>
 								<Link passHref href={'/user/ticket'}>
-								<MenuItem sx={{ display: 'flex', gap: '0.5rem', justifyContent: 'space-between', color: '#6A35F2' }}>
-									<ConfirmationNumberIcon /> Tickets
-								</MenuItem>
+									<MenuItem sx={{ display: 'flex', gap: '0.5rem', justifyContent: 'space-between', color: '#6A35F2' }}>
+										<ConfirmationNumberIcon /> Tickets
+									</MenuItem>
 								</Link>
+								<Link passHref href={'/user/ticket'}>
+									<MenuItem sx={{ display: 'flex', gap: '0.5rem', justifyContent: 'space-between', color: '#6A35F2' }}>
+										<LocalActivityIcon /> Combo
+									</MenuItem>
+								</Link>
+								<Divider variant='inset' component='li' sx={{ width: '100%', mx: '0 !important' }} />
+								<Link passHref href={'/user/ticket'}>
+									<MenuItem
+										sx={{
+											display: 'flex',
+											gap: '0.5rem',
+											color: '#6A35F2',
+											height: '70px',
+											flexDirection: 'column',
+											justifyContent: 'flex-start',
+										}}
+									>
+										<Box
+											sx={{
+												display: 'flex',
+												justifyContent: 'flex-start',
+												alignItems: 'center',
+												width: '100%',
+												gap: '1.3rem',
+											}}
+										>
+											<AccountBalanceWalletIcon />
+										</Box>
+										<Box
+											sx={{
+												display: 'flex',
+												justifyContent: 'space-between',
+												alignItems: 'center',
+												width: '100%',
+												gap: '1.3rem',
+											}}
+										>
+											<Typography variant='body2' sx={{ fontSize: '1rem' }}>
+												1800000
+											</Typography>
+
+											<Typography variant='body2' sx={{ fontSize: '1rem' }}>
+												VND
+											</Typography>
+										</Box>
+									</MenuItem>
+								</Link>
+								<Divider variant='inset' component='li' sx={{ width: '100%', mx: '0 !important' }} />
 								<Link passHref href={'/user/logout'}>
-								<MenuItem sx={{ display: 'flex', gap: '0.5rem', justifyContent: 'space-between', color: '#6A35F2' }}>
-									<LogoutIcon />
-									Logout
-								</MenuItem>
+									<MenuItem sx={{ display: 'flex', gap: '0.5rem', justifyContent: 'space-between', color: '#6A35F2' }}>
+										<LogoutIcon />
+										Logout
+									</MenuItem>
 								</Link>
 							</Menu>
 						</>
@@ -325,7 +375,6 @@ const Header = (props: any) => {
 									create an event
 								</Button>
 							</Link>
-
 						</>
 					)}
 				</Toolbar>

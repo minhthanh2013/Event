@@ -49,7 +49,7 @@ const Combo__2 = (props: TicketSessionProps) => {
 	const getPrice = (session: SessionProp) => {
 		// 9:00 PM – Saturday, Dec 10,{" "}
 		let totalPrice = 0
-		session?.conferenceList.forEach((item) => {
+		session?.conferenceList?.forEach((item) => {
 			totalPrice += parseInt(item.price.toString())
 		})
 		return totalPrice
@@ -74,7 +74,7 @@ const Combo__2 = (props: TicketSessionProps) => {
 									<Typography flexGrow={6} component='h5'>
 										By Saigon Classical Music Group
 									</Typography>
-									<Typography component='h6'>{props.data?.conferenceList.length || '1'} events</Typography>
+									<Typography component='h6'>{props.data?.conferenceList?.length || '1'} events</Typography>
 								</Box>
 								<Box component='div'>
 									<AttachMoneyIcon />

@@ -12,7 +12,6 @@ import { Pagination, Navigation } from 'swiper'
 import Box from '@material-ui/core/Box'
 import { splitNum } from '../GlobalFunction/SplitNumber'
 
-
 interface CarouselSlideProps {
 	status: boolean
 	data: CarouselSlideProp[]
@@ -29,6 +28,7 @@ interface CarouselSlideProp {
 	date_end_sell_string: string
 	address: string
 	// conferenceOrganizer: string;
+	handleToggle: any
 }
 const weekday = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
 const CarouselSlide = (props: any) => {
@@ -203,6 +203,7 @@ const CarouselSlide = (props: any) => {
 									</Typography>
 
 									<Button
+										onClick={props.handleToggle}
 										sx={{
 											mb: '45px',
 											fontSize: '1.1rem',
@@ -217,7 +218,7 @@ const CarouselSlide = (props: any) => {
 										variant='outlined'
 									>
 										{/* `${splitNum(Total)} VNĐ` || '' */}
-										Buy ticket ({list?.price ?  `${splitNum(list.price)} VNĐ` : '0'})
+										Buy ticket ({list?.price ? `${splitNum(list.price)} VNĐ` : '0'})
 									</Button>
 								</Box>
 							</Box>
