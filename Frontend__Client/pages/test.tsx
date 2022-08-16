@@ -19,19 +19,8 @@ const Test = () => {
     }
     return (
         <>
-            <>
-                <Box className={styles.background__wrap} sx={{ filter: open ? 'blur(10px) ' : 'none' }}>
-                    <Box className={styles.dot__1}></Box>
-                    <Header />
-                    <DetailBanner data={undefined} handleToggle={handleToggle} />
-                    <DetailContent data={undefined} />
-                    {/* <DetailBanner data={ticketList.data}/>
-					<DetailContent data={ticketList.data}/> */}
-                </Box>
-                <Footer />
-            </>
-          {open && <PurchaseModal handleToggle={handleToggle} />}
-         
+            
+              
         </>
     )
 }

@@ -19,6 +19,19 @@ import ConfirmationNumberIcon from '@mui/icons-material/ConfirmationNumber'
 import { format } from 'date-fns'
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet'
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined'
+import Modal from '@mui/material/Modal'
+import { useForm } from 'react-hook-form'
+import { yupResolver } from '@hookform/resolvers/yup'
+import * as yup from 'yup'
+import TextField from '@mui/material/TextField'
+import FormHelperText from '@mui/material/FormHelperText'
+import InputAdornment from '@mui/material/InputAdornment'
+import InputLabel from '@mui/material/InputLabel'
+import FormControl from '@mui/material/FormControl'
+import OutlinedInput from '@mui/material/OutlinedInput'
+
+
+
 interface HeaderProps {
 	props: any
 }
@@ -38,6 +51,25 @@ interface TicketProp {
 	isValiated: boolean
 	// conferenceOrganizer: string;
 }
+
+//Balance Modal
+const style = {
+	position: 'absolute' as 'absolute',
+	top: '50%',
+	left: '50%',
+	transform: 'translate(-50%, -50%)',
+	width: 400,
+	bgcolor: 'background.paper',
+	boxShadow: 24,
+	p: 4,
+}
+const schema = yup
+	.object({
+		amount: yup.number().integer().positive(),
+	})
+	.required()
+
+	
 const Header = (props: any) => {
 	const [ticketList, setTicketList] = useState<TicketProps>()
 	const pages = ['Products', 'Pricing', 'Blog']
@@ -49,6 +81,24 @@ const Header = (props: any) => {
 	//avatar
 	const [anchorElAvatar, setAnchorElAvatar] = React.useState<null | HTMLElement>(null)
 	const open = Boolean(anchorElAvatar)
+
+	//Balance Modal
+	const [openBalanceModal, setOpenBalanceModal] = React.useState(false)
+	const handleOpenBalanceModal = () => setOpenBalanceModal(true)
+	const handleCloseBalanceModal = () => setOpenBalanceModal(false)
+	const [valueBalance, setValueBalance] = React.useState(null)
+	const handleChangeBalance = (e) => {
+		setValueBalance(e.target.value)
+	}
+	const {
+		register,
+		handleSubmit,
+		formState: { errors },
+	} = useForm({
+		resolver: yupResolver(schema),
+	})
+	const onSubmitBalanceModal = ({amount}) => console.log(amount)
+	
 
 	// 12:00 am - Thu, Jul 1
 	function parseDate(date: Date) {
@@ -308,46 +358,48 @@ const Header = (props: any) => {
 									</MenuItem>
 								</Link>
 								<Divider variant='inset' component='li' sx={{ width: '100%', mx: '0 !important' }} />
-								<Link passHref href={'/user/ticket'}>
-									<MenuItem
-										sx={{
-											display: 'flex',
-											gap: '0.5rem',
-											color: '#6A35F2',
-											height: '70px',
-											flexDirection: 'column',
-											justifyContent: 'flex-start',
-										}}
-									>
-										<Box
+								<Link href='/'>
+									<a onClick={handleOpenBalanceModal}>
+										<MenuItem
 											sx={{
 												display: 'flex',
+												gap: '0.5rem',
+												color: '#6A35F2',
+												height: '70px',
+												flexDirection: 'column',
 												justifyContent: 'flex-start',
-												alignItems: 'center',
-												width: '100%',
-												gap: '1.3rem',
 											}}
 										>
-											<AccountBalanceWalletIcon />
-										</Box>
-										<Box
-											sx={{
-												display: 'flex',
-												justifyContent: 'space-between',
-												alignItems: 'center',
-												width: '100%',
-												gap: '1.3rem',
-											}}
-										>
-											<Typography variant='body2' sx={{ fontSize: '1rem' }}>
-												1800000
-											</Typography>
+											<Box
+												sx={{
+													display: 'flex',
+													justifyContent: 'flex-start',
+													alignItems: 'center',
+													width: '100%',
+													gap: '1.3rem',
+												}}
+											>
+												<AccountBalanceWalletIcon />
+											</Box>
+											<Box
+												sx={{
+													display: 'flex',
+													justifyContent: 'space-between',
+													alignItems: 'center',
+													width: '100%',
+													gap: '1.3rem',
+												}}
+											>
+												<Typography variant='body2' sx={{ fontSize: '1rem' }}>
+													1800000
+												</Typography>
 
-											<Typography variant='body2' sx={{ fontSize: '1rem' }}>
-												VND
-											</Typography>
-										</Box>
-									</MenuItem>
+												<Typography variant='body2' sx={{ fontSize: '1rem' }}>
+													VND
+												</Typography>
+											</Box>
+										</MenuItem>
+									</a>
 								</Link>
 								<Divider variant='inset' component='li' sx={{ width: '100%', mx: '0 !important' }} />
 								<Link passHref href={'/user/logout'}>
@@ -379,8 +431,40 @@ const Header = (props: any) => {
 					)}
 				</Toolbar>
 			</AppBar>
+			<Modal
+				open={openBalanceModal}
+				onClose={handleCloseBalanceModal}
+				aria-labelledby='modal-modal-title'
+				aria-describedby='modal-modal-description'
+			>
+				<Box sx={style}>
+					<form onSubmit={handleSubmit(onSubmitBalanceModal)}>
+						<TextField
+							label='Amonunt'
+							{...register('amount')}
+							id='outlined-start-adornment'
+							sx={{ m: 1, width: '100%' }}
+							InputProps={{
+								startAdornment: <InputAdornment position='start'>VND</InputAdornment>,
+							}}
+							helperText={errors.amount && errors.amount.message as any}
+						/>
+						<Box sx={{ display: 'flex', mt: 2, justifyContent: 'space-around' }}>
+							<Button variant='text' sx={{ color: 'red' }} onClick={handleCloseBalanceModal}>
+								Cancel
+							</Button>
+							<Button type='submit' variant='text' sx={{ color: '#180a3d' }}>
+								Proceed
+							</Button>
+						</Box>
+					</form>
+				</Box>
+			</Modal>
 		</Box>
 	)
 }
 
 export default Header
+
+
+
