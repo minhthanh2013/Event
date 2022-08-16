@@ -226,7 +226,7 @@ const Header = (props: any) => {
 													{ticket?.conference_type === '2' && ticket?.zoom_meeting_id !== null && (
 														<IconButton sx={{ display: 'flex', gap: '0.5rem', color: '#C64EFF' }}>
 														<PlayCircleOutlineOutlinedIcon />
-														<Link href={`/zoom/join-by-zoom-id/${ticket?.zoom_meeting_id}`} passHref>
+														<Link href={`/zoom/join-by-zoom-id?id=${ticket?.zoom_meeting_id}`} passHref>
 															<Typography>Join</Typography>
 														</Link>
 														</IconButton>

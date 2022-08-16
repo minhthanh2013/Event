@@ -30,6 +30,9 @@ interface TicketProp {
 	conference_name: number
 	date_start_conference: Date
 	address: string
+	isValidated: boolean;
+	conference_type: string;
+	zoom_meeting_id: string;
 	// conferenceOrganizer: string;
 }
 const HeaderHost = (props: any) => {
@@ -60,9 +63,9 @@ const HeaderHost = (props: any) => {
 		return dateString
 	}
 	useEffect(() => {
-		if (props?.tempDecode?.role === 'user') {
+		if (props?.tempDecode?.role === 'host') {
 			const fetchTicketList = async () => {
-				const dataResult = await fetch(`/api/conference/get-conference-by-user-id/${props?.tempDecode?.sub}`)
+				const dataResult = await fetch(`/api/conference/get-conference-by-host-id/${props?.tempDecode?.sub}`)
 				const cateResult = await dataResult.json()
 				setTicketList(cateResult)
 			}
@@ -219,14 +222,21 @@ const HeaderHost = (props: any) => {
 													<Typography component='h4'>{parseDate(ticket?.date_start_conference)}</Typography>
 												</Box>
 												<Box display='flex' flexDirection='column' sx={{ width: '25%', alignItems: 'flex-start' }}>
-													<IconButton sx={{ display: 'flex', gap: '0.5rem', color: '#C64EFF' }}>
+												{ticket?.conference_type === '2' && ticket?.zoom_meeting_id !== null && (
+														<IconButton sx={{ display: 'flex', gap: '0.5rem', color: '#C64EFF' }}>
 														<PlayCircleOutlineOutlinedIcon />
-														<Typography>Join</Typography>
-													</IconButton>
-													<IconButton sx={{ display: 'flex', gap: '0.5rem', color: '#C64EFF' }}>
+														<Link href={`/zoom/join-by-zoom-id?id=${ticket?.zoom_meeting_id}`} passHref>
+															<Typography>Join</Typography>
+														</Link>
+														</IconButton>
+													)}
+													{ticket?.conference_type === '2' && ticket?.isValidated === false && (
+														<IconButton sx={{ display: 'flex', gap: '0.5rem', color: '#C64EFF' }}>
 														<ReplayOutlinedIcon />
 														<Typography>Record</Typography>
-													</IconButton>
+														</IconButton>
+													)}
+
 												</Box>
 											</Box>
 										</MenuItem>

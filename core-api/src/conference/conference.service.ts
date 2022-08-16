@@ -1,3 +1,4 @@
+import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
 import { SpeakerEntity } from 'src/speaker/models/speaker.entity';
 /* eslint-disable prettier/prettier */
 import { EmailService } from 'src/email/email.service';
@@ -46,6 +47,7 @@ export class ConferenceService {
     private readonly dataSource: DataSource,
     private readonly zoomService: ZoomService,
     private readonly emailService: EmailService,
+    private readonly cloudinaryService: CloudinaryService,
   ) {}
 
   async findAllConferences(): Promise<ResponseData> {
@@ -501,5 +503,18 @@ export class ConferenceService {
       throw new BadRequestException('Can not delete conference with status: ' + (await conference).status_ticket);
     }
   }
-    
+  async getConferenceRecord(id: number): Promise<ResponseData> {
+    const conference = await this.conferenceRepository.findOne({where: {conference_id: id}});
+    console.log(conference)
+    if(!conference) {
+      throw new NotFoundException('Conference not found with conference id: ' + id);
+    }
+    if(conference.conference_type.toString() !== '2' || conference.zoom_meeting_id === undefined) {
+      throw new NotFoundException('Conference not found with conference id: ' + id);
+    }
+    const result = new ResponseData();
+    result.status = true;
+    result.data = this.cloudinaryService.getVideo(conference.zoom_meeting_id);
+    return result;
+  }
 }

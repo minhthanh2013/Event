@@ -121,5 +121,8 @@ export class ConferenceController {
   deleteConference(@Param("id") id: number): Promise<ResponseData> {
     return this.conferenceService.deleteConference(id);
   }
-  
+  @Get('/get-conference-record/:id')
+  getConferenceRecord(@Param("id") id: number): Promise<ResponseData> {
+    return this.conferenceService.getConferenceRecord(id);
+  }
 }
