@@ -31,15 +31,16 @@ interface TicketProp {
 function SearchResult(props: any) {
 	const router = useRouter()
 	const temp = 'Vinh Duong Quang'
-	const [filter, setFilter] = useState('0')
+	const [filter, setFilter] = useState('0');
 
 	const typeRef = useRef(null)
 
 	// inside SearchBar__SearchResult
 	const [inputSearch, setInputSearch] = useState(router?.query?.search?.toString() || '')
 	const [inputSearchTemp, setInputSearchTemp] = useState('')
-	const [type, setType] = useState('0')
-	const [typeTemp, setTypeTemp] = useState('0')
+	const [type, setType] = useState(router?.query?.type?.toString()  || '0')
+	console.log(type)
+	const [typeTemp, setTypeTemp] = useState(router?.query?.type?.toString() || '0')
 
 	const [number, setNumber] = useState(-1)
 	const [data, setData] = useState({})
@@ -78,15 +79,11 @@ function SearchResult(props: any) {
 		}
 	}
 	useEffect(() => {
-		let isCancelled = true
-		if (isCancelled) {
 			if (type == '0') {
 				fetchTicket()
 			} else fetchSession()
-		}
-		return () => {
-			isCancelled = false
-		}
+		
+	
 	}, [page, inputSearch, type])
 
 	return (

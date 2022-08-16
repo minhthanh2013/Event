@@ -25,7 +25,7 @@ interface ZoomProp {
     role: number;
     password: string;
 }
-const Zoom = (props: ZoomProps) => {
+const Zoom = (props: any) => {
     const router = useRouter();
     const id = router.query.id;
     const [zoomProp, setZoomProp] = useState<ZoomProp>();
@@ -33,14 +33,15 @@ const Zoom = (props: ZoomProps) => {
         const fetchZoomProps = async () => {
             const response = await fetch(`/api/zoom/get-meeting-details/${id}`);
             const cateResult = await response.json();
-            const jwt = props.jwtToken;
+            console.log(props)
             let tempZoomProps = {
                 meetingNumber: id.toString(),
-                userName: jwt.tempDecode.username.toString(),
+                userName: props?.tempDecode?.username,
                 userEmail: cateResult.host_email.toString(),
-                role: jwt.tempDecode.role.toString() === 'host' ? 1 : 0,
+                role: props?.tempDecode?.role.toString() === 'host' ? 1 : 0,
                 password: cateResult.password.toString()
             };
+            console.log(tempZoomProps)
             setZoomProp(tempZoomProps);
             // const dataResult = await fetch('/api/combo/get-by-host/1');
           }

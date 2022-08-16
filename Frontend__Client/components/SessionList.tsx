@@ -41,7 +41,9 @@ const SessionList = (props : any) => {
 				<div className={styles.productContainer}>
 					<Box className={styles.control__wrap}>
 						<Typography className={styles.list__title}>Combo</Typography>
-						<a className={styles.see__all}>See all</a>
+						
+							<a className={styles.see__all} href={'/search-result?type=1'}>See all</a>
+						
 					</Box>
 					<Grid container rowSpacing={8} columnSpacing={8} marginTop={0} sx={{ position: 'relative' }}>
 						{sessionList?.data?.map((dataItem) => (

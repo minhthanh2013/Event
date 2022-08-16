@@ -10,7 +10,7 @@ const SearchBar = (props: SearchBarProps) => {
   const router = useRouter();
   const [search, setSearch] = React.useState<string>();
   const handleSearch = (e:any) => {
-    router.push("/search-result?page=1&search=" + search);
+    router.push("/search-result?page=1&search=" + search+"&type=0");
     e.preventDefault();
   };
   return (
