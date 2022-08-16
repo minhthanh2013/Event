@@ -209,54 +209,54 @@ export default async function middleware(req: NextRequest) {
          }
       }
       // req.page.params.id
-      if(req.page.params.id !== undefined && pathname === `/zoom/record/`) {
-        if (jwt === undefined) {
-            req.nextUrl.pathname = "/";
-            return NextResponse.redirect(req.nextUrl);
-        }
-        try {
-            let tempDecode1 = JSON.parse(Buffer.from(jwt.split('.')[1], 'base64').toString());
-            const role = tempDecode1.role;
-            const userId = tempDecode1.sub;
-            const meetingId = param.get('id').toString();
-            let dataResult = null;
-            let cateResult = null;
-            if(role === 'host') {
-                try {
-                    verify(jwt, hostSecret);
-                    let dataResult = await fetch(`http:localhost:8080/api/conference/get-conference-by-zoom-meeting-id/${meetingId}`);
-                    let cateResult = await dataResult.json();
-                    if(await cateResult.conference_id !== undefined) {
-                        return NextResponse.next();
-                    } else {
-                        req.nextUrl.pathname = "/";
-                        return NextResponse.redirect(req.nextUrl);
-                    }
-                } catch (error) {
-                    req.nextUrl.pathname = "/";
-                    return NextResponse.redirect(req.nextUrl);
-                }
-            } else if (role === "user") {
-                try {
-                    verify(jwt, userSecret);
-                    let dataResult = await fetch(`http://localhost:8080/api/conference/get-conference-by-user-zoom-meeting-id?userId=${userId}&zoomId=${meetingId}`);
-                    let cateResult = await dataResult.json();
-                    if(cateResult.ticket_id !== undefined) {
-                        return NextResponse.next();
-                    } else {
-                        req.nextUrl.pathname = "/";
-                        return NextResponse.redirect(req.nextUrl);
-                    }
-                } catch (error) {
-                    req.nextUrl.pathname = "/";
-                    return NextResponse.redirect(req.nextUrl);
-                }
-            }
-        } catch (error) {
-            req.nextUrl.pathname = "/";
-            return NextResponse.redirect(req.nextUrl);
-         }
-      }
+      // if(req.page.params.id !== undefined && pathname === `/zoom/record/`) {
+      //   if (jwt === undefined) {
+      //       req.nextUrl.pathname = "/";
+      //       return NextResponse.redirect(req.nextUrl);
+      //   }
+      //   try {
+      //       let tempDecode1 = JSON.parse(Buffer.from(jwt.split('.')[1], 'base64').toString());
+      //       const role = tempDecode1.role;
+      //       const userId = tempDecode1.sub;
+      //       const meetingId = param.get('id').toString();
+      //       let dataResult = null;
+      //       let cateResult = null;
+      //       if(role === 'host') {
+      //           try {
+      //               verify(jwt, hostSecret);
+      //               let dataResult = await fetch(`http:localhost:8080/api/conference/get-conference-by-zoom-meeting-id/${meetingId}`);
+      //               let cateResult = await dataResult.json();
+      //               if(await cateResult.conference_id !== undefined) {
+      //                   return NextResponse.next();
+      //               } else {
+      //                   req.nextUrl.pathname = "/";
+      //                   return NextResponse.redirect(req.nextUrl);
+      //               }
+      //           } catch (error) {
+      //               req.nextUrl.pathname = "/";
+      //               return NextResponse.redirect(req.nextUrl);
+      //           }
+      //       } else if (role === "user") {
+      //           try {
+      //               verify(jwt, userSecret);
+      //               let dataResult = await fetch(`http://localhost:8080/api/conference/get-conference-by-user-zoom-meeting-id?userId=${userId}&zoomId=${meetingId}`);
+      //               let cateResult = await dataResult.json();
+      //               if(cateResult.ticket_id !== undefined) {
+      //                   return NextResponse.next();
+      //               } else {
+      //                   req.nextUrl.pathname = "/";
+      //                   return NextResponse.redirect(req.nextUrl);
+      //               }
+      //           } catch (error) {
+      //               req.nextUrl.pathname = "/";
+      //               return NextResponse.redirect(req.nextUrl);
+      //           }
+      //       }
+      //   } catch (error) {
+      //       req.nextUrl.pathname = "/";
+      //       return NextResponse.redirect(req.nextUrl);
+      //    }
+      // }
 
       if(param.has("uuid") && pathname === `/zoom/join-by-zoom-id`) {
         try {

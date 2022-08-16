@@ -9,33 +9,56 @@ import CloseIcon from '@mui/icons-material/Close'
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet'
 import CreditCardIcon from '@mui/icons-material/CreditCard'
 import ArrowRightAltIcon from '@mui/icons-material/ArrowRightAlt'
+import { splitNum } from '../GlobalFunction/SplitNumber'
 
 interface modalProps {
 	handleToggle: any
+	data: TicketProp;
+}
+interface TicketProp {
+    conferenceAddress: string
+    conferenceCategory: number
+    conferenceDescription: string
+    conferenceName: string
+    conferencePrice: number
+    conferenceType: number
+    organizerName: string
+    ticketQuantity: number
+    status_ticket: string
+    host_id: number
+    conference_id: number
+    address: string
+    date_start_conference: Date
+
+    // conferenceOrganizer: string;
+}
+const handleChangeQuantity = (event: React.ChangeEvent<HTMLInputElement>) => {
+	console.log(event.target.value);
+	// setSelectedValue(event.target.value)
 }
 const PurchaseModal = (props: modalProps) => {
 	const [selectedValue, setSelectedValue] = useState('a')
+	const [total, setTotal] = useState(0);
 	const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		setSelectedValue(event.target.value)
 	}
-
 	return (
 		<>
 			<Box className={styles.container} sx={{position:'absolute', top:'50%', left:'50%', transform: 'translate(-50%, -50%)'}}>
 				<Box className={styles.leftWrap}>
 					<Box className={styles.leftWrap__top}>
-						<Typography component='h3'>British Boarding Schools Show, Ho Chi Minh</Typography>
-						<Typography component='h4'>Tue, Apr 19, 2022 1:00 AM - 2:00 AM +07</Typography>
+						<Typography component='h3'>{props?.data?.conferenceName}</Typography>
+						<Typography component='h4'>{props?.data?.date_start_conference}</Typography>
 						<Divider variant='middle' />
 					</Box>
 					<Box className={styles.leftWrap__body}>
-						<TicketInModal />
+						<TicketInModal data={props?.data}/>
 					</Box>
 					<Box className={styles.leftWrap__bottom}>
 						<Typography>Total</Typography>
 						<Typography>
 							<AttachMoneyIcon />
-							50.00
+							{total}
 						</Typography>
 					</Box>
 				</Box>
@@ -76,7 +99,7 @@ const PurchaseModal = (props: modalProps) => {
 	)
 }
 
-export const TicketInModal = () => {
+export const TicketInModal = (data: TicketProp) => {
 	const [age, setAge] = useState('')
 	const handleChange = (event: SelectChangeEvent) => {
 		setAge(event.target.value as string)
@@ -92,13 +115,13 @@ export const TicketInModal = () => {
 						alt='Live from space album cover'
 					/>
 					<Box className={styles.ticketContent}>
-						<Typography component='h3'>eTicket - British Boarding School Show</Typography>
-						<Typography component='h4'>$ 50.00</Typography>
+						<Typography component='h3'>{data?.data?.conferenceName}</Typography>
+						<Typography component='h4'>{splitNum(data?.data?.conferencePrice)} VNĐ</Typography>
 						<Typography component='h5'>Sales end in 2 days</Typography>
 					</Box>
 					<Box>
 						<FormControl variant='standard' className={styles.ticketNumber}>
-							<TextField type='number' size='small' defaultValue={1} />
+							<TextField type='number' size='small' defaultValue={1} onChange={handleChangeQuantity}/>
 						</FormControl>
 					</Box>
 				</Card>
@@ -108,3 +131,4 @@ export const TicketInModal = () => {
 }
 
 export default PurchaseModal
+

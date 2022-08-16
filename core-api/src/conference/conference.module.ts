@@ -16,9 +16,10 @@ import { ZoomModule } from 'src/zoom/zoom.module';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
 import { CloudinaryModule } from 'src/cloudinary/cloudinary.module';
+import { UserEntity } from 'src/user/models/user.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([ConferenceEntity, ConferenceTypeEntity, ConferenceCategoryEntity, SpeakerEntity, HostEntity, TicketEntity]),
+  imports: [TypeOrmModule.forFeature([ConferenceEntity, ConferenceTypeEntity, ConferenceCategoryEntity, SpeakerEntity, HostEntity, TicketEntity, UserEntity]),
   ZoomModule,
   HttpModule,
   CloudinaryModule,

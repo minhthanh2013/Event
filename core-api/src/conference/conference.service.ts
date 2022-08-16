@@ -1,3 +1,4 @@
+import { UserEntity } from './../user/models/user.entity';
 import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
 import { SpeakerEntity } from 'src/speaker/models/speaker.entity';
 /* eslint-disable prettier/prettier */
@@ -41,6 +42,8 @@ export class ConferenceService {
     private readonly speakerRepository: Repository<SpeakerEntity>,
     @InjectRepository(HostEntity)
     private readonly hostRepository: Repository<HostEntity>,
+    @InjectRepository(UserEntity)
+    private readonly userRepository: Repository<UserEntity>,
     @InjectRepository(TicketEntity)
     private readonly ticketRepository: Repository<TicketEntity>,
     @InjectDataSource()
@@ -486,6 +489,15 @@ export class ConferenceService {
     result.status = host == undefined;
     if (host !== undefined && host.length >= 1) {
       result.data = host;
+    }
+    return result;
+  }
+  async getAllUser(): Promise<ResponseData> {
+    const result = new ResponseData();
+    const user = await this.userRepository.find();
+    result.status = user == undefined;
+    if (user !== undefined && user.length >= 1) {
+      result.data = user;
     }
     return result;
   }

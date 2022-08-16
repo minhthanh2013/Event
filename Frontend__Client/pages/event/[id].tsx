@@ -98,7 +98,7 @@ const Event = (props: any) => {
                             {/* <DetailBanner data={ticketList.data}/>
 					<DetailContent data={ticketList.data}/> */}
                         </Box>
-						{open && <PurchaseModal handleToggle={handleToggle}/>}
+						{open && <PurchaseModal handleToggle={handleToggle} data={ticketList.data}/>}
                         <Footer />
                     </>
                 ) : (
@@ -120,7 +120,7 @@ const Event = (props: any) => {
                         {/* <DetailBanner data={ticketList.data}/>
 						<DetailContent data={ticketList.data}/> */}
                     </Box>
-					{open && <PurchaseModal handleToggle={handleToggle}/>}
+					{open && <PurchaseModal handleToggle={handleToggle} data={ticketList.data}/>}
                     <Footer />
                 </>
             )}

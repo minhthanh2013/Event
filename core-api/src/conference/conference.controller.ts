@@ -125,4 +125,8 @@ export class ConferenceController {
   getConferenceRecord(@Param("id") id: number): Promise<ResponseData> {
     return this.conferenceService.getConferenceRecord(id);
   }
+  @Get('/find-all/user')
+  getAllUser(): Promise<ResponseData> {
+    return this.conferenceService.getAllUser();
+  }
 }
