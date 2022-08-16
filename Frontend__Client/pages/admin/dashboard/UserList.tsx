@@ -90,7 +90,7 @@ export const UserList = (props: EventListProps) => {
                                     <TableCell align="right">{parseDate(row?.update_at)}</TableCell>
                                     <TableCell align="right">{row?.host_id}</TableCell>
                                     <TableCell sx={{ width: "2rem" }}>
-                                        <HostMenu event={row} props={props.propss} />
+                                        <HostMenu host={row} props={props.propss} />
                                     </TableCell>
                                 </TableRow>
                             ))}
