@@ -136,14 +136,6 @@ export class ConferenceService {
     const dto = await this.convertEntityToDto(data);
     result.status = data !== undefined;
     result.data = dto;
-    // ConferenceRequestDto
-    // if (data) {
-    //   const speakers = this.speakerRepository.find({where: {conference_id: data.conference_id}});
-    // }
-    // result.status = data !== undefined;
-    // if (result.status === true) {
-    //   result.data = data;
-    // }
     return result;
   }
   async createConference(
@@ -486,7 +478,7 @@ export class ConferenceService {
   async getAllHost(): Promise<ResponseData> {
     const result = new ResponseData();
     const host = await this.hostRepository.find();
-    result.status = host == undefined;
+    result.status = host != undefined;
     if (host !== undefined && host.length >= 1) {
       result.data = host;
     }

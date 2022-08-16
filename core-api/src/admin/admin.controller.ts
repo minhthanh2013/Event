@@ -75,4 +75,16 @@ export class AdminController {
   deleteConference(@Param("id") confenrenceId: number) {
     return this.adminService.deleteConference(confenrenceId);
   }
+  @HttpCode(HttpStatus.OK)
+  @Post('upgrade-host/:id')
+  @UseGuards(AdminJwtGuard)
+  upgradeHost(@Param('id') hostId: string) {
+    return this.adminService.upgradeHost(hostId);
+  }
+  @HttpCode(HttpStatus.OK)
+  @Post('ban-host/:id')
+  @UseGuards(AdminJwtGuard)
+  banHost(@Param('id') hostId: string) {
+    return this.adminService.banHost(hostId);
+  }
 }

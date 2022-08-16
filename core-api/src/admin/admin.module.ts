@@ -1,3 +1,4 @@
+import { HostEntity } from 'src/host/models/host.entity';
 import { SpeakerEntity } from 'src/speaker/models/speaker.entity';
 /* eslint-disable prettier/prettier */
 import { forwardRef, Module } from '@nestjs/common';
@@ -25,7 +26,7 @@ import { ComboSessionEntity } from 'src/combosession/models/combo_session.entity
         signOptions: { expiresIn: '10000s' },
       }),
     }),
-    TypeOrmModule.forFeature([AdminEntity, ConferenceEntity, SpeakerEntity, ComboSessionEntity])
+    TypeOrmModule.forFeature([AdminEntity, ConferenceEntity, SpeakerEntity, ComboSessionEntity, HostEntity])
   ],
   controllers: [AdminController],
   providers: [AdminService, AdminJwtStrategy, EmailService],

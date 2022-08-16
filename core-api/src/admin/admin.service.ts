@@ -1,3 +1,4 @@
+import { HostEntity } from 'src/host/models/host.entity';
 import { ComboSessionEntity } from 'src/combosession/models/combo_session.entity';
 import { EmailService } from 'src/email/email.service';
 import { SpeakerEntity } from 'src/speaker/models/speaker.entity';
@@ -16,6 +17,7 @@ import { AdminAuthDto } from './dto/admin.auth';
 import { HttpService } from '@nestjs/axios';
 import { Request, response } from 'express';
 import { firstValueFrom } from 'rxjs';
+import { ResponseData } from 'src/responsedata/response-data.dto';
 @Injectable()
 export class AdminService {
   constructor(
@@ -27,6 +29,8 @@ export class AdminService {
     private readonly comboRepository: Repository<ComboSessionEntity>,
     @InjectRepository(SpeakerEntity)
     private readonly speakerRepository: Repository<SpeakerEntity>,
+    @InjectRepository(HostEntity)
+    private readonly hostRepository: Repository<HostEntity>,
     private jwt: JwtService,
     private readonly httpService: HttpService,
     private readonly emailService: EmailService,
@@ -185,5 +189,27 @@ export class AdminService {
       }
       )
     });
+  }
+  async upgradeHost(id: string): Promise<ResponseData> {
+    const response = new ResponseData();
+    try {
+      response.status = (await this.hostRepository.update(id, { host_type: "premium" })).affected == 1;
+      response.data = null;
+    } catch (error) {
+      response.data = null;
+      response.status = false;
+    }
+    return response;
+  }
+  async banHost(id: string): Promise<ResponseData> {
+    const response = new ResponseData();
+    try {
+      response.status = (await this.hostRepository.update(id, { host_type: "ban" })).affected == 1;
+      response.data = null;
+    } catch (error) {
+      response.data = null;
+      response.status = false;
+    }
+    return response;
   }
 }

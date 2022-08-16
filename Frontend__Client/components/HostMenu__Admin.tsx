@@ -39,7 +39,13 @@ const EventMenuAdmin: React.FC<props> = ({ id, event, props }) => {
 
     const banButton = async () => {
         // ban API here
-
+        const resData = await fetch("/api/host/ban-host?id=" + event.host_id, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${props.value}`  
+            },
+        });
         if (resData.status === 200) {
             setStatus("1");
             setPopUp("1");

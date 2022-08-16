@@ -86,7 +86,7 @@ export const UserList = (props: EventListProps) => {
                             {props?.data?.map((row) => (
                                 <TableRow key={row.host_id} sx={{ width: "100%" }}>
                                     <TableCell align="right">{row?.user_name}</TableCell>
-                                    <TableCell align="right">{parseDate(row?.update_at.toString())}</TableCell>
+                                    <TableCell align="right">{parseDate(row?.update_at?.toString())}</TableCell>
                                     <TableCell align="right">{row?.host_id}</TableCell>
                                     <TableCell sx={{ width: "2rem" }}>
                                         <HostMenu id={row?.host_id} event={row} props={props.propss} />

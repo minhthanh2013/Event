@@ -136,8 +136,8 @@ const EventCreate = (props: any) => {
             setSessionsAfterFilter(data);
         }
         const fetchHostData = async () => {
-            // const response = await fetch("http://localhost:8080/api/combo/get-latest-x?id=0");
-            // const data = await response.json();
+            const response = await fetch("http://localhost:8080/api/host/get-all");
+            const data = await response.json();
             // API get host here
 
             setHost(data);
@@ -145,6 +145,7 @@ const EventCreate = (props: any) => {
         }
         fetchConferencesData();
         fetchCombosData();
+        fetchHostData();
 
 
     }, []);
