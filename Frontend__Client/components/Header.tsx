@@ -52,11 +52,11 @@ interface TicketProp {
 	// conferenceOrganizer: string;
 }
 interface UserDetailProp {
-    firstName: string
-    lastName: string
-    password: string
-    email: string
-    showPassword: boolean
+	firstName: string
+	lastName: string
+	password: string
+	email: string
+	showPassword: boolean
 	balance: number;
 }
 //Balance Modal
@@ -76,7 +76,7 @@ const schema = yup
 	})
 	.required()
 
-	
+
 const Header = (props: any) => {
 	const [ticketList, setTicketList] = useState<TicketProps>()
 	const [userDetails, setUserDetails] = useState<UserDetailProp>()
@@ -105,12 +105,12 @@ const Header = (props: any) => {
 	} = useForm({
 		resolver: yupResolver(schema),
 	})
-	const onSubmitBalanceModal = ({amount}) => {
+	const onSubmitBalanceModal = ({ amount }) => {
 		// setValueBalance(amount)
 		setValueBalance(prev => prev + Number(userDetails?.balance + amount))
 		handleCloseBalanceModal()
 	}
-	
+
 
 	// 12:00 am - Thu, Jul 1
 	function parseDate(date: Date) {
@@ -138,7 +138,7 @@ const Header = (props: any) => {
 				const config = {
 					headers: {
 						'Content-Type': 'application/json',
-						'Authorization': 'Bearer '+props.value.toString(),
+						'Authorization': 'Bearer ' + props.value.toString(),
 					},
 				}
 				const dataResult = await fetch(`/api/user/${props.tempDecode.sub}`, config);
@@ -146,7 +146,9 @@ const Header = (props: any) => {
 				setUserDetails(cateResult)
 			}
 			fetchTicketList()
-			fetchUser()
+			if (props !== undefined && props.tempDecode !== undefined) {
+				fetchUser();
+			}
 		}
 	}, [props?.tempDecode?.role, props?.tempDecode?.sub])
 
