@@ -1,13 +1,11 @@
+/* eslint-disable prettier/prettier */
 import { UserEntity } from './../user/models/user.entity';
 import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
 import { SpeakerEntity } from 'src/speaker/models/speaker.entity';
-/* eslint-disable prettier/prettier */
 import { EmailService } from 'src/email/email.service';
-import { Observable } from 'rxjs';
 import {
   SubmitConferenceRequestDto,
   ConferenceRequestDto,
-  ConferenceResponseDto,
   SpeakerRequestDto,
   SpeakerList
 } from './models/conference.dto';
@@ -163,25 +161,6 @@ export class ConferenceService {
         speaker.uuid = myuuid;
         await this.speakerRepository.save(speaker);
         this.emailService.sendEmailToSpeakerAfterConferenceIsSchedule(speaker.speaker_name, speaker.speaker_email, data.conference_name, data.date_start_conference, `http://localhost:8080/zoom/join-by-uuid/${myuuid}`, data.address, data.conference_type == 1);
-      }
-      if (data.conference_type == 2) {
-        // TODO only schedule when admin is submit.
-        // const zoomDto: ScheduleZoomDto = new ScheduleZoomDto();
-        // zoomDto.conferenceId = data.conference_id;
-        // zoomDto.conferenceName = data.conference_name;
-        // zoomDto.hostName = conference.hostName;
-        // const conferenceCategor =
-        //   await this.conferenceCategoryRepository.findOne({
-        //     where: {
-        //       category_id: data.conference_category,
-        //     },
-        //   });
-        // zoomDto.conferenceCategory = conferenceCategor.category_name;
-        // zoomDto.dateStartConference = data.date_start_conference;
-        // const scheduleZoomResult = await this.zoomService.createConference(
-        //   zoomDto,
-        // );
-        // console.log(scheduleZoomResult);
       }
       return result;
     });

@@ -8,7 +8,6 @@ import { Repository } from 'typeorm';
 import { HostEntity } from './models/host.entity';
 import { Host, HostResponseDto } from './models/host.interface';
 import { HostAuthDto } from './dto/host.auth';
-import { ResponseData } from 'src/responsedata/response-data.dto';
 
 @Injectable()
 export class HostService {

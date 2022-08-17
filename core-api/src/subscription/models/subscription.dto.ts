@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 export class SubscriptionDto {
     duration: number;
     host_id: number;
