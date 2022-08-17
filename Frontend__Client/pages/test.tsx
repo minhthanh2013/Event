@@ -13,6 +13,7 @@ import list from 'material-ui/svg-icons/action/list'
 import { splitNum } from '../GlobalFunction/SplitNumber'
 import DetailBannerSession from '../components/DetailBannerSession'
 import EventCreate from './host/dashboard'
+import GoogleMapReact from 'google-map-react';
 
 const Test = () => {
     const [open, setOpen] = useState(false)
@@ -23,7 +24,7 @@ const Test = () => {
     }
     return (
         <>
-            <EventCreate></EventCreate>
+            <DetailContent data={undefined}></DetailContent>
         </>
     )
 }
