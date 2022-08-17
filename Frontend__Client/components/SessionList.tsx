@@ -48,7 +48,7 @@ const SessionList = (props : any) => {
 					<Grid container rowSpacing={8} columnSpacing={8} marginTop={0} sx={{ position: 'relative' }}>
 						{sessionList?.data?.map((dataItem) => (
 							<Grid item lg={4} md={6} sm={12} key={dataItem.comboSessionId}>
-								<Link href={'/session/' + dataItem.comboSessionId}>
+								<Link href={'/session/' + dataItem.comboSessionId} sx={{textDecoration: 'none !important'}}>
 									<TicketSession data={dataItem} props={props} />
 								</Link>
 							</Grid>

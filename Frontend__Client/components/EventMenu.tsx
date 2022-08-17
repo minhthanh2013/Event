@@ -96,10 +96,10 @@ const EventMenu: React.FC<props> = ({ id, hostId, event }) => {
                         </Link>
                     ) : (
                         <>
-                            <Link href={`/event/${id.toString()}`} passHref >
+                            <Link href={`/event/${id?.toString()}`} passHref >
                                 <MenuItem onClick={handleClose}>View</MenuItem>
                             </Link>
-                            <Link href={`/host/dashboard/edit-event/${id.toString()}`} passHref >
+                            <Link href={`/host/dashboard/edit-event/${id?.toString()}`} passHref >
                                 <MenuItem onClick={handleClose}>Edit</MenuItem>
                             </Link>
 

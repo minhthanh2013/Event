@@ -71,7 +71,7 @@ const DetailBanner = (props: TicketProps) => {
             <Box className={styles.container}>
                 <Box className={styles.banner__wrap} sx={{backgroundImage:imageURL}}>
                     <Box component="div">
-                        <Link href="/">
+                        <Link href="/" sx={{textDecoration: 'none !important'}}>
                             <IconButton >
                                 <KeyboardBackspaceIcon />
                                 <Typography>Back</Typography>

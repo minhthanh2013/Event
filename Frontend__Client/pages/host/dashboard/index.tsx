@@ -158,7 +158,7 @@ const EventCreate = (props: any) => {
     fetchHostDetails();
     fetchConferences();
     fetchSessions();
-  }, [props.tempDecode.sub, props.value]);
+  }, [props.tempDecode?.sub, props.value]);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
