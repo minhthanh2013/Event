@@ -22,7 +22,6 @@ import { SessionMenu } from "../../../components/SessionMenu";
 interface SessionProps {
   data: SessionListProp[];
   propss: any;
-  filter: (props: string) => void;
 }
 
 interface SessionListProp {
@@ -84,23 +83,11 @@ export const Sessions = (props: SessionProps) => {
     return totalPrice;
   }
   const Total = props?.data?.reduce((result, item) => {
-    let a = item.comboSessionPrice;
-    let b = getTotalTicketSold(item.conferenceList);
-
-    if (typeof item.comboSessionPrice === 'string') {
-      a = parseInt(item.comboSessionPrice)
-    }
-    return result + a * b;
+    return result + getTotalGross(item.conferenceList);
   }, 0);
 
   const TotalAfterDiscount = props?.data?.reduce((result, item) => {
-    let a = item.comboSessionPrice;
-    let b = getTotalTicketSold(item.conferenceList);
-
-    if (typeof item.comboSessionPrice === 'string') {
-      a = parseInt(item.comboSessionPrice)
-    }
-    let total = a * b;
+    let total = getTotalGross(item.conferenceList);
     let discountPrice = total * item.discount / 100
     return result + total - discountPrice;
   }, 0);

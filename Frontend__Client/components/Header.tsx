@@ -454,7 +454,7 @@ const Header = (props: any) => {
 							</Link>
 							<Link href={'/host/dashboard'} passHref>
 								<Button variant='text' sx={{ color: '#6A35F2' }}>
-									create an event
+									Host section
 								</Button>
 							</Link>
 						</>
