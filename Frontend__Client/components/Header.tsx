@@ -310,7 +310,9 @@ const Header = (props: any) => {
 													{ticket?.conference_type === '2' && ticket?.isValiated === false && (
 														<IconButton sx={{ display: 'flex', gap: '0.5rem', color: '#C64EFF' }}>
 															<ReplayOutlinedIcon />
-															<Typography>Record</Typography>
+															<Link href={`/zoom/record/${ticket?.conference_id}`} passHref>
+																<Typography>Record</Typography>
+															</Link>
 														</IconButton>
 													)}
 												</Box>

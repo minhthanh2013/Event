@@ -70,6 +70,7 @@ interface ConferenceProp {
   current_quantity: number;
   status_ticket: string;
   conference_type: string;
+  isValidated: boolean;
   // conferenceOrganizer: string;
 }
 
