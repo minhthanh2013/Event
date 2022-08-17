@@ -23,6 +23,7 @@ import EventMenu from '../../../components/EventMenu'
 import TextField from '@mui/material/TextField'
 import { splitNum } from '../../../GlobalFunction/SplitNumber'
 import Checkbox from '@mui/material/Checkbox';
+import { PopUp } from '../../../components/AlertPop-up'
 
 interface ConferenceProp {
     conference_id: number
@@ -45,14 +46,26 @@ interface EventListProps {
     filter: (props: string) => void
 }
 export const EventList = (props: EventListProps) => {
+    const [popUp, setPopUp] = useState("0");
+    const [status, setStatus] = useState("0");
     const [sortType, setSortType] = useState('all')
 
-    const [checked, setChecked] = useState(false);
+    function refreshPage() {
+        window.location.reload();
+    }
 
-    const handleChange = (e) => {
-        setChecked(e.target.checked);
-    };
-
+    async function endConference(confId: number) {
+          const dataResult = await fetch(`/api/conference/end-conference/${confId}`);
+          const cateResult = await dataResult.json();
+          if (cateResult.status === true) {
+            setStatus("1");
+            setPopUp("1");
+            setTimeout(refreshPage, 2000);
+        } else {
+            setStatus("0");
+            setPopUp("1");  
+        }
+    }
     function parseDate(dateString: String) {
         const date = new Date(dateString)
         const day = date.getDate()
@@ -81,6 +94,7 @@ export const EventList = (props: EventListProps) => {
     const Income = (Total * 90) / 100
     return (
         <>
+            <PopUp status={status} popUp={popUp} onClick={() => setPopUp("0")}/>
             <Box sx={{ marginLeft: '0' }}>
                 <Typography variant='h3' component='div' sx={{ fontWeight: 'bold' }}>
                     Events
@@ -158,7 +172,9 @@ export const EventList = (props: EventListProps) => {
                                     <TableCell align='right'>{splitNum(row?.price) || '0'} VNĐ</TableCell>
                                     <TableCell align='right'>{row.status_ticket?.toUpperCase()}</TableCell>
                                     <TableCell align='right'>
-                                        <Checkbox value={checked} onChange={handleChange} sx={{ '& *': { borderColor: '#4F3398 !important', color: ' #4F3398 !important' } }} />
+                                        <Checkbox checked={!row?.isValidated} onClick={()=>{
+                                            endConference(row?.conference_id)
+                                        }}sx={{'& *':{borderColor:'#4F3398 !important', color:' #4F3398 !important'}}} disabled={!row.isValidated}/>
                                     </TableCell>
                                     <TableCell sx={{ width: '2rem' }}>
                                         <EventMenu id={row.conference_id} hostId={props.propss.tempDecode?.sub} event={row} />

@@ -129,4 +129,8 @@ export class ConferenceController {
   getAllUser(): Promise<ResponseData> {
     return this.conferenceService.getAllUser();
   }
+  @Post('/end-conference/:id')
+  endConference(@Param("id") id: number): Promise<ResponseData> {
+    return this.conferenceService.endConference(id);
+  }
 }
