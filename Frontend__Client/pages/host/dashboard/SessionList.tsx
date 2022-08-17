@@ -99,7 +99,7 @@ export const Sessions = (props: SessionProps) => {
         <Typography variant="h3" component="div" sx={{ fontWeight: "bold" }}>
           Sessions
         </Typography>
-        <Box sx={{ marginRight: "5rem", float: "right" }}>
+        <Box sx={{ marginRight: "5rem", float: "right", display: "flex", flexShrink: 0 }}>
           <FormControl sx={{ width: "15rem", marginRight: "2rem" }}>
             <InputLabel id="select-type">Sort Type</InputLabel>
             <Select

@@ -4,7 +4,7 @@ import MenuIcon from '@mui/icons-material/MoreVertOutlined';
 import Menu from '@mui/material/Menu';
 import MenuItem from "@mui/material/MenuItem";
 import React, { useState } from "react";
-
+import {PopUp} from "../components/AlertPop-up";
 interface ConferenceProp {
     conference_id: number;
     description: string;
@@ -80,6 +80,7 @@ const EventMenu: React.FC<props> = ({ id, hostId, event }) => {
     };
     return (
         <>
+        <PopUp status={status} popUp={popUp} onClick={() => setPopUp("0")}/>
             <IconButton sx={{ color: "rgba(106, 53, 242, 0.77)" }} onClick={handleClick}>
                 <MenuIcon />
             </IconButton>

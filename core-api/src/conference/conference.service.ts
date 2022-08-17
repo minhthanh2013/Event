@@ -503,4 +503,18 @@ export class ConferenceService {
     result.data = this.cloudinaryService.getVideo(conference.zoom_meeting_id);
     return result;
   }
+  async endConference(id: number): Promise<ResponseData> {
+    const result = new ResponseData();
+    const conference = await this.conferenceRepository.findOne({where: {conference_id: id}});
+    if(!conference) {
+      throw new NotFoundException('Conference not found with conference id: ' + id);
+    }
+    if(conference.isValidated) {
+      await this.conferenceRepository.update(id, {isValidated: false});
+      result.status = true;
+      return result;
+    } else {
+      throw new BadRequestException('Can not end conference with status');
+    }
+  }
 }

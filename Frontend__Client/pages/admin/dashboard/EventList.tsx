@@ -91,14 +91,20 @@ export const EventList = (props: EventListProps) => {
     const result = hostList?.find(h => h.host_id.toString() === hostId)
     return result?.user_name;
   }
-
+  const TotalEvent = (props: EventListProps) => {
+    let count = 0;
+    let a = props?.data?.forEach(() => {
+      count++;
+    });
+    return count;
+  }
   return (
     <>
       <Box sx={{ marginLeft: "0" }}>
         <Typography variant="h3" component="div" sx={{ fontWeight: "bold" }}>
           Conference
         </Typography>
-        <Box sx={{ marginRight: "5rem", float: "right" }}>
+        <Box sx={{ marginRight: "5rem", float: "right", display: "flex", flexShrink: 0 }}>
           <FormControl sx={{ width: "15rem", marginRight: "2rem" }}>
             <InputLabel id="select-type">Sort Type</InputLabel>
             <Select
@@ -132,9 +138,18 @@ export const EventList = (props: EventListProps) => {
             disabled
             type="string"
             value={`${splitNum(Total_debt)} VNĐ` || ''}
+            sx={{ marginRight: "2rem" }}
+          />
+          <TextField
+            label="Total event"
+            disabled
+            type="string"
+            value={`${TotalEvent(props)}` || ''}
+            sx={{ width: "8rem" }}
           />
         </Box>
-        <TableContainer component={Paper} sx={{ marginTop: "5rem", marginLeft: "5rem", width: "90%" }}>
+        <TableContainer component={Paper} sx={{ marginTop: "5rem", marginLeft: "5rem", width: "90%" }}
+          style={{ maxHeight: "30vw", overflow: 'auto' }}>
           <Table >
             <TableHead sx={{ backgroundColor: "#4F3398" }}>
               <TableRow>
