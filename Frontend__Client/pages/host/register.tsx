@@ -17,10 +17,10 @@ import { useState } from 'react'
 
 const validationSchema = yup.object({
 	email: yup.string().email('Enter a valid email').required('Email is required'),
-	password: yup.string().required('Password is required'),
+	password: yup.string().min(8, 'Password must be at least 8 characters').max(20, 'Your password is too long').required('Password is required'),
 	first_name: yup.string().required('firstname is required'),
 	last_name: yup.string().required('lastname is required'),
-	user_name: yup.string().required('username is required'),
+	user_name: yup.string().min(6, 'User name must be at least 8 characters').max(20, 'Your User name is too long').required('username is required'),
 })
 
 const Register = (props: Props) => {
