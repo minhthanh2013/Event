@@ -126,7 +126,6 @@ const EventCreate = (props: any) => {
 
   let onlyFetchOneTime = React.useRef(true)
   useEffect(() => {
-
     const fetchHostDetails = async () => {
       const config = {
         headers: {
@@ -320,13 +319,13 @@ const EventCreate = (props: any) => {
 
           </Grid>
           <Grid item xs={10} md={10}>
-            <TabPanel value={value} index={0}>
-              <Box sx={{ marginLeft: "3rem" }}>
-                <EventList data={conferencesAfterFilter?.data} propss={props} filter={filterConferences} />
-              </Box>
-            </TabPanel>
             {hostDetailsProps && hostDetailsProps.host_type === 'premium' ? (
               <>
+                <TabPanel value={value} index={0}>
+                  <Box sx={{ marginLeft: "3rem" }}>
+                    <EventList data={conferencesAfterFilter?.data} host_type={hostDetailsProps?.host_type} propss={props} filter={filterConferences} />
+                  </Box>
+                </TabPanel>
                 <TabPanel value={value} index={1}>
                   <Box sx={{ marginLeft: "3rem" }}>
                     <Sessions data={sessionsAfterFilter?.data} propss={props} />
@@ -339,11 +338,18 @@ const EventCreate = (props: any) => {
                 </TabPanel>
               </>
             ) : (
-              <TabPanel value={value} index={1}>
-                <Box sx={{ marginLeft: "3rem" }}>
-                  <Subcriptions host_type={hostDetailsProps?.host_type} exDate={hostDetailsProps?.update_at} />
-                </Box>
-              </TabPanel>
+              <>
+                <TabPanel value={value} index={0}>
+                  <Box sx={{ marginLeft: "3rem" }}>
+                    <EventList host_type={hostDetailsProps?.host_type} data={conferencesAfterFilter?.data} propss={props} filter={filterConferences} />
+                  </Box>
+                </TabPanel>
+                <TabPanel value={value} index={1}>
+                  <Box sx={{ marginLeft: "3rem" }}>
+                    <Subcriptions host_type={hostDetailsProps?.host_type} exDate={hostDetailsProps?.update_at} />
+                  </Box>
+                </TabPanel>
+              </>
             )
             }
 

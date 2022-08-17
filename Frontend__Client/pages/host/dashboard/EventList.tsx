@@ -24,6 +24,7 @@ import TextField from '@mui/material/TextField'
 import { splitNum } from '../../../GlobalFunction/SplitNumber'
 import Checkbox from '@mui/material/Checkbox';
 import { PopUp } from '../../../components/AlertPop-up'
+import Tooltip from '@mui/material/Tooltip';
 
 interface ConferenceProp {
     conference_id: number
@@ -43,8 +44,10 @@ interface ConferenceProp {
 interface EventListProps {
     data: ConferenceProp[]
     propss: any
+    host_type: string;
     filter: (props: string) => void
 }
+
 export const EventList = (props: EventListProps) => {
     const [popUp, setPopUp] = useState("0");
     const [status, setStatus] = useState("0");
@@ -55,15 +58,15 @@ export const EventList = (props: EventListProps) => {
     }
 
     async function endConference(confId: number) {
-          const dataResult = await fetch(`/api/conference/end-conference/${confId}`);
-          const cateResult = await dataResult.json();
-          if (cateResult.status === true) {
+        const dataResult = await fetch(`/api/conference/end-conference/${confId}`);
+        const cateResult = await dataResult.json();
+        if (cateResult.status === true) {
             setStatus("1");
             setPopUp("1");
             setTimeout(refreshPage, 2000);
         } else {
             setStatus("0");
-            setPopUp("1");  
+            setPopUp("1");
         }
     }
     function parseDate(dateString: String) {
@@ -94,7 +97,7 @@ export const EventList = (props: EventListProps) => {
     const Income = (Total * 90) / 100
     return (
         <>
-            <PopUp status={status} popUp={popUp} onClick={() => setPopUp("0")}/>
+            <PopUp status={status} popUp={popUp} onClick={() => setPopUp("0")} />
             <Box sx={{ marginLeft: '0' }}>
                 <Typography variant='h3' component='div' sx={{ fontWeight: 'bold' }}>
                     Events
@@ -125,11 +128,25 @@ export const EventList = (props: EventListProps) => {
                         sx={{ marginRight: '2rem' }}
                     />
                     <TextField label='Total income' disabled type='string' value={`${splitNum(Income)} VNĐ` || ''} />
-                    <Button variant='outlined' sx={{ width: '15rem', height: '3.5rem', marginLeft: '5rem', color: 'black', borderColor: 'black' }}>
-                        <Link href='/host/create-event'>
-                            <a>Create an event</a>
-                        </Link>
-                    </Button>
+                    {props.host_type === 'premium' ? (
+
+                        <Button variant='outlined' sx={{ width: '15rem', height: '3.5rem', marginLeft: '5rem', color: 'black', borderColor: 'black' }}>
+                            <Link href='/host/create-event'>
+                                <a>Create an event</a>
+                            </Link>
+                        </Button>
+
+                    ) : (
+
+                        <Button variant='outlined' disabled sx={{ width: '15rem', height: '3.5rem', marginLeft: '5rem', color: 'black', borderColor: 'black' }}>
+                            <Tooltip title="Please subscribe to create more!" arrow>
+                                <Link href='/host/create-event'>
+                                    <a>Create an event</a>
+                                </Link>
+                            </Tooltip>
+                        </Button>
+                    )}
+
                 </Box>
                 <TableContainer component={Paper} sx={{ marginTop: '5rem', marginLeft: '5rem', width: '90%' }}>
                     <Table>
@@ -172,9 +189,12 @@ export const EventList = (props: EventListProps) => {
                                     <TableCell align='right'>{splitNum(row?.price) || '0'} VNĐ</TableCell>
                                     <TableCell align='right'>{row.status_ticket?.toUpperCase()}</TableCell>
                                     <TableCell align='right'>
-                                        <Checkbox checked={!row?.isValidated} onClick={()=>{
-                                            endConference(row?.conference_id)
-                                        }}sx={{'& *':{borderColor:'#4F3398 !important', color:' #4F3398 !important'}}} disabled={!row.isValidated}/>
+                                        {row.status_ticket === 'published' &&
+                                            <Checkbox checked={!row?.isValidated} onClick={() => {
+                                                endConference(row?.conference_id)
+                                            }} sx={{ '& *': { borderColor: '#4F3398 !important', color: ' #4F3398 !important' } }}
+                                                disabled={!row.isValidated} />
+                                        }
                                     </TableCell>
                                     <TableCell sx={{ width: '2rem' }}>
                                         <EventMenu id={row.conference_id} hostId={props.propss.tempDecode?.sub} event={row} />

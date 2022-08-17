@@ -349,12 +349,10 @@ export const DateForm: React.FC<CreateEventProps> = ({ data, setData, setValue, 
   const [ticketEnd, setTicketEnd] = useState<Date | null>(null);
 
   const onSubmit = (value: any) => {
-    setData({
-      ...data, dateStartConference: value.dateStartConference, dateStartSell: value.dateStartSell,
-      dateEndSell: value.dateEndSell, conferencePrice: value.conferencePrice, ticketQuantity: value.ticketQuantity
-    });
     api({
-      ...data, hostName: prop.tempDecode.username, host_id: prop.tempDecode.sub
+      ...data, dateStartConference: value.dateStartConference, dateStartSell: value.dateStartSell,
+      dateEndSell: value.dateEndSell, conferencePrice: value.conferencePrice, ticketQuantity: value.ticketQuantity,
+      hostName: prop.tempDecode.username, host_id: prop.tempDecode.sub
     });
     console.log(`submit`);
   };

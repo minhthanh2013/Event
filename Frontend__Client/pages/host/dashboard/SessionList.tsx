@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Grid from "@material-ui/core/Grid";
@@ -47,9 +47,28 @@ interface ConferenceProp {
   conference_type: string;
   // conferenceOrganizer: string;
 }
+interface TotalPriceProps {
+  totalPrice: number;
+  totalComboSell: number;
+}
+interface TotalPrice {
+  status: boolean;
+  data: TotalPriceProps;
+}
 
 export const Sessions = (props: SessionProps) => {
   const [sortType, setSortType] = useState('all');
+  const [totalPrice, setTotalPrice] = useState<TotalPrice>();
+
+  useEffect(() => {
+    const fetchTotalPrice = async () => {
+      const dataResult = await fetch(`/api/combo/`);
+      const cateResult = await dataResult.json();
+      setTotalPrice(cateResult);
+    }
+
+    fetchTotalPrice();
+  }, []);
 
   const getTotalPrice = (conferenceList: ConferenceProp[]) => {
     let totalPrice = 0;
@@ -67,21 +86,6 @@ export const Sessions = (props: SessionProps) => {
     return totalGross;
   }
 
-  const getTotalTicket = (conferenceList: ConferenceProp[]) => {
-    let totalPrice = 0;
-    conferenceList?.forEach((item) => {
-      totalPrice += parseInt(item.ticket_quantity.toString());
-    });
-    return totalPrice;
-  }
-
-  const getTotalTicketSold = (conferenceList: ConferenceProp[]) => {
-    let totalPrice = 0;
-    conferenceList?.forEach((item) => {
-      totalPrice += parseInt(item.current_quantity.toString());
-    });
-    return totalPrice;
-  }
   const Total = props?.data?.reduce((result, item) => {
     return result + getTotalGross(item.conferenceList);
   }, 0);
@@ -160,8 +164,8 @@ export const Sessions = (props: SessionProps) => {
                   <TableCell component="th" scope="row">
                     <Typography sx={{ fontWeight: "bold" }}>{row?.comboSessionName}</Typography>
                   </TableCell>
-                  <TableCell align="right">{getTotalTicketSold(row?.conferenceList)}/{getTotalTicket(row?.conferenceList)}</TableCell>
-                  <TableCell align="right">{splitNum(getTotalGross(row?.conferenceList))} VNĐ</TableCell>
+                  <TableCell align="right">{totalPrice?.data?.totalComboSell}</TableCell>
+                  <TableCell align="right">{totalPrice?.data?.totalPrice} VNĐ</TableCell>
                   <TableCell align="right">{splitNum(getTotalPrice(row?.conferenceList))} VNĐ</TableCell>
                   <TableCell align="right">{row?.discount}%</TableCell>
                   <TableCell align="right" sx={{ width: "15rem" }}>
