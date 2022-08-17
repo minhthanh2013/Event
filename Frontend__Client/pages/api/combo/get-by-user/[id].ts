@@ -9,8 +9,8 @@ import https from 'https';
 export default async function (req: NextApiRequest, res: NextApiResponse) {
 	const { id } = req.query;
 	try {
-		// const request = process.env.BACKEND_PROTOCOL+'://' + process.env.BACKEND_HOST + ':' + process.env.BACKEND_PORT + "/conference/get-x-conferences/6"; 
-		const request = `http://localhost:3000/combosession/find-combo-by-user-id/${id}`;
+		const request = process.env.BACKEND_PROTOCOL+'://' + process.env.BACKEND_HOST + ':' + process.env.BACKEND_PORT + `/combosession/find-combo-by-user-id/${id}`; 
+		// const request = `http://localhost:3000/combosession/find-combo-by-user-id/${id}`;
 		const response = await axios.get(request);
 		if(response.data.status === false) {
 			res.status(404).json({

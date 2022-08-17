@@ -1,4 +1,4 @@
-import { TicketEntity } from './../ticket/models/ticket.entity';
+import { Conference } from './../conference/models/conference.interface';
 /* eslint-disable prettier/prettier */
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -15,6 +15,7 @@ import { ComboSession } from './models/combo_session.interface';
 import { ComboIdDateDto } from './models/combo_session_id_create_at';
 import { NotFoundException } from '@nestjs/common';
 import { ResponseError } from '@sendgrid/mail';
+import { TicketEntity } from './../ticket/models/ticket.entity';
 @Injectable()
 export class CombosessionService {
   constructor(
@@ -28,9 +29,6 @@ export class CombosessionService {
 
   findAllSessions(): Observable<ComboSession[]> {
     return from(this.comboSessionRepository.find());
-  }
-  findOne(id: number): Observable<ComboSession> {
-    return from(this.comboSessionRepository.findOne({where: {combo_id: id}}));
   }
   async createSession(comboRequestDto: ComboSessionRequestDto): Promise<ResponseData> {
     const result = new ResponseData();
@@ -329,4 +327,35 @@ export class CombosessionService {
 
     return response;
 }
+  async getComboRevenueById(id: number): Promise<ResponseData> {
+    const response = new ResponseData();
+    try {
+      let totalPrice = 0;
+      let totalComboSell = 0;
+      const combos = await this.comboSessionRepository.find({where: {combo_id: id }});
+      for (let index = 0; index < combos.length; index++) {
+        const combo = combos[index];
+                // COMBO ID - CONF ID
+        const tickets = await this.ticketRepository.find({where: {
+          session_id: combo.combo_id,
+          conference_id: combo.conference_id
+        }})
+        totalComboSell = tickets.length;
+        const conference = await this.conferenceRepository.findOne({where: {conference_id: combo.conference_id}});
+        totalPrice += parseInt(conference.price.toString()) * tickets.length;
+      }
+      response.status = true;
+      response.data = {
+        totalPrice: totalPrice,
+        totalComboSell: totalComboSell
+      }
+      if(totalPrice === 0 && totalComboSell === 0) {
+        response.status = false;
+      }
+    } catch (error) {
+      response.data = null
+      response.status = false;
+    }
+    return response;
+  }
 }

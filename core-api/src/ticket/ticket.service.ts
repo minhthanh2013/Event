@@ -84,6 +84,7 @@ export class TicketService {
     return from(this.ticketRepository.delete(id));
   }
   buySession(buy: BuySessionDto) {
+    console.log(buy)
     this.comboRepository.find({where: {combo_id: buy.session_id}}).then(combos => {
       combos.forEach(combo => {
         const ticket: Ticket =  {} as Ticket;

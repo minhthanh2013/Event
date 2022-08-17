@@ -21,8 +21,8 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
         try {
             
             // console.log(23, JSON.parse(req.body.toString()).combo_name)
-            // const request = process.env.BACKEND_PROTOCOL+'://' + process.env.BACKEND_HOST + ':' + process.env.BACKEND_PORT + "/conference/create-new"; 
-            const request = "http://localhost:3000/combosession/"; 
+            const request = process.env.BACKEND_PROTOCOL+'://' + process.env.BACKEND_HOST + ':' + process.env.BACKEND_PORT + "/combosession/"; 
+            // const request = "http://localhost:3000/combosession/"; 
             let obj: ComboRequest = req.body;
             let buildBody = {} as ComboSendRequest;
             buildBody.combo_name = obj.combo_name;

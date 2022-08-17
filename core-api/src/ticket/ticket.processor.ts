@@ -28,7 +28,7 @@ export class TicketProcessor {
     console.log("Here")
     const buy: BuySessionDto =  {} as BuySessionDto;
     buy.buyer_id = job.data.sessionDto.buyer_id;
-    buy.session_id = job.data.sessionDto.combo_id;
+    buy.session_id = job.data.sessionDto.session_id;
     buy.payment_id = job.data.sessionDto.payment_id;
     this.ticketService.buySession(buy);
   }

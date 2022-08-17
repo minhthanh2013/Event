@@ -6,8 +6,8 @@ import axios from 'axios'
 export default async function (req: NextApiRequest, res: NextApiResponse) {
 	let host = null
 	try {
-		// const request = process.env.BACKEND_PROTOCOL+'://' + process.env.BACKEND_HOST + ':' + process.env.BACKEND_PORT + '/host/signup';
-		const request = 'http://localhost:3000/host/signup'; 
+		const request = process.env.BACKEND_PROTOCOL+'://' + process.env.BACKEND_HOST + ':' + process.env.BACKEND_PORT + '/host/signup';
+		// const request = 'http://localhost:3000/host/signup'; 
 		console.log(request)
 		const config = {
 			headers: {

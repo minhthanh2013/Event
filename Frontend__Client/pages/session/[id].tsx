@@ -12,6 +12,7 @@ interface SessionProp {
 	comboSessionName: string;
 	comboSessionDescription: string;
 	conferenceList: TicketProp[];
+  discount: number;
 }
 
 interface TicketProp {
@@ -49,7 +50,8 @@ const Session = (props: SessionProps) => {
             <Box className={styles.background__wrap}>
                 <Box className={styles.dot__1}></Box>
                 <Header {...props}/>
-                {sessionProps?.data && <DetailBannerSession nameProp={sessionProps?.data?.comboSessionName} comboDescription={sessionProps?.data?.comboSessionDescription}/>}
+                {sessionProps?.data && <DetailBannerSession nameProp={sessionProps?.data?.comboSessionName} comboDescription={sessionProps?.data?.comboSessionDescription}
+                price={sessionProps?.data?.comboSessionPrice} numberOfTicket={sessionProps?.data?.conferenceList.length} discount={sessionProps?.data?.discount}/>}
                 {sessionProps?.data && <DetailContentSession data={sessionProps?.data} />}
             </Box>
             <Footer/>

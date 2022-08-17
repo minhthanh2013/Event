@@ -1,8 +1,3 @@
-import { HostEntity } from 'src/host/models/host.entity';
-import { ComboSessionEntity } from 'src/combosession/models/combo_session.entity';
-import { EmailService } from 'src/email/email.service';
-import { SpeakerEntity } from 'src/speaker/models/speaker.entity';
-import { ConferenceEntity } from './../conference/models/conference.entity';
 /* eslint-disable prettier/prettier */
 import { ConflictException, ForbiddenException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -15,9 +10,14 @@ import * as argon from 'argon2';
 import { JwtService } from '@nestjs/jwt';
 import { AdminAuthDto } from './dto/admin.auth';
 import { HttpService } from '@nestjs/axios';
-import { Request, response } from 'express';
-import { firstValueFrom } from 'rxjs';
+import { Request } from 'express';
 import { ResponseData } from 'src/responsedata/response-data.dto';
+import { HostEntity } from 'src/host/models/host.entity';
+import { ComboSessionEntity } from 'src/combosession/models/combo_session.entity';
+import { EmailService } from 'src/email/email.service';
+import { SpeakerEntity } from 'src/speaker/models/speaker.entity';
+import { ConferenceEntity } from './../conference/models/conference.entity';
+import { ConfigService } from '@nestjs/config';
 @Injectable()
 export class AdminService {
   constructor(
@@ -34,6 +34,7 @@ export class AdminService {
     private jwt: JwtService,
     private readonly httpService: HttpService,
     private readonly emailService: EmailService,
+    private readonly configService: ConfigService,
   ) {}
 
   findAllAdmins(): Observable<Admin[]> {
@@ -54,11 +55,13 @@ export class AdminService {
 
   async signinAdmin(dto: AdminAuthDto) {
     // find the user by email
+    console.log(58, dto)
     const admin = await this.adminRepository.findOne({
         where: {
             user_name: dto.username,
         },
     });
+    console.log(64, admin)
     // if user does not exist throw exception
     if(!admin) 
         throw new ForbiddenException(
@@ -133,8 +136,8 @@ export class AdminService {
               },
             }
             if(newConference?.conference_type?.toString() === '2') {
-              console.log(133, 'here')
-              const a = this.httpService.post("http://localhost:3000/conference/schedule-zoom-meeting/" + newConference.conference_id, headersRequest );
+              const request = "http://"+this.configService.get("BACKEND_HOST") + ":" + this.configService.get("BACKEND_PORT")+"/conference/schedule-zoom-meeting/" + newConference.conference_id;
+              const a = this.httpService.post(request, headersRequest );
               a.subscribe(async (data) => {
                 console.log(data);
                 resolve(data);

@@ -47,4 +47,8 @@ export class CombosessionController {
   getComboByUserId(@Param("id") id: number) {
     return this.comboSessionService.getComboByUserId(+id);
   }
+  @Get('find-combo-revenue-by-id/:id')
+  getComboRevenueById(@Param("id") id: number) {
+    return this.comboSessionService.getComboRevenueById(+id);
+  }
 }

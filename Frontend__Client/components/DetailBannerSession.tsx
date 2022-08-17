@@ -11,10 +11,13 @@ const imageURL = "https://images.pexels.com/photos/2306281/pexels-photo-2306281.
 interface DetailBannerSessionProps {
     nameProp: string
     comboDescription: string
+    price: number;
+    numberOfTicket: number;
+    discount: number;
     // props: any;
 }
 const DetailBannerSession = (props: DetailBannerSessionProps) => {
-    let price = 10000000000
+    let discountPrice = props.price - (props.price * props.discount) / 100
     return (
         <>
             <Box className={styles.container}>
@@ -32,8 +35,9 @@ const DetailBannerSession = (props: DetailBannerSessionProps) => {
                                 <Typography component="h3">{props?.comboDescription || 'No description'}</Typography>
                             </Box>
                             <Box sx={{display:'flex', flexDirection: 'column', alignItems: 'center', width:'400px', justifyContent: 'center'}}>
-                                <Typography component="h2" sx={{fontWeight:'700', color:'#6A35F2'}}>{splitNum(price)} VND</Typography>
-                                <Typography component="h3">10 events in <em style={{fontStyle:'normal', fontWeight:'700'}}>ONE</em> session</Typography>
+                                <Typography component="h2" sx={{fontWeight:'700', color:'#6A35F2'}}>{splitNum(discountPrice)} VND</Typography>
+                                <Typography component="h2" sx={{fontWeight:'700', color:'#6A35F2'}}>{splitNum(props?.price)} VND</Typography>
+                                <Typography component="h3">{props.numberOfTicket} events in <em style={{fontStyle:'normal', fontWeight:'700'}}>ONE</em> session</Typography>
                                 <Button className={styles.button__2} disabled={false}>Buy</Button>
                             </Box>
                         </Box>

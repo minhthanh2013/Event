@@ -192,6 +192,7 @@ const HeaderHost = (props: any) => {
 								{ticketList?.data?.map((ticket) => (
 									<>
 										{' '}
+										<Link href={`/event/${ticket?.conference_id}`}>
 										<MenuItem
 											key={ticket?.conference_id}
 											onClick={handleCloseUserMenu}
@@ -240,6 +241,7 @@ const HeaderHost = (props: any) => {
 												</Box>
 											</Box>
 										</MenuItem>
+										</Link>
 										<Divider variant='inset' component='li' sx={{ width: '100%', mx: '0 !important' }} />
 									</>
 								))}

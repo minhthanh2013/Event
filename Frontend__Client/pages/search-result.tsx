@@ -39,7 +39,6 @@ function SearchResult(props: any) {
 	const [inputSearch, setInputSearch] = useState(router?.query?.search?.toString() || '')
 	const [inputSearchTemp, setInputSearchTemp] = useState('')
 	const [type, setType] = useState(router?.query?.type?.toString()  || '0')
-	console.log(type)
 	const [typeTemp, setTypeTemp] = useState(router?.query?.type?.toString() || '0')
 
 	const [number, setNumber] = useState(-1)
@@ -176,22 +175,26 @@ export async function getServerSideProps(ctx: any) {
 	// Pass data to the page via props
 	let raw = null
 	try {
-		raw = ctx.req.headers.cookie.toString()
+		raw = ctx.req.cookies
 	} catch (e) {
 		return { props: {} }
 	}
-	if (raw.includes(';')) {
-		let rawCookie = raw.split(';')
-		for (let i = 0; i < rawCookie.length; i++) {
-			if (rawCookie[i].includes('OursiteJWT')) {
-				let cookies = rawCookie[i]
-				let token = cookies.split('=')[0]
-				let value = cookies.split('=')[1]
-				let tempDecode = JSON.parse(Buffer.from(value.split('.')[1], 'base64').toString())
-				return { props: { token, value, tempDecode } }
+	try {
+		if (raw.OursiteJWT.toString()) {
+			let token = 'OursiteJWT'
+			let value = raw.OursiteJWT.toString()
+			let tempDecode = JSON.parse(Buffer.from(value.split('.')[1], 'base64').toString())
+			return {
+				props: {
+					token,
+					value,
+					tempDecode,
+				},
 			}
 		}
+		return { props: {} }
+	} catch (error) {
+		return { props: {} }
 	}
-	return { props: {} }
 }
 export default SearchResult

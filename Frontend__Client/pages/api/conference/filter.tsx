@@ -12,9 +12,11 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
 		sParameter = encodeURIComponent(search?.toString().trim())
 	}
 	try {
-		let request = `http://localhost:3000/conference/filter?page=${page}&onlyPublish=true`;
+		// let request = `http://localhost:3000/conference/filter?page=${page}&onlyPublish=true`;
+		let request = `${process.env.BACKEND_PROTOCOL}://${process.env.BACKEND_HOST}:${process.env.BACKEND_PORT}/conference/filter?page=${page}&onlyPublish=true`;
 		if (sParameter !== '') {
-			request = `http://localhost:3000/conference/filter?page=${page}&search=${sParameter}&onlyPublish=true`;
+			request = `${process.env.BACKEND_PROTOCOL}://${process.env.BACKEND_HOST}:${process.env.BACKEND_PORT}/conference/filter?page=${page}&search=${sParameter}&onlyPublish=true`;
+			// request = `http://localhost:3000/conference/filter?page=${page}&search=${sParameter}&onlyPublish=true`;
 		}
 		const response = await axios.get(request);
         res.status(200).json( response.data);

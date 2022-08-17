@@ -5,11 +5,32 @@ const hostSecret = process.env.HOST_JWT_SECRET as string;
 const adminSecret = process.env.ADMIN_JWT_SECRET as string;
 const userSecret = process.env.USER_JWT_SECRET as string;
 
+const isGuestRoute = (pathname: string) => {
+  return pathname.startsWith('/api/');
+}
+const isLoginRoutes = (pathname: string) => {
+  return pathname.startsWith('/api/auth');
+}
 export default async function middleware(req: NextRequest) {
     const param = req.nextUrl.searchParams;
     const jwt = req.cookies.OursiteJWT;
     const {pathname} = req.nextUrl;
-    console.log(pathname)
+    if(!isLoginRoutes) {
+      if (isGuestRoute(pathname)) {
+        if (!jwt || jwt === undefined) {
+          return {
+            status: 401,
+            body: {
+              message: 'Unauthorized'
+            }
+          }
+        }
+        return NextResponse.redirect(new URL('/'));
+      }
+    }
+
+    
+
     // USER
     if (pathname === "/user/login") {
         if (jwt === undefined) {
@@ -175,7 +196,9 @@ export default async function middleware(req: NextRequest) {
             if(role === 'host') {
                 try {
                     verify(jwt, hostSecret);
-                    let dataResult = await fetch(`http:localhost:8080/api/conference/get-conference-by-zoom-meeting-id/${meetingId}`);
+                    // const request = `http://localhost:8080/api/conference/get-conference-by-zoom-meeting-id/${meetingId}`
+                    const request = `https://evenity.page/api/conference/get-conference-by-zoom-meeting-id/${meetingId}`
+                    let dataResult = await fetch(request);
                     let cateResult = await dataResult.json();
                     if(await cateResult.conference_id !== undefined) {
                         return NextResponse.next();
@@ -190,7 +213,9 @@ export default async function middleware(req: NextRequest) {
             } else if (role === "user") {
                 try {
                     verify(jwt, userSecret);
-                    let dataResult = await fetch(`http://localhost:8080/api/conference/get-conference-by-user-zoom-meeting-id?userId=${userId}&zoomId=${meetingId}`);
+                    // const request = `http://localhost:8080/api/conference/get-conference-by-user-zoom-meeting-id?userId=${userId}&zoomId=${meetingId}`
+                    const request = `https://evenity.page/api/conference/get-conference-by-user-zoom-meeting-id?userId=${userId}&zoomId=${meetingId}`
+                    let dataResult = await fetch(request);
                     let cateResult = await dataResult.json();
                     if(cateResult.ticket_id !== undefined) {
                         return NextResponse.next();

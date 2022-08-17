@@ -123,20 +123,20 @@ const EventCreate = (props: any) => {
     useEffect(() => {
         console.log(props);
         const fetchConferencesData = async () => {
-            const response = await fetch("http://localhost:8080/api/conference/get-all");
+            const response = await fetch("/api/conference/get-all");
             const data = await response.json();
             setConferences(data);
             setConferencesAfterFilter(data);
         }
         const fetchCombosData = async () => {
-            const response = await fetch("http://localhost:8080/api/combo/get-latest-x?id=0");
+            const response = await fetch("/api/combo/get-latest-x?id=0");
             const data = await response.json();
 
             setSessions(data);
             setSessionsAfterFilter(data);
         }
         const fetchHostData = async () => {
-            const response = await fetch("http://localhost:8080/api/host/get-all");
+            const response = await fetch("/api/host/get-all");
             const data = await response.json();
             // API get host here
 
