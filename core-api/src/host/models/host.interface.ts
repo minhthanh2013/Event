@@ -16,4 +16,6 @@ export class HostResponseDto {
   email: string;
   firstName: string;
   lastName: string;
+  host_type?: string;
+  update_at?: Date;
 }

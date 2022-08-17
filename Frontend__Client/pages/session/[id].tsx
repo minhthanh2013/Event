@@ -21,7 +21,11 @@ interface TicketProp {
 	conference_name: number;
 	date_start_conference: Date;
 	address: string;
-  organizerName: string;
+	ticket_quantity: number;
+	current_quantity: number;
+	status_ticket: string;
+	conference_type: string;
+	organizer_name: string;
 }
 
 interface SessionProps {

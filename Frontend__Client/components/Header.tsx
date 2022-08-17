@@ -51,7 +51,14 @@ interface TicketProp {
 	isValiated: boolean
 	// conferenceOrganizer: string;
 }
-
+interface UserDetailProp {
+    firstName: string
+    lastName: string
+    password: string
+    email: string
+    showPassword: boolean
+	balance: number;
+}
 //Balance Modal
 const style = {
 	position: 'absolute' as 'absolute',
@@ -72,6 +79,7 @@ const schema = yup
 	
 const Header = (props: any) => {
 	const [ticketList, setTicketList] = useState<TicketProps>()
+	const [userDetails, setUserDetails] = useState<UserDetailProp>()
 	const pages = ['Products', 'Pricing', 'Blog']
 	const settings = ['Profile', 'Account', 'Dashboard', 'Logout', 'Account', 'Dashboard', 'Logout', 'Account', 'Dashboard', 'Logout']
 
@@ -97,7 +105,11 @@ const Header = (props: any) => {
 	} = useForm({
 		resolver: yupResolver(schema),
 	})
-	const onSubmitBalanceModal = ({amount}) => console.log(amount)
+	const onSubmitBalanceModal = ({amount}) => {
+		// setValueBalance(amount)
+		setValueBalance(prev => prev + Number(userDetails?.balance + amount))
+		handleCloseBalanceModal()
+	}
 	
 
 	// 12:00 am - Thu, Jul 1
@@ -122,7 +134,19 @@ const Header = (props: any) => {
 				const cateResult = await dataResult.json()
 				setTicketList(cateResult)
 			}
+			const fetchUser = async () => {
+				const config = {
+					headers: {
+						'Content-Type': 'application/json',
+						'Authorization': 'Bearer '+props.value.toString(),
+					},
+				}
+				const dataResult = await fetch(`/api/user/${props.tempDecode.sub}`, config);
+				const cateResult = await dataResult.json();
+				setUserDetails(cateResult)
+			}
 			fetchTicketList()
+			fetchUser()
 		}
 	}, [props?.tempDecode?.role, props?.tempDecode?.sub])
 
@@ -391,7 +415,11 @@ const Header = (props: any) => {
 												}}
 											>
 												<Typography variant='body2' sx={{ fontSize: '1rem' }}>
-													1800000
+													{valueBalance == null ? (
+														userDetails?.balance
+													) : (
+														valueBalance
+													)}
 												</Typography>
 
 												<Typography variant='body2' sx={{ fontSize: '1rem' }}>

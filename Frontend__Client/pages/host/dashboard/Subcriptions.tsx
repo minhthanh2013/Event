@@ -82,20 +82,6 @@ export const Subcriptions = () => {
                 Create 10 Events
               </Typography>
             </Box>
-            <Box
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                flexDirection: "row",
-              }}
-            >
-              <Tick color="success" />
-              <Typography
-                sx={{ margin: "1rem 0 1rem 0.5rem", fontStyle: "italic" }}
-              >
-                Create 5 Sessions
-              </Typography>
-            </Box>
           </Box>
           <Box
             sx={{

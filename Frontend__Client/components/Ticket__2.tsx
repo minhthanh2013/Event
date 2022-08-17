@@ -18,7 +18,7 @@ interface TicketProp {
 	current_quantity: number;
 	status_ticket: string;
 	conference_type: string;
-	organizerName: string;
+	organizer_name: string;
 }
 interface TicketProps {
 	data: TicketProp
@@ -26,14 +26,13 @@ interface TicketProps {
 const weekday = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
 const Ticket__2 = (props: TicketProps) => {
 	const [imageProp, setImageProp] = useState<string>()
-	const [year, setYear] = useState<string>()
-	const [month, setMonth] = useState<string>()
 	const [monthString, setMonthString] = useState<string>()
 	const [day, setDay] = useState<string>()
 	const [hour, setHour] = useState<string>()
 	const [min, setMin] = useState<string>()
 	const [weekDay, setWeekDay] = useState<string>()
 	const [timePeriod, setTimePeriod] = useState<string>()
+	const [normalizeDate, setNormalizeDate] = useState<string>()
 
 	useEffect(() => {
 		// 2022-11-11T00:00:00.000Z
@@ -44,8 +43,6 @@ const Ticket__2 = (props: TicketProps) => {
 		}
 		const parseDate = () => {
 			const date = new Date(props.data?.date_start_conference)
-			setYear(date.getFullYear().toString())
-			setMonth(date.getMonth().toString())
 			setMonthString(date.toLocaleString('en-us', { month: 'short' }))
 			setDay(date.getDate().toString())
 			let hours = date.getHours()
@@ -58,6 +55,9 @@ const Ticket__2 = (props: TicketProps) => {
 			setHour(hours.toString())
 			setMin(minuteString.toString())
 			setWeekDay(weekday[date.getDay()])
+			// {weekDay || 'Fri'}, {monthString || 'Dec'} {day || '2'}, {hour || '11'}:{min || '11'}{' '}
+			// {timePeriod?.toUpperCase() || 'AM'}
+			setNormalizeDate(`${weekDay || 'Fri'}, ${monthString || 'Dec'} ${day || '2'}, ${hour || '11'}:${min || '11'}{' '}${timePeriod?.toUpperCase() || 'AM'}`)
 		}
 		fetchImage()
 		parseDate()
@@ -94,7 +94,7 @@ const Ticket__2 = (props: TicketProps) => {
 											? props.data.address
 											: '227 Nguyễn Văn Cừ, Phường 4, Quận 5, Thành phố Hồ Chí Minh'}
 									</Typography>
-									<Typography component='h5'>By {props.data.organizerName}</Typography>
+									<Typography component='h5'>By {props.data.organizer_name}</Typography>
 								</Box>
 								<Box component='div'>
 									<AttachMoneyIcon />

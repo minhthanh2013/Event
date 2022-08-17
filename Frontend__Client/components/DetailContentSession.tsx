@@ -1,5 +1,5 @@
 
-import { Box, Typography } from "@mui/material"
+import { Box, Link, Typography } from "@mui/material"
 import styles from "../styles/DetailContentSession.module.scss"
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import Grid from '@mui/material/Grid';
@@ -23,7 +23,7 @@ interface TicketProp {
 	current_quantity: number;
 	status_ticket: string;
 	conference_type: string;
-	organizerName: string;
+	organizer_name: string;
 }
 
 interface DetailContentSessionProp {
@@ -49,7 +49,9 @@ const DetailContentSession = (props: DetailContentSessionProp) => {
                             {props?.data?.conferenceList?.map((dataItem) => (
                                 // eslint-disable-next-line react/jsx-key
                                 <Grid item sm={12}>
-                                    <Ticket__2 data={dataItem}/>
+                                    <Link href={`/event/${dataItem.conference_id}`}>
+                                        <Ticket__2 data={dataItem}/>
+                                    </Link>
                                 </Grid>
                             ))}
                         </Grid>

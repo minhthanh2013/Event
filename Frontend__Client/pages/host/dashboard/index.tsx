@@ -1,4 +1,4 @@
-import React, { useState, ChangeEvent, useEffect } from "react";
+import React, { useState, ChangeEvent, useEffect, useRef } from "react";
 import HeaderHost from "../../../components/Header__Host";
 import Box from "@mui/material/Box";
 import Footer from "../../../components/Footer";
@@ -103,15 +103,37 @@ interface TicketProp {
   current_quantity: string;
   status_ticket: string;
 }
+interface HostDetailsProps {
+  email: string;
+  firstName: string
+  host_id: string
+  host_type: string
+  lastName: string
+  update_at: Date
+  user_name: string
+}
 //
 const EventCreate = (props: any) => {
   const [conferences, setConferences] = useState<ConferenceProps>();
   const [conferencesAfterFilter, setConferencesAfterFilter] = useState<ConferenceProps>();
   const [sessions, setSessions] = useState<SessionListProps>();
+  const [hostDetailsProps, setHostDetailsProps] = useState<HostDetailsProps>();
   const [sessionsAfterFilter, setSessionsAfterFilter] = useState<SessionListProps>();
   const [value, setValue] = React.useState(0);
-
+  let onlyFetchOneTime = React.useRef(true)
   useEffect(() => {
+
+    const fetchHostDetails = async () => {
+        const config = {
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + props.value,
+          },
+        };
+        const dataResult = await fetch(`/api/host/${props.tempDecode.sub}`, config);
+        const cateResult = await dataResult.json();
+        setHostDetailsProps(cateResult);
+    }
     const fetchConferences = async () => {
       const dataResult = await fetch(`/api/conference/get-conference-by-host-id/${props.tempDecode.sub}`);
       const cateResult = await dataResult.json();
@@ -132,9 +154,10 @@ const EventCreate = (props: any) => {
       setSessions(cateResult)
       setSessionsAfterFilter(cateResult);
     }
+    fetchHostDetails();
     fetchConferences();
     fetchSessions();
-  }, [props.tempDecode.sub]);
+  }, [props.tempDecode.sub, props.value]);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
@@ -201,26 +224,28 @@ const EventCreate = (props: any) => {
                   }
                   {...a11yProps(0)}
                 />
-                <Tab
-                  label={
-                    <>
-                      <Box
-                        sx={{
-                          display: "flex",
-                          alignItems: "center",
-                          flexDirection: "row",
-                          justifyContent: "center",
-                        }}
-                      >
-                        <SessionsIcon sx={{ marginRight: "0.5rem" }} />
-                        <Typography sx={{ fontWeight: "bold" }}>
-                          Sessions
-                        </Typography>
-                      </Box>
-                    </>
-                  }
-                  {...a11yProps(1)}
-                />
+                {hostDetailsProps && hostDetailsProps.host_type === 'premium' && (
+                  <Tab
+                label={
+                  <>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        flexDirection: "row",
+                        justifyContent: "center",
+                      }}
+                    >
+                      <SessionsIcon sx={{ marginRight: "0.5rem" }} />
+                      <Typography sx={{ fontWeight: "bold" }}>
+                        Sessions
+                      </Typography>
+                    </Box>
+                  </>
+                }
+                {...a11yProps(1)}
+              />
+                )}   
                 <Tab
                   label={
                     <>

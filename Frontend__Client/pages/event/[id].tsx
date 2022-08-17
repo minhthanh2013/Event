@@ -15,30 +15,6 @@ import DetailContent from '../../components/DetailContent'
 import Typography from '@mui/material/Typography'
 import PurchaseModal from '../../components/PurchaseModal'
 
-// export const getStaticPaths = async () => {
-//     const res = await fetch('api/event')
-//     const data = await res.json()
-
-//     const paths = data.map((event:any) => {
-//         return {
-//             params: { id: event.id.toString()}
-//         }
-//     })
-//     return {
-//         paths: paths,
-//         fallback: false
-//     }
-// }
-
-// export const getStaticProps = async (context:any) => {
-//     const id = context.params.id;
-//     const res = await fetch(`api/event/${id}`)
-//     const data = await res.json()
-//     return {
-//         props: { event: data }
-//     }
-// }
-
 interface TicketProp {
 	conferenceAddress: string
 	conferenceCategory: number
@@ -64,10 +40,10 @@ interface TicketProps {
 const Event = (props: any) => {
 	const router = useRouter()
 	const { id } = router.query
+	const {isBuy} = router.query
 	const [ticketList, setTicketList] = useState<TicketProps>()
-
-	const [open, setOpen] = useState(false)
-
+	const [imageProp, setImageProp] = useState<string>()
+	let [open, setOpen] = useState(false || isBuy === 'true')
 	const handleToggle = () => {
 		setOpen(!open)
 		// check cookie hiện tại xem người dùng đã đăng nhập chưa, nếu chưa thì redirect
@@ -76,12 +52,17 @@ const Event = (props: any) => {
 		const fetchTicketList = async () => {
 			const dataResult = await fetch(`/api/conference/${id}`)
 			const cateResult = await dataResult.json()
-			console.log(67, cateResult)
 			setTicketList(cateResult)
+		}
+		const fetchImage = async () => {
+			const dataResult = await fetch(`/api/conference/get-conference-image/${id}`)
+			const cateResult = await dataResult.json()
+			setImageProp(cateResult.url)
 		}
 		fetchTicketList().catch(() => {
 			//
 		})
+		fetchImage();
 	}, [id])
 
 	return (
@@ -98,7 +79,7 @@ const Event = (props: any) => {
 							{/* <DetailBanner data={ticketList.data}/>
 					<DetailContent data={ticketList.data}/> */}
 						</Box>
-						{open && <PurchaseModal handleToggle={handleToggle} data={ticketList.data} />}
+						{open && <PurchaseModal handleToggle={handleToggle} data={ticketList.data} imageProp={imageProp} />}
 						<Footer />
 					</>
 				) : (
@@ -120,7 +101,7 @@ const Event = (props: any) => {
 						{/* <DetailBanner data={ticketList.data}/>
 						<DetailContent data={ticketList.data}/> */}
 					</Box>
-					{open && <PurchaseModal handleToggle={handleToggle} data={ticketList.data} />}
+					{open && <PurchaseModal handleToggle={handleToggle} data={ticketList.data} imageProp={imageProp} />}
 					<Footer />
 				</>
 			)}

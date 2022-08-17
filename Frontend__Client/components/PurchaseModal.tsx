@@ -4,7 +4,7 @@ import RadioButtonCheckedIcon from '@mui/icons-material/RadioButtonChecked'
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked'
 import styles from '../styles/PurchaseModal.module.scss'
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import CloseIcon from '@mui/icons-material/Close'
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet'
 import CreditCardIcon from '@mui/icons-material/CreditCard'
@@ -14,10 +14,12 @@ import { splitNum } from '../GlobalFunction/SplitNumber'
 interface modalProps {
 	handleToggle: any
 	data: TicketProp;
+	imageProp: string;
 }
 interface TicketProps {
 	data: TicketProp;
 	setTotal: (props: number) => void;
+	imageProps: string;
 }
 interface TicketProp {
 	conferenceAddress: string
@@ -40,27 +42,48 @@ interface TicketProp {
 const PurchaseModal = (props: modalProps) => {
 	const [selectedValue, setSelectedValue] = useState('a')
 	const [total, setTotal] = useState(parseInt(props?.data?.conferencePrice));
-
+	const [normalizeDate, setNormalizeDate] = useState<string>()
 	const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		setSelectedValue(event.target.value)
 	}
+	const parseDate = () => {
+		const weekday = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+		const date = new Date(props?.data?.date_start_conference)
+		let monthString = date.toLocaleString('en-us', { month: 'short' })
+		let day = date.getDate().toString()
+		let hours = date.getHours()
+		let minutes = date.getMinutes()
+		let ampm = hours >= 12 ? 'pm' : 'am'
+		hours = hours % 12
+		hours = hours ? hours : 12 // the hour '0' should be '12'
+		let minuteString = minutes < 10 ? '0' + minutes : minutes
+		let timePeriod = ampm
+		let hour = hours.toString()
+		let min = minuteString.toString()
+		let  weekDay = weekday[date.getDay()]
+		// {weekDay || 'Fri'}, {monthString || 'Dec'} {day || '2'}, {hour || '11'}:{min || '11'}{' '}
+		// {timePeriod?.toUpperCase() || 'AM'}
+		setNormalizeDate(`${weekDay || 'Fri'}, ${monthString || 'Dec'} ${day || '2'}, ${hour || '11'}:${min || '11'} ${timePeriod?.toUpperCase() || 'AM'}`)
+	}
+	useEffect(() => {
+		parseDate()
+	}, [])
 	return (
 		<>
 			<Box className={styles.container} sx={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }}>
 				<Box className={styles.leftWrap}>
 					<Box className={styles.leftWrap__top}>
 						<Typography component='h3'>{props?.data?.conferenceName}</Typography>
-						<Typography component='h4'>{props?.data?.date_start_conference}</Typography>
+						<Typography component='h4'>{normalizeDate}</Typography>
 						<Divider variant='middle' />
 					</Box>
 					<Box className={styles.leftWrap__body}>
-						<TicketInModal data={props?.data} setTotal={setTotal} />
+						<TicketInModal data={props?.data} setTotal={setTotal} imageProps={props.imageProp} />
 					</Box>
 					<Box className={styles.leftWrap__bottom}>
 						<Typography>Total</Typography>
 						<Typography>
-							<AttachMoneyIcon />
-							{total}
+							{splitNum(total)} VNĐ
 						</Typography>
 					</Box>
 				</Box>
@@ -101,7 +124,7 @@ const PurchaseModal = (props: modalProps) => {
 	)
 }
 
-export const TicketInModal: React.FC<TicketProps> = ({ data, setTotal }) => {
+export const TicketInModal: React.FC<TicketProps> = ({ data, setTotal, imageProps }) => {
 	const [age, setAge] = useState('')
 
 	const handleChange = (event: any) => {
@@ -116,13 +139,12 @@ export const TicketInModal: React.FC<TicketProps> = ({ data, setTotal }) => {
 					<CardMedia
 						component='img'
 						sx={{ width: 151, mt: '1rem', boxShadow: '0px' }}
-						image='https://images.pexels.com/photos/2306281/pexels-photo-2306281.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'
+						image={imageProps ||'https://images.pexels.com/photos/2306281/pexels-photo-2306281.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'}
 						alt='Live from space album cover'
 					/>
 					<Box className={styles.ticketContent}>
 						<Typography component='h3'>{data?.conferenceName}</Typography>
 						<Typography component='h4'>{splitNum(data?.conferencePrice)} VNĐ</Typography>
-						<Typography component='h5'>Sales end in 2 days</Typography>
 					</Box>
 					<Box>
 						<FormControl variant='standard' className={styles.ticketNumber}>

@@ -28,4 +28,6 @@ export class UserEntity {
     referencedColumnName: 'buyer_id',
   })
   tickets: TicketEntity[];
+  @Column()
+  balance: number;
 }

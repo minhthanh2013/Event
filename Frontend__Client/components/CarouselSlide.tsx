@@ -1,5 +1,5 @@
 import Container from '@material-ui/core/Container'
-import { Paper, Button } from '@mui/material'
+import { Paper, Button, Link } from '@mui/material'
 import React, { useEffect, useRef, useState } from 'react'
 import { Typography } from '@mui/material'
 import { Swiper, SwiperSlide } from 'swiper/react'
@@ -218,7 +218,10 @@ const CarouselSlide = (props: any) => {
 										variant='outlined'
 									>
 										{/* `${splitNum(Total)} VNĐ` || '' */}
-										Buy ticket ({list?.price ? `${splitNum(list.price)} VNĐ` : '0'})
+										<Link href={`/event/${list.conference_id}?isBuy=true`}>
+											Buy ticket ({list?.price ? `${splitNum(list.price)} VNĐ` : '0'})
+										</Link>
+										
 									</Button>
 								</Box>
 							</Box>

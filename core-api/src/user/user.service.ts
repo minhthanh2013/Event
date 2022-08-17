@@ -32,6 +32,7 @@ export class UserService {
     response.email = user.email;
     response.firstName = user.first_name;
     response.lastName = user.last_name;
+    response.balance = user.balance;
     return response;
   }
 

@@ -129,10 +129,12 @@ export class ConferenceService {
     });
   }
   async findOne(id: number): Promise<ResponseData> {
+    console.log(132, id);
     const result = new ResponseData();
     const data = await this.conferenceRepository.findOne({
       where: { conference_id: id },
     });
+    console.log(136, data);
     const dto = await this.convertEntityToDto(data);
     result.status = data !== undefined;
     result.data = dto;
@@ -237,6 +239,7 @@ export class ConferenceService {
     return result;
   }
   async convertEntityToDto(entity: ConferenceEntity): Promise<ConferenceRequestDto> {
+    console.log(241, entity);
     const dto = new ConferenceRequestDto();
     // conferenceName: string;
     // conferenceAddress: string;

@@ -12,18 +12,21 @@ import { useState } from 'react'
 import PurchaseModal from '../components/PurchaseModal'
 export { default as buildStore } from '../shared/redux/buildStore'
 
-interface ConferenceProps {
-	status: boolean
-	data: ConferenceProps[]
+interface CarouselSlideProp {
+	conference_id: number
+	description: string
+	price: number
+	conference_name: number
+	date_start_sell: Date
+	date_end_sell: Date
+	date_start_sell_string: string
+	date_end_sell_string: string
+	address: string
+	// conferenceOrganizer: string;
+	handleToggle: any
 }
-
 const Home: NextPage = (props) => {
 	const [open, setOpen] = useState(false)
-
-	const handleToggle = () => {
-		setOpen(!open)
-		// check cookie hiện tại xem người dùng đã đăng nhập chưa, nếu chưa thì redirect
-	}
 	return (
 		<Box>
 			<Box className={styles.background__wrap} sx={{ filter: open ? 'blur(10px) ' : 'none' }}>
@@ -31,17 +34,13 @@ const Home: NextPage = (props) => {
 				<Box className={styles.dot__2}></Box>
 				<Box className={styles.dot__3}></Box>
 				<Header {...props} />
-				<CarouselSlide {...props} handleToggle={handleToggle} />
+				<CarouselSlide {...props}/>
 
 				<SearchBar />
 				<SessionList {...props} />
 				<TicketList {...props} />
 			</Box>
 			<Footer />
-			{/* <HomeDashboard /> */}
-			<Box sx={{ position: 'fixed', top: '40%', left: '50%', zIndex: '4' }}>
-				{open && <PurchaseModal handleToggle={handleToggle} data={undefined} />}
-			</Box>
 		</Box>
 	)
 }

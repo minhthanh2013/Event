@@ -49,8 +49,7 @@ const DetailContent = (props: TicketProps) => {
 	useEffect(() => {
 		
 		const fetchHostDetails = async () => {
-			console.log(props)
-			const dataResult = await fetch ('/api/conference/get-host-by-conference-id/' + props?.data?.host_id);
+			const dataResult = await fetch ('/api/conference/get-host-by-conference-id/' + props?.data?.conference_id);
 			const cateResult = await dataResult.json();
 			setHost(cateResult);
 		}

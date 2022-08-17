@@ -30,15 +30,22 @@ export class HostService {
     response.email = host.email;
     response.firstName = host.first_name;
     response.lastName = host.last_name;
+    response.update_at = host.update_at;
+    response.host_type = host.host_type;
     return response;
   }
   async signinHost(dto: HostAuthDto) {
        // find the user by email
-       const host = await this.hostRepository.findOne({
+    const host = await this.hostRepository.findOne({
         where: {
             user_name: dto.username,
         },
     });
+    if(host.host_type === "ban") {
+      throw new ForbiddenException(
+        'You are banned from this service',
+    );
+    }
     // if user does not exist throw exception
     if(!host) 
         throw new ForbiddenException(
