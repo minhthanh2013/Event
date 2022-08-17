@@ -50,7 +50,7 @@ export const EventList = (props: EventListProps) => {
     const [checked, setChecked] = useState(false);
 
     const handleChange = (e) => {
-      setChecked(e.target.checked);
+        setChecked(e.target.checked);
     };
 
     function parseDate(dateString: String) {
@@ -85,7 +85,7 @@ export const EventList = (props: EventListProps) => {
                 <Typography variant='h3' component='div' sx={{ fontWeight: 'bold' }}>
                     Events
                 </Typography>
-                <Box sx={{ marginRight: '5rem', float: 'right' }}>
+                <Box sx={{ marginRight: '5rem', float: 'right', display: "flex", flexShrink: 0 }}>
                     <FormControl sx={{ width: '15rem', marginRight: '2rem' }}>
                         <InputLabel id='select-type'>Sort Type</InputLabel>
                         <Select
@@ -141,8 +141,8 @@ export const EventList = (props: EventListProps) => {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {props?.data?.map((row) => ( 
-                            // {[1, 2, 3, 4].map((row) => (
+                            {props?.data?.map((row) => (
+                                // {[1, 2, 3, 4].map((row) => (
                                 <TableRow key={row.conference_id} sx={{ width: '100%' }}>
                                     <TableCell component='th' scope='row'>
                                         <>
@@ -158,7 +158,7 @@ export const EventList = (props: EventListProps) => {
                                     <TableCell align='right'>{splitNum(row?.price) || '0'} VNĐ</TableCell>
                                     <TableCell align='right'>{row.status_ticket?.toUpperCase()}</TableCell>
                                     <TableCell align='right'>
-                                        <Checkbox value={checked} onChange={handleChange} sx={{'& *':{borderColor:'#4F3398 !important', color:' #4F3398 !important'}}}/>
+                                        <Checkbox value={checked} onChange={handleChange} sx={{ '& *': { borderColor: '#4F3398 !important', color: ' #4F3398 !important' } }} />
                                     </TableCell>
                                     <TableCell sx={{ width: '2rem' }}>
                                         <EventMenu id={row.conference_id} hostId={props.propss.tempDecode?.sub} event={row} />
