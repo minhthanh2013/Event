@@ -14,6 +14,7 @@ interface DetailBannerSessionProps {
 	price: number
 	numberOfTicket: number
 	discount: number
+	handleToggle: any
 	// props: any;
 }
 const DetailBannerSession = (props: DetailBannerSessionProps) => {
@@ -63,7 +64,7 @@ const DetailBannerSession = (props: DetailBannerSessionProps) => {
 								<Typography component='h3'>
 									{props.numberOfTicket} events in <em style={{ fontStyle: 'normal', fontWeight: '700' }}>ONE</em> session
 								</Typography>
-								<Button className={styles.button__2} disabled={false}>
+								<Button className={styles.button__2} onClick={props.handleToggle} disabled={false}>
 									Buy
 								</Button>
 							</Box>
