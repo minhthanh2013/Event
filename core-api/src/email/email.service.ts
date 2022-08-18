@@ -12,10 +12,10 @@ export class EmailService {
     sgMail.setApiKey(this.configService.get("SENDGRID_API_KEY"))
     const msg = {
     to: email, // Change to your recipient
-    from: '18126014@student.hcmus.edu.vn', // Change to your verified sender
+    from: '18126014@student.hcmus.edu.vn', // Change to your verified senderhttp://localhost:3000/confirm
     subject: 'Confirm bougth ticket',
     text: 'Hi there, your ticket has been bougth',
-    html: 'You could check out you bought ticket under this link: <a href="http://localhost:3000/confirm">Confirm</a> Thank you for choosing our service. We hope you enjoy our service. Have a good day.',
+    html: `You could check out you bought ticket under this link: <a href="${this.configService.get("PROTOCOL_INTERNET")}://${this.configService.get("HOST_INTERNET")}:${this.configService.get("PORT_INTERNET")}">Confirm</a> Thank you for choosing our service. We hope you enjoy our service. Have a good day.`,
     }
     sgMail
     .send(msg)
@@ -34,7 +34,7 @@ export class EmailService {
     from: '18126014@student.hcmus.edu.vn', // Change to your verified sender
     subject: 'Confirm bougth conference record',
     text: 'Hi there, your record has been bougth',
-    html: 'You could check out you bought record under this link: <a href="http://localhost:3000/confirm">Confirm</a> Thank you for choosing our service. We hope you enjoy our service. Have a good day.',
+    html: `You could check out you bought record under this link: <a href="${this.configService.get("PROTOCOL_INTERNET")}://${this.configService.get("HOST_INTERNET")}:${this.configService.get("PORT_INTERNET")}/confirm">Confirm</a> Thank you for choosing our service. We hope you enjoy our service. Have a good day.`,
     }
     sgMail
     .send(msg)
@@ -53,7 +53,7 @@ export class EmailService {
     from: '18126014@student.hcmus.edu.vn', // Change to your verified sender
     subject: 'Confirm bougth subscription',
     text: 'Hi there, your subscription has been bougth',
-    html: 'You could check out you bought record under this link: <a href="http://localhost:3000/confirm">Confirm</a> Thank you for choosing our service. We hope you enjoy our service. Have a good day.',
+    html: `You could check out you bought record under this link: <a href="${this.configService.get("PROTOCOL_INTERNET")}://${this.configService.get("HOST_INTERNET")}:${this.configService.get("PORT_INTERNET")}/confirm">Confirm</a> Thank you for choosing our service. We hope you enjoy our service. Have a good day.`,
     }
     sgMail
     .send(msg)
@@ -72,7 +72,7 @@ export class EmailService {
     from: '18126014@student.hcmus.edu.vn', // Change to your verified sender
     subject: 'Confirm conference submission',
     text: 'Hi there, your conference has been submitted',
-    html: 'Please wait untill your conference is approved by admin. Thank you for choosing our service. We hope you enjoy our service. Have a good day.',
+    html: `Please wait untill your conference is approved by admin. Thank you for choosing our service. We hope you enjoy our service. Have a good day.`,
     }
     sgMail
     .send(msg)

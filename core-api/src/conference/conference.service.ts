@@ -160,7 +160,7 @@ export class ConferenceService {
         const myuuid = uuidv4();
         speaker.uuid = myuuid;
         await this.speakerRepository.save(speaker);
-        this.emailService.sendEmailToSpeakerAfterConferenceIsSchedule(speaker.speaker_name, speaker.speaker_email, data.conference_name, data.date_start_conference, `http://localhost:8080/zoom/join-by-uuid/${myuuid}`, data.address, data.conference_type == 1);
+        this.emailService.sendEmailToSpeakerAfterConferenceIsSchedule(speaker.speaker_name, speaker.speaker_email, data.conference_name, data.date_start_conference, `http://localhost:8080/zoom/join-by-uuid?uuid=${myuuid}`, data.address, data.conference_type == 1);
       }
       return result;
     });

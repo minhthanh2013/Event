@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { SignOptions, sign } from 'jsonwebtoken';
 import { InjectStripe } from 'nestjs-stripe';
 import Stripe from 'stripe';
 import { AddBalanceDto, PaymentDto, ResponseData, SubscriptionDto, TransactionInfo } from './payment/payment.dto';
@@ -98,8 +97,7 @@ export class AppService {
 
   async newSubscription(subscriptionDto: SubscriptionDto): Promise<ResponseData> {
     const responseData = new ResponseData()
-    console.log(subscriptionDto)
-    const temp = subscriptionDto.idHost?.toString()
+    const temp = subscriptionDto.idHost.toString()
     const param: Stripe.Checkout.SessionCreateParams = {
       mode: 'subscription',
       payment_method_types: ['card'],

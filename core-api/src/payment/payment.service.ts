@@ -40,7 +40,8 @@ export class PaymentService {
     return this.paymentClient.send({ cmd: 'CHECKOUT' }, paymentDto)
   }
   newSubscription(subscriptionDto: SubscriptionDto): Observable<ResponseData> {
-    return this.paymentClient.send({ cmd: 'SUBSCRIPTION' }, { subscriptionDto })
+    const idHost = subscriptionDto.idHost;
+    return this.paymentClient.send({ cmd: 'SUBSCRIPTION' }, { idHost })
   }
   getInfoPayment(payment_intent_id: string): Observable<ResponseData> {
     return this.paymentClient.send({ cmd: 'DETAIL_PAYMENT' }, payment_intent_id)

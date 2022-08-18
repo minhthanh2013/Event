@@ -1,20 +1,21 @@
+/* eslint-disable prettier/prettier */
 export class PaymentDto {
-    conferenceId: number;
-    ticketPrice: number;
-    ticketName: string;
-    ticketQuantity: number;
+  conferenceId: number;
+  ticketPrice: number;
+  ticketName: string;
+  ticketQuantity: number;
 }
 
 export class SubscriptionDto {
-    idHost: number
+  idHost: number;
 }
 
 export class AddBalanceDto {
-    balance: number;
-    idUser: number;
+  balance: number;
+  idUser: number;
 }
 
 export class BoughtTicketDto {
-    conferenceId: number;
-    userId: number;
+  conferenceId: number;
+  userId: number;
 }
