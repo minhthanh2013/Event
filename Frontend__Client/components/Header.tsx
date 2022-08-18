@@ -78,6 +78,7 @@ const schema = yup
 
 
 const Header = (props: any) => {
+	console.log(81, props)
 	const [ticketList, setTicketList] = useState<TicketProps>()
 	const [userDetails, setUserDetails] = useState<UserDetailProp>()
 	const pages = ['Products', 'Pricing', 'Blog']
@@ -142,6 +143,12 @@ const Header = (props: any) => {
 					},
 				}
 				const dataResult = await fetch(`/api/user/${props.tempDecode.sub}`, config);
+				console.log(dataResult.status)
+				if(dataResult.status === 401 || dataResult.status === 404) {
+
+					const newDataResult = await fetch('/api/auth/user/logout');
+					if(newDataResult.status === 200) {}
+				}
 				const cateResult = await dataResult.json();
 				setUserDetails(cateResult)
 			}

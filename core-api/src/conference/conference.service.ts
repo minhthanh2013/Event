@@ -342,7 +342,6 @@ export class ConferenceService {
     if (tempResult !== undefined && tempResult.length >= 1) {
       result.data = tempResult;
     }
-    console.log(366, result)
     return result;
   }
 

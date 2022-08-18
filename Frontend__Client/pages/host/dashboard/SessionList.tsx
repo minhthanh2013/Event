@@ -31,6 +31,8 @@ interface SessionListProp {
   comboSessionDescription: string;
   conferenceList: ConferenceProp[];
   discount: number;
+  totalPrice: number;
+  totalComboSell: number;
 }
 
 
@@ -57,6 +59,7 @@ interface TotalPrice {
 }
 
 export const Sessions = (props: SessionProps) => {
+  console.log(62, props)
   const [sortType, setSortType] = useState('all');
   const [totalPrice, setTotalPrice] = useState<TotalPrice>();
 
@@ -164,8 +167,8 @@ export const Sessions = (props: SessionProps) => {
                   <TableCell component="th" scope="row">
                     <Typography sx={{ fontWeight: "bold" }}>{row?.comboSessionName}</Typography>
                   </TableCell>
-                  <TableCell align="right">{totalPrice?.data?.totalComboSell}</TableCell>
-                  <TableCell align="right">{totalPrice?.data?.totalPrice} VNĐ</TableCell>
+                  <TableCell align="right">{row?.totalComboSell}</TableCell>
+                  <TableCell align="right">{row?.totalPrice} VNĐ</TableCell>
                   <TableCell align="right">{splitNum(getTotalPrice(row?.conferenceList))} VNĐ</TableCell>
                   <TableCell align="right">{row?.discount}%</TableCell>
                   <TableCell align="right" sx={{ width: "15rem" }}>

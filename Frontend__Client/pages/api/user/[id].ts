@@ -18,9 +18,15 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
 		// const request = `http://localhost:3000/user/${id}`;
 		const response = await axios.get(request, config);
         const url = response.data;
+		if(response.data.statusCode === 401) {
+			res.status(401).json({
+				message: 'Unauthorized',
+			});
+		}
         res.status(200).json(url);
 	} catch (error) {
-        console.log(error);
-		res.status(200).json(null);
+		res.status(404).json({
+			message: error.message,
+		});
 	}
 }

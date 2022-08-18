@@ -40,8 +40,10 @@ export class CombosessionController {
     return this.comboSessionService.remove(+id);
   } 
   @Get('find-combo-by-host-id/:id')
-  getComboByHostId(@Param("id") id: number): Promise<ResponseData> {
-    return this.comboSessionService.getComboByHostId(+id);
+  getComboByHostId(
+    @Param("id") id: number,  
+    @Query('revenue', new DefaultValuePipe('')) isRevenue = '',): Promise<ResponseData> {
+    return this.comboSessionService.getComboByHostId(+id, isRevenue);
   }
   @Get('find-combo-by-user-id/:id')
   getComboByUserId(@Param("id") id: number) {

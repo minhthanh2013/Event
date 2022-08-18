@@ -7,6 +7,8 @@ export class ComboSessionDto {
   comboSessionDescription: string;
   conferenceList: ConferenceEntity[];
   discount: number;
+  totalPrice?: number;
+  totalComboSell?: number;
 }
 export class ComboSessionRequestDto {
   listConferenceIds: number[];
