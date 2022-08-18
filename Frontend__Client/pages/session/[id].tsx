@@ -6,7 +6,7 @@ import Footer from '../../components/Footer'
 import DetailBannerSession from '../../components/DetailBannerSession'
 import DetailContentSession from '../../components/DetailContentSession'
 import { useRouter } from 'next/router'
-import PurchaseModal from '../../components/PurchaseModal'
+import PurchaseModalSession from '../../components/PurchaseModal__Session'
 
 interface SessionProp {
 	comboSessionId: number
@@ -39,7 +39,7 @@ const Session = (props: SessionProps) => {
 	const router = useRouter()
 	const { id } = router.query
 	const [sessionProps, setSessionProps] = useState<SessionProps>()
-
+	const [imageProp, setImageProp] = useState<string>()
 	let [open, setOpen] = useState(false)
 	const handleToggle = () => {
 		setOpen(!open)
@@ -51,7 +51,13 @@ const Session = (props: SessionProps) => {
 			const cateResult = await dataResult.json()
 			setSessionProps(cateResult)
 		}
+		const fetchImage = async () => {
+			const dataResult = await fetch(`/api/combo/get-combo-image/${id}`)
+			const cateResult = await dataResult.json()
+			setImageProp(cateResult.url)
+		}
 		fetchSessionProp()
+		fetchImage()
 	}, [id])
 	return (
 		<>
@@ -70,7 +76,7 @@ const Session = (props: SessionProps) => {
 				)}
 				{sessionProps?.data && <DetailContentSession data={sessionProps?.data} />}
 			</Box>
-			{open && <PurchaseModal handleToggle={handleToggle} data={undefined} imageProp={undefined} />}
+			{open && <PurchaseModalSession handleToggle={handleToggle} data={sessionProps?.data} imageProp={imageProp} />}
 
 			<Footer />
 		</>

@@ -91,6 +91,8 @@ interface SessionListProp {
   comboSessionDescription: string;
   conferenceList: ConferenceProp[];
   discount: number;
+  totalPrice: number;
+  totalComboSell: number;
 }
 
 interface ConferenceProp {
@@ -104,6 +106,7 @@ interface ConferenceProp {
   current_quantity: number;
   status_ticket: string;
   conference_type: string;
+
   // conferenceOrganizer: string;
 }
 interface HostDetailsProps {
@@ -123,7 +126,6 @@ const EventCreate = (props: any) => {
   const [sessionsAfterFilter, setSessionsAfterFilter] = useState<SessionListProps>();
   const [hostDetailsProps, setHostDetailsProps] = useState<HostDetailsProps>();
   const [value, setValue] = React.useState(0);
-
   let onlyFetchOneTime = React.useRef(true)
   useEffect(() => {
     const fetchHostDetails = async () => {
@@ -152,8 +154,9 @@ const EventCreate = (props: any) => {
     }
 
     const fetchSessions = async () => {
-      const dataResult = await fetch(`/api/combo/get-by-host/${props.tempDecode.sub}`);
+      const dataResult = await fetch(`/api/combo/get-by-host/${props.tempDecode.sub}?revenue=true`);
       const cateResult = await dataResult.json();
+      console.log(159, cateResult)
       setSessions(cateResult)
       setSessionsAfterFilter(cateResult);
     }

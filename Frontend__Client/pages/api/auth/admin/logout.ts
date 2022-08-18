@@ -8,7 +8,7 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
   const jwt = cookies.OursiteJWT;
 
   if (!jwt) {
-    return res.json({ message: "Bro you are already not logged in..." });
+    return res.status(200).json({ message: "Bro you are already not logged in..." });
   } else {
     const serialised = serialize("OursiteJWT", "", {
       httpOnly: true,
