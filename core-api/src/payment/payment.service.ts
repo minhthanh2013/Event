@@ -66,7 +66,7 @@ export class PaymentService {
     try {
       const data = await this.userRepository.createQueryBuilder()
         .update(UserEntity)
-        .set({ balance: await this.getCurrentBalance(addBalanceDto.idUser) + addBalanceDto.balance })
+        .set({ balance: parseInt((await this.getCurrentBalance(addBalanceDto.idUser)).toString()) + parseInt(addBalanceDto.balance.toString()) })
         .where("user_id = :id", { id: addBalanceDto.idUser })
         .execute()
       if (data.affected == 1) {

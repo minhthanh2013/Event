@@ -66,6 +66,7 @@ export class AppService {
   }
 
   async addBalance(balanceInfo: AddBalanceDto): Promise<ResponseData> {
+    console.log(69, balanceInfo);
     const responseData = new ResponseData()
     const param: Stripe.Checkout.SessionCreateParams = {
       mode: 'payment',
