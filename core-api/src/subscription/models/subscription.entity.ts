@@ -10,25 +10,31 @@ export class SubscriptionEntity {
   @PrimaryGeneratedColumn()
   subscription_id: number;
   @Column()
-  start_date: Date;
+  expired_date: Date;
   @Column()
-  duration: number;
+  is_premium: boolean;
+  @Column()
+  host_id: number;
   @ManyToOne(() => HostEntity, (host) => host.subscriptions)
   @JoinColumn({
     name: "host_id",
     referencedColumnName: "host_id"
   })
   host: HostEntity;
+  @Column()
+  sub_detail: number
   @ManyToOne(() => SubscriptionPlanEntity, (subscriptionPlan) => subscriptionPlan.subscriptions)
   @JoinColumn({
     name: "sub_detail",
     referencedColumnName: "plan_id"
   })
   subscriptionPlan: SubscriptionPlan;
+  @Column()
+  payment_method: number
   @ManyToOne(() =>PaymentEntity, (payment) => payment.payment_id)
   @JoinColumn({
     name: "payment_method",
     referencedColumnName: "payment_id"
   })
-  payment_method: PaymentEntity
+  payment: PaymentEntity
 }

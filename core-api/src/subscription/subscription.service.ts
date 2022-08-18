@@ -1,8 +1,9 @@
 /* eslint-disable prettier/prettier */
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { from, Observable } from 'rxjs';
 import { HostEntity } from 'src/host/models/host.entity';
+import { PaymentEntity } from 'src/payment/models/payment.entity';
 import { ResponseData } from 'src/responsedata/response-data.dto';
 import { SubscriptionPlanEntity } from 'src/subscriptionplan/models/subscription_plan.entity';
 import { DeleteResult, Repository, UpdateResult } from 'typeorm';
@@ -19,14 +20,10 @@ export class SubscriptionService {
     private readonly hostRepository: Repository<HostEntity>,
     @InjectRepository(SubscriptionPlanEntity)
     private readonly subPlanRepository: Repository<SubscriptionPlanEntity>,
+    @InjectRepository(PaymentEntity)
+    private readonly paymentRepository: Repository<PaymentEntity>,
   ) {}
 
-  findAll(): Observable<Subscription[]> {
-    return from(this.subscriptionRepository.find());
-  }
-  findOne(id: number): Observable<Subscription> {
-    return from(this.subscriptionRepository.findOne({where: {subscription_id: id}}));
-  }
   async create(subscription: SubscriptionDto): Promise<ResponseData> {
     const responseData = new ResponseData()
     const result = await this.subscriptionRepository.save(await this.convertDtoToEntity(subscription))
@@ -45,9 +42,10 @@ export class SubscriptionService {
   }
   async updateSubscription(id: number): Promise<ResponseData> {
     const result = new ResponseData();
+    const expire = await this.subscriptionRepository.findOneBy({host_id: id})
     const data = await this.subscriptionRepository.createQueryBuilder()
     .update(SubscriptionEntity)
-    .set({duration: +30})
+    .set({expired_date: new Date()})
     .where("host_id = :id", {id: id})
     .execute()
     if (data.affected == 1) {
@@ -60,14 +58,16 @@ export class SubscriptionService {
 
   async convertDtoToEntity(params: SubscriptionDto): Promise<SubscriptionEntity> {
     const entity = new SubscriptionEntity()
-    entity.duration = params.duration
     entity.host = await this.hostRepository.findOne({where: {
       host_id: params.host_id
     }})
-    entity.start_date = params.start_date
+    entity.expired_date = params.expired_date
     entity.subscription_id = params.plan_id
     entity.subscriptionPlan = await this.subPlanRepository.findOne({ where : {
       plan_id: params.plan_id
+    }})
+    entity.payment = await this.paymentRepository.findOne({ where : {
+      payment_id: params.payment_id
     }})
     return entity
   }

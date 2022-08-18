@@ -1,11 +1,12 @@
 import { Injectable } from '@nestjs/common';
+import { SignOptions, sign } from 'jsonwebtoken';
 import { InjectStripe } from 'nestjs-stripe';
 import Stripe from 'stripe';
-import { PaymentDto, ResponseData, SubscriptionDto } from './payment/payment.dto';
+import { AddBalanceDto, PaymentDto, ResponseData, SubscriptionDto, TransactionInfo } from './payment/payment.dto';
 
 @Injectable()
 export class AppService {
-  public constructor(@InjectStripe() private readonly stripeClient: Stripe) {}
+  public constructor(@InjectStripe() private readonly stripeClient: Stripe) { }
   getHello(): string {
     return 'Hello World!';
   }
@@ -17,35 +18,86 @@ export class AppService {
       payment_method_types: ['card'],
       line_items: [
         {
-          name: paymentDto.ticketName,
-          amount: paymentDto.ticketPrice,
-          currency: "vnd",
-          quantity: paymentDto.ticketQuantity
+          quantity: paymentDto.ticketQuantity,
+          price_data: {
+            product_data: {
+              name: paymentDto.ticketName,
+              description: paymentDto.description,
+            },
+            currency: 'vnd',
+            unit_amount: paymentDto.ticketPrice
+          },
         }
       ],
-      success_url: `${process.env.MOCK_URL}/success`,
-      cancel_url: `${process.env.MOCK_URL}/cancel`,
+      success_url: `${process.env.MOCK_URL}`,
+      cancel_url: `${process.env.MOCK_URL}`,
+      payment_intent_data: {
+        description: 'BUY TICKET',
+      },
+      client_reference_id: paymentDto.conferenceId + '|' + paymentDto.userId
     }
     try {
       const result = await this.stripeClient.checkout.sessions.create(param)
       responseData.data = result.url
-    } catch(err) {
+    } catch (err) {
       responseData.status = false
       console.log(err)
     }
     return responseData
   }
 
-  async newSubscription(): Promise<ResponseData> {
+  async getAdminTransaction(): Promise<ResponseData> {
     const responseData = new ResponseData()
-    const id = 2
-    const accountParam: Stripe.AccountCreateParams = {
-      type: 'custom',
-      capabilities: {
-        card_payments: {requested: true},
-        transfers: {requested: true}
-      }
-     }
+    try {
+      const trans = await this.stripeClient.balanceTransactions.list()
+      const res = new TransactionInfo()
+      trans.data.forEach(index => {
+        res.id = index.id
+        res.amount = index.amount / 100
+        res.created = new Date(index.created).toString()
+        res.net = index.net / 100
+        res.fee = index.fee / 100
+        res.currency = 'vnd'
+      })
+      responseData.data = res
+    } catch (err) {
+      responseData.status = false
+    }
+    return responseData
+  }
+
+  async addBalance(balanceInfo: AddBalanceDto): Promise<ResponseData> {
+    const responseData = new ResponseData()
+    const param: Stripe.Checkout.SessionCreateParams = {
+      mode: 'payment',
+      payment_method_types: ['card'],
+      line_items: [
+        {
+          name: 'ADD BALANCE TO ACCOUNT',
+          quantity: 1,
+          amount: balanceInfo.balance,
+          currency: 'vnd'
+        },
+      ],
+      success_url: `${process.env.MOCK_URL}`,
+      cancel_url: `${process.env.MOCK_URL}`,
+      payment_intent_data: {
+        description: 'ADD BALANCE'
+      },
+      client_reference_id: balanceInfo.idUser.toString()
+    }
+    try {
+      const data = await this.stripeClient.checkout.sessions.create(param)
+      responseData.data = data.url
+    } catch (err) {
+      responseData.status = false
+      console.log(err)
+    }
+    return responseData
+  }
+
+  async newSubscription(subscriptionDto: SubscriptionDto): Promise<ResponseData> {
+    const responseData = new ResponseData()
     const param: Stripe.Checkout.SessionCreateParams = {
       mode: 'subscription',
       payment_method_types: ['card'],
@@ -53,39 +105,64 @@ export class AppService {
         {
           quantity: 1,
           price: process.env.PREMIUM_PLAN_ID_TEST,
+          description: 'SUBSCRIBE PREMIUM PLAN (1 MONTH)'
         }
       ],
       success_url: `${process.env.MOCK_URL}`,
       cancel_url: `${process.env.MOCK_URL}`,
+      subscription_data: {
+        description: 'SUBSCRIBE PREMIUM PLAN (1 MONTH)'
+      },
+      client_reference_id: subscriptionDto.id.toString()
     }
-    
+
     try {
       const result = await this.stripeClient.checkout.sessions.create(param)
-      const acc = await this.stripeClient.accounts.create(accountParam)
-      console.log(acc)
-      // const resul1 = await this.stripeClient.accounts.retrieve('acct_1L7fYzLHHzSNpGj2')
       responseData.data = result.url
-    } catch(err) {
+    } catch (err) {
       responseData.status = false
       console.log(err)
     }
     return responseData
   }
 
-  async demoNewSubscription(): Promise<string> {
-    const param: Stripe.Checkout.SessionCreateParams = {
-      mode: 'subscription',
-      payment_method_types: ['card'],
-      line_items: [
-        {
-          quantity: 1,
-          price: 'price_1L8UvGLHHzSNpGj2LAmyoQmt',
-        }
-      ],
-      success_url: `${process.env.MOCK_URL}/success`,
-      cancel_url: `${process.env.MOCK_URL}/cancel`,
+  async getAdminBalance(): Promise<ResponseData> {
+    const responseData = new ResponseData();
+    try {
+      const param: Stripe.BalanceRetrieveParams = {
+
+      }
+      const balance = await this.stripeClient.balance.retrieve(param, {
+        
+      })
+      const data = balance.pending[0].amount / 100
+      responseData.data = data
+    } catch (err) {
+      responseData.status = false
+      console.log(err)
     }
-    const result = await this.stripeClient.checkout.sessions.create(param)
-    return result.url
+    return responseData
+  }
+  async getPaymentDetail(id: string): Promise<ResponseData> {
+    const responseData = new ResponseData()
+    try {
+      const data = await this.stripeClient.paymentIntents.retrieve(id)
+      responseData.data = data
+    } catch (err) {
+      responseData.status = false
+    }
+    return responseData
+  }
+
+  async getSessionLineItem(id_session: string): Promise<ResponseData> {
+    const responseData = new ResponseData() 
+    try {
+      const data = await this.stripeClient.checkout.sessions.retrieve(id_session)
+      responseData.data = data
+    } catch (err) {
+      responseData.status = false
+      console.log(err)
+    }
+    return responseData
   }
 }

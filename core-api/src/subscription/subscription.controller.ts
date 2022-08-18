@@ -11,15 +11,6 @@ import { SubscriptionService } from './subscription.service';
 @Controller('subscription')
 export class SubscriptionController {
   constructor(private readonly subscriptionService: SubscriptionService) {}
-
-  @Get()
-  findAll(): Observable<Subscription[]> {
-    return this.subscriptionService.findAll();
-  }
-  @Get(':id')
-  findOne(@Param('id') id: string): Observable<Subscription> {
-    return this.subscriptionService.findOne(+id);
-  }
   @Post()
   create(@Body() subscription: SubscriptionDto): Observable<ResponseData> {
     return from(this.subscriptionService.create(subscription));

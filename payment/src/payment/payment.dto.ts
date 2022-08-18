@@ -1,8 +1,10 @@
 export class PaymentDto {
+    userId: number;
     conferenceId: number;
     ticketPrice: number;
     ticketName: string;
     ticketQuantity: number;
+    description?: string;
 }
 export class ResponseData {
     status: boolean = true;
@@ -11,4 +13,18 @@ export class ResponseData {
 
 export class SubscriptionDto {
     id: number
+}
+
+export class TransactionInfo {
+    id: string;
+    amount: number;
+    created: string;
+    currency: string;
+    net: number;
+    fee: number;
+}
+
+export class AddBalanceDto {
+    balance: number;
+    idUser: number;
 }
