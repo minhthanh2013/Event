@@ -12,9 +12,11 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
 		sParameter = encodeURIComponent(search?.toString().trim())
 	}
 	try {
-		let request = `http://localhost:3000/combosession/filter?page=${page}`;
+		// let request = `http://localhost:3000/combosession/filter?page=${page}`;
+		let request = `${process.env.BACKEND_PROTOCOL}://${process.env.BACKEND_HOST}:${process.env.BACKEND_PORT}/combosession/filter?page=${page}`;
 		if (sParameter !== '') {
-			request = `http://localhost:3000/combosession/filter?page=${page}&search=${sParameter}`;
+			request = `${process.env.BACKEND_PROTOCOL}://${process.env.BACKEND_HOST}:${process.env.BACKEND_PORT}/combosession/filter?page=${page}&search=${sParameter}`;
+			// request = `http://localhost:3000/combosession/filter?page=${page}&search=${sParameter}`;
 		}
 		const response = await axios.get(request);
         res.status(200).json( response.data);

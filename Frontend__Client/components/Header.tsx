@@ -14,9 +14,24 @@ import PlayCircleOutlineOutlinedIcon from '@mui/icons-material/PlayCircleOutline
 import ReplayOutlinedIcon from '@mui/icons-material/ReplayOutlined'
 import ListItemIcon from '@mui/material/ListItemIcon'
 import LogoutIcon from '@mui/icons-material/Logout'
-
+import LocalActivityIcon from '@mui/icons-material/LocalActivity'
 import ConfirmationNumberIcon from '@mui/icons-material/ConfirmationNumber'
 import { format } from 'date-fns'
+import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet'
+import AddOutlinedIcon from '@mui/icons-material/AddOutlined'
+import Modal from '@mui/material/Modal'
+import { useForm } from 'react-hook-form'
+import { yupResolver } from '@hookform/resolvers/yup'
+import * as yup from 'yup'
+import TextField from '@mui/material/TextField'
+import FormHelperText from '@mui/material/FormHelperText'
+import InputAdornment from '@mui/material/InputAdornment'
+import InputLabel from '@mui/material/InputLabel'
+import FormControl from '@mui/material/FormControl'
+import OutlinedInput from '@mui/material/OutlinedInput'
+
+
+
 interface HeaderProps {
 	props: any
 }
@@ -31,12 +46,40 @@ interface TicketProp {
 	conference_name: number
 	date_start_conference: Date
 	address: string
-	conference_type: string;
-	zoom_meeting_id: string;
+	conference_type: string
+	zoom_meeting_id: string
+	isValiated: boolean
 	// conferenceOrganizer: string;
 }
+interface UserDetailProp {
+	firstName: string
+	lastName: string
+	password: string
+	email: string
+	showPassword: boolean
+	balance: number;
+}
+//Balance Modal
+const style = {
+	position: 'absolute' as 'absolute',
+	top: '50%',
+	left: '50%',
+	transform: 'translate(-50%, -50%)',
+	width: 400,
+	bgcolor: 'background.paper',
+	boxShadow: 24,
+	p: 4,
+}
+const schema = yup
+	.object({
+		amount: yup.number().integer().positive(),
+	})
+	.required()
+
+
 const Header = (props: any) => {
 	const [ticketList, setTicketList] = useState<TicketProps>()
+	const [userDetails, setUserDetails] = useState<UserDetailProp>()
 	const pages = ['Products', 'Pricing', 'Blog']
 	const settings = ['Profile', 'Account', 'Dashboard', 'Logout', 'Account', 'Dashboard', 'Logout', 'Account', 'Dashboard', 'Logout']
 
@@ -47,14 +90,36 @@ const Header = (props: any) => {
 	const [anchorElAvatar, setAnchorElAvatar] = React.useState<null | HTMLElement>(null)
 	const open = Boolean(anchorElAvatar)
 
+	//Balance Modal
+	const [openBalanceModal, setOpenBalanceModal] = React.useState(false)
+	const handleOpenBalanceModal = () => setOpenBalanceModal(true)
+	const handleCloseBalanceModal = () => setOpenBalanceModal(false)
+	const [valueBalance, setValueBalance] = React.useState(null)
+	const handleChangeBalance = (e) => {
+		setValueBalance(e.target.value)
+	}
+	const {
+		register,
+		handleSubmit,
+		formState: { errors },
+	} = useForm({
+		resolver: yupResolver(schema),
+	})
+	const onSubmitBalanceModal = ({ amount }) => {
+		// setValueBalance(amount)
+		setValueBalance(prev => prev + Number(userDetails?.balance + amount))
+		handleCloseBalanceModal()
+	}
+
+
 	// 12:00 am - Thu, Jul 1
 	function parseDate(date: Date) {
 		date = new Date(date)
 		const day = date.getDate()
 		const hour = date.getHours()
-		const stringHour = (date.getHours() < 10 ? '0' : '') + date.getHours();
+		const stringHour = (date.getHours() < 10 ? '0' : '') + date.getHours()
 		const min = date.getMinutes()
-		const stringMin = (date.getMinutes() < 10 ? '0' : '') + date.getMinutes();
+		const stringMin = (date.getMinutes() < 10 ? '0' : '') + date.getMinutes()
 		let ampm = hour >= 12 ? 'pm' : 'am'
 		const weekday = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
 		let weekDayString = weekday[date.getDay()]
@@ -69,7 +134,21 @@ const Header = (props: any) => {
 				const cateResult = await dataResult.json()
 				setTicketList(cateResult)
 			}
+			const fetchUser = async () => {
+				const config = {
+					headers: {
+						'Content-Type': 'application/json',
+						'Authorization': 'Bearer ' + props.value.toString(),
+					},
+				}
+				const dataResult = await fetch(`/api/user/${props.tempDecode.sub}`, config);
+				const cateResult = await dataResult.json();
+				setUserDetails(cateResult)
+			}
 			fetchTicketList()
+			if (props !== undefined && props.tempDecode !== undefined) {
+				fetchUser();
+			}
 		}
 	}, [props?.tempDecode?.role, props?.tempDecode?.sub])
 
@@ -117,7 +196,7 @@ const Header = (props: any) => {
 		}
 	}
 	let isLogin = false
-	if (props?.token !== undefined && props?.tempDecode?.role === "user") {
+	if (props?.token !== undefined && props?.tempDecode?.role === 'user') {
 		isLogin = true
 	}
 	return (
@@ -222,18 +301,22 @@ const Header = (props: any) => {
 													<Typography component='h4'>{parseDate(ticket?.date_start_conference)}</Typography>
 												</Box>
 												<Box display='flex' flexDirection='column' sx={{ width: '25%', alignItems: 'flex-start' }}>
-													{ticket?.conference_type === '1' && ticket?.zoom_meeting_id !== null && (
+													{ticket?.conference_type === '2' && ticket?.zoom_meeting_id !== null && (
 														<IconButton sx={{ display: 'flex', gap: '0.5rem', color: '#C64EFF' }}>
-														<PlayCircleOutlineOutlinedIcon />
-														<Link href={`/zoom/join-by-zoom-id/${ticket?.zoom_meeting_id}`} passHref>
-															<Typography>Join</Typography>
-														</Link>
+															<PlayCircleOutlineOutlinedIcon />
+															<Link href={`/zoom/join-by-zoom-id?id=${ticket?.zoom_meeting_id}`} passHref>
+																<Typography>Join</Typography>
+															</Link>
 														</IconButton>
 													)}
-													<IconButton sx={{ display: 'flex', gap: '0.5rem', color: '#C64EFF' }}>
-														<ReplayOutlinedIcon />
-														<Typography>Record</Typography>
-													</IconButton>
+													{ticket?.conference_type === '2' && ticket?.isValiated === false && (
+														<IconButton sx={{ display: 'flex', gap: '0.5rem', color: '#C64EFF' }}>
+															<ReplayOutlinedIcon />
+															<Link href={`/zoom/record/${ticket?.conference_id}`} passHref>
+																<Typography>Record</Typography>
+															</Link>
+														</IconButton>
+													)}
 												</Box>
 											</Box>
 										</MenuItem>
@@ -287,16 +370,76 @@ const Header = (props: any) => {
 								transformOrigin={{ horizontal: 'right', vertical: 'top' }}
 								anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
 							>
-								<MenuItem sx={{ display: 'flex', gap: '0.5rem', justifyContent: 'space-between', color: '#6A35F2' }}>
-									<Avatar sx={{ color: '#6A35F2', bgcolor: 'white' }} /> Profile
-								</MenuItem>
-								<MenuItem sx={{ display: 'flex', gap: '0.5rem', justifyContent: 'space-between', color: '#6A35F2' }}>
-									<ConfirmationNumberIcon /> Tickets
-								</MenuItem>
-								<MenuItem sx={{ display: 'flex', gap: '0.5rem', justifyContent: 'space-between', color: '#6A35F2' }}>
-									<LogoutIcon />
-									Logout
-								</MenuItem>
+								<Link passHref href={'/user/profile'}>
+									<MenuItem sx={{ display: 'flex', gap: '0.5rem', justifyContent: 'space-between', color: '#6A35F2' }}>
+										<Avatar sx={{ color: '#6A35F2', bgcolor: 'white' }} /> Profile
+									</MenuItem>
+								</Link>
+								<Link passHref href={'/user/ticket'}>
+									<MenuItem sx={{ display: 'flex', gap: '0.5rem', justifyContent: 'space-between', color: '#6A35F2' }}>
+										<ConfirmationNumberIcon /> Tickets
+									</MenuItem>
+								</Link>
+								<Link passHref href={'/user/combo'}>
+									<MenuItem sx={{ display: 'flex', gap: '0.5rem', justifyContent: 'space-between', color: '#6A35F2' }}>
+										<LocalActivityIcon /> Combo
+									</MenuItem>
+								</Link>
+								<Divider variant='inset' component='li' sx={{ width: '100%', mx: '0 !important' }} />
+								<Link href='/'>
+									<a onClick={handleOpenBalanceModal}>
+										<MenuItem
+											sx={{
+												display: 'flex',
+												gap: '0.5rem',
+												color: '#6A35F2',
+												height: '70px',
+												flexDirection: 'column',
+												justifyContent: 'flex-start',
+											}}
+										>
+											<Box
+												sx={{
+													display: 'flex',
+													justifyContent: 'flex-start',
+													alignItems: 'center',
+													width: '100%',
+													gap: '1.3rem',
+												}}
+											>
+												<AccountBalanceWalletIcon />
+											</Box>
+											<Box
+												sx={{
+													display: 'flex',
+													justifyContent: 'space-between',
+													alignItems: 'center',
+													width: '100%',
+													gap: '1.3rem',
+												}}
+											>
+												<Typography variant='body2' sx={{ fontSize: '1rem' }}>
+													{valueBalance == null ? (
+														userDetails?.balance
+													) : (
+														valueBalance
+													)}
+												</Typography>
+
+												<Typography variant='body2' sx={{ fontSize: '1rem' }}>
+													VND
+												</Typography>
+											</Box>
+										</MenuItem>
+									</a>
+								</Link>
+								<Divider variant='inset' component='li' sx={{ width: '100%', mx: '0 !important' }} />
+								<Link passHref href={'/user/logout'}>
+									<MenuItem sx={{ display: 'flex', gap: '0.5rem', justifyContent: 'space-between', color: '#6A35F2' }}>
+										<LogoutIcon />
+										Logout
+									</MenuItem>
+								</Link>
 							</Menu>
 						</>
 					) : (
@@ -313,16 +456,47 @@ const Header = (props: any) => {
 							</Link>
 							<Link href={'/host/dashboard'} passHref>
 								<Button variant='text' sx={{ color: '#6A35F2' }}>
-									create an event
+									Host section
 								</Button>
 							</Link>
-
 						</>
 					)}
 				</Toolbar>
 			</AppBar>
+			<Modal
+				open={openBalanceModal}
+				onClose={handleCloseBalanceModal}
+				aria-labelledby='modal-modal-title'
+				aria-describedby='modal-modal-description'
+			>
+				<Box sx={style}>
+					<form onSubmit={handleSubmit(onSubmitBalanceModal)}>
+						<TextField
+							label='Amonunt'
+							{...register('amount')}
+							id='outlined-start-adornment'
+							sx={{ m: 1, width: '100%' }}
+							InputProps={{
+								startAdornment: <InputAdornment position='start'>VND</InputAdornment>,
+							}}
+							helperText={errors.amount && errors.amount.message as any}
+						/>
+						<Box sx={{ display: 'flex', mt: 2, justifyContent: 'space-around' }}>
+							<Button variant='text' sx={{ color: 'red' }} onClick={handleCloseBalanceModal}>
+								Cancel
+							</Button>
+							<Button type='submit' variant='text' sx={{ color: '#180a3d' }}>
+								Proceed
+							</Button>
+						</Box>
+					</form>
+				</Box>
+			</Modal>
 		</Box>
 	)
 }
 
 export default Header
+
+
+

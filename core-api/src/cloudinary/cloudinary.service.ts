@@ -69,8 +69,9 @@ export class CloudinaryService {
     return rawResponse.slice(index + 1, index2);
   }
 
-  getVideo(meetingId: number) {
+  getVideo(meetingId: string) {
     let rawResponse = v2.video("conference-"+meetingId+"-record")
+    console.log(rawResponse)
     while(true) {
       const index = rawResponse.indexOf("<");
       const index2 = rawResponse.indexOf(">");

@@ -5,12 +5,46 @@ const hostSecret = process.env.HOST_JWT_SECRET as string;
 const adminSecret = process.env.ADMIN_JWT_SECRET as string;
 const userSecret = process.env.USER_JWT_SECRET as string;
 
+const isGuestRoute = (pathname: string) => {
+  return pathname.startsWith('/api/');
+}
+const isLoginRoutes = (pathname: string) => {
+  return pathname.startsWith('/api/auth');
+}
 export default async function middleware(req: NextRequest) {
     const param = req.nextUrl.searchParams;
     const jwt = req.cookies.OursiteJWT;
     const {pathname} = req.nextUrl;
+    if(!isLoginRoutes) {
+      if (isGuestRoute(pathname)) {
+        if (!jwt || jwt === undefined) {
+          return {
+            status: 401,
+            body: {
+              message: 'Unauthorized'
+            }
+          }
+        }
+        return NextResponse.redirect(new URL('/'));
+      }
+    }
+
+    
+
     // USER
     if (pathname === "/user/login") {
+        if (jwt === undefined) {
+          return NextResponse.next();
+        }
+        try {
+          verify(jwt, userSecret);
+          req.nextUrl.pathname = "/";
+          return NextResponse.redirect(req.nextUrl);
+        } catch (error) {
+            return NextResponse.next();
+        }
+      }
+      if (pathname === "/user/register") {
         if (jwt === undefined) {
           return NextResponse.next();
         }
@@ -38,8 +72,33 @@ export default async function middleware(req: NextRequest) {
         }
       }
 
-      // ADMIN 
+      // HOST
+      if (pathname === "/host") {
+        if (jwt === undefined) {
+          req.nextUrl.pathname = "/host/login";
+          return NextResponse.redirect(req.nextUrl);
+        }
+        try {
+          verify(jwt, adminSecret);
+          req.nextUrl.pathname = "/host/dashboard";
+          return NextResponse.redirect(req.nextUrl);
+        } catch (error) {
+            return NextResponse.next();
+        }
+      }
       if (pathname === "/host/login") {
+        if (jwt === undefined) {
+          return NextResponse.next();
+        }
+        try {
+          verify(jwt, hostSecret);
+          req.nextUrl.pathname = "/host/dashboard";
+          return NextResponse.redirect(req.nextUrl);
+        } catch (error) {
+            return NextResponse.next();
+        }
+      }
+      if (pathname === "/host/register") {
         if (jwt === undefined) {
           return NextResponse.next();
         }
@@ -68,7 +127,32 @@ export default async function middleware(req: NextRequest) {
       }
 
       // ADMIN 
+      if (pathname === "/admin") {
+        if (jwt === undefined) {
+          req.nextUrl.pathname = "/admin/login";
+          return NextResponse.redirect(req.nextUrl);
+        }
+        try {
+          verify(jwt, adminSecret);
+          req.nextUrl.pathname = "/admin/dashboard";
+          return NextResponse.redirect(req.nextUrl);
+        } catch (error) {
+            return NextResponse.next();
+        }
+      }
       if (pathname === "/admin/login") {
+        if (jwt === undefined) {
+          return NextResponse.next();
+        }
+        try {
+          verify(jwt, adminSecret);
+          req.nextUrl.pathname = "/admin/dashboard";
+          return NextResponse.redirect(req.nextUrl);
+        } catch (error) {
+            return NextResponse.next();
+        }
+      }
+      if (pathname === "/admin/register") {
         if (jwt === undefined) {
           return NextResponse.next();
         }
@@ -112,7 +196,9 @@ export default async function middleware(req: NextRequest) {
             if(role === 'host') {
                 try {
                     verify(jwt, hostSecret);
-                    let dataResult = await fetch(`http:localhost:8080/api/conference/get-conference-by-zoom-meeting-id/${meetingId}`);
+                    // const request = `http://localhost:8080/api/conference/get-conference-by-zoom-meeting-id/${meetingId}`
+                    const request = `https://evenity.page/api/conference/get-conference-by-zoom-meeting-id/${meetingId}`
+                    let dataResult = await fetch(request);
                     let cateResult = await dataResult.json();
                     if(await cateResult.conference_id !== undefined) {
                         return NextResponse.next();
@@ -127,7 +213,9 @@ export default async function middleware(req: NextRequest) {
             } else if (role === "user") {
                 try {
                     verify(jwt, userSecret);
-                    let dataResult = await fetch(`http://localhost:8080/api/conference/get-conference-by-user-zoom-meeting-id?userId=${userId}&zoomId=${meetingId}`);
+                    // const request = `http://localhost:8080/api/conference/get-conference-by-user-zoom-meeting-id?userId=${userId}&zoomId=${meetingId}`
+                    const request = `https://evenity.page/api/conference/get-conference-by-user-zoom-meeting-id?userId=${userId}&zoomId=${meetingId}`
+                    let dataResult = await fetch(request);
                     let cateResult = await dataResult.json();
                     if(cateResult.ticket_id !== undefined) {
                         return NextResponse.next();
@@ -145,6 +233,55 @@ export default async function middleware(req: NextRequest) {
             return NextResponse.redirect(req.nextUrl);
          }
       }
+      // req.page.params.id
+      // if(req.page.params.id !== undefined && pathname === `/zoom/record/`) {
+      //   if (jwt === undefined) {
+      //       req.nextUrl.pathname = "/";
+      //       return NextResponse.redirect(req.nextUrl);
+      //   }
+      //   try {
+      //       let tempDecode1 = JSON.parse(Buffer.from(jwt.split('.')[1], 'base64').toString());
+      //       const role = tempDecode1.role;
+      //       const userId = tempDecode1.sub;
+      //       const meetingId = param.get('id').toString();
+      //       let dataResult = null;
+      //       let cateResult = null;
+      //       if(role === 'host') {
+      //           try {
+      //               verify(jwt, hostSecret);
+      //               let dataResult = await fetch(`http:localhost:8080/api/conference/get-conference-by-zoom-meeting-id/${meetingId}`);
+      //               let cateResult = await dataResult.json();
+      //               if(await cateResult.conference_id !== undefined) {
+      //                   return NextResponse.next();
+      //               } else {
+      //                   req.nextUrl.pathname = "/";
+      //                   return NextResponse.redirect(req.nextUrl);
+      //               }
+      //           } catch (error) {
+      //               req.nextUrl.pathname = "/";
+      //               return NextResponse.redirect(req.nextUrl);
+      //           }
+      //       } else if (role === "user") {
+      //           try {
+      //               verify(jwt, userSecret);
+      //               let dataResult = await fetch(`http://localhost:8080/api/conference/get-conference-by-user-zoom-meeting-id?userId=${userId}&zoomId=${meetingId}`);
+      //               let cateResult = await dataResult.json();
+      //               if(cateResult.ticket_id !== undefined) {
+      //                   return NextResponse.next();
+      //               } else {
+      //                   req.nextUrl.pathname = "/";
+      //                   return NextResponse.redirect(req.nextUrl);
+      //               }
+      //           } catch (error) {
+      //               req.nextUrl.pathname = "/";
+      //               return NextResponse.redirect(req.nextUrl);
+      //           }
+      //       }
+      //   } catch (error) {
+      //       req.nextUrl.pathname = "/";
+      //       return NextResponse.redirect(req.nextUrl);
+      //    }
+      // }
 
       if(param.has("uuid") && pathname === `/zoom/join-by-zoom-id`) {
         try {

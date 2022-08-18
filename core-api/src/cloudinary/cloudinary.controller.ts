@@ -36,7 +36,7 @@ export class CloudinaryController {
     }
 
     @Get('get-conference-record/:recordId')
-    getRecordUrl(@Param('recordId') videoId: number) {
+    getRecordUrl(@Param('recordId') videoId: string) {
         return this.cloudinaryService.getVideo(videoId);
     }
 

@@ -11,14 +11,15 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import EventIcon from "@mui/icons-material/Event";
 import SessionsIcon from "@mui/icons-material/EmojiEvents";
-import SubscriptionsIcon from "@mui/icons-material/ShopTwo";
+import UserIcon from '@mui/icons-material/AssignmentInd';
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { Users } from "./UserList";
 import { EventList } from "./EventList";
 import { Sessions } from "./SessionList";
+import { UserList } from "./UserList";
 import FilterList from "@mui/icons-material/FilterList";
 import HeaderHost from "../../../components/Header__Host";
 import Footer from "../../../components/Footer";
+import HeaderAdmin from "../../../components/Header__Admin";
 
 interface EventCreate { }
 
@@ -70,6 +71,7 @@ interface ConferenceProp {
     current_quantity: number;
     status_ticket: string;
     conference_type: string;
+    host_id: number;
     // conferenceOrganizer: string;
 }
 
@@ -92,35 +94,60 @@ interface SessionListProp {
     discount: number;
 }
 
+interface HostList {
+    status: boolean;
+    data: HostListProp[];
+}
+interface HostListProp {
+    host_id: string,
+    user_name: string,
+    email: string,
+    first_name: string,
+    last_name: string,
+    create_at: Date,
+    update_at: Date,
+    host_type: string,
+}
+
 //
 const EventCreate = (props: any) => {
     const [conferences, setConferences] = useState<ConferenceProps>();
     const [conferencesAfterFilter, setConferencesAfterFilter] = useState<ConferenceProps>();
     const [sessionsAfterFilter, setSessionsAfterFilter] = useState<SessionListProps>();
     const [sessions, setSessions] = useState<SessionListProps>();
+    const [host, setHost] = useState<HostList>();
+    const [hostAfterFilter, setHostAfterFilter] = useState<HostList>();
+
     const [value, setValue] = React.useState(0);
+
     useEffect(() => {
         console.log(props);
-        // khúc này dùng API, set API cho cả 2 state là confenences và conferencesAfterFilter, tương tự với sessions và user. Xem lại Field, xem khúc đỏ dưới dòng 306
         const fetchConferencesData = async () => {
-            const response = await fetch("http://localhost:8080/api/conference/get-all");
+            const response = await fetch("/api/conference/get-all");
             const data = await response.json();
             setConferences(data);
             setConferencesAfterFilter(data);
         }
         const fetchCombosData = async () => {
-            const response = await fetch("http://localhost:8080/api/combo/get-latest-x?id=0");
+            const response = await fetch("/api/combo/get-latest-x?id=0");
             const data = await response.json();
 
             setSessions(data);
             setSessionsAfterFilter(data);
         }
+        const fetchHostData = async () => {
+            const response = await fetch("/api/host/get-all");
+            const data = await response.json();
+            // API get host here
+
+            setHost(data);
+            setHostAfterFilter(data);
+        }
         fetchConferencesData();
         fetchCombosData();
-    
-        // Ở đây chưa có state [users, setUsers] = ... cũng như UserProps vì t không biết field của Users
-        // Tạo interface như trên nhưng dành cho Users => state [users, setUsers] = useState<UserProps>();
-        // Nhớ tạo state usersAfterFilter rồi copy 2 cái t làm sẵn cho m, hiện tại nó là fe của Subcriptions
+        fetchHostData();
+
+
     }, []);
 
     const handleChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -146,9 +173,9 @@ const EventCreate = (props: any) => {
     //chỉnh field status_ticket thành field lưu trữ type người dùng là host hay admin
     const filterUsers = (props: string) => {
         if (props === 'all') {
-            setConferencesAfterFilter(conferences)
+            setHostAfterFilter(host)
         } else {
-            setConferencesAfterFilter({ status: true, data: conferences?.data?.filter(data => data.status_ticket === props) });
+            setHostAfterFilter({ status: true, data: host?.data?.filter(data => data.host_type === props) });
         }
     };
 
@@ -156,7 +183,7 @@ const EventCreate = (props: any) => {
         <>
             <Box
                 sx={{
-                    background: "#F1EFEF",
+                    background: "#ffffff",
                     width: "100%",
                     overflow: "hidden",
                     position: "relative",
@@ -166,7 +193,7 @@ const EventCreate = (props: any) => {
                 <Box className={styles.dot__1}></Box>
                 <Box className={styles.dot__2}></Box>
                 <Box className={styles.dot__3}></Box>
-                <HeaderHost {...props} />
+                <HeaderAdmin {...props} />
 
                 <Grid container spacing={2}>
                     <Grid item xs={2} md={2}>
@@ -232,14 +259,14 @@ const EventCreate = (props: any) => {
                                                     marginLeft: "20px",
                                                 }}
                                             >
-                                                <SubscriptionsIcon sx={{ marginRight: "0.5rem" }} />
+                                                <UserIcon sx={{ marginRight: "0.5rem" }} />
                                                 <Typography sx={{ fontWeight: "bold" }}>
-                                                    User
+                                                    Host List
                                                 </Typography>
                                             </Box>
                                         </>
                                     }
-                                    {...a11yProps(2)}
+                                    {...a11yProps(1)}
                                 />
                             </Tabs>
                         </ThemeProvider>
@@ -247,17 +274,17 @@ const EventCreate = (props: any) => {
                     <Grid item xs={10} md={10}>
                         <TabPanel value={value} index={0}>
                             <Box sx={{ marginLeft: "3rem" }}>
-                                <EventList data={conferencesAfterFilter?.data} propss={props} filter={filterConferences} />
+                                <EventList data={conferencesAfterFilter?.data} propss={props} filter={filterConferences} host={host?.data} />
                             </Box>
                         </TabPanel>
                         <TabPanel value={value} index={1}>
                             <Box sx={{ marginLeft: "3rem" }}>
-                                <Sessions data={sessionsAfterFilter?.data} propss={props} filter={filterSessions} />
+                                <Sessions data={sessionsAfterFilter?.data} propss={props} filter={filterSessions} host={host?.data} />
                             </Box>
                         </TabPanel>
                         <TabPanel value={value} index={2}>
                             <Box sx={{ marginLeft: "3rem" }}>
-                                <Users data={sessions?.data} propss={props} filter={filterUsers} />
+                                <UserList data={hostAfterFilter?.data} propss={props} filter={filterUsers} />
                             </Box>
                         </TabPanel>
                     </Grid>
@@ -274,25 +301,25 @@ export async function getServerSideProps(ctx: any) {
     // Pass data to the page via props
     let raw = null;
     try {
-      raw = ctx.req.cookies;
+        raw = ctx.req.cookies;
     } catch (e) {
-      return { props: {} }
+        return { props: {} }
     }
-    try { 
-      if (raw.OursiteJWT.toString()) {
-        let token = "OursiteJWT"
-        let value = raw.OursiteJWT.toString();
-        let tempDecode = JSON.parse(Buffer.from(value.split('.')[1], 'base64').toString());
-        return {
-          props: {
-            token, value,
-            tempDecode
-          }
-        };
-      } return { props: {} }
+    try {
+        if (raw.OursiteJWT.toString()) {
+            let token = "OursiteJWT"
+            let value = raw.OursiteJWT.toString();
+            let tempDecode = JSON.parse(Buffer.from(value.split('.')[1], 'base64').toString());
+            return {
+                props: {
+                    token, value,
+                    tempDecode
+                }
+            };
+        } return { props: {} }
     } catch (error) {
-      return { props: {} }
+        return { props: {} }
     }
-  }
+}
 
 export default EventCreate;

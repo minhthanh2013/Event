@@ -12,8 +12,8 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
 	}
 	let host = null
 	try {
-		// const request = process.env.BACKEND_PROTOCOL+'://' + process.env.BACKEND_HOST + ':' + process.env.BACKEND_PORT + '/host/signin'; 
-		const request = 'http://localhost:3000/host/signin'; 
+		const request = process.env.BACKEND_PROTOCOL+'://' + process.env.BACKEND_HOST + ':' + process.env.BACKEND_PORT + '/host/signin'; 
+		// const request = 'http://localhost:3000/host/signin'; 
 		host = await axios.post(request, req.body);
 	} catch (error) {
 		console.log(error);

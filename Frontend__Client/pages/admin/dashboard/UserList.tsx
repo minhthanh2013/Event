@@ -13,90 +13,91 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import styles from "../styles/CreateEventForm.module.scss";
-import Link from 'next/link'
-import IconButton from '@mui/material/IconButton';
-import MenuIcon from '@mui/icons-material/MoreVertOutlined';
-import Menu from '@mui/material/Menu';
+import styles from "../../../styles/CreateEventForm.module.scss";
 import MenuItem from "@mui/material/MenuItem";
-import EventMenu from "../../../components/EventMenu";
+import EventMenuAdmin from "../../../components/EventMenu__Admin";
+import HostMenu from "../../../components/HostMenu__Admin";
 
-interface ConferenceProp {
-  conference_id: number;
-  description: string;
-  price: number;
-  conference_name: number;
-  date_start_conference: Date;
-  address: string;
-  ticket_quantity: number;
-  current_quantity: number;
-  status_ticket: string;
-  conference_type: string;
-  // conferenceOrganizer: string;
+interface host {
+    host_id: string,
+    user_name: string,
+    email: string,
+    first_name: string,
+    last_name: string,
+    create_at: Date,
+    update_at: Date,
+    host_type: string
 }
 
 interface EventListProps {
-  data: ConferenceProp[];
-  propss: any;
-  filter: (props: string) => void;
+    data: host[];
+    propss: any;
+    filter: (props: string) => void;
 }
-export const Users = (props: EventListProps) => {
-  const [sortType, setSortType] = useState('all');
 
-  return (
-    <>
-      <Box sx={{ marginLeft: "0" }}>
-        <Typography variant="h3" component="div" sx={{ fontWeight: "bold" }}>
-          Conference
-        </Typography>
-        <Box sx={{ marginRight: "5rem", float: "right" }}>
-          <FormControl sx={{ width: "15rem" }}>
-            <InputLabel id="select-type">Sort Type</InputLabel>
-            <Select
-              labelId="select-type"
-              value={sortType}
-              label={sortType}
-              onChange={(e) => { props.filter(e.target.value); setSortType(e.target.value) }}
-            >
-              <MenuItem value="all">All</MenuItem>
-              <MenuItem value="host">Host</MenuItem>
-              <MenuItem value="user">User</MenuItem>
-            </Select>
-          </FormControl>
-        </Box>
-        <TableContainer component={Paper} sx={{ marginTop: "5rem", marginLeft: "5rem", width: "90%" }}>
-          <Table >
-            <TableHead sx={{ backgroundColor: "#4F3398" }}>
-              <TableRow>
-                <TableCell sx={{ color: "#ffffff" }}>Events</TableCell>
-                <TableCell align="right" sx={{ color: "#ffffff" }}>Sold</TableCell>
-                <TableCell align="right" sx={{ color: "#ffffff" }}>Gross</TableCell>
-                <TableCell align="right" sx={{ color: "#ffffff" }}>Status</TableCell>
-                <TableCell align="right"></TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {props?.data?.map((row) => (
-                <TableRow key={row.conference_id} sx={{ width: "100%" }}>
-                  <TableCell component="th" scope="row">
-                    <>
-                      <Typography sx={{ fontWeight: "bold" }}>{row.conference_name}</Typography>
-                      {row?.conference_type.toString() === "1" ? "Offline" : "Online"} event <br />
-                      {row.date_start_conference}
-                    </>
-                  </TableCell>
-                  <TableCell align="right">{row.current_quantity}/{row.ticket_quantity}</TableCell>
-                  <TableCell align="right">${row?.price || "0"}</TableCell>
-                  <TableCell align="right">{row.status_ticket?.toUpperCase()}</TableCell>
-                  <TableCell sx={{ width: "2rem" }}>
-                    <EventMenu id={row.conference_id} hostId={1} event={row} />
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      </Box>
-    </>
-  )
+export const UserList = (props: EventListProps) => {
+    const [sortType, setSortType] = useState('all');
+
+    function parseDate(dateString: Date) {
+        const date = new Date(dateString);
+        const day = date.getDate()
+        const hour = date.getHours()
+        const weekday = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+        let weekDayString = weekday[date.getDay()]
+        let monthString = date.toLocaleString('en-us', { month: 'short' })
+        const dateFinal = `${weekDayString}, ${monthString} ${day}`
+        return dateFinal
+    }
+
+    return (
+        <>
+            <Box sx={{ marginLeft: "0" }}>
+                <Typography variant="h3" component="div" sx={{ fontWeight: "bold" }}>
+                    Host
+                </Typography>
+                <Box sx={{ marginRight: "5rem", float: "right" }}>
+                    <FormControl sx={{ width: "15rem", marginRight: "2rem" }}>
+                        <InputLabel id="select-type">Sort Type</InputLabel>
+                        <Select
+                            labelId="select-type"
+                            value={sortType}
+                            label={sortType}
+                            onChange={(e) => { props.filter(e.target.value); setSortType(e.target.value) }}
+                        >
+                            <MenuItem value="all">All</MenuItem>
+                            <MenuItem value="free">Free</MenuItem>
+                            <MenuItem value="premium">Premium</MenuItem>
+                            <MenuItem value="ban">Ban</MenuItem>
+                        </Select>
+                    </FormControl>
+                </Box>
+                <TableContainer component={Paper} sx={{ marginTop: "5rem", marginLeft: "5rem", width: "90%" }}>
+                    <Table >
+                        <TableHead sx={{ backgroundColor: "#4F3398" }}>
+                            <TableRow>
+                                <TableCell sx={{ color: "#ffffff" }}>Hosts Name</TableCell>
+                                <TableCell align="right" sx={{ color: "#ffffff" }}>Status</TableCell>
+                                <TableCell align="right" sx={{ color: "#ffffff" }}>Expiration Date</TableCell>
+                                <TableCell align="right" sx={{ color: "#ffffff" }}>Number of Event</TableCell>
+                                <TableCell align="right"></TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {props?.data?.map((row) => (
+                                <TableRow key={row.host_id} sx={{ width: "100%" }}>
+                                    <TableCell align="left">{row?.user_name}</TableCell>
+                                    <TableCell align="right">{row?.host_type.toUpperCase()}</TableCell>
+                                    <TableCell align="right">{parseDate(row?.update_at)}</TableCell>
+                                    <TableCell align="right">{row?.host_id}</TableCell>
+                                    <TableCell sx={{ width: "2rem" }}>
+                                        <HostMenu host={row} props={props.propss} />
+                                    </TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+            </Box>
+        </>
+    )
 }

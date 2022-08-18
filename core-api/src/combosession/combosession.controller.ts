@@ -17,7 +17,7 @@ export class CombosessionController {
   findAll(): Observable<ComboSession[]> {
     return this.comboSessionService.findAllSessions();
   }
-  @Get("/:id")
+  @Get(":id")
   getCombo(@Param('id') comboId: number): Promise<ResponseData> {
     return this.comboSessionService.findAllSessionsBySessionId(comboId);
   }
@@ -35,12 +35,20 @@ export class CombosessionController {
     return this.comboSessionService.update(+id, comboSession);
   }
 
-  @Delete('id')
-  remove(@Param('id') id: number): Observable<DeleteResult> {
+  @Delete(':id')
+  remove(@Param('id') id: number): ResponseData {
     return this.comboSessionService.remove(+id);
   } 
   @Get('find-combo-by-host-id/:id')
   getComboByHostId(@Param("id") id: number): Promise<ResponseData> {
     return this.comboSessionService.getComboByHostId(+id);
+  }
+  @Get('find-combo-by-user-id/:id')
+  getComboByUserId(@Param("id") id: number) {
+    return this.comboSessionService.getComboByUserId(+id);
+  }
+  @Get('find-combo-revenue-by-id/:id')
+  getComboRevenueById(@Param("id") id: number) {
+    return this.comboSessionService.getComboRevenueById(+id);
   }
 }

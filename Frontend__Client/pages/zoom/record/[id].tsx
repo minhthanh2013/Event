@@ -12,7 +12,7 @@ const ZoomRecord = (props) => {
 	useEffect(() => {
 		const fetchVideoRecord = async () => {
 			// const response = await fetch(`/api/conference/get-conference-record/${id}`);
-			const response = await fetch(`/api/conference/get-conference-record/83133508657`)
+			const response = await fetch(`/api/conference/get-conference-record/${id}`)
 			const cateResult = await response.text()
 			// console.log(16, cateResult);
 			setRecord(cateResult)

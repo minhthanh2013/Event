@@ -11,10 +11,12 @@ import Button from "@mui/material/Button";
 import Image from "next/image";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
-import { BasicInfo, Speakers, Date } from "./CreateEventForm";
+import { BasicInfo, Speakers, DateForm } from "./CreateEventForm";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Multer } from 'multer';
 import HeaderHost from "../../../components/Header__Host";
+import { PopUp } from "../../../components/AlertPop-up";
+import { useRouter } from "next/router";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -52,11 +54,13 @@ function a11yProps(index: number) {
     "aria-controls": `simple-tabpanel-${index}`,
   };
 }
-
 const CreateEvent = (props) => {
   const [data, setData] = useState({})
   const [image, setImage] = useState<string | ArrayBuffer | null>();
   const [imageFile, setImageFile] = useState<Multer.File | null>();
+  const [popUp, setPopUp] = useState("0");
+  const [status, setStatus] = useState("0");
+
   const onImageChange = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
       let reader = new FileReader();
@@ -68,9 +72,18 @@ const CreateEvent = (props) => {
     }
   };
   const [value, setValue] = React.useState(0);
+  // redirect after successfully create 
+  const router = useRouter();
+  const redirect = () => {
+    router.push("/host/dashboard")
+  }
 
   const apiCall = async (data) => {
-    console.log(data);
+    if (imageFile === undefined) {
+      setStatus("0");
+      setPopUp("1");
+      return;
+    }
     const resData = await fetch("/api/conference/create-new", {
       method: "POST",
       headers: {
@@ -79,15 +92,23 @@ const CreateEvent = (props) => {
       body: JSON.stringify(data),
     });
     const resDataJson = await resData.json();
-    console.log(resDataJson);
-    if(resData.status === 200) {
+    if (resData.status === 200) {
       let body = new FormData()
-      body.append('file',imageFile)
+      body.append('file', imageFile)
       const imageUploadResult = await fetch(`/api/cloudinary/update-image-conference/${resDataJson.data.conference_id}`, {
         method: "POST",
         body,
       });
       console.log(90, imageUploadResult);
+    }
+
+    if (resData.status === 200) {
+      setStatus("1");
+      setPopUp("1");
+      setTimeout(redirect, 2000);
+    } else {
+      setStatus("0");
+      setPopUp("1");
     }
   }
 
@@ -99,7 +120,7 @@ const CreateEvent = (props) => {
     <>
       <Box
         sx={{
-          background: "#F1EFEF",
+          background: "#ffffff",
           width: "100%",
           marginBottom: "10rem",
           overflow: "hidden",
@@ -109,7 +130,8 @@ const CreateEvent = (props) => {
         <Box className={styles.dot__1}></Box>
         <Box className={styles.dot__2}></Box>
         <Box className={styles.dot__3}></Box>
-        <HeaderHost {...props}/>
+        <HeaderHost {...props} />
+        <PopUp status={status} popUp={popUp} onClick={() => setPopUp("0")} />
 
         <Typography variant="h3" component="div" className={styles.header}>
           Event Dashboard
@@ -170,17 +192,17 @@ const CreateEvent = (props) => {
                 indicatorColor="primary"
               >
                 <Tab label="Basic Information" {...a11yProps(0)} />
-                <Tab label="Speakers" {...a11yProps(1)} />
-                <Tab label="Date and time" {...a11yProps(2)} />
+                {value === 1 || value == 2 ? (<Tab label="Speakers" {...a11yProps(1)} />) : (<Tab disabled label="Speakers" {...a11yProps(1)} />)}
+                {value === 2 ? (<Tab label="Date and time" {...a11yProps(2)} />) : (<Tab disabled label="Date and time" {...a11yProps(2)} />)}
               </Tabs>
               <TabPanel value={value} index={0}>
-                <BasicInfo data={data} setData={setData} setValue={setValue} api={apiCall} prop={props}/>
+                <BasicInfo data={data} setData={setData} setValue={setValue} api={apiCall} prop={props} />
               </TabPanel>
               <TabPanel value={value} index={1}>
                 <Speakers data={data} setData={setData} setValue={setValue} api={apiCall} prop={props} />
               </TabPanel>
               <TabPanel value={value} index={2}>
-                <Date data={data} setData={setData} setValue={setValue} api={apiCall} prop={props}/>
+                <DateForm data={data} setData={setData} setValue={setValue} api={apiCall} prop={props} />
               </TabPanel>
             </ThemeProvider>
           </Box>
@@ -201,7 +223,7 @@ export async function getServerSideProps(ctx: any) {
   } catch (e) {
     return { props: {} }
   }
-  try { 
+  try {
     if (raw.OursiteJWT.toString()) {
       let token = "OursiteJWT"
       let value = raw.OursiteJWT.toString();

@@ -1,13 +1,10 @@
-import { ConferenceEntity } from 'src/conference/models/conference.entity';
 /* eslint-disable prettier/prettier */
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { from, Observable } from 'rxjs';
-import { UpdateResult, DeleteResult } from 'typeorm';
 import { Repository } from 'typeorm/repository/Repository';
 import { SpeakerEntity } from './models/speaker.entity';
-import { Speaker, SpeakerResponseDto } from './models/speaker.interface';
-
+import { SpeakerResponseDto } from './models/speaker.interface';
+import { ConferenceEntity } from 'src/conference/models/conference.entity';
 @Injectable()
 export class SpeakerService {
   constructor(

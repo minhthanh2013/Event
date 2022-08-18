@@ -1,14 +1,15 @@
-import { SpeakerEntity } from 'src/speaker/models/speaker.entity';
 /* eslint-disable prettier/prettier */
+import { UserEntity } from './../user/models/user.entity';
+import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
+import { SpeakerEntity } from 'src/speaker/models/speaker.entity';
 import { EmailService } from 'src/email/email.service';
-import { Observable } from 'rxjs';
 import {
   SubmitConferenceRequestDto,
   ConferenceRequestDto,
-  ConferenceResponseDto,
-  SpeakerRequestDto
+  SpeakerRequestDto,
+  SpeakerList
 } from './models/conference.dto';
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectDataSource, InjectRepository } from '@nestjs/typeorm';
 import { ConferenceCategoryEntity } from 'src/conferencecategory/models/conference_category.entity';
 import { ConferenceTypeEntity } from 'src/conferencetype/models/conference_type.entity';
@@ -39,18 +40,21 @@ export class ConferenceService {
     private readonly speakerRepository: Repository<SpeakerEntity>,
     @InjectRepository(HostEntity)
     private readonly hostRepository: Repository<HostEntity>,
+    @InjectRepository(UserEntity)
+    private readonly userRepository: Repository<UserEntity>,
     @InjectRepository(TicketEntity)
     private readonly ticketRepository: Repository<TicketEntity>,
     @InjectDataSource()
     private readonly dataSource: DataSource,
     private readonly zoomService: ZoomService,
     private readonly emailService: EmailService,
+    private readonly cloudinaryService: CloudinaryService,
   ) {}
 
   async findAllConferences(): Promise<ResponseData> {
     const result = new ResponseData();
     const data = await this.conferenceRepository.find();
-    if (data.length >= 1) {
+    if (data !== undefined && data.length >= 1) {
       result.data = data;
     } else {
       result.status = false;
@@ -97,7 +101,9 @@ export class ConferenceService {
         .then((result) => {
           if (!result.status) {
             reject('Fail to get host by conference id: ' + id);
-            return null;
+            const resultData = new ResponseData();
+            resultData.data = [];
+            resultData.status = false;
           }
           this.hostRepository
             .findOne({
@@ -121,15 +127,15 @@ export class ConferenceService {
     });
   }
   async findOne(id: number): Promise<ResponseData> {
+    console.log(132, id);
     const result = new ResponseData();
     const data = await this.conferenceRepository.findOne({
       where: { conference_id: id },
     });
-
+    console.log(136, data);
+    const dto = await this.convertEntityToDto(data);
     result.status = data !== undefined;
-    if (result.status === true) {
-      result.data = data;
-    }
+    result.data = dto;
     return result;
   }
   async createConference(
@@ -155,25 +161,6 @@ export class ConferenceService {
         speaker.uuid = myuuid;
         await this.speakerRepository.save(speaker);
         this.emailService.sendEmailToSpeakerAfterConferenceIsSchedule(speaker.speaker_name, speaker.speaker_email, data.conference_name, data.date_start_conference, `http://localhost:8080/zoom/join-by-uuid/${myuuid}`, data.address, data.conference_type == 1);
-      }
-      if (data.conference_type == 2) {
-        // TODO only schedule when admin is submit.
-        // const zoomDto: ScheduleZoomDto = new ScheduleZoomDto();
-        // zoomDto.conferenceId = data.conference_id;
-        // zoomDto.conferenceName = data.conference_name;
-        // zoomDto.hostName = conference.hostName;
-        // const conferenceCategor =
-        //   await this.conferenceCategoryRepository.findOne({
-        //     where: {
-        //       category_id: data.conference_category,
-        //     },
-        //   });
-        // zoomDto.conferenceCategory = conferenceCategor.category_name;
-        // zoomDto.dateStartConference = data.date_start_conference;
-        // const scheduleZoomResult = await this.zoomService.createConference(
-        //   zoomDto,
-        // );
-        // console.log(scheduleZoomResult);
       }
       return result;
     });
@@ -205,7 +192,7 @@ export class ConferenceService {
       .from(ConferenceEntity, 'conferences')
       .limit(limit)
       .getMany();
-    if (data.length >= 1) {
+    if (data.length !== undefined && data.length >= 1) {
       result.data = data;
     } else {
       result.status = false;
@@ -223,19 +210,53 @@ export class ConferenceService {
         },
       },
     });
-    if (data2.length >= 1) {
+    if (data2 !== undefined && data2.length >=1) {
       result.data = data2;
     } else {
       result.status = false;
     }
     return result;
   }
-  convertEntityToDto(entity: ConferenceEntity): ConferenceResponseDto {
-    const dto = new ConferenceResponseDto();
-    dto.conferenceAddress = entity.address;
-    dto.conferenceDateStart = entity.date_start_conference;
-    dto.conferencePrice = entity.price;
+  async convertEntityToDto(entity: ConferenceEntity): Promise<ConferenceRequestDto> {
+    console.log(241, entity);
+    const dto = new ConferenceRequestDto();
+    // conferenceName: string;
+    // conferenceAddress: string;
+    // organizerName: string;
+    // hostName: string;
+    // conferenceType: number;
+    // conferenceCategory: number;
+    // conferenceDescription: string;
+    // speakerList: SpeakerList[];
+    // dateStartConference: Date;
+    // dateStartSell: Date;
+    // dateEndSell: Date;
+    // ticketQuantity: number;
+    // conferencePrice: number;
     dto.conferenceName = entity.conference_name;
+    dto.conferenceAddress = entity.address;
+    dto.organizerName = entity.organizer_name;
+    dto.conferenceType = entity.conference_type;
+    dto.conferenceCategory = entity.conference_category;
+    dto.conferenceDescription = entity.description;
+    dto.status_ticket = entity.status_ticket;
+    dto.host_id = entity.host_id
+    dto.conference_id = entity.conference_id
+    dto.address = entity.address
+    dto.date_start_conference = entity.date_start_conference
+    dto.speakerList = [];
+    const speakers = await this.speakerRepository.find({where: {conference_id: entity.conference_id}});
+    (speakers).forEach(element => {
+      const speaker = new SpeakerList();
+      speaker.name = element.speaker_name;
+      speaker.email = element.speaker_email;
+      dto.speakerList.push(speaker);
+    });
+    dto.dateStartConference = entity.date_start_conference;
+    dto.dateStartSell = entity.date_start_sell;
+    dto.dateEndSell = entity.date_end_sell;
+    dto.ticketQuantity = entity.ticket_quantity;
+    dto.conferencePrice = entity.price;
     return dto;
   }
 
@@ -315,11 +336,13 @@ export class ConferenceService {
           host_id: id,
         },
       });
+      // console.log(360, tempResult)
     }
-    result.status = tempResult.length > 1;
-    if (tempResult.length > 1) {
+    result.status = tempResult !== undefined;
+    if (tempResult !== undefined && tempResult.length >= 1) {
       result.data = tempResult;
     }
+    console.log(366, result)
     return result;
   }
 
@@ -332,7 +355,6 @@ export class ConferenceService {
     });
     }
     if(onlyPublish === 'true') {
-      console.log("Here");
       queryBuilder.andWhere('conference.status_ticket = :status', {
         status: 'published',
     });
@@ -359,6 +381,26 @@ export class ConferenceService {
       result.data = newConference;
       const host = await this.hostRepository.findOne({where: {host_id: conferenceSubmitDto.hostId}});
       this.emailService.sendEmailToHostAfterSubmitConference(host.email);
+      return result;
+    }
+  }
+
+  async cancelConference(id: number): Promise<ResponseData> {
+    const conference = await this.conferenceRepository.findOne({
+      where: { 
+        conference_id: id,
+        status_ticket: "pending"
+      }
+    })
+    if(!conference) {
+      throw new NotFoundException('Conference not found with conference id: ' + id);
+    }
+    conference.status_ticket = "draft";
+    const result = new ResponseData();
+    const newConference = await this.conferenceRepository.save(conference);
+    if(newConference) {
+      result.status = true;
+      result.data = newConference;
       return result;
     }
   }
@@ -415,5 +457,64 @@ export class ConferenceService {
     })
     return ticket;
   }
-
+  async getAllHost(): Promise<ResponseData> {
+    const result = new ResponseData();
+    const host = await this.hostRepository.find();
+    result.status = host != undefined;
+    if (host !== undefined && host.length >= 1) {
+      result.data = host;
+    }
+    return result;
+  }
+  async getAllUser(): Promise<ResponseData> {
+    const result = new ResponseData();
+    const user = await this.userRepository.find();
+    result.status = user == undefined;
+    if (user !== undefined && user.length >= 1) {
+      result.data = user;
+    }
+    return result;
+  }
+  async deleteConference(id: number): Promise<ResponseData> {
+    const conference = this.conferenceRepository.findOne({where: {conference_id: id}});
+    if(!conference) {
+      throw new NotFoundException('Conference not found with conference id: ' + id);
+    }
+    if((await conference).status_ticket === 'draft') {
+      const result = new ResponseData();
+      await this.conferenceRepository.delete({conference_id: id});
+      result.status = true;
+      return result;
+    } else {
+      throw new BadRequestException('Can not delete conference with status: ' + (await conference).status_ticket);
+    }
+  }
+  async getConferenceRecord(id: number): Promise<ResponseData> {
+    const conference = await this.conferenceRepository.findOne({where: {conference_id: id}});
+    console.log(conference)
+    if(!conference) {
+      throw new NotFoundException('Conference not found with conference id: ' + id);
+    }
+    if(conference.conference_type.toString() !== '2' || conference.zoom_meeting_id === undefined) {
+      throw new NotFoundException('Conference not found with conference id: ' + id);
+    }
+    const result = new ResponseData();
+    result.status = true;
+    result.data = this.cloudinaryService.getVideo(conference.zoom_meeting_id);
+    return result;
+  }
+  async endConference(id: number): Promise<ResponseData> {
+    const result = new ResponseData();
+    const conference = await this.conferenceRepository.findOne({where: {conference_id: id}});
+    if(!conference) {
+      throw new NotFoundException('Conference not found with conference id: ' + id);
+    }
+    if(conference.isValidated) {
+      await this.conferenceRepository.update(id, {isValidated: false});
+      result.status = true;
+      return result;
+    } else {
+      throw new BadRequestException('Can not end conference with status');
+    }
+  }
 }

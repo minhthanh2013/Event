@@ -1,5 +1,5 @@
 
-import { Box, Typography } from "@mui/material"
+import { Box, Link, Typography } from "@mui/material"
 import styles from "../styles/DetailContentSession.module.scss"
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import Grid from '@mui/material/Grid';
@@ -19,6 +19,11 @@ interface TicketProp {
 	conference_name: number;
 	date_start_conference: Date;
 	address: string;
+	ticket_quantity: number;
+	current_quantity: number;
+	status_ticket: string;
+	conference_type: string;
+	organizer_name: string;
 }
 
 interface DetailContentSessionProp {
@@ -39,20 +44,17 @@ const DetailContentSession = (props: DetailContentSessionProp) => {
                         </Box>
                     </Box>
                     <Box className={styles.eventList__section}>
-                        <Typography component="h3">Event List</Typography>
+                    <Typography component="h3">Event list</Typography>
                         <Grid container rowSpacing={8}  marginTop={0}>
                             {props?.data?.conferenceList?.map((dataItem) => (
                                 // eslint-disable-next-line react/jsx-key
                                 <Grid item sm={12}>
-                                    <Ticket__2 data={dataItem}/>
+                                    <Link href={`/event/${dataItem.conference_id}`}>
+                                        <Ticket__2 data={dataItem}/>
+                                    </Link>
                                 </Grid>
                             ))}
                         </Grid>
-                    </Box>
-
-                    <Box className={styles.info__section}>
-                        <Typography component="h3">How can I contact the organizer with any question?</Typography>
-                        <Typography component="p">Please visit <a href="#">https://www.rmit.edu.vn/</a> and refer to the FAQ section for all questions and contact information. </Typography>
                     </Box>
                 </Box>
 

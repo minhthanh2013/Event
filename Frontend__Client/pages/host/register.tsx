@@ -17,10 +17,10 @@ import { useState } from 'react'
 
 const validationSchema = yup.object({
 	email: yup.string().email('Enter a valid email').required('Email is required'),
-	password: yup.string().required('Password is required'),
+	password: yup.string().min(8, 'Password must be at least 8 characters').max(20, 'Your password is too long').required('Password is required'),
 	first_name: yup.string().required('firstname is required'),
 	last_name: yup.string().required('lastname is required'),
-	user_name: yup.string().required('username is required'),
+	user_name: yup.string().min(6, 'User name must be at least 8 characters').max(20, 'Your User name is too long').required('username is required'),
 })
 
 const Register = (props: Props) => {
@@ -52,8 +52,6 @@ const Register = (props: Props) => {
             } else {
                 setErrorMessage("Username or email already exists");
             }
-
-			alert(JSON.stringify(values, null, 5))
 		},
 	})
 	return (
@@ -62,9 +60,9 @@ const Register = (props: Props) => {
 				<Box className={styles.right}>
 					<Firework />
 					<Box className={styles.redirect}>
-						<Typography component='h3'>Hello, Friend!</Typography>
+						<Typography component='h3'>Hi, Friend!</Typography>
 						<Typography component='h4'>Enter your personal details and start your journey with us.</Typography>
-						<Link href='/account/login' passHref>
+						<Link href='/host/login' passHref>
 							<Button variant='contained' size='medium' type='button'>
 								Go To Sign in
 							</Button>
@@ -73,24 +71,7 @@ const Register = (props: Props) => {
 				</Box>
 				<Box className={styles.left}>
 					<Box className={styles.container__left}>
-						<Typography component='h2'>Sign Up</Typography>
-						<Box className={styles.iconLogin__section}>
-							<IconButton>
-								<FcGoogle />
-							</IconButton>
-							<IconButton
-								style={{
-									color: '#3C5A99',
-								}}
-							>
-								<BsFacebook />
-							</IconButton>
-						</Box>
-						<Box className={styles.or__section}>
-							<hr />
-							<p>or</p>
-							<hr />
-						</Box>
+						<Typography component='h2'>Sign Up Host</Typography>
 						{(errorMessage !=='') && <Typography component='h4'>{errorMessage}</Typography>}
 						<Box className={styles.form__section}>
 							<form onSubmit={formik.handleSubmit} className={styles.mainForm}>

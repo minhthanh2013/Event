@@ -1,8 +1,8 @@
-import React, { useState, ChangeEvent } from "react";
+import React, { useState, ChangeEvent, useEffect } from "react";
 import Box from "@mui/material/Box";
 import Footer from "../../../../components/Footer";
 import Typography from "@mui/material/Typography";
-import styles from "../../../styles/EventDashboard.module.scss";
+import styles from "../../../../styles/EventDashboard.module.scss";
 import Card from "@mui/material/Card";
 import CardActionArea from "@mui/material/CardActionArea";
 import CardContent from "@mui/material/CardContent";
@@ -15,6 +15,8 @@ import { BasicInfo, Conferences } from "./CreateSessionForm";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Multer } from 'multer';
 import HeaderHost from "../../../../components/Header__Host";
+import { PopUp } from "../../../../components/AlertPop-up";
+import { useRouter } from "next/router";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -54,9 +56,27 @@ function a11yProps(index: number) {
 }
 
 const CreateEvent = (props) => {
+  const router = useRouter();
+  const { id } = router.query;
   const [data, setData] = useState({})
   const [image, setImage] = useState<string | ArrayBuffer | null>();
   const [imageFile, setImageFile] = useState<Multer.File | null>();
+  const [popUp, setPopUp] = useState("0");
+  const [status, setStatus] = useState("0");
+
+  const router = useRouter();
+  const redirect = () => {
+    router.push("/host/dashboard")
+  }
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const res = await fetch(`/api/combo/${id}`);
+      const data = await res.json();
+      setData(data.data);
+    }
+    fetchData();
+  } , [id]);
 
   const onImageChange = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
@@ -73,8 +93,8 @@ const CreateEvent = (props) => {
   const [value, setValue] = React.useState(0);
 
   const apiCall = async (data) => {
-    const res = await fetch("/api/combo/create-new", {
-      method: "POST",
+    const res = await fetch(`/api/combo/update/${id}`, {
+      method: "PATCH",
       body: JSON.stringify(data),
       headers: {
         'Content-Type': 'application/json',
@@ -83,12 +103,19 @@ const CreateEvent = (props) => {
     const result = await res.json();
     if (res.status === 200) {
       let body = new FormData()
-      body.append('file',imageFile)
+      body.append('file', imageFile)
       await fetch(`/api/cloudinary/update-image-session/${props?.tempDecode?.sub}`, {
         method: "POST",
         body,
       });
+      setStatus("1");
+      setPopUp("1");
+      setTimeout(redirect, 2000);
+    } else {
+      setStatus("0");
+      setPopUp("1");
     }
+
   }
   //change tabs; value = tabs value
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -99,7 +126,7 @@ const CreateEvent = (props) => {
     <>
       <Box
         sx={{
-          background: "#F1EFEF",
+          background: "#ffffff",
           width: "100%",
           marginBottom: "10rem",
           overflow: "hidden",
@@ -109,11 +136,12 @@ const CreateEvent = (props) => {
         <Box className={styles.dot__1}></Box>
         <Box className={styles.dot__2}></Box>
         <Box className={styles.dot__3}></Box>
-        <HeaderHost {...props}/>
+        <HeaderHost {...props} />
 
         <Typography variant="h3" component="div" className={styles.header}>
           Session Dashboard
         </Typography>
+        <PopUp status={status} popUp={popUp} onClick={() => setPopUp("0")} />
         <Grid container spacing={0} direction="column" alignItems="center">
           <Card className={styles.imageInput}>
             {image ? (
@@ -197,7 +225,7 @@ export async function getServerSideProps(ctx: any) {
   } catch (e) {
     return { props: {} }
   }
-  try { 
+  try {
     if (raw.OursiteJWT.toString()) {
       let token = "OursiteJWT"
       let value = raw.OursiteJWT.toString();

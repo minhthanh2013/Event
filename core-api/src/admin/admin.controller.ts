@@ -59,6 +59,7 @@ export class AdminController {
   @HttpCode(HttpStatus.OK)
   @Post("signin")
   signinAdmin(@Body() dto: AdminAuthDto) {
+    console.log(dto)
     return this.adminService.signinAdmin(dto);
   }
 
@@ -74,5 +75,23 @@ export class AdminController {
   @UseGuards(AdminJwtGuard)
   deleteConference(@Param("id") confenrenceId: number) {
     return this.adminService.deleteConference(confenrenceId);
+  }
+  @HttpCode(HttpStatus.OK)
+  @Post('upgrade-host/:id')
+  @UseGuards(AdminJwtGuard)
+  upgradeHost(@Param('id') hostId: string) {
+    return this.adminService.upgradeHost(hostId);
+  }
+  @HttpCode(HttpStatus.OK)
+  @Post('ban-host/:id')
+  @UseGuards(AdminJwtGuard)
+  banHost(@Param('id') hostId: string) {
+    return this.adminService.banHost(hostId);
+  }
+  @HttpCode(HttpStatus.OK)
+  @Post('unban-host/:id')
+  @UseGuards(AdminJwtGuard)
+  unbanHost(@Param('id') hostId: string) {
+    return this.adminService.unbanHost(hostId);
   }
 }

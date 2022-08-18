@@ -9,3 +9,13 @@ export interface Host {
   create_at?: Date;
   update_at?: Date;
 }
+
+export class HostResponseDto {
+  host_id?: number;
+  user_name: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+  host_type?: string;
+  update_at?: Date;
+}

@@ -3,7 +3,7 @@ import { Body, Controller, Get, HttpCode, HttpStatus, Param, Post, UseGuards } f
 import { Observable } from 'rxjs/internal/Observable';
 import { HostAuthDto } from 'src/host/dto/host.auth';
 import { UserJwtGuard } from './guard/user.jwt.guard';
-import { User } from './models/user.interface';
+import { User, UserResponseDto } from './models/user.interface';
 import { UserService } from './user.service';
 
 @Controller('user')
@@ -18,7 +18,7 @@ export class UserController {
   }
   @Get(':id')
   @UseGuards(UserJwtGuard)
-  findOne(@Param('id') id: string): Observable<User> {
+  findOne(@Param('id') id: string): Promise<UserResponseDto> {
     return this.userService.findOne(+id);
   }
   @Post("signup")

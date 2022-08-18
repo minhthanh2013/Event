@@ -12,7 +12,7 @@ export class EmailService {
     sgMail.setApiKey(this.configService.get("SENDGRID_API_KEY"))
     const msg = {
     to: email, // Change to your recipient
-    from: 'minhthanhd013@gmail.com', // Change to your verified sender
+    from: '18126014@student.hcmus.edu.vn', // Change to your verified sender
     subject: 'Confirm bougth ticket',
     text: 'Hi there, your ticket has been bougth',
     html: 'You could check out you bought ticket under this link: <a href="http://localhost:3000/confirm">Confirm</a> Thank you for choosing our service. We hope you enjoy our service. Have a good day.',
@@ -31,7 +31,7 @@ export class EmailService {
     sgMail.setApiKey(this.configService.get("SENDGRID_API_KEY"))
     const msg = {
     to: email, // Change to your recipient
-    from: 'minhthanhd013@gmail.com', // Change to your verified sender
+    from: '18126014@student.hcmus.edu.vn', // Change to your verified sender
     subject: 'Confirm bougth conference record',
     text: 'Hi there, your record has been bougth',
     html: 'You could check out you bought record under this link: <a href="http://localhost:3000/confirm">Confirm</a> Thank you for choosing our service. We hope you enjoy our service. Have a good day.',
@@ -50,7 +50,7 @@ export class EmailService {
     sgMail.setApiKey(this.configService.get("SENDGRID_API_KEY"))
     const msg = {
     to: email, // Change to your recipient
-    from: 'minhthanhd013@gmail.com', // Change to your verified sender
+    from: '18126014@student.hcmus.edu.vn', // Change to your verified sender
     subject: 'Confirm bougth subscription',
     text: 'Hi there, your subscription has been bougth',
     html: 'You could check out you bought record under this link: <a href="http://localhost:3000/confirm">Confirm</a> Thank you for choosing our service. We hope you enjoy our service. Have a good day.',
@@ -69,7 +69,7 @@ export class EmailService {
     sgMail.setApiKey(this.configService.get("SENDGRID_API_KEY"))
     const msg = {
     to: email, // Change to your recipient
-    from: 'minhthanhd013@gmail.com', // Change to your verified sender
+    from: '18126014@student.hcmus.edu.vn', // Change to your verified sender
     subject: 'Confirm conference submission',
     text: 'Hi there, your conference has been submitted',
     html: 'Please wait untill your conference is approved by admin. Thank you for choosing our service. We hope you enjoy our service. Have a good day.',
@@ -89,7 +89,7 @@ export class EmailService {
     sgMail.setApiKey(this.configService.get("SENDGRID_API_KEY"))
     const msg = {
     to: email, // Change to your recipient
-    from: 'minhthanhd013@gmail.com', // Change to your verified sender
+    from: '18126014@student.hcmus.edu.vn', // Change to your verified sender
     subject: 'Delete conference notification',
     text: `Delete conference notification`,
     html: `<p>Hi, due to some reasons, ${confName} conference has been deleted.</p>
@@ -109,7 +109,7 @@ export class EmailService {
     sgMail.setApiKey(this.configService.get("SENDGRID_API_KEY"))
     const msg = {
     to: email, // Change to your recipient
-    from: 'minhthanhd013@gmail.com', // Change to your verified sender
+    from: '18126014@student.hcmus.edu.vn', // Change to your verified sender
     subject: 'Confirm speaker invitation',
     text: `Hi ${speakerName}, you have been invited as a speaker to ${confName} conference.`,
     html: `

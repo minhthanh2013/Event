@@ -1,7 +1,3 @@
-import { ComboSessionEntity } from 'src/combosession/models/combo_session.entity';
-import { EmailService } from 'src/email/email.service';
-import { SpeakerEntity } from 'src/speaker/models/speaker.entity';
-import { ConferenceEntity } from './../conference/models/conference.entity';
 /* eslint-disable prettier/prettier */
 import { ConflictException, ForbiddenException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -14,8 +10,14 @@ import * as argon from 'argon2';
 import { JwtService } from '@nestjs/jwt';
 import { AdminAuthDto } from './dto/admin.auth';
 import { HttpService } from '@nestjs/axios';
-import { Request, response } from 'express';
-import { firstValueFrom } from 'rxjs';
+import { Request } from 'express';
+import { ResponseData } from 'src/responsedata/response-data.dto';
+import { HostEntity } from 'src/host/models/host.entity';
+import { ComboSessionEntity } from 'src/combosession/models/combo_session.entity';
+import { EmailService } from 'src/email/email.service';
+import { SpeakerEntity } from 'src/speaker/models/speaker.entity';
+import { ConferenceEntity } from './../conference/models/conference.entity';
+import { ConfigService } from '@nestjs/config';
 @Injectable()
 export class AdminService {
   constructor(
@@ -27,9 +29,12 @@ export class AdminService {
     private readonly comboRepository: Repository<ComboSessionEntity>,
     @InjectRepository(SpeakerEntity)
     private readonly speakerRepository: Repository<SpeakerEntity>,
+    @InjectRepository(HostEntity)
+    private readonly hostRepository: Repository<HostEntity>,
     private jwt: JwtService,
     private readonly httpService: HttpService,
     private readonly emailService: EmailService,
+    private readonly configService: ConfigService,
   ) {}
 
   findAllAdmins(): Observable<Admin[]> {
@@ -50,11 +55,13 @@ export class AdminService {
 
   async signinAdmin(dto: AdminAuthDto) {
     // find the user by email
+    console.log(58, dto)
     const admin = await this.adminRepository.findOne({
         where: {
             user_name: dto.username,
         },
     });
+    console.log(64, admin)
     // if user does not exist throw exception
     if(!admin) 
         throw new ForbiddenException(
@@ -78,6 +85,9 @@ export class AdminService {
     if (await this.adminRepository.findOne({where: {user_name: dto.user_name}})) {
       throw new ConflictException('Username already exists');
     }
+    if (await this.adminRepository.findOne({where: {email: dto.email}})) {
+      throw new ConflictException('Email already exists');
+    }
     const hash = await argon.hash(dto.password);
     // save the new user in the db
     try{
@@ -87,7 +97,6 @@ export class AdminService {
       newAdmin.password = dto.password;
       newAdmin.admin_id = dto.admin_id;
       newAdmin.email = dto.email;
-      console.log(newAdmin)
       const admin = await this.adminRepository.save(newAdmin);
       return this.signToken(admin.admin_id, admin.email, 'admin');
     } catch(error) {
@@ -111,6 +120,7 @@ export class AdminService {
 }
   async verifyConference(conferenceId: number, res: Request) {
     const jwt = res.headers.authorization;
+    console.log(114, jwt);
     return new Promise(async (resolve, reject) => {
       await this.conferenceRepository.findOne({where: {conference_id: conferenceId}}).then(async conference => {
         if(conference) {
@@ -125,14 +135,19 @@ export class AdminService {
                 'Authorization': jwt,
               },
             }
-            const a = this.httpService.post("http://localhost:3000/conference/schedule-zoom-meeting/" + newConference.conference_id, { headers: headersRequest });
-            a.subscribe(async (data) => {
-              console.log(data);
-              resolve(data);
-            }).add(() => {
-              console.log("done");
-            })
-            resolve(true);
+            if(newConference?.conference_type?.toString() === '2') {
+              const request = "http://"+this.configService.get("BACKEND_HOST") + ":" + this.configService.get("BACKEND_PORT")+"/conference/schedule-zoom-meeting/" + newConference.conference_id;
+              const a = this.httpService.post(request, headersRequest );
+              a.subscribe(async (data) => {
+                console.log(data);
+                resolve(data);
+              }).add(() => {
+                console.log("done");
+              })
+              resolve(true);
+            } else {
+              resolve(false);
+            }
           })
           .catch(error => {
               reject(error)
@@ -177,5 +192,38 @@ export class AdminService {
       }
       )
     });
+  }
+  async upgradeHost(id: string): Promise<ResponseData> {
+    const response = new ResponseData();
+    try {
+      response.status = (await this.hostRepository.update(id, { host_type: "premium" })).affected == 1;
+      response.data = null;
+    } catch (error) {
+      response.data = null;
+      response.status = false;
+    }
+    return response;
+  }
+  async banHost(id: string): Promise<ResponseData> {
+    const response = new ResponseData();
+    try {
+      response.status = (await this.hostRepository.update(id, { host_type: "ban" })).affected == 1;
+      response.data = null;
+    } catch (error) {
+      response.data = null;
+      response.status = false;
+    }
+    return response;
+  }
+  async unbanHost(id: string): Promise<ResponseData> {
+    const response = new ResponseData();
+    try {
+      response.status = (await this.hostRepository.update(id, { host_type: "free" })).affected == 1;
+      response.data = null;
+    } catch (error) {
+      response.data = null;
+      response.status = false;
+    }
+    return response;
   }
 }

@@ -7,6 +7,7 @@ import { CardActionArea } from "@mui/material";
 import styles from "../styles/TicketSession.module.scss";
 import Box from "@mui/material/Box";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
+import { splitNum } from "../GlobalFunction/SplitNumber";
 interface SessionProp {
 	comboSessionId: number;
 	comboSessionPrice: number;
@@ -66,17 +67,14 @@ const TicketSession = (props: TicketSessionProps) => {
 								<Typography gutterBottom component='h2'>
 									{props?.data?.comboSessionName}
 								</Typography>
-								<Typography gutterBottom component='h3'>
-									by FINEXPO PTE LTD.
-								</Typography>
 								<Typography gutterBottom component='p'>
 								{props?.data?.conferenceList.length} events
 								</Typography>
 							</Box>
 
 							<Box component='div'>
-								<AttachMoneyIcon />
-								<Typography>{getPrice(props?.data)}</Typography>
+								{/* <AttachMoneyIcon /> */}
+								<Typography>{`${splitNum(getPrice(props?.data))} VNĐ`}</Typography>
 							</Box>
 						</CardContent>
 					</CardActionArea>

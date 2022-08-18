@@ -4,41 +4,93 @@ import RadioButtonCheckedIcon from '@mui/icons-material/RadioButtonChecked'
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked'
 import styles from '../styles/PurchaseModal.module.scss'
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import CloseIcon from '@mui/icons-material/Close'
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet'
 import CreditCardIcon from '@mui/icons-material/CreditCard'
 import ArrowRightAltIcon from '@mui/icons-material/ArrowRightAlt'
-const PurchaseModal = () => {
+import { splitNum } from '../GlobalFunction/SplitNumber'
+
+interface modalProps {
+	handleToggle: any
+	data: TicketProp;
+	imageProp: string;
+}
+interface TicketProps {
+	data: TicketProp;
+	setTotal: (props: number) => void;
+	imageProps: string;
+}
+interface TicketProp {
+	conferenceAddress: string
+	conferenceCategory: number
+	conferenceDescription: string
+	conferenceName: string
+	conferencePrice: number
+	conferenceType: number
+	organizerName: string
+	ticketQuantity: number
+	status_ticket: string
+	host_id: number
+	conference_id: number
+	address: string
+	date_start_conference: Date
+
+	// conferenceOrganizer: string;
+}
+
+const PurchaseModal = (props: modalProps) => {
 	const [selectedValue, setSelectedValue] = useState('a')
+	const [total, setTotal] = useState(parseInt(props?.data?.conferencePrice));
+	const [normalizeDate, setNormalizeDate] = useState<string>()
 	const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		setSelectedValue(event.target.value)
 	}
-
+	const parseDate = () => {
+		const weekday = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+		const date = new Date(props?.data?.date_start_conference)
+		let monthString = date.toLocaleString('en-us', { month: 'short' })
+		let day = date.getDate().toString()
+		let hours = date.getHours()
+		let minutes = date.getMinutes()
+		let ampm = hours >= 12 ? 'pm' : 'am'
+		hours = hours % 12
+		hours = hours ? hours : 12 // the hour '0' should be '12'
+		let minuteString = minutes < 10 ? '0' + minutes : minutes
+		let timePeriod = ampm
+		let hour = hours.toString()
+		let min = minuteString.toString()
+		let  weekDay = weekday[date.getDay()]
+		// {weekDay || 'Fri'}, {monthString || 'Dec'} {day || '2'}, {hour || '11'}:{min || '11'}{' '}
+		// {timePeriod?.toUpperCase() || 'AM'}
+		setNormalizeDate(`${weekDay || 'Fri'}, ${monthString || 'Dec'} ${day || '2'}, ${hour || '11'}:${min || '11'} ${timePeriod?.toUpperCase() || 'AM'}`)
+	}
+	useEffect(() => {
+		parseDate()
+	}, [])
 	return (
 		<>
-			<Box className={styles.container}>
+			<Box className={styles.container} sx={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }}>
 				<Box className={styles.leftWrap}>
 					<Box className={styles.leftWrap__top}>
-						<Typography component='h3'>British Boarding Schools Show, Ho Chi Minh</Typography>
-						<Typography component='h4'>Tue, Apr 19, 2022 1:00 AM - 2:00 AM +07</Typography>
+						<Typography component='h3'>{props?.data?.conferenceName}</Typography>
+						<Typography component='h4'>{normalizeDate}</Typography>
 						<Divider variant='middle' />
 					</Box>
 					<Box className={styles.leftWrap__body}>
-						<TicketInModal />
+						<TicketInModal data={props?.data} setTotal={setTotal} imageProps={props.imageProp} />
 					</Box>
 					<Box className={styles.leftWrap__bottom}>
 						<Typography>Total</Typography>
 						<Typography>
-							<AttachMoneyIcon />
-							50.00
+							{splitNum(total)} VNĐ
 						</Typography>
 					</Box>
 				</Box>
 				<Box className={styles.rightWrap}>
 					<Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
 						<IconButton aria-label='delete'>
-							<CloseIcon sx={{ color: 'white', width: '1.5em', height: '1.5em' }} onClick={() => {}} />
+							<CloseIcon sx={{ color: 'white', width: '1.5em', height: '1.5em' }} onClick={props.handleToggle} />
 						</IconButton>
 					</Box>
 					<Box className={styles.content} sx={{ width: '80%', height: '85%', pt: '1rem', pb: '3rem', mx: 'auto' }} display='flex' flexDirection='column'>
@@ -72,11 +124,14 @@ const PurchaseModal = () => {
 	)
 }
 
-export const TicketInModal = () => {
+export const TicketInModal: React.FC<TicketProps> = ({ data, setTotal, imageProps }) => {
 	const [age, setAge] = useState('')
-	const handleChange = (event: SelectChangeEvent) => {
-		setAge(event.target.value as string)
+
+	const handleChange = (event: any) => {
+		const price = parseInt(event.target.value) * data.conferencePrice;
+		setTotal(price);
 	}
+
 	return (
 		<>
 			<Box className={styles.ticketContainer}>
@@ -84,17 +139,17 @@ export const TicketInModal = () => {
 					<CardMedia
 						component='img'
 						sx={{ width: 151, mt: '1rem', boxShadow: '0px' }}
-						image='https://images.pexels.com/photos/2306281/pexels-photo-2306281.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'
+						image={imageProps ||'https://images.pexels.com/photos/2306281/pexels-photo-2306281.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'}
 						alt='Live from space album cover'
 					/>
 					<Box className={styles.ticketContent}>
-						<Typography component='h3'>eTicket - British Boarding School Show</Typography>
-						<Typography component='h4'>$ 50.00</Typography>
-						<Typography component='h5'>Sales end in 2 days</Typography>
+						<Typography component='h3'>{data?.conferenceName}</Typography>
+						<Typography component='h4'>{splitNum(data?.conferencePrice)} VNĐ</Typography>
 					</Box>
 					<Box>
 						<FormControl variant='standard' className={styles.ticketNumber}>
-							<TextField type='number' size='small' defaultValue={1} />
+							<TextField type='number' disabled size='small' defaultValue={1} onChange={(event) => handleChange(event)}
+								InputProps={{ inputProps: { min: 1, max: 10 } }} />
 						</FormControl>
 					</Box>
 				</Card>
@@ -104,3 +159,4 @@ export const TicketInModal = () => {
 }
 
 export default PurchaseModal
+

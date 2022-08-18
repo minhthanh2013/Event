@@ -31,13 +31,15 @@ interface TicketProp {
 function SearchResult(props: any) {
 	const router = useRouter()
 	const temp = 'Vinh Duong Quang'
-	const [filter, setFilter] = useState('0')
+	const [filter, setFilter] = useState('0');
+
+	const typeRef = useRef(null)
 
 	// inside SearchBar__SearchResult
 	const [inputSearch, setInputSearch] = useState(router?.query?.search?.toString() || '')
 	const [inputSearchTemp, setInputSearchTemp] = useState('')
-	const [type, setType] = useState('0')
-	const [typeTemp, setTypeTemp] = useState('0')
+	const [type, setType] = useState(router?.query?.type?.toString()  || '0')
+	const [typeTemp, setTypeTemp] = useState(router?.query?.type?.toString() || '0')
 
 	const [number, setNumber] = useState(-1)
 	const [data, setData] = useState({})
@@ -50,7 +52,6 @@ function SearchResult(props: any) {
 
 	const handlePaginationChange = async (event, value) => {
 		setPage(value)
-		fetchTicket()
 	}
 	const fetchTicket = async () => {
 		try {
@@ -60,33 +61,29 @@ function SearchResult(props: any) {
 			}
 			const response = await fetch(request)
 			const setTemp = await response.json()
+
 			setTempProps(setTemp)
-			setNumber(tempProps?.meta?.totalItems)
-			console.log(tempProps)
+			setNumber(setTemp.meta.totalItems)
 		} catch (error) {
 			console.log(error)
 		}
 	}
 	const fetchSession = async () => {
 		try {
-			const response = await axios.get(`put URL Seesion here`)
+			const response = await axios.get(`/api/combo/get-latest-x?id=0`)
 			setData(response)
+			console.log(response.data.data.length)
 		} catch (error) {
 			console.log(error)
 		}
 	}
 	useEffect(() => {
-		let isCancelled = true
-		if (isCancelled) {
-			if (type === '0') {
+			if (type == '0') {
 				fetchTicket()
-				console.log(tempProps)
 			} else fetchSession()
-		}
-		return () => {
-			isCancelled = false
-		}
-	}, [page, inputSearch])
+		
+	
+	}, [page, inputSearch, type])
 
 	return (
 		<>
@@ -105,6 +102,7 @@ function SearchResult(props: any) {
 					setInputSearchTemp={setInputSearchTemp}
 					typeTemp={typeTemp}
 					inputSearchTemp={inputSearchTemp}
+					typeRef={typeRef}
 				/>
 				<Box sx={{ width: '71%', mx: 'auto', display: 'flex', flexDirection: 'row-reverse' }}>
 					<FormControl sx={{ m: 1, minWidth: 120 }} size='small'>
@@ -125,21 +123,30 @@ function SearchResult(props: any) {
 					</FormControl>
 				</Box>
 				<Box sx={{ width: '85%', mx: 'auto', mt: 5 }}>
-					{inputSearch !== '' && (
+					{type == '0' && inputSearch !== '' && (
 						<Typography component='h3' sx={{ lineHeight: '3.4rem', fontWeight: '600', fontSize: '1.6rem' }}>
 							“{inputSearch}” tickets
 						</Typography>
 					)}
-
-					{(number !== -1 || number !== undefined) && (
+					{type == '0' && number !== -1 && number != undefined && (
 						<Typography component='h4' sx={{ fontWeight: '500', lineHeight: '2rem', fontSize: '1rem' }}>
-							{number} results on Evenity
+							{tempProps?.meta.totalItems} results on Evenity
+						</Typography>
+					)}
+					{type == '1' && inputSearch !== '' && (
+						<Typography component='h3' sx={{ lineHeight: '3.4rem', fontWeight: '600', fontSize: '1.6rem' }}>
+							“{inputSearch}” tickets
+						</Typography>
+					)}
+					{type == '1' && (
+						<Typography component='h4' sx={{ fontWeight: '500', lineHeight: '2rem', fontSize: '1rem' }}>
+							{data.data?.data?.length} results on Evenity
 						</Typography>
 					)}
 				</Box>
 				<Box sx={{ width: '85%', mx: 'auto' }} flexGrow={1}>
-					{type === '0' && <TicketList_SearchResult data={tempProps?.items}></TicketList_SearchResult>}
-					{type === '1' && <SessionList_SearchResult data={data}></SessionList_SearchResult>}
+					{type == '0' && <TicketList_SearchResult data={tempProps?.items}></TicketList_SearchResult>}
+					{type == '1' && <SessionList_SearchResult data={data}></SessionList_SearchResult>}
 				</Box>
 				<Box sx={{ width: '85%', mx: 'auto', mb: 5 }}>
 					<Stack spacing={2}>
@@ -168,22 +175,26 @@ export async function getServerSideProps(ctx: any) {
 	// Pass data to the page via props
 	let raw = null
 	try {
-		raw = ctx.req.headers.cookie.toString()
+		raw = ctx.req.cookies
 	} catch (e) {
 		return { props: {} }
 	}
-	if (raw.includes(';')) {
-		let rawCookie = raw.split(';')
-		for (let i = 0; i < rawCookie.length; i++) {
-			if (rawCookie[i].includes('OursiteJWT')) {
-				let cookies = rawCookie[i]
-				let token = cookies.split('=')[0]
-				let value = cookies.split('=')[1]
-				let tempDecode = JSON.parse(Buffer.from(value.split('.')[1], 'base64').toString())
-				return { props: { token, value, tempDecode } }
+	try {
+		if (raw.OursiteJWT.toString()) {
+			let token = 'OursiteJWT'
+			let value = raw.OursiteJWT.toString()
+			let tempDecode = JSON.parse(Buffer.from(value.split('.')[1], 'base64').toString())
+			return {
+				props: {
+					token,
+					value,
+					tempDecode,
+				},
 			}
 		}
+		return { props: {} }
+	} catch (error) {
+		return { props: {} }
 	}
-	return { props: {} }
 }
 export default SearchResult

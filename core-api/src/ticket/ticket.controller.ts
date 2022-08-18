@@ -4,7 +4,7 @@ import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/commo
 import { Queue } from 'bull';
 import { Observable } from 'rxjs';
 import { UpdateResult, DeleteResult } from 'typeorm';
-import { Ticket } from './models/ticket.interface';
+import { BuySessionDto, Ticket } from './models/ticket.interface';
 import { TicketService } from './ticket.service';
 
 @Controller('ticket')
@@ -24,7 +24,6 @@ export class TicketController {
   }
 
   @Post()
-  // async create(@Body() ticket: Ticket) {
   async create(@Body() ticket: Ticket) {
     console.log('Added to queue')
     await this.ticketQueue.add('create', {
@@ -38,5 +37,13 @@ export class TicketController {
   @Delete(':id')
   remove(@Param('id') id: number): Observable<DeleteResult> {
     return this.ticketService.remove(+id);
+  }
+  @Post('buy-session')
+  async buySession(@Body() session: BuySessionDto) {
+    console.log(43, session)
+    console.log('Added to queue to buy session')
+    await this.ticketQueue.add('buysession', {
+      sessionDto: session
+    })
   }
 }

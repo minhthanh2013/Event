@@ -16,6 +16,7 @@ import { BasicInfo, Speakers, Date } from "./CreateEventForm";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Multer } from 'multer';
 import { useRouter } from "next/router";
+import { PopUp } from "../../../../components/AlertPop-up";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -54,39 +55,50 @@ function a11yProps(index: number) {
   };
 }
 interface ConferenceProp {
-	conference_id: number;
-	description: string;
-	price: number;
-	conference_name: number;
-	date_start_conference: Date;
-	address: string;
-  ticket_quantity: number;
-  current_quantity: number;
-  status_ticket: string;
-  conference_type: string;
+	conferenceName: string;
+  conferenceAddress: string;
+  organizerName: string;
+  conferenceType: string;
+  conferenceCategory: string;
+  conferenceDescription: string;
+  speakerList: SpeakerList[]
+  dateStartConference: Date;
+  dateEndConference: Date;
+  dateEndSell: Date;
+  ticketQuantity: number,
+  conferencePrice: number
 	// conferenceOrganizer: string;
 }
+interface SpeakerList{
+  name: string;
+  email: string;
+}
 const CreateEvent = (props) => {
+
   const router = useRouter();
   const { id } = router.query;
 
   const [data, setData] = useState({}) // set API vô state này luôn
 
   const [image, setImage] = useState<string | ArrayBuffer | null>(); // set image url vô state này luôn
-  
+
   const [imageFile, setImageFile] = useState<Multer.File | null>();
 
-  const [ ConferenceProp, SetConferenceProp] = useState<ConferenceProp>();
+  const [ConferenceProp, SetConferenceProp] = useState<ConferenceProp>();
+
+  const [popUp, setPopUp] = useState("0");
+  const [status, setStatus] = useState("0");
 
   useEffect(() => {
     const fetchData = async () => {
       const res = await fetch(`/api/conference/${id}`);
       const data = await res.json();
+      console.log(86, data)
       setData(data.data);
     }
     fetchData();
-  } , [id]);
-  
+  }, [id]);
+
 
   const onImageChange = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
@@ -99,25 +111,36 @@ const CreateEvent = (props) => {
     }
   };
   const [value, setValue] = React.useState(0);
+  const redirect = () => {
+    router.push("/host/dashboard")
+  }
 
   //gọi api post để sửa trong đây
   const apiCall = async (data) => {
-    const resData = await fetch("/api/conference/create-new", {
-      method: "POST",
+    const resData = await fetch(`/api/conference/update/${id}`, {
+      method: "PATCH",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(data),
     });
     const resDataJson = await resData.json();
-    console.log(81, resDataJson);
-    if(resData.status === 200) {
+    if (resData.status === 200 && imageFile !== undefined) {
       let body = new FormData()
-      body.append('file',imageFile)
+      body.append('file', imageFile)
       await fetch(`/api/cloudinary/update-image/${props?.tempDecode?.sub}`, {
         method: "POST",
         body,
       });
+    }
+
+    if (resData.status === 200) {
+      setStatus("1");
+      setPopUp("1");
+      setTimeout(redirect, 2000);
+    } else {
+      setStatus("0");
+      setPopUp("1");
     }
   }
 
@@ -129,7 +152,7 @@ const CreateEvent = (props) => {
     <>
       <Box
         sx={{
-          background: "#F1EFEF",
+          background: "#ffffff",
           width: "100%",
           marginBottom: "10rem",
           overflow: "hidden",
@@ -139,11 +162,12 @@ const CreateEvent = (props) => {
         <Box className={styles.dot__1}></Box>
         <Box className={styles.dot__2}></Box>
         <Box className={styles.dot__3}></Box>
-        <HeaderHost {...props}/>
+        <HeaderHost {...props} />
 
         <Typography variant="h3" component="div" className={styles.header}>
           Edit event {id}
         </Typography>
+        <PopUp status={status} popUp={popUp} onClick={() => setPopUp("0")} />
         <Grid container spacing={0} direction="column" alignItems="center">
           <Card className={styles.imageInput}>
             {image ? (
@@ -204,13 +228,13 @@ const CreateEvent = (props) => {
                 <Tab label="Date and time" {...a11yProps(2)} />
               </Tabs>
               <TabPanel value={value} index={0}>
-                <BasicInfo data={data} setData={setData} setValue={setValue} api={apiCall} prop={props}/>
+                <BasicInfo data={data} setData={setData} setValue={setValue} api={apiCall} prop={props} />
               </TabPanel>
               <TabPanel value={value} index={1}>
                 <Speakers data={data} setData={setData} setValue={setValue} api={apiCall} prop={props} />
               </TabPanel>
               <TabPanel value={value} index={2}>
-                <Date data={data} setData={setData} setValue={setValue} api={apiCall} prop={props}/>
+                <Date data={data} setData={setData} setValue={setValue} api={apiCall} prop={props} />
               </TabPanel>
             </ThemeProvider>
           </Box>
@@ -231,7 +255,7 @@ export async function getServerSideProps(ctx: any) {
   } catch (e) {
     return { props: {} }
   }
-  try { 
+  try {
     if (raw.OursiteJWT.toString()) {
       let token = "OursiteJWT"
       let value = raw.OursiteJWT.toString();

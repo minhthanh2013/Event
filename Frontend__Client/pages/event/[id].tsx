@@ -12,42 +12,24 @@ import SessionList from '../../components/SessionList'
 import styles from '../../styles/Event.module.scss'
 import DetailBanner from '../../components/DetailBanner'
 import DetailContent from '../../components/DetailContent'
-import Typography from '@mui/material/Typography';
-
-
-// export const getStaticPaths = async () => {
-//     const res = await fetch('api/event')
-//     const data = await res.json()
-
-//     const paths = data.map((event:any) => {
-//         return {
-//             params: { id: event.id.toString()}
-//         }
-//     })
-//     return {
-//         paths: paths,
-//         fallback: false
-//     }
-// }
-
-// export const getStaticProps = async (context:any) => {
-//     const id = context.params.id;
-//     const res = await fetch(`api/event/${id}`)
-//     const data = await res.json()
-//     return {
-//         props: { event: data }
-//     }
-// }
+import Typography from '@mui/material/Typography'
+import PurchaseModal from '../../components/PurchaseModal'
 
 interface TicketProp {
+	conferenceAddress: string
+	conferenceCategory: number
+	conferenceDescription: string
+	conferenceName: string
+	conferencePrice: number
+	conferenceType: number
+	organizerName: string
+	ticketQuantity: number
+	status_ticket: string
+	host_id: number
 	conference_id: number
-	description: string
-	price: number
-	conference_name: number
-	date_start_conference: Date
 	address: string
-	host_id: number;
-	status_ticket: string;
+	date_start_conference: Date
+
 	// conferenceOrganizer: string;
 }
 interface TicketProps {
@@ -58,86 +40,100 @@ interface TicketProps {
 const Event = (props: any) => {
 	const router = useRouter()
 	const { id } = router.query
+	const {isBuy} = router.query
 	const [ticketList, setTicketList] = useState<TicketProps>()
+	const [imageProp, setImageProp] = useState<string>()
+	let [open, setOpen] = useState(false || isBuy === 'true')
+	const handleToggle = () => {
+		setOpen(!open)
+		// check cookie hiện tại xem người dùng đã đăng nhập chưa, nếu chưa thì redirect
+	}
 	useEffect(() => {
 		const fetchTicketList = async () => {
 			const dataResult = await fetch(`/api/conference/${id}`)
 			const cateResult = await dataResult.json()
 			setTicketList(cateResult)
 		}
+		const fetchImage = async () => {
+			const dataResult = await fetch(`/api/conference/get-conference-image/${id}`)
+			const cateResult = await dataResult.json()
+			setImageProp(cateResult.url)
+		}
 		fetchTicketList().catch(() => {
 			//
-		});
+		})
+		fetchImage();
 	}, [id])
 
 	return (
 		<>
-		{ticketList?.data?.status_ticket !== "published" ? 
-		(props?.tempDecode?.role === "admin" || props?.tempDecode?.sub === ticketList?.data?.host_id && props?.tempDecode?.role === "host" ? (
-			(
-				<>
-					<Box className={styles.background__wrap}>
-					<Box className={styles.dot__1}></Box>
-					<Header {...props} />
-					{ticketList?.data && <DetailBanner data={ticketList.data} />}
-					{ticketList?.data && <DetailContent data={ticketList.data}/>}
-					{/* <DetailBanner data={ticketList.data}/>
-					<DetailContent data={ticketList.data}/> */}
-				</Box>
-				<Footer />
-				</>
-				)
-		) : ((
-			<>
-			<Header {...props}/>
-			<Typography variant="h1" component="div" gutterBottom className={styles.sketchy}>
-        		Sorry, this conference have not been published yet.
-      		</Typography>
-			<Footer />
-			</>
-		)) ) : (
-				(
+			{ticketList?.data?.status_ticket !== 'published' ? (
+				props?.tempDecode?.role === 'admin' ||
+				(props?.tempDecode?.sub === ticketList?.data?.host_id && props?.tempDecode?.role === 'host') ? (
 					<>
-						<Box className={styles.background__wrap}>
+						<Box className={styles.background__wrap} sx={{ filter: open ? 'blur(10px) ' : 'none' }}>
+							<Box className={styles.dot__1}></Box>
+							<Header {...props} />
+							{ticketList?.data && <DetailBanner data={ticketList.data} handleToggle={handleToggle} />}
+							{ticketList?.data && <DetailContent data={ticketList.data} />}
+							{/* <DetailBanner data={ticketList.data}/>
+					<DetailContent data={ticketList.data}/> */}
+						</Box>
+						{open && <PurchaseModal handleToggle={handleToggle} data={ticketList.data} imageProp={imageProp} />}
+						<Footer />
+					</>
+				) : (
+					<>
+						<Header {...props} />
+						<Typography variant='h1' component='div' gutterBottom className={styles.sketchy}>
+							Sorry, this conference have not been published yet.
+						</Typography>
+						<Footer />
+					</>
+				)
+			) : (
+				<>
+					<Box className={styles.background__wrap} sx={{ filter: open ? 'blur(10px) ' : 'none' }}>
 						<Box className={styles.dot__1}></Box>
 						<Header {...props} />
-						{ticketList?.data && <DetailBanner data={ticketList.data} />}
-						{ticketList?.data && <DetailContent data={ticketList.data}/>}
+						{ticketList?.data && <DetailBanner data={ticketList.data} handleToggle={handleToggle} />}
+						{ticketList?.data && <DetailContent data={ticketList.data} />}
 						{/* <DetailBanner data={ticketList.data}/>
 						<DetailContent data={ticketList.data}/> */}
 					</Box>
+					{open && <PurchaseModal handleToggle={handleToggle} data={ticketList.data} imageProp={imageProp} />}
 					<Footer />
-					</>
-				)
-			) 
-		}
-		</>	
+				</>
+			)}
+		</>
 	)
 }
 
 export async function getServerSideProps(ctx: any) {
 	// Fetch data from external API
 	// Pass data to the page via props
-	let raw = null;
+	let raw = null
 	try {
-	  raw = ctx.req.cookies;
+		raw = ctx.req.cookies
 	} catch (e) {
-	  return { props: {} }
+		return { props: {} }
 	}
-	try { 
-	  if (raw.OursiteJWT.toString()) {
-		let token = "OursiteJWT"
-		let value = raw.OursiteJWT.toString();
-		let tempDecode = JSON.parse(Buffer.from(value.split('.')[1], 'base64').toString());
-		return {
-		  props: {
-			token, value,
-			tempDecode
-		  }
-		};
-	  } return { props: {} }
+	try {
+		if (raw.OursiteJWT.toString()) {
+			let token = 'OursiteJWT'
+			let value = raw.OursiteJWT.toString()
+			let tempDecode = JSON.parse(Buffer.from(value.split('.')[1], 'base64').toString())
+			return {
+				props: {
+					token,
+					value,
+					tempDecode,
+				},
+			}
+		}
+		return { props: {} }
 	} catch (error) {
-	  return { props: {} }
+		return { props: {} }
 	}
-  }
+}
 export default Event

@@ -15,6 +15,8 @@ import Tab from "@mui/material/Tab";
 import { BasicInfo, Conferences } from "./CreateSessionForm";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Multer } from 'multer';
+import { PopUp } from "../../../components/AlertPop-up";
+import { useRouter } from "next/router";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -57,7 +59,10 @@ const CreateEvent = (props) => {
   const [data, setData] = useState({})
   const [image, setImage] = useState<string | ArrayBuffer | null>();
   const [imageFile, setImageFile] = useState<Multer.File | null>();
+  const [popUp, setPopUp] = useState("0");
+  const [status, setStatus] = useState("0");
 
+  console.log(data);
   const onImageChange = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
       let reader = new FileReader();
@@ -72,7 +77,17 @@ const CreateEvent = (props) => {
   };
   const [value, setValue] = React.useState(0);
 
+  const router = useRouter();
+  const redirect = () => {
+    router.push("/host/dashboard")
+  }
+
   const apiCall = async (data) => {
+    if (imageFile === undefined) {
+      setStatus("0");
+      setPopUp("1");
+      return;
+    }
     const res = await fetch("/api/combo/create-new", {
       method: "POST",
       body: JSON.stringify(data),
@@ -81,14 +96,22 @@ const CreateEvent = (props) => {
       },
     });
     const result = await res.json();
-    console.log(result);
     if (res.status === 200) {
       let body = new FormData()
-      body.append('file',imageFile)
+      body.append('file', imageFile)
       await fetch(`/api/cloudinary/update-image-session/${result.data.comboSessionId}`, {
         method: "POST",
         body,
       });
+    }
+
+    if (res.status === 200) {
+      setStatus("1");
+      setPopUp("1");
+      setTimeout(redirect, 2000);
+    } else {
+      setStatus("0");
+      setPopUp("1");
     }
   }
   //change tabs; value = tabs value
@@ -100,7 +123,7 @@ const CreateEvent = (props) => {
     <>
       <Box
         sx={{
-          background: "#F1EFEF",
+          background: "#ffffff",
           width: "100%",
           marginBottom: "10rem",
           overflow: "hidden",
@@ -110,11 +133,12 @@ const CreateEvent = (props) => {
         <Box className={styles.dot__1}></Box>
         <Box className={styles.dot__2}></Box>
         <Box className={styles.dot__3}></Box>
-        <HeaderHost {...props}/>
+        <HeaderHost {...props} />
 
         <Typography variant="h3" component="div" className={styles.header}>
           Session Dashboard
         </Typography>
+        <PopUp status={status} popUp={popUp} onClick={() => setPopUp("0")} />
         <Grid container spacing={0} direction="column" alignItems="center">
           <Card className={styles.imageInput}>
             {image ? (
@@ -198,7 +222,7 @@ export async function getServerSideProps(ctx: any) {
   } catch (e) {
     return { props: {} }
   }
-  try { 
+  try {
     if (raw.OursiteJWT.toString()) {
       let token = "OursiteJWT"
       let value = raw.OursiteJWT.toString();

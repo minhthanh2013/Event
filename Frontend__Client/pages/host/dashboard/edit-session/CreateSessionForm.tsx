@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from "react";
-import styles from "../../../styles/CreateEventForm.module.scss";
+import styles from "../../../../styles/CreateEventForm.module.scss";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import { Controller, useForm } from "react-hook-form";
@@ -39,7 +39,7 @@ export const BasicInfo: React.FC<CreateEventProps> = ({ data, setData, setValue 
   } = useForm();
   const onSubmit = (value: any) => {
     setData({
-      ...data, combo_name: value.sessionName, discount: value.totalPrice, combo_description: value.sessionDescription
+      ...data, comboSessionName: value.comboSessionName, discount: value.discount, comboSessionDescription: value.comboSessionDescription
     });
     setValue(1);
   };
@@ -60,7 +60,7 @@ export const BasicInfo: React.FC<CreateEventProps> = ({ data, setData, setValue 
             label="Session Name"
             defaultValue={data.conferenceName}
             variant="standard"
-            {...register("sessionName")}
+            {...register("comboSessionName")}
           />
           <TextField
             className={styles.eventFields}
@@ -68,16 +68,16 @@ export const BasicInfo: React.FC<CreateEventProps> = ({ data, setData, setValue 
             id="standard-required"
             label="Session Discount"
             variant="standard"
-            defaultValue={data.totalPrice}
+            defaultValue={data.discount}
             type="number"
             InputProps={{ inputProps: { min: 0, max: 100 } }}
-            {...register("totalPrice")}
+            {...register("discount")}
           />
           <TextField
             className={styles.eventFields}
             label="Description"
             multiline
-            {...register("sessionDescription")}
+            {...register("comboSessionDescription")}
           />
           <Button className={styles.nextBtn} variant="contained" type="submit">
             Next

@@ -8,14 +8,18 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
 	const param = req.query.id || ''
 	console.log(param)
 	try {
-		// const request = process.env.BACKEND_PROTOCOL+'://' + process.env.BACKEND_HOST + ':' + process.env.BACKEND_PORT + "/conference/get-x-conferences/6"; 
-		let request = 'http://localhost:3000' + "/combosession/latest-x-combos/6";
+		let request = process.env.BACKEND_PROTOCOL+'://' + process.env.BACKEND_HOST + ':' + process.env.BACKEND_PORT + "/combosession/latest-x-combos/6"; 
+		// let request = 'http://localhost:3000' + "/combosession/latest-x-combos/6";
 		if(param !== '') {
-			request = `http://localhost:3000/combosession/latest-x-combos/${param}`;
+			request = process.env.BACKEND_PROTOCOL+'://' + process.env.BACKEND_HOST + ':' + process.env.BACKEND_PORT + `/combosession/latest-x-combos/${param}`; 
+			// request = `http://localhost:3000/combosession/latest-x-combos/${param}`;
 		}
 		const response = await axios.get(request);
         res.status(200).json(response.data);
 	} catch (error) {
-		// console.log(error);
+		res.status(404).json({
+			message: 'Not Found',
+			data: []
+		});
 	}
 }

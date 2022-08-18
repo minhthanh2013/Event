@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 export class SubscriptionDto {
     host_id: number;
     expired_date: Date;

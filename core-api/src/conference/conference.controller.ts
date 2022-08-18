@@ -82,7 +82,7 @@ export class ConferenceController {
   ): Observable<ResponseData> {
     return from(this.conferenceService.findAllByHostId(+id, status));
   }
-  @Get('/find-host-by-conference-id/:id')
+  @Get('/find-host-by/conference-id/:id')
   getByConfId(@Param('id') id: number): Promise<ResponseData> {
     return this.conferenceService.getHostDataByConferenceId(id);
   }
@@ -93,6 +93,10 @@ export class ConferenceController {
   @Post('/submit-conference')
   submitConference(@Body() submitConference: SubmitConferenceRequestDto): Promise<ResponseData> {
     return this.conferenceService.submitConference(submitConference);
+  }
+  @Post('/cancel-conference/:id')
+  cancelConference(@Param("id") id: number): Promise<ResponseData> {
+    return this.conferenceService.cancelConference(id);
   }
   @Post('/schedule-zoom-meeting/:id')
   scheduleZoomMeeting(@Param("id") id: number) {
@@ -108,5 +112,25 @@ export class ConferenceController {
     @Query('zoomId', new DefaultValuePipe('')) zoomId = '',
     ) {
     return this.conferenceService.findConferenceByUserAndZoomMeetingId(+userId, zoomId);
+  }
+  @Get('/find-all/host')
+  getAllHost(): Promise<ResponseData> {
+    return this.conferenceService.getAllHost();
+  }
+  @Post('/delete-conference/:id')
+  deleteConference(@Param("id") id: number): Promise<ResponseData> {
+    return this.conferenceService.deleteConference(id);
+  }
+  @Get('/get-conference-record/:id')
+  getConferenceRecord(@Param("id") id: number): Promise<ResponseData> {
+    return this.conferenceService.getConferenceRecord(id);
+  }
+  @Get('/find-all/user')
+  getAllUser(): Promise<ResponseData> {
+    return this.conferenceService.getAllUser();
+  }
+  @Post('/end-conference/:id')
+  endConference(@Param("id") id: number): Promise<ResponseData> {
+    return this.conferenceService.endConference(id);
   }
 }

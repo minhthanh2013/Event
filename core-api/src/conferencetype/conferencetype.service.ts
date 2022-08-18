@@ -13,7 +13,7 @@ export class ConferencetypeService {
     private readonly conferenceTypeRepository: Repository<ConferenceTypeEntity>,
   ) {}
   async findAllConferenceTypes(): Promise<ResponseData> {
-    let result = new ResponseData()
+    const result = new ResponseData()
     const data = await this.conferenceTypeRepository.find()
     if (data.length >= 1) {
       result.data = data

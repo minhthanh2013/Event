@@ -22,6 +22,12 @@ export class ConferenceRequestDto {
     dateEndSell: Date;
     ticketQuantity: number;
     conferencePrice: number;
+
+    status_ticket?: string;
+	host_id?: number
+	conference_id?: number
+	address?: string;
+    date_start_conference?: Date;
 }
 
 export class SpeakerList {

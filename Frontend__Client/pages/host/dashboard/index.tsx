@@ -1,4 +1,4 @@
-import React, { useState, ChangeEvent, useEffect } from "react";
+import React, { useState, ChangeEvent, useEffect, useRef } from "react";
 import HeaderHost from "../../../components/Header__Host";
 import Box from "@mui/material/Box";
 import Footer from "../../../components/Footer";
@@ -70,6 +70,7 @@ interface ConferenceProp {
   current_quantity: number;
   status_ticket: string;
   conference_type: string;
+  isValidated: boolean;
   // conferenceOrganizer: string;
 }
 
@@ -88,52 +89,96 @@ interface SessionListProp {
   comboSessionPrice: number;
   comboSessionName: string;
   comboSessionDescription: string;
-  conferenceList: TicketProp[];
+  conferenceList: ConferenceProp[];
   discount: number;
 }
 
-interface TicketProp {
+interface ConferenceProp {
   conference_id: number;
   description: string;
-  price: string;
+  price: number;
   conference_name: number;
-  date_start_conference: Date;
+  date_start_conference: string;
   address: string;
-  ticket_quantity: string;
-  current_quantity: string;
+  ticket_quantity: number;
+  current_quantity: number;
   status_ticket: string;
+  conference_type: string;
+  // conferenceOrganizer: string;
+}
+interface HostDetailsProps {
+  email: string;
+  firstName: string
+  host_id: string
+  host_type: string
+  lastName: string
+  update_at: Date
+  user_name: string
 }
 //
 const EventCreate = (props: any) => {
   const [conferences, setConferences] = useState<ConferenceProps>();
+  const [conferencesAfterFilter, setConferencesAfterFilter] = useState<ConferenceProps>();
   const [sessions, setSessions] = useState<SessionListProps>();
+  const [sessionsAfterFilter, setSessionsAfterFilter] = useState<SessionListProps>();
+  const [hostDetailsProps, setHostDetailsProps] = useState<HostDetailsProps>();
   const [value, setValue] = React.useState(0);
 
-  console.log(props);
+  let onlyFetchOneTime = React.useRef(true)
   useEffect(() => {
+    const fetchHostDetails = async () => {
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer " + props.value,
+        },
+      };
+      const dataResult = await fetch(`/api/host/${props.tempDecode.sub}`, config);
+      const cateResult = await dataResult.json();
+      setHostDetailsProps(cateResult);
+    }
     const fetchConferences = async () => {
       const dataResult = await fetch(`/api/conference/get-conference-by-host-id/${props.tempDecode.sub}`);
       const cateResult = await dataResult.json();
+      if (cateResult.status === 'false') {
+        setConferences({
+          status: false,
+          data: [],
+        });
+        return;
+      }
       setConferences(cateResult)
+      setConferencesAfterFilter(cateResult);
     }
 
     const fetchSessions = async () => {
       const dataResult = await fetch(`/api/combo/get-by-host/${props.tempDecode.sub}`);
       const cateResult = await dataResult.json();
       setSessions(cateResult)
+      setSessionsAfterFilter(cateResult);
     }
+    fetchHostDetails();
     fetchConferences();
     fetchSessions();
-  }, []);
+  }, [props.tempDecode?.sub, props.value]);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
+
+  const filterConferences = (props: string) => {
+    if (props === 'all') {
+      setConferencesAfterFilter(conferences)
+    } else {
+      setConferencesAfterFilter({ status: true, data: conferences?.data?.filter(data => data.status_ticket === props) });
+    }
+  };
+
   return (
     <>
       <Box
         sx={{
-          background: "#F1EFEF",
+          background: "#ffffff",
           width: "100%",
           overflow: "hidden",
           position: "relative",
@@ -147,93 +192,167 @@ const EventCreate = (props: any) => {
 
         <Grid container spacing={2}>
           <Grid item xs={2} md={2}>
-            <ThemeProvider theme={outerTheme}>
-              <Tabs
-                orientation="vertical"
-                value={value}
-                onChange={handleChange}
-                variant="fullWidth"
-                indicatorColor="primary"
-              >
-                <Tab
-                  label={
-                    <>
-                      <Box
-                        sx={{
-                          display: "flex",
-                          alignItems: "center",
-                          flexDirection: "row",
-                          justifyContent: "center",
-                        }}
-                      >
-                        <EventIcon sx={{ marginRight: "0.5rem" }} />
-                        <Typography sx={{ fontWeight: "bold" }}>
-                          Events
-                        </Typography>
-                      </Box>
-                    </>
-                  }
-                  {...a11yProps(0)}
-                />
-                <Tab
-                  label={
-                    <>
-                      <Box
-                        sx={{
-                          display: "flex",
-                          alignItems: "center",
-                          flexDirection: "row",
-                          justifyContent: "center",
-                        }}
-                      >
-                        <SessionsIcon sx={{ marginRight: "0.5rem" }} />
-                        <Typography sx={{ fontWeight: "bold" }}>
-                          Sessions
-                        </Typography>
-                      </Box>
-                    </>
-                  }
-                  {...a11yProps(1)}
-                />
-                <Tab
-                  label={
-                    <>
-                      <Box
-                        sx={{
-                          display: "flex",
-                          alignItems: "center",
-                          flexDirection: "row",
-                          justifyContent: "center",
-                        }}
-                      >
-                        <SubscriptionsIcon sx={{ marginRight: "0.5rem" }} />
-                        <Typography sx={{ fontWeight: "bold" }}>
-                          Subcriptions
-                        </Typography>
-                      </Box>
-                    </>
-                  }
-                  {...a11yProps(2)}
-                />
-              </Tabs>
-            </ThemeProvider>
+
+            {hostDetailsProps && hostDetailsProps.host_type === 'premium' ? (
+              <ThemeProvider theme={outerTheme}>
+                <Tabs
+                  orientation="vertical"
+                  value={value}
+                  onChange={handleChange}
+                  variant="fullWidth"
+                  indicatorColor="primary"
+                >
+                  <Tab
+                    label={
+                      <>
+                        <Box
+                          sx={{
+                            display: "flex",
+                            alignItems: "center",
+                            flexDirection: "row",
+                            justifyContent: "center",
+                          }}
+                        >
+                          <EventIcon sx={{ marginRight: "0.5rem" }} />
+                          <Typography sx={{ fontWeight: "bold" }}>
+                            Events
+                          </Typography>
+                        </Box>
+                      </>
+                    }
+                    {...a11yProps(0)}
+                  />
+                  <Tab
+                    label={
+                      <>
+                        <Box
+                          sx={{
+                            display: "flex",
+                            alignItems: "center",
+                            flexDirection: "row",
+                            justifyContent: "center",
+                          }}
+                        >
+                          <SessionsIcon sx={{ marginRight: "0.5rem" }} />
+                          <Typography sx={{ fontWeight: "bold" }}>
+                            Sessions
+                          </Typography>
+                        </Box>
+                      </>
+                    }
+                    {...a11yProps(1)}
+                  />
+                  <Tab
+                    label={
+                      <>
+                        <Box
+                          sx={{
+                            display: "flex",
+                            alignItems: "center",
+                            flexDirection: "row",
+                            justifyContent: "center",
+                          }}
+                        >
+                          <SubscriptionsIcon sx={{ marginRight: "0.5rem" }} />
+                          <Typography sx={{ fontWeight: "bold" }}>
+                            Subcriptions
+                          </Typography>
+                        </Box>
+                      </>
+                    }
+                    {...a11yProps(2)}
+                  />
+                </Tabs>
+              </ThemeProvider>
+            ) : (
+              <ThemeProvider theme={outerTheme}>
+                <Tabs
+                  orientation="vertical"
+                  value={value}
+                  onChange={handleChange}
+                  variant="fullWidth"
+                  indicatorColor="primary"
+                >
+                  <Tab
+                    label={
+                      <>
+                        <Box
+                          sx={{
+                            display: "flex",
+                            alignItems: "center",
+                            flexDirection: "row",
+                            justifyContent: "center",
+                          }}
+                        >
+                          <EventIcon sx={{ marginRight: "0.5rem" }} />
+                          <Typography sx={{ fontWeight: "bold" }}>
+                            Events
+                          </Typography>
+                        </Box>
+                      </>
+                    }
+                    {...a11yProps(0)}
+                  />
+                  <Tab
+                    label={
+                      <>
+                        <Box
+                          sx={{
+                            display: "flex",
+                            alignItems: "center",
+                            flexDirection: "row",
+                            justifyContent: "center",
+                          }}
+                        >
+                          <SubscriptionsIcon sx={{ marginRight: "0.5rem" }} />
+                          <Typography sx={{ fontWeight: "bold" }}>
+                            Subcriptions
+                          </Typography>
+                        </Box>
+                      </>
+                    }
+                    {...a11yProps(1)}
+                  />
+                </Tabs>
+              </ThemeProvider>
+            )}
+
           </Grid>
           <Grid item xs={10} md={10}>
-            <TabPanel value={value} index={0}>
-              <Box sx={{ marginLeft: "3rem" }}>
-                <EventList data={conferences?.data} propss={props} />
-              </Box>
-            </TabPanel>
-            <TabPanel value={value} index={1}>
-              <Box sx={{ marginLeft: "3rem" }}>
-                <Sessions data={sessions?.data} propss={props} />
-              </Box>
-            </TabPanel>
-            <TabPanel value={value} index={2}>
-              <Box sx={{ marginLeft: "3rem" }}>
-                <Subcriptions />
-              </Box>
-            </TabPanel>
+            {hostDetailsProps && hostDetailsProps.host_type === 'premium' ? (
+              <>
+                <TabPanel value={value} index={0}>
+                  <Box sx={{ marginLeft: "3rem" }}>
+                    <EventList data={conferencesAfterFilter?.data} host_type={hostDetailsProps?.host_type} propss={props} filter={filterConferences} />
+                  </Box>
+                </TabPanel>
+                <TabPanel value={value} index={1}>
+                  <Box sx={{ marginLeft: "3rem" }}>
+                    <Sessions data={sessionsAfterFilter?.data} propss={props} />
+                  </Box>
+                </TabPanel>
+                <TabPanel value={value} index={2}>
+                  <Box sx={{ marginLeft: "3rem" }}>
+                    <Subcriptions host_type={hostDetailsProps?.host_type} exDate={hostDetailsProps?.update_at} />
+                  </Box>
+                </TabPanel>
+              </>
+            ) : (
+              <>
+                <TabPanel value={value} index={0}>
+                  <Box sx={{ marginLeft: "3rem" }}>
+                    <EventList host_type={hostDetailsProps?.host_type} data={conferencesAfterFilter?.data} propss={props} filter={filterConferences} />
+                  </Box>
+                </TabPanel>
+                <TabPanel value={value} index={1}>
+                  <Box sx={{ marginLeft: "3rem" }}>
+                    <Subcriptions host_type={hostDetailsProps?.host_type} exDate={hostDetailsProps?.update_at} />
+                  </Box>
+                </TabPanel>
+              </>
+            )
+            }
+
           </Grid>
         </Grid>
       </Box>
@@ -252,7 +371,7 @@ export async function getServerSideProps(ctx: any) {
   } catch (e) {
     return { props: {} }
   }
-  try { 
+  try {
     if (raw.OursiteJWT.toString()) {
       let token = "OursiteJWT"
       let value = raw.OursiteJWT.toString();

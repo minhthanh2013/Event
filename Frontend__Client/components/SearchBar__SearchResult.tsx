@@ -13,7 +13,7 @@ interface SearchBarProps {
 	setInputSearchTemp: any
 	typeTemp: string
 	inputSearchTemp: string
-
+	
 	typeRef: any
 }
 
@@ -23,16 +23,15 @@ const SearchBar__SearchResult = (props: SearchBarProps) => {
 		e.preventDefault()
 	}
 	let temp = '';
-	const handleChangeType = (event: any) => {
+	const handleChangeType = (event: any, value) => {
 		// props.setTypeTemp(event.target.value)
 		// temp = event.target.value;
-		props.setType(event.target.value)
+		props.setTypeTemp(value)
 	}
 
 	const handleOnClick = (event: any) => {
-		props.setType(props.typeRef.current.value)
-		// props.setType(props.typeTemp)
-		props.setInputSearch(props.inputSearchTemp)
+		props.setType(props.typeTemp)
+		props.setInputSearch(() => props.inputSearchTemp)
 	}
 	return (
 		<>
@@ -73,7 +72,9 @@ const SearchBar__SearchResult = (props: SearchBarProps) => {
 								'& input': { color: '#6A35F2' },
 								'& .Mui-focused': { color: '#6A35F2' },
 								'& .MuiInput-underline:after': { borderBottomColor: '#6A35F2' },
-								'& .css-1r19i84-MuiInputBase-root-MuiInput-root:hover:not(.Mui-disabled):before': { borderBottomColor: '#6A35F2' },
+								'& .css-1r19i84-MuiInputBase-root-MuiInput-root:hover:not(.Mui-disabled):before': {
+									borderBottomColor: '#6A35F2',
+								},
 							}}
 						/>
 						<Box sx={{ minWidth: 120, mr: 2 }}>
@@ -84,8 +85,8 @@ const SearchBar__SearchResult = (props: SearchBarProps) => {
 								<Select
 									labelId='demo-simple-select-label'
 									id='demo-simple-select'
-									value={props.type}
-									onChange={handleChangeType}
+									value={props.typeTemp}
+									onChange={(e) => props.setTypeTemp(e.target.value)}
 									ref={props.typeRef}
 									sx={{
 										'& .MuiSelect-select:before': { color: '#6A35F2', borderBottomColor: '#6A35F2' },
@@ -108,7 +109,7 @@ const SearchBar__SearchResult = (props: SearchBarProps) => {
 								</Select>
 							</FormControl>
 						</Box>
-						<SearchIcon type='submit' onClick={handleOnClick} className={styles.searchIcon} />
+						<SearchIcon onClick={handleOnClick} className={styles.searchIcon} />
 					</form>
 				</Box>
 			</Box>

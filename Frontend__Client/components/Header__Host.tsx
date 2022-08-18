@@ -30,6 +30,9 @@ interface TicketProp {
 	conference_name: number
 	date_start_conference: Date
 	address: string
+	isValidated: boolean;
+	conference_type: string;
+	zoom_meeting_id: string;
 	// conferenceOrganizer: string;
 }
 const HeaderHost = (props: any) => {
@@ -60,9 +63,9 @@ const HeaderHost = (props: any) => {
 		return dateString
 	}
 	useEffect(() => {
-		if (props?.tempDecode?.role === 'user') {
+		if (props?.tempDecode?.role === 'host') {
 			const fetchTicketList = async () => {
-				const dataResult = await fetch(`/api/conference/get-conference-by-user-id/${props?.tempDecode?.sub}`)
+				const dataResult = await fetch(`/api/conference/get-conference-by-host-id/${props?.tempDecode?.sub}`)
 				const cateResult = await dataResult.json()
 				setTicketList(cateResult)
 			}
@@ -166,7 +169,7 @@ const HeaderHost = (props: any) => {
 								open={Boolean(anchorElUser)}
 								onClose={handleCloseUserMenu}
 							>
-								{ticketList?.data.length === 0 ||
+								{ticketList?.data?.length === 0 ||
 									(ticketList === undefined && (
 										<>
 											<MenuItem key={0} onClick={handleCloseUserMenu} sx={{ mb: '0.5rem', userSelect: 'none' }}>
@@ -189,6 +192,7 @@ const HeaderHost = (props: any) => {
 								{ticketList?.data?.map((ticket) => (
 									<>
 										{' '}
+										<Link href={`/event/${ticket?.conference_id}`}>
 										<MenuItem
 											key={ticket?.conference_id}
 											onClick={handleCloseUserMenu}
@@ -219,17 +223,25 @@ const HeaderHost = (props: any) => {
 													<Typography component='h4'>{parseDate(ticket?.date_start_conference)}</Typography>
 												</Box>
 												<Box display='flex' flexDirection='column' sx={{ width: '25%', alignItems: 'flex-start' }}>
-													<IconButton sx={{ display: 'flex', gap: '0.5rem', color: '#C64EFF' }}>
-														<PlayCircleOutlineOutlinedIcon />
-														<Typography>Join</Typography>
-													</IconButton>
-													<IconButton sx={{ display: 'flex', gap: '0.5rem', color: '#C64EFF' }}>
-														<ReplayOutlinedIcon />
-														<Typography>Record</Typography>
-													</IconButton>
+													{ticket?.conference_type === '2' && ticket?.zoom_meeting_id !== null && (
+														<IconButton sx={{ display: 'flex', gap: '0.5rem', color: '#C64EFF' }}>
+															<PlayCircleOutlineOutlinedIcon />
+															<Link href={`/zoom/join-by-zoom-id?id=${ticket?.zoom_meeting_id}`} passHref>
+																<Typography>Join</Typography>
+															</Link>
+														</IconButton>
+													)}
+													{ticket?.conference_type === '2' && ticket?.isValidated === false && (
+														<IconButton sx={{ display: 'flex', gap: '0.5rem', color: '#C64EFF' }}>
+															<ReplayOutlinedIcon />
+															<Typography>Record</Typography>
+														</IconButton>
+													)}
+
 												</Box>
 											</Box>
 										</MenuItem>
+										</Link>
 										<Divider variant='inset' component='li' sx={{ width: '100%', mx: '0 !important' }} />
 									</>
 								))}
@@ -280,16 +292,17 @@ const HeaderHost = (props: any) => {
 								transformOrigin={{ horizontal: 'right', vertical: 'top' }}
 								anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
 							>
-								<MenuItem sx={{ display: 'flex', gap: '0.5rem', justifyContent: 'space-between', color: '#6A35F2' }}>
-									<Avatar sx={{ color: '#6A35F2', bgcolor: 'white' }} /> Profile
-								</MenuItem>
-								<MenuItem sx={{ display: 'flex', gap: '0.5rem', justifyContent: 'space-between', color: '#6A35F2' }}>
-									<ConfirmationNumberIcon /> Tickets
-								</MenuItem>
-								<MenuItem sx={{ display: 'flex', gap: '0.5rem', justifyContent: 'space-between', color: '#6A35F2' }}>
-									<LogoutIcon />
-									Logout
-								</MenuItem>
+								<Link passHref href={'/host/profile'}>
+									<MenuItem sx={{ display: 'flex', gap: '0.5rem', justifyContent: 'space-between', color: '#6A35F2' }}>
+										<Avatar sx={{ color: '#6A35F2', bgcolor: 'white' }} /> Profile
+									</MenuItem>
+								</Link>
+								<Link passHref href={'/host/logout'}>
+									<MenuItem sx={{ display: 'flex', gap: '0.5rem', justifyContent: 'space-between', color: '#6A35F2' }}>
+										<LogoutIcon />
+										Logout
+									</MenuItem>
+								</Link>
 							</Menu>
 						</>
 					) : (
@@ -306,7 +319,7 @@ const HeaderHost = (props: any) => {
 							</Link>
 
 							<Button variant='text' sx={{ color: '#6A35F2' }}>
-								create an event
+								Host Section
 							</Button>
 						</>
 					)}

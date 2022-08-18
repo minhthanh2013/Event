@@ -25,7 +25,7 @@ export class ConferencecategoryService {
     return result;
   }
   convertEntityToDto(entity: ConferenceCategoryEntity): ConferenceCategoryDto {
-    let resultDto = new ConferenceCategoryDto()
+    const resultDto = new ConferenceCategoryDto()
     resultDto.categoryId = entity.category_id
     resultDto.categoryName = entity.category_name
     return resultDto
