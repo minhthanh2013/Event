@@ -5,25 +5,27 @@ import LocationOnIcon from '@mui/icons-material/LocationOn';
 import Grid from '@mui/material/Grid';
 import Ticket__2 from "./Ticket__2"
 interface SessionProp {
-	comboSessionId: number;
-	comboSessionPrice: number;
-	comboSessionName: string;
-	comboSessionDescription: string;
-	conferenceList: TicketProp[];
+    comboSessionId: number;
+    comboSessionPrice: number;
+    comboSessionName: string;
+    comboSessionDescription: string;
+    conferenceList: TicketProp[];
 }
 
 interface TicketProp {
-	conference_id: number;
-	description: string;
-	price: number;
-	conference_name: number;
-	date_start_conference: Date;
-	address: string;
-	ticket_quantity: number;
-	current_quantity: number;
-	status_ticket: string;
-	conference_type: string;
-	organizer_name: string;
+    conferenceAddress: string
+    conferenceCategory: number
+    conferenceDescription: string
+    conferenceName: string
+    price: number
+    conferenceType: number
+    organizerName: string
+    ticketQuantity: number
+    status_ticket: string
+    host_id: number
+    conference_id: number
+    address: string
+    date_start_conference: Date
 }
 
 interface DetailContentSessionProp {
@@ -44,13 +46,13 @@ const DetailContentSession = (props: DetailContentSessionProp) => {
                         </Box>
                     </Box>
                     <Box className={styles.eventList__section}>
-                    <Typography component="h3">Event list</Typography>
-                        <Grid container rowSpacing={8}  marginTop={0}>
+                        <Typography component="h3">Event list</Typography>
+                        <Grid container rowSpacing={8} marginTop={0}>
                             {props?.data?.conferenceList?.map((dataItem) => (
                                 // eslint-disable-next-line react/jsx-key
                                 <Grid item sm={12}>
                                     <Link href={`/event/${dataItem.conference_id}`}>
-                                        <Ticket__2 data={dataItem}/>
+                                        <Ticket__2 data={dataItem} />
                                     </Link>
                                 </Grid>
                             ))}

@@ -10,6 +10,7 @@ import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet'
 import CreditCardIcon from '@mui/icons-material/CreditCard'
 import ArrowRightAltIcon from '@mui/icons-material/ArrowRightAlt'
 import { splitNum } from '../GlobalFunction/SplitNumber'
+import { useRouter } from 'next/router'
 interface SessionProp {
 	comboSessionId: number
 	comboSessionPrice: number
@@ -28,6 +29,7 @@ interface modalProps {
 	handleToggle: any
 	data: SessionProp;
 	imageProp: string;
+	userId?: number;
 }
 interface TicketProp {
 	conferenceAddress: string
@@ -52,36 +54,30 @@ const PurchaseModalSession = (props: modalProps) => {
 	const [selectedValue, setSelectedValue] = useState('a')
 	const [total, setTotal] = useState(0);
 	const [normalizeDate, setNormalizeDate] = useState<string>()
+	const router = useRouter();
 	const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		setSelectedValue(event.target.value)
 	}
-	const parseDate = () => {
-		const weekday = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
-		const date = new Date(props?.data?.date_start_conference)
-		let monthString = date.toLocaleString('en-us', { month: 'short' })
-		let day = date.getDate().toString()
-		let hours = date.getHours()
-		let minutes = date.getMinutes()
-		let ampm = hours >= 12 ? 'pm' : 'am'
-		hours = hours % 12
-		hours = hours ? hours : 12 // the hour '0' should be '12'
-		let minuteString = minutes < 10 ? '0' + minutes : minutes
-		let timePeriod = ampm
-		let hour = hours.toString()
-		let min = minuteString.toString()
-		let  weekDay = weekday[date.getDay()]
-		// {weekDay || 'Fri'}, {monthString || 'Dec'} {day || '2'}, {hour || '11'}:{min || '11'}{' '}
-		// {timePeriod?.toUpperCase() || 'AM'}
-		setNormalizeDate(`${weekDay || 'Fri'}, ${monthString || 'Dec'} ${day || '2'}, ${hour || '11'}:${min || '11'} ${timePeriod?.toUpperCase() || 'AM'}`)
-	}
 	const calculateTotal = () => {
-		let totalTemp = 0
+		let totalTemp = 0;
 		for (let i = 0; i < props?.data?.conferenceList.length; i++) {
 			console.log(80, props?.data?.conferenceList[i])
 			totalTemp += parseInt(props?.data?.conferenceList[i].price.toString())
 		}
 		totalTemp = totalTemp - (totalTemp * props?.data?.discount) / 100
 		setTotal(totalTemp);
+	}
+	async function handleCheckout() {
+		if (props.userId === undefined) {
+			router.push("/user/login")
+		}
+		else {
+			if (selectedValue === "b") {
+				//checkout cho Credit Card
+			} else {
+				//Set Checkout cho nút Palpay ở đây
+			}
+		}
 	}
 	useEffect(() => {
 		// parseDate()
@@ -131,7 +127,7 @@ const PurchaseModalSession = (props: modalProps) => {
 							</Box>
 						</Box>
 						<Box display='flex' flexDirection='row-reverse'>
-							<Button variant='contained' size='large' sx={{ bgcolor: '#6A35F2' }}>
+							<Button variant='contained' size='large' sx={{ bgcolor: '#6A35F2' }} onClick={handleCheckout}>
 								Checkout
 								<ArrowRightAltIcon />
 							</Button>
@@ -158,7 +154,7 @@ export const TicketInModal: React.FC<SessionProps> = ({ data, setTotal, imagePro
 					<CardMedia
 						component='img'
 						sx={{ width: 151, mt: '1rem', boxShadow: '0px' }}
-						image={imageProps ||'https://images.pexels.com/photos/2306281/pexels-photo-2306281.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'}
+						image={imageProps || 'https://images.pexels.com/photos/2306281/pexels-photo-2306281.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'}
 						alt='Live from space album cover'
 					/>
 					<Box className={styles.ticketContent}>

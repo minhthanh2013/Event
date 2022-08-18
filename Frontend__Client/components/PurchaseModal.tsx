@@ -42,12 +42,12 @@ interface TicketProp {
 }
 
 interface PaymentDto {
-    userId: number;
-    conferenceId: number;
-    ticketPrice: number;
-    ticketName: string;
-    ticketQuantity: number;
-    description?: string;
+	userId: number;
+	conferenceId: number;
+	ticketPrice: number;
+	ticketName: string;
+	ticketQuantity: number;
+	description?: string;
 }
 
 const PurchaseModal = (props: modalProps) => {
@@ -76,38 +76,43 @@ const PurchaseModal = (props: modalProps) => {
 		let timePeriod = ampm
 		let hour = hours.toString()
 		let min = minuteString.toString()
-		let  weekDay = weekday[date.getDay()]
+		let weekDay = weekday[date.getDay()]
 		// {weekDay || 'Fri'}, {monthString || 'Dec'} {day || '2'}, {hour || '11'}:{min || '11'}{' '}
 		// {timePeriod?.toUpperCase() || 'AM'}
 		setNormalizeDate(`${weekDay || 'Fri'}, ${monthString || 'Dec'} ${day || '2'}, ${hour || '11'}:${min || '11'} ${timePeriod?.toUpperCase() || 'AM'}`)
 	}
 	async function handleCheckout() {
-		if(props.userId === undefined) {
+		if (props.userId === undefined) {
 			router.push("/user/login")
 		}
 		else {
-			const paymentRequest = {} as PaymentDto;
-			paymentRequest.userId = props.userId;
-			paymentRequest.conferenceId = props.data.conference_id;
-			paymentRequest.ticketPrice = props.data.conferencePrice;
-			paymentRequest.ticketQuantity = 1;	
-			paymentRequest.ticketName = props.data.conferenceName;
+			if (selectedValue === "b") {
+				const paymentRequest = {} as PaymentDto;
+				paymentRequest.userId = props.userId;
+				paymentRequest.conferenceId = props.data.conference_id;
+				paymentRequest.ticketPrice = props.data.conferencePrice;
+				paymentRequest.ticketQuantity = 1;
+				paymentRequest.ticketName = props.data.conferenceName;
 
-			const result = await fetch("/api/payment/buy-ticket", {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-					"Authorization": process.env.STRIPE_TEST_KEY,
+				const result = await fetch("/api/payment/buy-ticket", {
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+						"Authorization": process.env.STRIPE_TEST_KEY,
 					},
 					body: JSON.stringify(paymentRequest),
 				})
-			const resDataJson = await result.json();
-			if(resDataJson.status === true) {
-				router.push(resDataJson.data);
-			}
+				const resDataJson = await result.json();
+				if (resDataJson.status === true) {
+					router.push(resDataJson.data);
+				}
+			} else {
+				//Set Checkout cho nút Palpay ở đây
 			}
 		}
-	
+	}
+
+
 	useEffect(() => {
 		parseDate()
 	}, [])
@@ -182,7 +187,7 @@ export const TicketInModal: React.FC<TicketProps> = ({ data, setTotal, imageProp
 					<CardMedia
 						component='img'
 						sx={{ width: 151, mt: '1rem', boxShadow: '0px' }}
-						image={imageProps ||'https://images.pexels.com/photos/2306281/pexels-photo-2306281.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'}
+						image={imageProps || 'https://images.pexels.com/photos/2306281/pexels-photo-2306281.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'}
 						alt='Live from space album cover'
 					/>
 					<Box className={styles.ticketContent}>
