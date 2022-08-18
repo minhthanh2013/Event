@@ -2,10 +2,11 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Observable, from } from 'rxjs';
+import { ResponseData } from 'src/responsedata/response-data.dto';
 import { UpdateResult, DeleteResult } from 'typeorm';
 import { Repository } from 'typeorm/repository/Repository';
 import { RecordEntity } from './models/record.entity';
-import { Record } from './models/retcord.interface';
+import { Record, UserRecordRequest } from './models/retcord.interface';
 
 @Injectable()
 export class RecordService {
@@ -27,5 +28,17 @@ export class RecordService {
   }
   remove(id: number): Observable<DeleteResult> {
     return from(this.recordRepository.delete(id));
+  }
+  async checkValidUserBuyRecord(body: UserRecordRequest): Promise<ResponseData> {
+    const response = new ResponseData();
+    const record = await this.recordRepository.findOne({where: {buyer_id: body.user_id, conference_id: body.conference_id}});
+    if (record) {
+      response.data = record;
+      response.status = true;
+    } else {
+      response.status = false;
+      response.data = 'Record not found';
+    }
+    return response;
   }
 }

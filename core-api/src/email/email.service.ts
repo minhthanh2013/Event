@@ -15,7 +15,7 @@ export class EmailService {
     from: '18126014@student.hcmus.edu.vn', // Change to your verified senderhttp://localhost:3000/confirm
     subject: 'Confirm bougth ticket',
     text: 'Hi there, your ticket has been bougth',
-    html: `You could check out you bought ticket under this link: <a href="${this.configService.get("PROTOCOL_INTERNET")}://${this.configService.get("HOST_INTERNET")}:${this.configService.get("PORT_INTERNET")}">Confirm</a> Thank you for choosing our service. We hope you enjoy our service. Have a good day.`,
+    html: `You could check out your bought ticket under this link: <a href="${this.configService.get("PROTOCOL_INTERNET")}://${this.configService.get("HOST_INTERNET")}:${this.configService.get("PORT_INTERNET")}">Confirm</a> Thank you for choosing our service. We hope you enjoy our service. Have a good day.`,
     }
     sgMail
     .send(msg)
@@ -117,6 +117,7 @@ export class EmailService {
     ${isOfflineConf ? `<p>You can access your conference on ${dateStart}</p>` : 
     `<p>You can join the conference by clicking the link below</p>
     <a href="${zoomLink}">Join the conference</a>`}
+    <p>Note: You cannot join the online meeting when it isn't start</p>
     <p>Thank you for choosing our service. We hope you enjoy our service. Have a good day.</p>
     .`,
     }

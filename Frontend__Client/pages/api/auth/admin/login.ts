@@ -5,11 +5,6 @@ import axios from 'axios'
 import https from 'https';
 
 export default async function (req: NextApiRequest, res: NextApiResponse) {
-	const config = {
-		headers: {
-			'Content-Type': 'application/x-www-form-urlencoded',
-		}
-	}
 	let admin = null
 	try {
 		const request = process.env.BACKEND_PROTOCOL+'://' + process.env.BACKEND_HOST + ':' + process.env.BACKEND_PORT + '/admin/signin'; 

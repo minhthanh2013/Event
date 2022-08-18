@@ -2,12 +2,12 @@
 import { ConferenceEntity } from "src/conference/models/conference.entity";
 import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 
-@Entity('record')
+@Entity('Record')
 export class RecordEntity {
     @PrimaryGeneratedColumn()
     record_id: number;
     @Column()
-    record_url: string;
+    buyer_id: string;
     @Column()
     conference_id: number;
     @OneToOne(

@@ -6,13 +6,14 @@ import Header from '../../../components/Header'
 import styles from '../../../styles/Background.module.scss'
 
 const ZoomRecord = (props) => {
+	console.log(9, props)
 	const [record, setRecord] = useState<string>()
 	const router = useRouter()
-	const { id } = router.query
+	const { conferenceId } = router.query
 	useEffect(() => {
 		const fetchVideoRecord = async () => {
 			// const response = await fetch(`/api/conference/get-conference-record/${id}`);
-			const response = await fetch(`/api/conference/get-conference-record/${id}`)
+			const response = await fetch(`/api/conference/get-conference-record/${conferenceId}`)
 			const cateResult = await response.text()
 			// console.log(16, cateResult);
 			setRecord(cateResult)

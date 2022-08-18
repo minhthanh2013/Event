@@ -1,8 +1,9 @@
 /* eslint-disable prettier/prettier */
 import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
 import { Observable } from 'rxjs';
+import { ResponseData } from 'src/responsedata/response-data.dto';
 import { DeleteResult, UpdateResult } from 'typeorm';
-import { Record } from './models/retcord.interface';
+import { Record, UserRecordRequest } from './models/retcord.interface';
 import { RecordService } from './record.service';
 
 @Controller('record')
@@ -27,5 +28,9 @@ export class RecordController {
   @Delete(':id')
   remove(@Param('id') id: number): Observable<DeleteResult> {
     return this.recordService.remove(+id);
+  }
+  @Post('check-valid-user-buy-record') 
+  checkValidUserBuyRecord(@Body() body: UserRecordRequest): Promise<ResponseData> {
+    return this.recordService.checkValidUserBuyRecord(body);
   }
 }
