@@ -143,6 +143,7 @@ export class PaymentService {
     try {
       await this.hostRepository.save({
         host_id: id,
+        host_type: 'premium'
       })
     } catch (err) {
       console.log(err)
