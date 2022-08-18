@@ -10,11 +10,13 @@ import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet'
 import CreditCardIcon from '@mui/icons-material/CreditCard'
 import ArrowRightAltIcon from '@mui/icons-material/ArrowRightAlt'
 import { splitNum } from '../GlobalFunction/SplitNumber'
+import { useRouter } from 'next/router'
 
 interface modalProps {
 	handleToggle: any
 	data: TicketProp;
 	imageProp: string;
+	userId?: number;
 }
 interface TicketProps {
 	data: TicketProp;
@@ -39,9 +41,23 @@ interface TicketProp {
 	// conferenceOrganizer: string;
 }
 
+interface PaymentDto {
+    userId: number;
+    conferenceId: number;
+    ticketPrice: number;
+    ticketName: string;
+    ticketQuantity: number;
+    description?: string;
+}
+
 const PurchaseModal = (props: modalProps) => {
+	const router = useRouter();
+	console.log(43, props)
+	// CALL API DI CHECKOUT
+	const conferenceId = props.data.conference_id
+	console.log(props.userId)
 	const [selectedValue, setSelectedValue] = useState('a')
-	const [total, setTotal] = useState(parseInt(props?.data?.conferencePrice));
+	const [total, setTotal] = useState(parseInt(props?.data?.conferencePrice?.toString()));
 	const [normalizeDate, setNormalizeDate] = useState<string>()
 	const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		setSelectedValue(event.target.value)
@@ -65,6 +81,33 @@ const PurchaseModal = (props: modalProps) => {
 		// {timePeriod?.toUpperCase() || 'AM'}
 		setNormalizeDate(`${weekDay || 'Fri'}, ${monthString || 'Dec'} ${day || '2'}, ${hour || '11'}:${min || '11'} ${timePeriod?.toUpperCase() || 'AM'}`)
 	}
+	async function handleCheckout() {
+		if(props.userId === undefined) {
+			router.push("/user/login")
+		}
+		else {
+			const paymentRequest = {} as PaymentDto;
+			paymentRequest.userId = props.userId;
+			paymentRequest.conferenceId = props.data.conference_id;
+			paymentRequest.ticketPrice = props.data.conferencePrice;
+			paymentRequest.ticketQuantity = 1;	
+			paymentRequest.ticketName = props.data.conferenceName;
+
+			const result = await fetch("/api/payment/buy-ticket", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+					"Authorization": process.env.STRIPE_TEST_KEY,
+					},
+					body: JSON.stringify(paymentRequest),
+				})
+			const resDataJson = await result.json();
+			if(resDataJson.status === true) {
+				router.push(resDataJson.data);
+			}
+			}
+		}
+	
 	useEffect(() => {
 		parseDate()
 	}, [])
@@ -112,7 +155,7 @@ const PurchaseModal = (props: modalProps) => {
 							</Box>
 						</Box>
 						<Box display='flex' flexDirection='row-reverse'>
-							<Button variant='contained' size='large' sx={{ bgcolor: '#6A35F2' }}>
+							<Button variant='contained' size='large' sx={{ bgcolor: '#6A35F2' }} onClick={handleCheckout}>
 								Checkout
 								<ArrowRightAltIcon />
 							</Button>

@@ -43,6 +43,7 @@ const Event = (props: any) => {
 	const {isBuy} = router.query
 	const [ticketList, setTicketList] = useState<TicketProps>()
 	const [imageProp, setImageProp] = useState<string>()
+	const userId = props.tempDecode.sub;
 	let [open, setOpen] = useState(false || isBuy === 'true')
 	const handleToggle = () => {
 		setOpen(!open)
@@ -79,7 +80,7 @@ const Event = (props: any) => {
 							{/* <DetailBanner data={ticketList.data}/>
 					<DetailContent data={ticketList.data}/> */}
 						</Box>
-						{open && <PurchaseModal handleToggle={handleToggle} data={ticketList.data} imageProp={imageProp} />}
+						{open && <PurchaseModal handleToggle={handleToggle} data={ticketList.data} imageProp={imageProp} userId={userId}/>}
 						<Footer />
 					</>
 				) : (
@@ -101,7 +102,7 @@ const Event = (props: any) => {
 						{/* <DetailBanner data={ticketList.data}/>
 						<DetailContent data={ticketList.data}/> */}
 					</Box>
-					{open && <PurchaseModal handleToggle={handleToggle} data={ticketList.data} imageProp={imageProp} />}
+					{open && <PurchaseModal handleToggle={handleToggle} data={ticketList.data} imageProp={imageProp} userId={userId}/>}
 					<Footer />
 				</>
 			)}
