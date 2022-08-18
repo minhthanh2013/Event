@@ -110,19 +110,20 @@ export class PaymentService {
       console.log(err)
     }
   }
-  async updateSubscription(id: number) {
-    const expire = await this.subscriptionRepository.findOneBy({ host_id: id })
+  async updateSubscription(subDto: SubscriptionDto) {
+    const expire = await this.subscriptionRepository.findOneBy({ host_id: subDto.idHost })
     const date = new Date()
     if (expire == null) {
       try {
         await this.subscriptionRepository.insert({
-          expired_date: date.setDate(date.getDate() + 30),
-          host: await this.hostRepository.findOneBy({ host_id: id }),
+          expired_date: new Date(date.setDate(date.getDate() + 30)),
+          host: await this.hostRepository.findOneBy({ host_id: subDto.idHost }),
           payment: await this.paymentRepository.findOneBy({ payment_id: 1 }),
           subscriptionPlan: await this.subPlanRepository.findOneBy({ plan_id: 1 })
         })
       } catch (err) {
         console.log(err)
+        return
       }
     } else {
       try {
@@ -133,19 +134,23 @@ export class PaymentService {
         }
         await this.subscriptionRepository.createQueryBuilder()
           .update(SubscriptionEntity)
-          .set({ expired_date: date })
-          .where("host_id = :id", { id: id })
+          .set({ expired_date: new Date(date) })
+          .where("host_id = :id", { id: subDto.idHost })
           .execute()
       } catch (err) {
         console.log(err)
+        return
       }
     }
     try {
-      await this.hostRepository.save({
-        host_id: id,
-      })
+      await this.hostRepository.createQueryBuilder()
+      .update(HostEntity)
+      .set({host_type: 'premium'})
+      .where("host_id = :id", {id: subDto.idHost})
+      .execute()
     } catch (err) {
       console.log(err)
+      return
     }
   }
 }

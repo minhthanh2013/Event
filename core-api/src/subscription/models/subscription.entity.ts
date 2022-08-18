@@ -12,8 +12,6 @@ export class SubscriptionEntity {
   @Column()
   expired_date: Date;
   @Column()
-  is_premium: boolean;
-  @Column()
   host_id: number;
   @ManyToOne(() => HostEntity, (host) => host.subscriptions)
   @JoinColumn({

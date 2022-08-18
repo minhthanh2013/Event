@@ -12,7 +12,7 @@ export class ResponseData {
 }
 
 export class SubscriptionDto {
-    id: number
+    idHost: number;
 }
 
 export class TransactionInfo {

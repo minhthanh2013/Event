@@ -27,6 +27,9 @@ export class PaymentController {
   async webhook(@Req() req: any) {
     const event = req.body
     if (event.type == 'checkout.session.completed') {
+      const date = new Date()
+      date.setDate(date.getDate() + 30)
+      console.log(new Date(date))
       if (event.data.object.mode == 'payment') {
         const id_session = event.data.object.id as string
         const payment_intent_id = event.data.object.payment_intent as string
@@ -54,7 +57,11 @@ export class PaymentController {
         }
       } else {
         // SUBSCRIBE PREMIUM PLAN
-        
+        console.log("subscribe to premium")
+        const subDto = new SubscriptionDto()
+        subDto.idHost = event.data.object.client_reference_id as number
+        console.log(subDto)
+        this.paymentService.updateSubscription(subDto)
       }
     }
   }

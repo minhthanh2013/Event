@@ -98,6 +98,8 @@ export class AppService {
 
   async newSubscription(subscriptionDto: SubscriptionDto): Promise<ResponseData> {
     const responseData = new ResponseData()
+    console.log(subscriptionDto)
+    const temp = subscriptionDto.idHost?.toString()
     const param: Stripe.Checkout.SessionCreateParams = {
       mode: 'subscription',
       payment_method_types: ['card'],
@@ -113,7 +115,7 @@ export class AppService {
       subscription_data: {
         description: 'SUBSCRIBE PREMIUM PLAN (1 MONTH)'
       },
-      client_reference_id: subscriptionDto.id.toString()
+      client_reference_id: temp
     }
 
     try {

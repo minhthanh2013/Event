@@ -6,7 +6,7 @@ export class PaymentDto {
 }
 
 export class SubscriptionDto {
-    id: number
+    idHost: number
 }
 
 export class AddBalanceDto {
