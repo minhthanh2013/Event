@@ -28,3 +28,12 @@ export class AddBalanceDto {
     balance: number;
     idUser: number;
 }
+
+export class PaymentRecordDto {
+    conferenceId: number;
+    userId: number;
+    price: number;
+    payment_method: number;
+    conferenceName: string;
+    conferenceDescription?: string;
+}

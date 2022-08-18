@@ -31,7 +31,7 @@ export class RecordService {
   }
   async checkValidUserBuyRecord(body: UserRecordRequest): Promise<ResponseData> {
     const response = new ResponseData();
-    const record = await this.recordRepository.findOne({where: {buyer_id: body.user_id, conference_id: body.conference_id}});
+    const record = await this.recordRepository.findOne({where: {buyer_id: parseInt(body.user_id), conference_id: body.conference_id}});
     if (record) {
       response.data = record;
       response.status = true;

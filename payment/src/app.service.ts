@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectStripe } from 'nestjs-stripe';
 import Stripe from 'stripe';
-import { AddBalanceDto, PaymentDto, ResponseData, SubscriptionDto, TransactionInfo } from './payment/payment.dto';
+import { AddBalanceDto, PaymentDto, PaymentRecordDto, ResponseData, SubscriptionDto, TransactionInfo } from './payment/payment.dto';
 
 @Injectable()
 export class AppService {
@@ -96,9 +96,9 @@ export class AppService {
     return responseData
   }
 
-  async newSubscription(subscriptionDto: SubscriptionDto): Promise<ResponseData> {
+  async newSubscription(idHost: number): Promise<ResponseData> {
     const responseData = new ResponseData()
-    const temp = subscriptionDto.idHost.toString()
+    const temp = idHost.toString()
     const param: Stripe.Checkout.SessionCreateParams = {
       mode: 'subscription',
       payment_method_types: ['card'],
@@ -134,7 +134,7 @@ export class AppService {
 
       }
       const balance = await this.stripeClient.balance.retrieve(param, {
-        
+
       })
       const data = balance.pending[0].amount / 100
       responseData.data = data
@@ -156,10 +156,45 @@ export class AppService {
   }
 
   async getSessionLineItem(id_session: string): Promise<ResponseData> {
-    const responseData = new ResponseData() 
+    const responseData = new ResponseData()
     try {
       const data = await this.stripeClient.checkout.sessions.retrieve(id_session)
       responseData.data = data
+    } catch (err) {
+      responseData.status = false
+      console.log(err)
+    }
+    return responseData
+  }
+
+  async buyRecord(record: PaymentRecordDto): Promise<ResponseData> {
+    const responseData = new ResponseData()
+    try {
+      const params: Stripe.Checkout.SessionCreateParams = {
+        mode: 'payment',
+        payment_method_types: ['card'],
+        line_items: [
+          {
+            quantity: 1,
+            price_data: {
+              product_data: {
+                name: record.conferenceName,
+                description: record.conferenceDescription,
+              },
+              currency: 'vnd',
+              unit_amount: record.price
+            },
+          }
+        ],
+        success_url: `${process.env.MOCK_URL}`,
+        cancel_url: `${process.env.MOCK_URL}`,
+        payment_intent_data: {
+          description: 'BUY RECORD',
+        },
+        client_reference_id: record.conferenceId + '|' + record.userId
+      }
+      const data = await this.stripeClient.checkout.sessions.create(params)
+      responseData.data = data.url
     } catch (err) {
       responseData.status = false
       console.log(err)

@@ -6,6 +6,7 @@ import e from 'express';
 import { Observable } from 'rxjs';
 import { ConferenceEntity } from 'src/conference/models/conference.entity';
 import { HostEntity } from 'src/host/models/host.entity';
+import { RecordEntity } from 'src/record/models/record.entity';
 import { ResponseData } from 'src/responsedata/response-data.dto';
 import { SubscriptionEntity } from 'src/subscription/models/subscription.entity';
 import { SubscriptionPlanEntity } from 'src/subscriptionplan/models/subscription_plan.entity';
@@ -13,7 +14,7 @@ import { TicketEntity } from 'src/ticket/models/ticket.entity';
 import { UserEntity } from 'src/user/models/user.entity';
 import { User } from 'src/user/models/user.interface';
 import { Repository } from 'typeorm/repository/Repository';
-import { AddBalanceDto, BoughtTicketDto, PaymentDto, SubscriptionDto } from './models/payment.dto';
+import { AddBalanceDto, BoughtRecordDto, BoughtTicketDto, PaymentDto, PaymentRecordDto, PaymentRecordWithBalanceDto, PaymentWithBalanceDto, SubscriptionDto } from './models/payment.dto';
 import { PaymentEntity } from './models/payment.entity';
 
 @Injectable()
@@ -33,7 +34,9 @@ export class PaymentService {
     @InjectRepository(HostEntity)
     private readonly hostRepository: Repository<HostEntity>,
     @InjectRepository(SubscriptionPlanEntity)
-    private readonly subPlanRepository: Repository<SubscriptionPlanEntity>
+    private readonly subPlanRepository: Repository<SubscriptionPlanEntity>,
+    @InjectRepository(RecordEntity)
+    private readonly recordRepository: Repository<RecordEntity>,
   ) { }
 
   createPaymentLink(paymentDto: PaymentDto): Observable<ResponseData> {
@@ -51,6 +54,9 @@ export class PaymentService {
   }
   getInfoSession(id_session: string): Observable<ResponseData> {
     return this.paymentClient.send({ cmd: 'INFO_SESSION' }, id_session)
+  }
+  buyRecordWithStripe(paymentRecordDto: PaymentRecordDto): Observable<ResponseData> {
+    return this.paymentClient.send({ cmd: 'BUY_RECORD'}, {paymentRecordDto})
   }
 
   async getCurrentBalance(id: number): Promise<number> {
@@ -153,5 +159,63 @@ export class PaymentService {
       console.log(err)
       return
     }
+  }
+
+  async paymentTicketWithBalance(paymentDto: PaymentWithBalanceDto): Promise<ResponseData> {
+    const responseData = new ResponseData()
+    try {
+      const res = await this.userRepository.createQueryBuilder()
+      .update(UserEntity)
+      .set({balance: parseInt(paymentDto.userBalance.toString()) - parseInt(paymentDto.ticketPrice.toString())})
+      .where("user_id = :id", {id: paymentDto.userId})
+      .execute()
+
+      const data = await this.conferenceRepository.createQueryBuilder()
+        .update(ConferenceEntity)
+        .set({ current_quantity: await this.getCurrentTicketQuantity(paymentDto.conferenceId) - 1 })
+        .where("conference_id = :id", { id: paymentDto.conferenceId })
+        .execute()
+      responseData.status = res.affected == data.affected
+    } catch (err) {
+      console.log(err)
+    }
+    return responseData
+  }
+
+  async updateRecord(record: BoughtRecordDto) {
+    try {
+      await this.recordRepository
+      .insert({
+        buyer_id: record.userId,
+        conference_id: record.conferenceId,
+        payment_method: record.payment_method,
+        price: record.price_record
+      })
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
+  async buyRecordWithBalance(record: PaymentRecordWithBalanceDto): Promise<ResponseData> {
+    const responseData = new ResponseData()
+    try {
+      await this.recordRepository
+      .insert({
+        buyer_id: record.userId,
+        conference_id: record.conferenceId,
+        payment_method: 2,
+        price: record.price
+      })
+
+      await this.userRepository.createQueryBuilder()
+      .update(UserEntity)
+      .set({balance: parseInt(record.balance.toString()) - parseInt(record.price.toString())})
+      .where("user_id = :id", {id: record.userId})
+      .execute()
+    } catch (err) {
+      console.log(err)
+      responseData.status = false
+    }
+    return responseData
   }
 }

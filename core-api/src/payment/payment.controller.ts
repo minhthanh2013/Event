@@ -3,7 +3,7 @@ import { Body, Controller, Post, Req } from '@nestjs/common';
 import { from, Observable } from 'rxjs';
 import { ResponseData } from 'src/responsedata/response-data.dto';
 import { SubscriptionService } from 'src/subscription/subscription.service';
-import { AddBalanceDto, BoughtTicketDto, PaymentDto, SubscriptionDto } from './models/payment.dto';
+import { AddBalanceDto, BoughtRecordDto, BoughtTicketDto, PaymentDto, PaymentRecordDto, PaymentRecordWithBalanceDto, PaymentWithBalanceDto, SubscriptionDto } from './models/payment.dto';
 import { PaymentService } from './payment.service';
 
 @Controller('payment')
@@ -23,6 +23,19 @@ export class PaymentController {
   addBalance(@Body() addBalanceDto: AddBalanceDto): Observable<ResponseData> {
     return this.paymentService.addBalanceUser(addBalanceDto)
   }
+  @Post('/payment-ticket-with-balance')
+  paymentTicketWithBalance(@Body() paymentDto: PaymentWithBalanceDto): Observable<ResponseData> {
+    return from(this.paymentService.paymentTicketWithBalance(paymentDto))
+  }
+  @Post('/buy-record')
+  buyRecord(@Body() paymentRecordDto: PaymentRecordDto): Observable<ResponseData> {
+    return this.paymentService.buyRecordWithStripe(paymentRecordDto)
+  }
+  @Post('/buy-record-wit-balance')
+  buyRecordWithBalance(@Body() recordDto: PaymentRecordWithBalanceDto): Observable<ResponseData> {
+    return from(this.paymentService.buyRecordWithBalance(recordDto))
+  }
+
   @Post('/webhook')
   async webhook(@Req() req: any) {
     const event = req.body
@@ -54,6 +67,16 @@ export class PaymentController {
           ticketDto.userId = userId as unknown as number
           this.paymentService.updateTicketQuantity(ticketDto)
           this.paymentService.createUserTicket(ticketDto)
+        } else if (description.data.description == 'BUY RECORD') {
+          console.log('buy record')
+          const session = await this.paymentService.getInfoSession(id_session).toPromise()
+          console.log(session.data)
+          const recordDto = new BoughtRecordDto()
+          recordDto.conferenceId = parseInt((session.data.client_reference_id as string).split('|')[0])
+          recordDto.userId = parseInt((session.data.client_reference_id as string).split('|')[1])
+          recordDto.price_record = parseInt(event.data.object.amount_total.toString())
+          recordDto.payment_method = 1
+          this.paymentService.updateRecord(recordDto)
         }
       } else {
         // SUBSCRIBE PREMIUM PLAN
