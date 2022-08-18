@@ -29,8 +29,7 @@ import InputAdornment from '@mui/material/InputAdornment'
 import InputLabel from '@mui/material/InputLabel'
 import FormControl from '@mui/material/FormControl'
 import OutlinedInput from '@mui/material/OutlinedInput'
-
-
+import { useRouter } from 'next/router'
 
 interface HeaderProps {
 	props: any
@@ -58,6 +57,10 @@ interface UserDetailProp {
 	email: string
 	showPassword: boolean
 	balance: number;
+}
+interface addBalanceDTO {
+	balance: number;
+	idUser: number;
 }
 //Balance Modal
 const style = {
@@ -106,9 +109,18 @@ const Header = (props: any) => {
 	} = useForm({
 		resolver: yupResolver(schema),
 	})
+	const router = useRouter();
+	if (props.tempDecode == undefined) {
+		router.push("/user/login")
+	}
 	const onSubmitBalanceModal = ({ amount }) => {
 		// setValueBalance(amount)
 		setValueBalance(prev => prev + Number(userDetails?.balance + amount))
+
+		const addBalance = {} as addBalanceDTO
+		addBalance.balance = valueBalance;
+		addBalance.idUser = props.tempDecode?.sub;
+		// call API here
 		handleCloseBalanceModal()
 	}
 
@@ -144,10 +156,10 @@ const Header = (props: any) => {
 				}
 				const dataResult = await fetch(`/api/user/${props.tempDecode.sub}`, config);
 				console.log(dataResult.status)
-				if(dataResult.status === 401 || dataResult.status === 404) {
+				if (dataResult.status === 401 || dataResult.status === 404) {
 
 					const newDataResult = await fetch('/api/auth/user/logout');
-					if(newDataResult.status === 200) {}
+					if (newDataResult.status === 200) { }
 				}
 				const cateResult = await dataResult.json();
 				setUserDetails(cateResult)

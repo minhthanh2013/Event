@@ -349,7 +349,7 @@ const EventCreate = (props: any) => {
                 </TabPanel>
                 <TabPanel value={value} index={1}>
                   <Box sx={{ marginLeft: "3rem" }}>
-                    <Subcriptions host_type={hostDetailsProps?.host_type} exDate={hostDetailsProps?.update_at} />
+                    <Subcriptions host_type={hostDetailsProps?.host_type} exDate={hostDetailsProps?.update_at} hostId={props.tempDecode?.sub} />
                   </Box>
                 </TabPanel>
               </>

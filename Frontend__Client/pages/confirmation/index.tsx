@@ -5,29 +5,30 @@ import Typography from '@mui/material/Typography';
 import styles from '../../styles/Event.module.scss';
 import { useRouter } from "next/router";
 
-const Confirmation = (prop: any) => {
-  
+const Confirmation = (props: any) => {
+  console.log(props)
   const router = useRouter();
-  const redirect = () => {
-    router.push("/host/dashboard")
-  }
-  setTimeout(redirect,5000);
-  useEffect(() => {
-    const updatePremium = async () => {
-      const result = await fetch(`api/subscription`)
 
+  const redirect = () => {
+    if (props.tempDecode.role == "host") {
+      router.push("/host/dashboard")
+    } else {
+      router.push("/")
     }
-  }, []);
-    return (
-        <>
-            <Header/>
-            <Typography variant="h1" component="div" gutterBottom className={styles.confirmation}>
-        		  Your payment has been done succesfully
-      		  </Typography>
-            
-            <Footer/>
-        </>
-    );
+  }
+
+  setTimeout(redirect, 2000);
+
+  return (
+    <>
+      <Header />
+      <Typography variant="h1" component="div" gutterBottom className={styles.confirmation}>
+        Your payment has been done succesfully
+      </Typography>
+
+      <Footer />
+    </>
+  );
 };
 
 export async function getServerSideProps(ctx: any) {
@@ -40,7 +41,7 @@ export async function getServerSideProps(ctx: any) {
     return { props: {} }
   }
   try {
-    
+
     if (raw.OursiteJWT.toString()) {
       let token = "OursiteJWT"
       let value = raw.OursiteJWT.toString();
@@ -56,5 +57,5 @@ export async function getServerSideProps(ctx: any) {
     return { props: {} }
   }
 }
-  
+
 export default Confirmation

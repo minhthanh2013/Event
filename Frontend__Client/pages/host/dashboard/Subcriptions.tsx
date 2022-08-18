@@ -13,26 +13,25 @@ interface ResponseData {
 interface SubProps {
   host_type: string,
   exDate: Date,
+  hostId: number,
 }
-export const Subcriptions: React.FC<SubProps> = ({ host_type, exDate }) => {
+export const Subcriptions: React.FC<SubProps> = ({ host_type, exDate, hostId }) => {
 
-  const [subscription, setSubscription] = useState<ResponseData>()
   const router = useRouter()
-  useEffect(() => {
-    const newSubscription = async () => {
-      const data = await fetch("/api/payment/", {
-        method: 'POST'
-      })
-      const result = await data.json()
-      setSubscription(result)
-    }
 
-    newSubscription();
-  }, [])
-  const navigate = () => {
-    const url = subscription?.data
-    console.log(url)
-    router.push(url)
+  async function navigate() {
+    const result = await fetch("/api/payment/supcription", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": process.env.STRIPE_TEST_KEY,
+      },
+      body: JSON.stringify(hostId),
+    })
+    const resDataJson = await result.json();
+    if (resDataJson.status === true) {
+      router.push(resDataJson.data);
+    }
   }
 
   return (
