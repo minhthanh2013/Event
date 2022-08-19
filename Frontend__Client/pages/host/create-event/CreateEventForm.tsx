@@ -20,6 +20,9 @@ import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { ErrorMessage } from '@hookform/error-message';
+import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Checkbox from '@mui/material/Checkbox';
 
 type Data = {
   [key: string]: any;
@@ -82,6 +85,7 @@ export const BasicInfo: React.FC<CreateEventProps> = ({ data, setData, setValue 
       ...data, conferenceName: value.conferenceName, conferenceAddress: value.conferenceAddress, organizerName: value.organizerName,
       conferenceType: value.conferenceType, conferenceCategory: value.conferenceCategory, conferenceDescription: value.conferenceDescription
     });
+    console.log(data)
     setValue(1);
   };
   return (
@@ -351,7 +355,7 @@ export const DateForm: React.FC<CreateEventProps> = ({ data, setData, setValue, 
   const onSubmit = (value: any) => {
     api({
       ...data, dateStartConference: value.dateStartConference, dateStartSell: value.dateStartSell,
-      dateEndSell: value.dateEndSell, conferencePrice: value.conferencePrice, ticketQuantity: value.ticketQuantity,
+      dateEndSell: value.dateEndSell, conferencePrice: value.conferencePrice, ticketQuantity: value.ticketQuantity, isRecorded: value.isRecorded,
       hostName: prop.tempDecode.username, host_id: prop.tempDecode.sub
     });
     console.log(`submit`);
@@ -373,10 +377,9 @@ export const DateForm: React.FC<CreateEventProps> = ({ data, setData, setValue, 
                 name="dateStartConference"
                 control={control}
                 render={({ field: { ...rest } }) => (
-                  <DatePicker
+                  <DateTimePicker
                     label="Event start date"
-                    inputFormat="dd/MM/yyyy"
-                    value={data.dateStartConference}
+                    value={eventStart}
                     disablePast
                     renderInput={(params) => (
                       <TextField
@@ -394,7 +397,7 @@ export const DateForm: React.FC<CreateEventProps> = ({ data, setData, setValue, 
                     minDate: value => {
                       const today = new Date();
                       const dateValue = new Date(value.toString());
-                      return dateValue.getDate() + 1 >= today.getDate();
+                      return dateValue.getTime() >= today.getTime();
                     },
                   }
                 }}
@@ -405,10 +408,9 @@ export const DateForm: React.FC<CreateEventProps> = ({ data, setData, setValue, 
                 name="dateStartSell"
                 control={control}
                 render={({ field: { ...rest } }) => (
-                  <DatePicker
+                  <DateTimePicker
                     label="Ticket sales start"
-                    inputFormat="dd/MM/yyyy"
-                    value={data.dateStartSell}
+                    value={ticketStart}
                     disablePast
                     maxDate={eventStart ? eventStart : undefined}
                     renderInput={(params) => (
@@ -427,12 +429,12 @@ export const DateForm: React.FC<CreateEventProps> = ({ data, setData, setValue, 
                   validate: {
                     maxDate: value => {
                       const dateValue = new Date(value.toString());
-                      return dateValue.getDate() <= eventStart.getDate();
+                      return dateValue.getTime() <= eventStart.getTime();
                     },
                     minDate: value => {
                       const today = new Date();
                       const dateValue = new Date(value.toString());
-                      return dateValue.getDate() >= today.getDate();
+                      return dateValue.getTime() >= today.getTime();
                     },
                   }
                 }}
@@ -443,10 +445,9 @@ export const DateForm: React.FC<CreateEventProps> = ({ data, setData, setValue, 
                 name="dateEndSell"
                 control={control}
                 render={({ field: { ...rest } }) => (
-                  <DatePicker
+                  <DateTimePicker
                     label="Ticket sales end"
-                    inputFormat="dd/MM/yyyy"
-                    value={data.dateEndSell}
+                    value={ticketEnd}
                     disablePast
                     minDate={ticketStart ? ticketStart : undefined}
                     maxDate={eventStart ? eventStart : undefined}
@@ -462,14 +463,15 @@ export const DateForm: React.FC<CreateEventProps> = ({ data, setData, setValue, 
                 )}
                 rules={{
                   required: true,
+                  onChange: (newValue) => { setTicketEnd(newValue.target.value) },
                   validate: {
                     minDate: value => {
                       const dateValue = new Date(value.toString());
-                      return dateValue.getDate() >= ticketStart.getDate();
+                      return dateValue.getTime() >= ticketStart.getTime();
                     },
                     maxDate: value => {
                       const dateValue = new Date(value.toString());
-                      return dateValue.getDate() <= eventStart.getDate();
+                      return dateValue.getTime() <= eventStart.getTime();
                     }
                   }
                 }}
@@ -486,6 +488,7 @@ export const DateForm: React.FC<CreateEventProps> = ({ data, setData, setValue, 
             variant="standard"
             defaultValue={data.conferencePrice}
             type="number"
+            InputProps={{ inputProps: { min: 30000 } }}
             {...register("conferencePrice")}
           />
           <TextField
@@ -495,10 +498,17 @@ export const DateForm: React.FC<CreateEventProps> = ({ data, setData, setValue, 
             label="Ticket quantity"
             variant="standard"
             type="number"
+            InputProps={{ inputProps: { min: 10 } }}
             defaultValue={data.ticketQuantity}
             {...register("ticketQuantity")}
           />
-          <Button className={styles.nextBtn} variant="contained" type="submit">
+          <FormControlLabel
+            control={<Checkbox disabled={data.conferenceType !== "2"} />}
+            label="Record this conference"
+            {...register("isRecorded")}
+          />
+          <br />
+          <Button className={styles.nextBtn} variant="contained" type="submit" >
             Submit
           </Button>
         </form>
