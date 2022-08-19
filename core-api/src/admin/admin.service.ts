@@ -120,7 +120,6 @@ export class AdminService {
 }
   async verifyConference(conferenceId: number, res: Request) {
     const jwt = res.headers.authorization;
-    console.log(114, jwt);
     return new Promise(async (resolve, reject) => {
       await this.conferenceRepository.findOne({where: {conference_id: conferenceId}}).then(async conference => {
         if(conference) {

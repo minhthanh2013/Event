@@ -220,19 +220,6 @@ export class ConferenceService {
   async convertEntityToDto(entity: ConferenceEntity): Promise<ConferenceRequestDto> {
     console.log(241, entity);
     const dto = new ConferenceRequestDto();
-    // conferenceName: string;
-    // conferenceAddress: string;
-    // organizerName: string;
-    // hostName: string;
-    // conferenceType: number;
-    // conferenceCategory: number;
-    // conferenceDescription: string;
-    // speakerList: SpeakerList[];
-    // dateStartConference: Date;
-    // dateStartSell: Date;
-    // dateEndSell: Date;
-    // ticketQuantity: number;
-    // conferencePrice: number;
     dto.conferenceName = entity.conference_name;
     dto.conferenceAddress = entity.address;
     dto.organizerName = entity.organizer_name;

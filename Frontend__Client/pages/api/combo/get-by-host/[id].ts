@@ -18,7 +18,7 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
 		// const request = `http://localhost:3000/combosession/find-combo-by-host-id/${id}`;
 		console.log(request);
 		const response = await axios.get(request);
-		if(response.data.statusCode === 404) {
+		if(response.data.status === false) {
 			res.status(404).json({
 				message: 'Not Found',
 				data: []

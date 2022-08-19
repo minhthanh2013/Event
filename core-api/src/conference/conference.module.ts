@@ -28,7 +28,7 @@ import { UserEntity } from 'src/user/models/user.entity';
         name: 'ZOOM',
         transport: Transport.TCP,
         options: {
-          // host: 'zoom',
+          host: 'zoom',
           port: 3001,
         }
       }

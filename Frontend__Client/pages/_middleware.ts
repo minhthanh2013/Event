@@ -251,7 +251,7 @@ export default async function middleware(req: NextRequest) {
                     const data = new URLSearchParams();
                     data.append('user_id', `${userId}`);
                     data.append('conference_id', `${conferenceId}`);
-                    let dataResult = await fetch(`http://localhost:8080/api/record/get-by-conference-id?conferenceId=${conferenceId}`, {
+                    let dataResult = await fetch(`https://evenity.page/api/record/get-by-conference-id?conferenceId=${conferenceId}`, {
                       method: 'POST',
                       headers: {
                         'Content-Type': 'application/x-www-form-urlencoded',
@@ -259,7 +259,6 @@ export default async function middleware(req: NextRequest) {
                       body: data,
                     });
                     let cateResult = await dataResult.json();
-                    console.log(279, cateResult);
                     if(cateResult.status !== undefined && cateResult.status === true) {
                         return NextResponse.next();
                     } else {
@@ -280,14 +279,14 @@ export default async function middleware(req: NextRequest) {
          }
       }
 
-      if(param.has("uuid") && pathname === `/zoom/join-by-zoom-id`) {
+      if(param.has("uuid") && pathname === `/zoom/join-by-uuid`) {
         try {
             const uuid = param.get('uuid');
             let dataResult = null;
             let cateResult = null;
             
                 try {
-                    let dataResult = await fetch('/api/speaker/' + uuid);
+                    let dataResult = await fetch('https://evenity.page/api/speaker/' + uuid);
                     let cateResult = await dataResult.json();
                 } catch (error) {
                     req.nextUrl.pathname = "/";
