@@ -1,16 +1,18 @@
 import { Box } from '@mui/material'
 import type { NextPage } from 'next'
-import CarouselSlide from '../components/CarouselSlide'
 import Footer from '../components/Footer'
-import Header from '../components/Header'
 import SearchBar from '../components/SearchBar'
-import SessionList from '../components/SessionList'
-import TicketList from '../components/TicketList'
 import HomeDashboard from './host/dashboard'
 import styles from '../styles/Background.module.scss'
 import { useState } from 'react'
 import PurchaseModal from '../components/PurchaseModal'
 export { default as buildStore } from '../shared/redux/buildStore'
+import dynamic from 'next/dynamic'
+
+const CarouselSlide = dynamic(() => import('../components/CarouselSlide'), { ssr: false })
+const SessionList = dynamic(() => import('../components/SessionList'), { ssr: false })
+const TicketList = dynamic(() => import('../components/TicketList'), { ssr: false })
+const Header = dynamic(() => import('../components/Header'), { ssr: false })
 
 interface CarouselSlideProp {
 	conference_id: number
@@ -34,7 +36,7 @@ const Home: NextPage = (props) => {
 				<Box className={styles.dot__2}></Box>
 				<Box className={styles.dot__3}></Box>
 				<Header {...props} />
-				<CarouselSlide {...props}/>
+				<CarouselSlide {...props} />
 				<SearchBar />
 				<SessionList {...props} />
 				<TicketList {...props} />
@@ -44,31 +46,31 @@ const Home: NextPage = (props) => {
 	)
 }
 
-export async function getServerSideProps(ctx: any) {
-	// Fetch data from external API
-	// Pass data to the page via props
-	let raw = null
-	try {
-		raw = ctx.req.cookies
-	} catch (e) {
-		return { props: {} }
-	}
-	try {
-		if (raw.OursiteJWT.toString()) {
-			let token = 'OursiteJWT'
-			let value = raw.OursiteJWT.toString()
-			let tempDecode = JSON.parse(Buffer.from(value.split('.')[1], 'base64').toString())
-			return {
-				props: {
-					token,
-					value,
-					tempDecode,
-				},
-			}
-		}
-		return { props: {} }
-	} catch (error) {
-		return { props: {} }
-	}
-}
+// export async function getServerSideProps(ctx: any) {
+// 	// Fetch data from external API
+// 	// Pass data to the page via props
+// 	let raw = null
+// 	try {
+// 		raw = ctx.req.cookies
+// 	} catch (e) {
+// 		return { props: {} }
+// 	}
+// 	try {
+// 		if (raw.OursiteJWT.toString()) {
+// 			let token = 'OursiteJWT'
+// 			let value = raw.OursiteJWT.toString()
+// 			let tempDecode = JSON.parse(Buffer.from(value.split('.')[1], 'base64').toString())
+// 			return {
+// 				props: {
+// 					token,
+// 					value,
+// 					tempDecode,
+// 				},
+// 			}
+// 		}
+// 		return { props: {} }
+// 	} catch (error) {
+// 		return { props: {} }
+// 	}
+// }
 export default Home

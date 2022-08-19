@@ -8,6 +8,7 @@ import InstagramIcon from "@mui/icons-material/Instagram";
 import TelegramIcon from "@mui/icons-material/Telegram";
 interface FooterProps {}
 
+
 const Footer = (props: FooterProps) => {
   return (
     <div className={styles.footerWrap}>

@@ -11,9 +11,12 @@ import CarouselSlide from '../../components/CarouselSlide'
 import SessionList from '../../components/SessionList'
 import styles from '../../styles/Event.module.scss'
 import DetailBanner from '../../components/DetailBanner'
-import DetailContent from '../../components/DetailContent'
 import Typography from '@mui/material/Typography'
 import PurchaseModal from '../../components/PurchaseModal'
+import dynamic from 'next/dynamic'
+
+
+const DetailContent = dynamic (() => import('../../components/DetailContent'), { ssr: false })
 
 interface TicketProp {
 	conferenceAddress: string

@@ -8,6 +8,7 @@ import styles from "../styles/Ticket.module.scss";
 import Box from "@mui/material/Box";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import { splitNum } from "../GlobalFunction/SplitNumber";
+import Image from 'next/image'
 
 interface TicketProp {
 	conference_id: number;
@@ -69,35 +70,34 @@ const Ticket = (props: TicketProps) => {
 		<>
 			<div>
 				<Card elevation={7} className={styles.ticketWrap}>
-					<CardActionArea >
+					<CardActionArea>
 						<CardMedia
-							component="img" 
-							height="250"
-							src={ imageProp ||"https://images.pexels.com/photos/2306281/pexels-photo-2306281.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"}  
-							alt="Event"
-						/>
+							component='img'
+							height='250'
+							src={
+								imageProp ||
+								'https://images.pexels.com/photos/2306281/pexels-photo-2306281.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'
+							}
+							alt='Event'
+						/>		
 						<CardContent className={styles.ticketContent}>
-							<Box component="div">
-								<Typography gutterBottom component="h2">
-								{monthString?.toUpperCase()}
+							<Box component='div'>
+								<Typography gutterBottom component='h2'>
+									{monthString?.toUpperCase()}
 								</Typography>
-								<Typography gutterBottom component="p">
+								<Typography gutterBottom component='p'>
 									{day}
 								</Typography>
 							</Box>
-							<Box component="div">
-								<Typography component="h2">
-								{props.data.conference_name}
+							<Box component='div'>
+								<Typography component='h2'>{props.data.conference_name}</Typography>
+								<Typography component='h3'>
+									{weekDay}, {monthString} {day}, {hour}:{min} {timePeriod?.toUpperCase()}
 								</Typography>
-								<Typography component="h3">{weekDay}, {monthString} {day}, {hour}:{min} {timePeriod?.toUpperCase()}</Typography>
-								<Typography component="h4">
-									{props.data.address != undefined ? props.data.address : 'Zoom'}
-								</Typography>
-								<Typography component="h5">
-									By {props.data?.organizer_name || 'Zoom'}
-								</Typography>
+								<Typography component='h4'>{props.data.address != undefined ? props.data.address : 'Zoom'}</Typography>
+								<Typography component='h5'>By {props.data?.organizer_name || 'Zoom'}</Typography>
 							</Box>
-							<Box component="div">
+							<Box component='div'>
 								{/* <AttachMoneyIcon /> */}
 								<Typography>{`${splitNum(props.data.price)} VNĐ`}</Typography>
 							</Box>
@@ -106,7 +106,7 @@ const Ticket = (props: TicketProps) => {
 				</Card>
 			</div>
 		</>
-	);
+	)
 };
 
 export default Ticket;

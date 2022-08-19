@@ -4,10 +4,15 @@ import styles from '../../styles/Session.module.scss'
 import Header from '../../components/Header'
 import Footer from '../../components/Footer'
 import DetailBannerSession from '../../components/DetailBannerSession'
-import DetailContentSession from '../../components/DetailContentSession'
 import { useRouter } from 'next/router'
 import PurchaseModalSession from '../../components/PurchaseModal__Session'
+import dynamic from 'next/dynamic'
 
+const DetailContentSession = dynamic (() => import('../../components/DetailContentSession'), { ssr: false })
+
+export const config = {
+	unstable_runtimeJS: false,
+}
 interface SessionProp {
 	comboSessionId: number
 	comboSessionPrice: number
