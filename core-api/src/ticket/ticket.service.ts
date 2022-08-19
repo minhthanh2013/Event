@@ -1,4 +1,5 @@
-import { BuySessionDto } from './models/ticket.interface';
+import { ResponseData } from './../responsedata/response-data.dto';
+import { BuySessionDto, UserToVerify } from './models/ticket.interface';
 /* eslint-disable prettier/prettier */
 import { Injectable, NotFoundException, ConflictException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -100,4 +101,22 @@ export class TicketService {
       });
     })
   }
+  async verifyUserBuyTickets(user: UserToVerify): Promise<ResponseData> {
+    const response = new ResponseData();
+    const ticket = await this.ticketRepository.findOne({
+      where: {
+        buyer_id: user.user_id,
+        conference_id: user.conference_id,
+      },
+  })
+  if(ticket) {
+    response.status = true;
+    response.data = 'User has bought tickets';
+  }
+  else {
+    response.status = false;
+    response.data = 'User has not bought tickets';
+  }
+  return response;
+}
 }

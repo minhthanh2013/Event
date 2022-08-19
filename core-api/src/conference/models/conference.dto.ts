@@ -29,6 +29,7 @@ export class ConferenceRequestDto {
 	address?: string;
     date_start_conference?: Date;
     isRecorded?: boolean;
+    isValidated?: boolean;
 }
 
 export class SpeakerList {

@@ -132,7 +132,6 @@ export class ConferenceService {
     const data = await this.conferenceRepository.findOne({
       where: { conference_id: id },
     });
-    console.log(136, data);
     const dto = await this.convertEntityToDto(data);
     result.status = data !== undefined;
     result.data = dto;
@@ -222,7 +221,6 @@ export class ConferenceService {
     return result;
   }
   async convertEntityToDto(entity: ConferenceEntity): Promise<ConferenceRequestDto> {
-    console.log(241, entity);
     const dto = new ConferenceRequestDto();
     dto.conferenceName = entity.conference_name;
     dto.conferenceAddress = entity.address;
@@ -235,6 +233,8 @@ export class ConferenceService {
     dto.conference_id = entity.conference_id
     dto.address = entity.address
     dto.date_start_conference = entity.date_start_conference
+    dto.isRecorded = entity.isRecorded;
+    dto.isValidated = entity.isValidated;
     dto.speakerList = [];
     const speakers = await this.speakerRepository.find({where: {conference_id: entity.conference_id}});
     (speakers).forEach(element => {

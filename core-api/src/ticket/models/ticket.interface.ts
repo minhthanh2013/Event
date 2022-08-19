@@ -13,3 +13,7 @@ export interface BuySessionDto {
   conference_id?: number;
   payment_id?: number;
 }
+export interface UserToVerify {
+  user_id: number;
+  conference_id: number;
+}

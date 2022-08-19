@@ -31,7 +31,11 @@ interface TicketProp {
 	host_id: number
 	conference_id: number
 	address: string
-	date_start_conference: Date
+	dateStartSell: Date
+	dateStartConference: Date
+	dateEndSell: Date;
+	isRecorded?: boolean;
+	isValidated?: boolean;
 
 	// conferenceOrganizer: string;
 }
@@ -78,7 +82,7 @@ const Event = (props: any) => {
 						<Box className={styles.background__wrap} sx={{ filter: open ? 'blur(10px) ' : 'none' }}>
 							<Box className={styles.dot__1}></Box>
 							<Header {...props} />
-							{ticketList?.data && <DetailBanner data={ticketList.data} handleToggle={handleToggle} />}
+							{ticketList?.data && <DetailBanner data={ticketList.data} handleToggle={handleToggle} userId={userId}/>}
 							{ticketList?.data && <DetailContent data={ticketList.data} />}
 							{/* <DetailBanner data={ticketList.data}/>
 					<DetailContent data={ticketList.data}/> */}
@@ -100,7 +104,7 @@ const Event = (props: any) => {
 					<Box className={styles.background__wrap} sx={{ filter: open ? 'blur(10px) ' : 'none' }}>
 						<Box className={styles.dot__1}></Box>
 						<Header {...props} />
-						{ticketList?.data && <DetailBanner data={ticketList.data} handleToggle={handleToggle} />}
+						{ticketList?.data && <DetailBanner data={ticketList.data} handleToggle={handleToggle} userId={userId}/>}
 						{ticketList?.data && <DetailContent data={ticketList.data} />}
 						{/* <DetailBanner data={ticketList.data}/>
 						<DetailContent data={ticketList.data}/> */}

@@ -4,7 +4,6 @@ import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 import IconButton from '@mui/material/IconButton';
 import AddIcon from '@mui/icons-material/Add';
 import Button from '@mui/material/Button';
-import Image from 'next/image';
 import { useState, useEffect } from 'react';
 import { splitNum } from '../GlobalFunction/SplitNumber';
 const imageURL = "https://images.pexels.com/photos/2306281/pexels-photo-2306281.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
@@ -23,7 +22,11 @@ interface TicketProp {
 	host_id: number
 	conference_id: number
 	address: string;
-	date_start_conference: Date
+	dateStartSell: Date
+	dateStartConference: Date
+	dateEndSell: Date;
+	isRecorded?: boolean;
+	isValidated?: boolean;
 	// conferenceOrganizer: string;
 }
 
@@ -31,26 +34,30 @@ interface TicketProps {
 	data: TicketProp;
 	// conferenceOrganizer: string;
 	handleToggle: any
+	userId?: string
 }
+export interface UserToVerify {
+	user_id: number;
+	conference_id: number;
+  }
 
 const weekday = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
 
 const DetailBanner = (props: TicketProps) => {
-
     const [imageProp, setImageProp] = useState<string>()
 	const [year, setYear] = useState<string>()
-	const [month, setMonth] = useState<string>()
+	const [month,  ] = useState<string>()
 	const [monthString, setMonthString] = useState<string>()
 	const [day, setDay] = useState<string>()
 	const [hour, setHour] = useState<string>()
 	const [min, setMin] = useState<string>()
 	const [weekDay, setWeekDay] = useState<string>()
 	const [timePeriod, setTimePeriod] = useState<string>()
+	const [hideBuyButton, setHideBuyButton] = useState(true)
 	useEffect(() => {
 		const parseDate = () => {
-			const date = new Date(props.data?.date_start_conference)
+			const date = new Date(props.data?.dateStartConference)
 			setYear(date.getFullYear().toString())
-			setMonth(date.getMonth().toString())
 			setMonthString(date.toLocaleString('en-us', { month: 'short' }))
 			setDay(date.getDate().toString())
 			let hours = date.getHours();
@@ -64,8 +71,25 @@ const DetailBanner = (props: TicketProps) => {
 			setMin(minuteString.toString())
 			setWeekDay(weekday[date.getDay()])
 		}
+		const getUserDetails = async () => {
+			const user = {} as UserToVerify 
+			user.user_id = +props.userId
+			user.conference_id = props.data.conference_id
+			const response = await fetch(`/api/ticket/verify-user-buy-ticket`, {
+				method: 'POST',
+				body: JSON.stringify(user)
+			})
+			const data = await response.json()
+			if(data.status === true) {
+				setHideBuyButton(true)
+			}
+		}
 		parseDate();
+		if(props.userId !== undefined) {
+			getUserDetails()
+		}
 	}, [])
+
     return (
         <>
             <Box className={styles.container}>
@@ -87,8 +111,22 @@ const DetailBanner = (props: TicketProps) => {
                                 <Typography component="h2">Date & Time</Typography>
                                 <Typography component="h3">{weekDay}, {monthString} {day}, {year} at {hour}:{min} {timePeriod}</Typography>
                                 <Button variant="text" className={styles.button__1}><AddIcon/>Add to calendar</Button>
-                                <Button variant="contained" className={styles.button__2} onClick={props.handleToggle}>Buy ticket ({`${splitNum(props.data?.conferencePrice)} VNĐ`})</Button>
-                                <Button variant="outlined" className={styles.button__3} disabled>Buy record ($ 5.00)</Button>
+								{!hideBuyButton ? (
+									<>
+										{new Date() < new Date(props.data.dateStartSell) &&
+											(`Conference begin to sell at ${props.data.dateStartSell}`)
+										}
+										{new Date(props.data.dateStartSell) < new Date() && new Date() < new Date(props.data.dateStartConference) &&
+											(<Button variant="contained" className={styles.button__2} onClick={props.handleToggle}>Buy ticket ({`${splitNum(props.data?.conferencePrice)} VNĐ`})</Button>)
+										}
+										{new Date() > new Date(props.data.dateStartConference) &&
+											(<Button variant="contained" className={styles.button__2} onClick={props.handleToggle}>Buy record ({`${splitNum(props.data?.conferencePrice)} VNĐ`})</Button>)
+										}
+									</>
+								) : (
+									<Typography component="h3">You have already bought this ticket</Typography>
+								)}
+								
                             </Box>
                         </Box>
                     </Box>

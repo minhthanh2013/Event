@@ -114,24 +114,6 @@ const UserTicket = (props: any) => {
 						)}
 					</Grid>
 				</Box>
-
-				<Box sx={{ width: '85%', mx: 'auto', mb: 10 }}>
-					<Stack spacing={2}>
-						<Pagination
-							count={10}
-							variant='outlined'
-							onChange={handlePaginationChange}
-							sx={{
-								display: 'flex',
-								justifyContent: 'center',
-								'& *': { borderColor: '#6A35F2 !important', color: '#6A35F2 !important' },
-								'.css-lqq3n7-MuiButtonBase-root-MuiPaginationItem-root.Mui-selected': {
-									backgroundColor: 'rgba(206, 147, 216, 0.24) !important',
-								},
-							}}
-						/>
-					</Stack>
-				</Box>
 			</Box>
 		</>
 	)

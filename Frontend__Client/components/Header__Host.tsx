@@ -192,7 +192,6 @@ const HeaderHost = (props: any) => {
 								{ticketList?.data?.map((ticket) => (
 									<>
 										{' '}
-										<Link href={`/event/${ticket?.conference_id}`}>
 										<MenuItem
 											key={ticket?.conference_id}
 											onClick={handleCloseUserMenu}
@@ -206,22 +205,23 @@ const HeaderHost = (props: any) => {
 														'https://images.pexels.com/photos/10402422/pexels-photo-10402422.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'
 													}
 												/>
-
-												<Box
-													className={styles.notification_Content}
-													sx={{
-														width: '50%',
-														height: '100%',
-														display: 'flex',
-														alignContent: 'center',
-														flexDirection: 'column ',
-														justifyContent: 'center',
-														gap: '0.5rem',
-													}}
-												>
-													<Typography component='h3'>{ticket?.conference_name}</Typography>
-													<Typography component='h4'>{parseDate(ticket?.date_start_conference)}</Typography>
-												</Box>
+												<Link href={`/event/${ticket?.conference_id}`}>
+													<Box
+														className={styles.notification_Content}
+														sx={{
+															width: '50%',
+															height: '100%',
+															display: 'flex',
+															alignContent: 'center',
+															flexDirection: 'column ',
+															justifyContent: 'center',
+															gap: '0.5rem',
+														}}
+													>
+														<Typography component='h3'>{ticket?.conference_name}</Typography>
+														<Typography component='h4'>{parseDate(ticket?.date_start_conference)}</Typography>
+													</Box>
+												</Link>
 												<Box display='flex' flexDirection='column' sx={{ width: '25%', alignItems: 'flex-start' }}>
 													{ticket?.conference_type === '2' && ticket?.zoom_meeting_id !== null && (
 														<IconButton sx={{ display: 'flex', gap: '0.5rem', color: '#C64EFF' }}>
@@ -241,7 +241,6 @@ const HeaderHost = (props: any) => {
 												</Box>
 											</Box>
 										</MenuItem>
-										</Link>
 										<Divider variant='inset' component='li' sx={{ width: '100%', mx: '0 !important' }} />
 									</>
 								))}
