@@ -85,6 +85,14 @@ export class PaymentService {
   }
   async updateTicketQuantity(ticketBoughtDto: BoughtTicketDto): Promise<ResponseData> {
     const responseData = new ResponseData()
+    const validateConfAmount = await this.conferenceRepository.findOneBy({ conference_id: ticketBoughtDto.conferenceId });
+    const current_quant = validateConfAmount.current_quantity;
+    const max_quant = validateConfAmount.ticket_quantity;
+    if(current_quant >= max_quant) {
+      responseData.status = false
+      responseData.data = 'Ticket is full'
+      return responseData;
+    }
     try {
       const data = await this.conferenceRepository.createQueryBuilder()
         .update(ConferenceEntity)
@@ -164,9 +172,14 @@ export class PaymentService {
   async paymentTicketWithBalance(paymentDto: PaymentWithBalanceDto): Promise<ResponseData> {
     const responseData = new ResponseData()
     try {
+      const user = await this.userRepository.findOne({ where: {user_id: paymentDto.userId} })
+      const userBalance = user.balance;
+      if(userBalance < parseInt(paymentDto.ticketPrice.toString())) {
+        throw new Error('Not enough balance')
+      }
       const res = await this.userRepository.createQueryBuilder()
       .update(UserEntity)
-      .set({balance: parseInt(paymentDto.userBalance.toString()) - parseInt(paymentDto.ticketPrice.toString())})
+      .set({balance: parseInt(userBalance.toString()) - parseInt(paymentDto.ticketPrice.toString())})
       .where("user_id = :id", {id: paymentDto.userId})
       .execute()
 
@@ -175,9 +188,22 @@ export class PaymentService {
         .set({ current_quantity: await this.getCurrentTicketQuantity(paymentDto.conferenceId) - 1 })
         .where("conference_id = :id", { id: paymentDto.conferenceId })
         .execute()
+        try {
+          await this.ticketRepository.insert(
+            {
+              buyer_id: paymentDto.userId,
+              conference_id: paymentDto.conferenceId,
+              date_buy: new Date(),
+              payment: await this.paymentRepository.findOneBy({ payment_id: 2 })
+            }
+          )
+        } catch (err) {
+          console.log(err)
+        }
       responseData.status = res.affected == data.affected
     } catch (err) {
-      console.log(err)
+      responseData.status = false;
+      responseData.data 
     }
     return responseData
   }

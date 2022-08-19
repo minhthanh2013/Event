@@ -60,6 +60,7 @@ const CreateEvent = (props) => {
   const [imageFile, setImageFile] = useState<Multer.File | null>();
   const [popUp, setPopUp] = useState("0");
   const [status, setStatus] = useState("0");
+  const [errorMessage, setErrorMessage] = useState<string>();
 
   const onImageChange = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
@@ -79,36 +80,47 @@ const CreateEvent = (props) => {
   }
 
   const apiCall = async (data) => {
-    if (imageFile === undefined) {
-      setStatus("0");
-      setPopUp("1");
-      return;
-    }
-    const resData = await fetch("/api/conference/create-new", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    });
-    const resDataJson = await resData.json();
-    if (resData.status === 200) {
-      let body = new FormData()
-      body.append('file', imageFile)
-      const imageUploadResult = await fetch(`/api/cloudinary/update-image-conference/${resDataJson.data.conference_id}`, {
+    try {
+      if (imageFile === undefined) {
+        setStatus("0");
+        setPopUp("1");
+        return;
+      }
+      const resData = await fetch("/api/conference/create-new", {
         method: "POST",
-        body,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
       });
-      console.log(90, imageUploadResult);
-    }
-
-    if (resData.status === 200) {
-      setStatus("1");
-      setPopUp("1");
-      setTimeout(redirect, 2000);
-    } else {
+      const resDataJson = await resData.json();
+      if(resDataJson.statusCode === 400) {
+        setStatus("0");
+        setPopUp("1");
+        setErrorMessage(resDataJson.message);
+      }
+      if (resData.status === 200) {
+        let body = new FormData()
+        body.append('file', imageFile)
+        const imageUploadResult = await fetch(`/api/cloudinary/update-image-conference/${resDataJson.data.conference_id}`, {
+          method: "POST",
+          body,
+        });
+        console.log(90, imageUploadResult);
+      }
+      if (resData.status === 200) {
+        setStatus("1");
+        setPopUp("1");
+        setTimeout(redirect, 2000);
+      } else {
+        setStatus("0");
+        setPopUp("1");
+        setErrorMessage("Fail to update event avatar to cloudinary");
+      }
+    } catch (err) {
       setStatus("0");
       setPopUp("1");
+      setErrorMessage(err.message);
     }
   }
 
@@ -131,7 +143,7 @@ const CreateEvent = (props) => {
         <Box className={styles.dot__2}></Box>
         <Box className={styles.dot__3}></Box>
         <HeaderHost {...props} />
-        <PopUp status={status} popUp={popUp} onClick={() => setPopUp("0")} />
+        <PopUp status={status} popUp={popUp} onClick={() => setPopUp("0")} errorMessage={errorMessage}/>
 
         <Typography variant="h3" component="div" className={styles.header}>
           Event Dashboard

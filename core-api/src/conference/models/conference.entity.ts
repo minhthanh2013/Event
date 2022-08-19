@@ -131,4 +131,6 @@ export class ConferenceEntity {
   organizer_name: string;
   @Column()
   zoom_meeting_id: string;
+  @Column()
+  isRecorded: boolean;
 }

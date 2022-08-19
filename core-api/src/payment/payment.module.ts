@@ -15,11 +15,12 @@ import { RecordEntity } from 'src/record/models/record.entity';
 
 @Module({
   imports: [TypeOrmModule.forFeature([PaymentEntity, UserEntity, ConferenceEntity, TicketEntity, SubscriptionEntity, HostEntity, SubscriptionPlanEntity, RecordEntity]),
-ClientsModule.register([
+  ClientsModule.register([
   {
     name: 'PAYMENT',
     transport: Transport.TCP,
     options: {
+      // host: 'payment', 19/8/2022
       port: 3002,
     }
   }

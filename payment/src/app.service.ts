@@ -28,8 +28,8 @@ export class AppService {
           },
         }
       ],
-      success_url: `${process.env.MOCK_URL}`,
-      cancel_url: `${process.env.MOCK_URL}`,
+      success_url: `${process.env.MOCK_URL}?role=user`,
+      cancel_url: `${process.env.CANCEL_URL}?role=user`,
       payment_intent_data: {
         description: 'BUY TICKET',
       },
@@ -66,7 +66,6 @@ export class AppService {
   }
 
   async addBalance(balanceInfo: AddBalanceDto): Promise<ResponseData> {
-    console.log(69, balanceInfo);
     const responseData = new ResponseData()
     const param: Stripe.Checkout.SessionCreateParams = {
       mode: 'payment',
@@ -79,8 +78,8 @@ export class AppService {
           currency: 'vnd'
         },
       ],
-      success_url: `${process.env.MOCK_URL}`,
-      cancel_url: `${process.env.MOCK_URL}`,
+      success_url: `${process.env.MOCK_URL}?role=user`,
+      cancel_url: `${process.env.CANCEL_URL}?role=user`,
       payment_intent_data: {
         description: 'ADD BALANCE'
       },
@@ -109,8 +108,8 @@ export class AppService {
           description: 'SUBSCRIBE PREMIUM PLAN (1 MONTH)'
         }
       ],
-      success_url: `${process.env.MOCK_URL}`,
-      cancel_url: `${process.env.MOCK_URL}`,
+      success_url: `${process.env.MOCK_URL}?role=host`,
+      cancel_url: `${process.env.CANCEL_URL}?role=host`,
       subscription_data: {
         description: 'SUBSCRIBE PREMIUM PLAN (1 MONTH)'
       },
@@ -186,8 +185,8 @@ export class AppService {
             },
           }
         ],
-        success_url: `${process.env.MOCK_URL}`,
-        cancel_url: `${process.env.MOCK_URL}`,
+        success_url: `${process.env.MOCK_URL}?role=user`,
+        cancel_url: `${process.env.CANCEL_URL}?role=user`,
         payment_intent_data: {
           description: 'BUY RECORD',
         },

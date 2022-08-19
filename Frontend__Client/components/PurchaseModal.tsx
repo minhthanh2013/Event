@@ -11,6 +11,7 @@ import CreditCardIcon from '@mui/icons-material/CreditCard'
 import ArrowRightAltIcon from '@mui/icons-material/ArrowRightAlt'
 import { splitNum } from '../GlobalFunction/SplitNumber'
 import { useRouter } from 'next/router'
+import { PopUp } from './AlertPop-up'
 
 interface modalProps {
 	handleToggle: any
@@ -50,15 +51,23 @@ interface PaymentDto {
 	description?: string;
 }
 
+interface PaymentBalanceDto {
+	userId: number;
+	conferenceId: number;
+	ticketPrice: number;
+}
+
 const PurchaseModal = (props: modalProps) => {
 	const router = useRouter();
-	console.log(43, props)
 	// CALL API DI CHECKOUT
-	const conferenceId = props.data.conference_id
-	console.log(props.userId)
 	const [selectedValue, setSelectedValue] = useState('a')
 	const [total, setTotal] = useState(parseInt(props?.data?.conferencePrice?.toString()));
 	const [normalizeDate, setNormalizeDate] = useState<string>()
+		// Handle exception
+	const [popUp, setPopUp] = useState("0");
+	const [status, setStatus] = useState("0");
+	const [errorMessage, setErrorMessage] = useState<string>();
+	const [successMessage, setSuccessMessage] = useState<string>();
 	const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		setSelectedValue(event.target.value)
 	}
@@ -107,11 +116,31 @@ const PurchaseModal = (props: modalProps) => {
 					router.push(resDataJson.data);
 				}
 			} else {
-				//Set Checkout cho nút Palpay ở đây
+				const paymentRequest = {} as PaymentBalanceDto;
+				paymentRequest.userId = props.userId;
+				paymentRequest.conferenceId = props.data.conference_id;
+				paymentRequest.ticketPrice = props.data.conferencePrice;
+				const result = await fetch("/api/payment/buy-ticket-by-balance", {
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+					},
+					body: JSON.stringify(paymentRequest),
+				})
+				const resDataJson = await result.json();
+				if (resDataJson.status === true) {
+					setSuccessMessage("Buy ticket successfully. Your balance will be charged " + splitNum(paymentRequest.ticketPrice) + " VND")
+					setStatus("1");
+					setPopUp("1");
+					window.location.reload();
+				} else {
+					setErrorMessage("Fail to buy ticket, your balance is not met the ticket price, please try again after you addup more balance")
+					setStatus("0");
+					setPopUp("1");
+				}
 			}
 		}
 	}
-
 
 	useEffect(() => {
 		parseDate()
@@ -119,8 +148,9 @@ const PurchaseModal = (props: modalProps) => {
 	return (
 		<>
 			<Box className={styles.container} sx={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }}>
+			<PopUp status={status} popUp={popUp} errorMessage={errorMessage} successMessage={successMessage} onClick={() => setPopUp("0")} />
 				<Box className={styles.leftWrap}>
-					<Box className={styles.leftWrap__top}>
+					<Box className={styles.leftWrap__top}> 
 						<Typography component='h3'>{props?.data?.conferenceName}</Typography>
 						<Typography component='h4'>{normalizeDate}</Typography>
 						<Divider variant='middle' />
@@ -147,7 +177,7 @@ const PurchaseModal = (props: modalProps) => {
 							<Box sx={{ width: '100%', height: '60px', backgroundColor: 'white', mt: '2rem', display: 'flex', alignContent: 'center' }}>
 								<Radio sx={{ color: '#6A35F2', '&.Mui-checked': { color: '#6A35F2' } }} name='radio-buttons' checked={selectedValue === 'a'} onChange={handleChange} value='a' />
 								<Typography flexGrow={1} component='h4' sx={{ my: 'auto' }}>
-									Paypal
+									Balance
 								</Typography>
 								<AccountBalanceWalletIcon sx={{ my: 'auto', mr: '1rem', color: '#6A35F2' }} />
 							</Box>
@@ -190,8 +220,8 @@ export const TicketInModal: React.FC<TicketProps> = ({ data, setTotal, imageProp
 						image={imageProps || 'https://images.pexels.com/photos/2306281/pexels-photo-2306281.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'}
 						alt='Live from space album cover'
 					/>
-					<Box className={styles.ticketContent}>
-						<Typography component='h3'>{data?.conferenceName}</Typography>
+					<Box className={styles.ticketContent} sx={{width: '500px'}}>
+						<Typography component='h3' sx={{height: 'auto'}}>{data?.conferenceName}</Typography>
 						<Typography component='h4'>{splitNum(data?.conferencePrice)} VNĐ</Typography>
 					</Box>
 					<Box>

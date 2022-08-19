@@ -4,7 +4,6 @@ import { Box, Button, Menu, MenuItem, Toolbar, Typography } from '@mui/material'
 import IconButton from '@mui/material/IconButton'
 import React, { useEffect, useState } from 'react'
 import Badge from '@mui/material/Badge'
-import MailOutlineIcon from '@mui/icons-material/MailOutline'
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone'
 import Avatar from '@mui/material/Avatar'
 import Link from 'next/link'
@@ -12,24 +11,19 @@ import Divider from '@mui/material/Divider'
 import styles from '../styles/Header.module.scss'
 import PlayCircleOutlineOutlinedIcon from '@mui/icons-material/PlayCircleOutlineOutlined'
 import ReplayOutlinedIcon from '@mui/icons-material/ReplayOutlined'
-import ListItemIcon from '@mui/material/ListItemIcon'
 import LogoutIcon from '@mui/icons-material/Logout'
 import LocalActivityIcon from '@mui/icons-material/LocalActivity'
 import ConfirmationNumberIcon from '@mui/icons-material/ConfirmationNumber'
-import { format } from 'date-fns'
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet'
-import AddOutlinedIcon from '@mui/icons-material/AddOutlined'
 import Modal from '@mui/material/Modal'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import TextField from '@mui/material/TextField'
-import FormHelperText from '@mui/material/FormHelperText'
 import InputAdornment from '@mui/material/InputAdornment'
-import InputLabel from '@mui/material/InputLabel'
-import FormControl from '@mui/material/FormControl'
-import OutlinedInput from '@mui/material/OutlinedInput'
 import { useRouter } from 'next/router'
+import { cp } from 'fs/promises'
+import { PopUp } from './AlertPop-up'
 
 interface HeaderProps {
 	props: any
@@ -81,11 +75,9 @@ const schema = yup
 
 
 const Header = (props: any) => {
-	console.log(81, props)
+	const router = useRouter();
 	const [ticketList, setTicketList] = useState<TicketProps>()
 	const [userDetails, setUserDetails] = useState<UserDetailProp>()
-	const pages = ['Products', 'Pricing', 'Blog']
-	const settings = ['Profile', 'Account', 'Dashboard', 'Logout', 'Account', 'Dashboard', 'Logout', 'Account', 'Dashboard', 'Logout']
 
 	// notification
 	const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null)
@@ -102,6 +94,12 @@ const Header = (props: any) => {
 	const handleChangeBalance = (e) => {
 		setValueBalance(e.target.value)
 	}
+
+	// Handle exception
+	const [popUp, setPopUp] = useState("0");
+	const [status, setStatus] = useState("0");
+	const [errorMessage, setErrorMessage] = useState<string>();
+  
 	const {
 		register,
 		handleSubmit,
@@ -109,19 +107,33 @@ const Header = (props: any) => {
 	} = useForm({
 		resolver: yupResolver(schema),
 	})
-	const router = useRouter();
-	if (props.tempDecode == undefined) {
-		router.push("/user/login")
-	}
-	const onSubmitBalanceModal = ({ amount }) => {
-		// setValueBalance(amount)
-		setValueBalance(prev => prev + Number(userDetails?.balance + amount))
-
+	const onSubmitBalanceModal = async ({ amount }) => {
+		if (props.tempDecode == undefined) {
+			router.push("/user/login")
+		}
+		if(amount < 30000) {
+			setStatus("0");
+			setPopUp("1");
+			setErrorMessage("Minimum balance is 30.000");
+		}
 		const addBalance = {} as addBalanceDTO
-		addBalance.balance = valueBalance;
+		addBalance.balance = parseInt(amount);
 		addBalance.idUser = props.tempDecode?.sub;
+
 		// call API here
-		handleCloseBalanceModal()
+		const result = await fetch("/api/payment/add-balance", {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+				"Authorization": process.env.STRIPE_TEST_KEY,
+			},
+			body: JSON.stringify(addBalance),
+		})
+		const resDataJson = await result.json();
+		if (resDataJson.status === true) {
+			handleCloseBalanceModal()
+			router.push(resDataJson.data);
+		}
 	}
 
 
@@ -131,7 +143,6 @@ const Header = (props: any) => {
 		const day = date.getDate()
 		const hour = date.getHours()
 		const stringHour = (date.getHours() < 10 ? '0' : '') + date.getHours()
-		const min = date.getMinutes()
 		const stringMin = (date.getMinutes() < 10 ? '0' : '') + date.getMinutes()
 		let ampm = hour >= 12 ? 'pm' : 'am'
 		const weekday = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
@@ -155,7 +166,6 @@ const Header = (props: any) => {
 					},
 				}
 				const dataResult = await fetch(`/api/user/${props.tempDecode.sub}`, config);
-				console.log(dataResult.status)
 				if (dataResult.status === 401 || dataResult.status === 404) {
 
 					const newDataResult = await fetch('/api/auth/user/logout');
@@ -220,6 +230,7 @@ const Header = (props: any) => {
 	}
 	return (
 		<Box sx={{ my: '20px' }}>
+			<PopUp status={status} popUp={popUp} errorMessage={errorMessage} onClick={() => setPopUp("0")} />
 			<AppBar position='static' color='transparent' elevation={0}>
 				<Toolbar sx={{ display: 'flex', gap: '20px' }}>
 					<Typography
@@ -331,7 +342,7 @@ const Header = (props: any) => {
 													{ticket?.conference_type === '2' && ticket?.isValiated === false && (
 														<IconButton sx={{ display: 'flex', gap: '0.5rem', color: '#C64EFF' }}>
 															<ReplayOutlinedIcon />
-															<Link href={`/zoom/record/${ticket?.conference_id}`} passHref>
+															<Link href={`/zoom/record?conferenceId=${ticket?.conference_id}`} passHref>
 																<Typography>Record</Typography>
 															</Link>
 														</IconButton>
@@ -438,7 +449,7 @@ const Header = (props: any) => {
 												}}
 											>
 												<Typography variant='body2' sx={{ fontSize: '1rem' }}>
-													{valueBalance == null ? (
+													{valueBalance == undefined ? (
 														userDetails?.balance
 													) : (
 														valueBalance

@@ -8,6 +8,7 @@ async function bootstrap() {
   app.connectMicroservice({
     transport: Transport.TCP,
     options: {
+      // host: 'payment',
       port: 3002,
     },
   });

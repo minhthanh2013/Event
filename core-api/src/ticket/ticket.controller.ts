@@ -40,7 +40,6 @@ export class TicketController {
   }
   @Post('buy-session')
   async buySession(@Body() session: BuySessionDto) {
-    console.log(43, session)
     console.log('Added to queue to buy session')
     await this.ticketQueue.add('buysession', {
       sessionDto: session

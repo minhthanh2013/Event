@@ -25,7 +25,6 @@ export class TicketProcessor {
 
   @Process('buysession')
   async handleBuySession(job: Job) {
-    console.log("Here")
     const buy: BuySessionDto =  {} as BuySessionDto;
     buy.buyer_id = job.data.sessionDto.buyer_id;
     buy.session_id = job.data.sessionDto.session_id;

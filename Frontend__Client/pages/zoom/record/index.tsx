@@ -6,7 +6,6 @@ import Header from '../../../components/Header'
 import styles from '../../../styles/Background.module.scss'
 
 const ZoomRecord = (props) => {
-	console.log(9, props)
 	const [record, setRecord] = useState<string>()
 	const router = useRouter()
 	const { conferenceId } = router.query

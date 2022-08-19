@@ -22,7 +22,7 @@ const Confirmation = (props: any) => {
     <>
       <Header />
       <Typography variant="h1" component="div" gutterBottom className={styles.confirmation}>
-        Your payment has been done succesfully
+        Your payment has been cancelled
       </Typography>
 
       <Footer />

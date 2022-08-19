@@ -12,7 +12,6 @@ export class PaymentWithBalanceDto {
   userId: number;
   conferenceId: number;
   ticketPrice: number;
-  userBalance: number;
 }
 
 export class SubscriptionDto {
