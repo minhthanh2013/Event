@@ -1,26 +1,25 @@
 import { Box, Typography } from '@mui/material'
 import styles from '../styles/DetailContent.module.scss'
-import LocationOnIcon from '@mui/icons-material/LocationOn'
 import { useEffect, useState } from 'react'
-import GoogleMapReact from 'google-map-react'
-import FmdGoodOutlinedIcon from '@mui/icons-material/FmdGoodOutlined'
-import Map from './Map'
 
 interface TicketProp {
-    conferenceAddress: string
-    conferenceCategory: number
-    conferenceDescription: string
-    conferenceName: string
-    conferencePrice: number
-    conferenceType: number
-    organizerName: string
-    ticketQuantity: number
-
-    status_ticket: string
-    host_id: number
-    conference_id: number
-    address: string
-    date_start_conference: Date
+	conferenceAddress: string
+	conferenceCategory: number
+	conferenceDescription: string
+	conferenceName: string
+	conferencePrice: number
+	conferenceType: number
+	organizerName: string
+	ticketQuantity: number
+	status_ticket: string
+	host_id: number
+	conference_id: number
+	address: string
+	dateStartSell: Date
+	dateStartConference: Date
+	dateEndSell: Date;
+	isRecorded?: boolean;
+	isValidated?: boolean;
     // conferenceOrganizer: string;
 }
 
@@ -38,9 +37,7 @@ interface Host {
 const weekday = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
 
 const DetailContent = (props: TicketProps) => {
-    const [imageProp, setImageProp] = useState<string>()
     const [year, setYear] = useState<string>()
-    const [month, setMonth] = useState<string>()
     const [monthString, setMonthString] = useState<string>()
     const [day, setDay] = useState<string>()
     const [hour, setHour] = useState<string>()
@@ -57,7 +54,6 @@ const DetailContent = (props: TicketProps) => {
         const parseDate = () => {
             const date = new Date(props.data?.date_start_conference)
             setYear(date.getFullYear().toString())
-            setMonth(date.getMonth().toString())
             setMonthString(date.toLocaleString('en-us', { month: 'short' }))
             setDay(date.getDate().toString())
             let hours = date.getHours()

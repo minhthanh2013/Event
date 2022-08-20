@@ -1,3 +1,4 @@
+import { ComboSessionEntity } from 'src/combosession/models/combo_session.entity';
 /* eslint-disable prettier/prettier */
 import { Module } from '@nestjs/common';
 import { PaymentService } from './payment.service';
@@ -14,7 +15,7 @@ import { SubscriptionPlanEntity } from 'src/subscriptionplan/models/subscription
 import { RecordEntity } from 'src/record/models/record.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([PaymentEntity, UserEntity, ConferenceEntity, TicketEntity, SubscriptionEntity, HostEntity, SubscriptionPlanEntity, RecordEntity]),
+  imports: [TypeOrmModule.forFeature([PaymentEntity, UserEntity, ConferenceEntity, TicketEntity, SubscriptionEntity, HostEntity, SubscriptionPlanEntity, RecordEntity, ComboSessionEntity]),
   ClientsModule.register([
   {
     name: 'PAYMENT',

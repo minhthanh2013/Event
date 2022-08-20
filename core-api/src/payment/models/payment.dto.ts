@@ -14,6 +14,12 @@ export class PaymentWithBalanceDto {
   ticketPrice: number;
 }
 
+export class PaymentSessionWithBalanceDto {
+  userId: number;
+  sessionId: number;
+  sessionPrice: number;
+}
+
 export class SubscriptionDto {
   idHost: number;
 }

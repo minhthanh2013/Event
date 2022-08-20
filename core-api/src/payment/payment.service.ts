@@ -1,3 +1,4 @@
+import { ComboSessionEntity } from 'src/combosession/models/combo_session.entity';
 /* eslint-disable prettier/prettier */
 import { Inject, Injectable } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
@@ -14,7 +15,7 @@ import { TicketEntity } from 'src/ticket/models/ticket.entity';
 import { UserEntity } from 'src/user/models/user.entity';
 import { User } from 'src/user/models/user.interface';
 import { Repository } from 'typeorm/repository/Repository';
-import { AddBalanceDto, BoughtRecordDto, BoughtTicketDto, PaymentDto, PaymentRecordDto, PaymentRecordWithBalanceDto, PaymentWithBalanceDto, SubscriptionDto } from './models/payment.dto';
+import { AddBalanceDto, BoughtRecordDto, BoughtTicketDto, PaymentDto, PaymentRecordDto, PaymentRecordWithBalanceDto, PaymentSessionWithBalanceDto, PaymentWithBalanceDto, SubscriptionDto } from './models/payment.dto';
 import { PaymentEntity } from './models/payment.entity';
 
 @Injectable()
@@ -37,6 +38,8 @@ export class PaymentService {
     private readonly subPlanRepository: Repository<SubscriptionPlanEntity>,
     @InjectRepository(RecordEntity)
     private readonly recordRepository: Repository<RecordEntity>,
+    @InjectRepository(ComboSessionEntity)
+    private readonly comboRepository: Repository<ComboSessionEntity>,
   ) { }
 
   createPaymentLink(paymentDto: PaymentDto): Observable<ResponseData> {
@@ -204,6 +207,61 @@ export class PaymentService {
     } catch (err) {
       responseData.status = false;
       responseData.data 
+    }
+    return responseData
+  }
+
+  async paymentSessionWithBalance(paymentDto: PaymentSessionWithBalanceDto): Promise<ResponseData> {
+    const responseData = new ResponseData()
+    const combos = await this.comboRepository.find({ where: {combo_id: paymentDto.sessionId} })
+    try {
+      const user = await this.userRepository.findOne({ where: {user_id: paymentDto.userId} })
+      // Check if user already buy the session
+      const tickets = await this.ticketRepository.find({ where: {buyer_id: paymentDto.userId, session_id: paymentDto.sessionId} })
+      if(tickets.length === combos.length) {
+        throw new Error('User already buy this session')
+      }
+      // Check if user met the required balance
+      const userBalance = user.balance;
+      if(userBalance < parseInt(paymentDto.sessionPrice.toString())) {
+        throw new Error('Not enough balance')
+      }
+
+      const res = await this.userRepository.createQueryBuilder()
+      .update(UserEntity)
+      .set({balance: parseInt(userBalance.toString()) - parseInt(paymentDto.sessionPrice.toString())})
+      .where("user_id = :id", {id: paymentDto.userId})
+      .execute()
+
+      let countAffectedConference = 0;
+      for (let index = 0; index < combos.length; index++) {
+        const combo = combos[index];
+        const conferenceId = combo.conference_id;
+        // const conferencePrice = conference.price;
+        const data = await this.conferenceRepository.createQueryBuilder()
+        .update(ConferenceEntity)
+        .set({ current_quantity: await this.getCurrentTicketQuantity(conferenceId) - 1 })
+        .where("conference_id = :id", { id: conferenceId })
+        .execute()
+        try {
+          await this.ticketRepository.insert(
+            {
+              buyer_id: paymentDto.userId,
+              conference_id: conferenceId,
+              date_buy: new Date(),
+              payment: await this.paymentRepository.findOneBy({ payment_id: 2 }),
+              session_id: paymentDto.sessionId
+            }
+          )
+        } catch (err) {
+          throw err;
+        }
+        countAffectedConference += data.affected;
+      }
+      responseData.status = res.affected == 1 && combos.length == countAffectedConference
+    } catch (err) {
+      responseData.status = false;
+      responseData.data = err.message;
     }
     return responseData
   }

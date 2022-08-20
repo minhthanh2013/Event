@@ -49,11 +49,31 @@ interface TicketProp {
 	// conferenceOrganizer: string;
 }
 
+interface PaymentDto {
+	userId: number;
+	conferenceId: number;
+	ticketPrice: number;
+	ticketName: string;
+	ticketQuantity: number;
+	description?: string;
+}
+
+interface PaymentBalanceDto {
+	userId: number;
+	sessionId: number;
+	sessionPrice: number;
+}
 const PurchaseModalSession = (props: modalProps) => {
 	console.log(51, props.data)
 	const [selectedValue, setSelectedValue] = useState('a')
 	const [total, setTotal] = useState(0);
 	const [normalizeDate, setNormalizeDate] = useState<string>()
+	// Handle exception
+	const [popUp, setPopUp] = useState("0");
+	const [status, setStatus] = useState("0");
+	const [errorMessage, setErrorMessage] = useState<string>();
+	const [successMessage, setSuccessMessage] = useState<string>();
+	
 	const router = useRouter();
 	const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		setSelectedValue(event.target.value)
@@ -74,8 +94,31 @@ const PurchaseModalSession = (props: modalProps) => {
 		else {
 			if (selectedValue === "b") {
 				//checkout cho Credit Card
+
 			} else {
-				//Set Checkout cho nút Palpay ở đây
+				//Set Checkout cho nút Balance ở đây
+				const paymentRequest = {} as PaymentBalanceDto;
+				paymentRequest.userId = props.userId;
+				paymentRequest.sessionId = props.data.comboSessionId;
+				paymentRequest.sessionPrice = props.data.comboSessionPrice;
+				const result = await fetch("/api/payment/buy-ticket-by-balance", {
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+					},
+					body: JSON.stringify(paymentRequest),
+				})
+				const resDataJson = await result.json();
+				if (resDataJson.status === true) {
+					setSuccessMessage("Buy session successfully. Your balance will be charged " + splitNum(paymentRequest.sessionPrice) + " VND")
+					setStatus("1");
+					setPopUp("1");
+					window.location.reload();
+				} else {
+					setErrorMessage("Fail to buy session, your balance is not met the ticket price, please try again after you addup more balance")
+					setStatus("0");
+					setPopUp("1");
+				}
 			}
 		}
 	}
@@ -114,7 +157,7 @@ const PurchaseModalSession = (props: modalProps) => {
 							<Box sx={{ width: '100%', height: '60px', backgroundColor: 'white', mt: '2rem', display: 'flex', alignContent: 'center' }}>
 								<Radio sx={{ color: '#6A35F2', '&.Mui-checked': { color: '#6A35F2' } }} name='radio-buttons' checked={selectedValue === 'a'} onChange={handleChange} value='a' />
 								<Typography flexGrow={1} component='h4' sx={{ my: 'auto' }}>
-									Paypal
+									Balance
 								</Typography>
 								<AccountBalanceWalletIcon sx={{ my: 'auto', mr: '1rem', color: '#6A35F2' }} />
 							</Box>

@@ -1,14 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
-import Link from 'next/link'
 
 import { Box } from '@mui/system'
 import Header from '../../components/Header'
 import Footer from '../../components/Footer'
-import SearchBar from '../../components/SearchBar'
-import TicketList from '../../components/TicketList'
-import CarouselSlide from '../../components/CarouselSlide'
-import SessionList from '../../components/SessionList'
 import styles from '../../styles/Event.module.scss'
 import DetailBanner from '../../components/DetailBanner'
 import Typography from '@mui/material/Typography'
@@ -50,7 +45,6 @@ const Event = (props: any) => {
 	const {isBuy} = router.query
 	const [ticketList, setTicketList] = useState<TicketProps>()
 	const [imageProp, setImageProp] = useState<string>()
-	const userId = props.tempDecode.sub;
 	let [open, setOpen] = useState(false || isBuy === 'true')
 	const handleToggle = () => {
 		setOpen(!open)
@@ -82,12 +76,10 @@ const Event = (props: any) => {
 						<Box className={styles.background__wrap} sx={{ filter: open ? 'blur(10px) ' : 'none' }}>
 							<Box className={styles.dot__1}></Box>
 							<Header {...props} />
-							{ticketList?.data && <DetailBanner data={ticketList.data} handleToggle={handleToggle} userId={userId}/>}
+							{ticketList?.data && <DetailBanner data={ticketList.data} handleToggle={handleToggle} userId={props?.tempDecode?.sub}/>}
 							{ticketList?.data && <DetailContent data={ticketList.data} />}
-							{/* <DetailBanner data={ticketList.data}/>
-					<DetailContent data={ticketList.data}/> */}
 						</Box>
-						{open && <PurchaseModal handleToggle={handleToggle} data={ticketList.data} imageProp={imageProp} userId={userId}/>}
+						{(new Date() > new Date(ticketList?.data?.dateStartSell)) && open && <PurchaseModal handleToggle={handleToggle} data={ticketList.data} imageProp={imageProp} userId={props?.tempDecode?.sub}/>}
 						<Footer />
 					</>
 				) : (
@@ -104,12 +96,12 @@ const Event = (props: any) => {
 					<Box className={styles.background__wrap} sx={{ filter: open ? 'blur(10px) ' : 'none' }}>
 						<Box className={styles.dot__1}></Box>
 						<Header {...props} />
-						{ticketList?.data && <DetailBanner data={ticketList.data} handleToggle={handleToggle} userId={userId}/>}
+						{ticketList?.data && <DetailBanner data={ticketList.data} handleToggle={handleToggle} userId={props?.tempDecode?.sub}/>}
 						{ticketList?.data && <DetailContent data={ticketList.data} />}
 						{/* <DetailBanner data={ticketList.data}/>
 						<DetailContent data={ticketList.data}/> */}
 					</Box>
-					{open && <PurchaseModal handleToggle={handleToggle} data={ticketList.data} imageProp={imageProp} userId={userId}/>}
+					{(new Date() > new Date(ticketList?.data?.dateStartSell))  && open && <PurchaseModal handleToggle={handleToggle} data={ticketList.data} imageProp={imageProp} userId={props?.tempDecode?.sub}/>}
 					<Footer />
 				</>
 			)}

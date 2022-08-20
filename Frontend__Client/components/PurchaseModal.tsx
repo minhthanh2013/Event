@@ -37,7 +37,11 @@ interface TicketProp {
 	host_id: number
 	conference_id: number
 	address: string
-	date_start_conference: Date
+	dateStartSell: Date
+	dateStartConference: Date
+	dateEndSell: Date;
+	isRecorded?: boolean;
+	isValidated?: boolean;
 
 	// conferenceOrganizer: string;
 }
@@ -73,7 +77,7 @@ const PurchaseModal = (props: modalProps) => {
 	}
 	const parseDate = () => {
 		const weekday = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
-		const date = new Date(props?.data?.date_start_conference)
+		const date = new Date(props?.data?.dateStartConference)
 		let monthString = date.toLocaleString('en-us', { month: 'short' })
 		let day = date.getDate().toString()
 		let hours = date.getHours()

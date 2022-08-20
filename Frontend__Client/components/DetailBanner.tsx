@@ -53,7 +53,24 @@ const DetailBanner = (props: TicketProps) => {
 	const [min, setMin] = useState<string>()
 	const [weekDay, setWeekDay] = useState<string>()
 	const [timePeriod, setTimePeriod] = useState<string>()
-	const [hideBuyButton, setHideBuyButton] = useState(true)
+	const [hideBuyButton, setHideBuyButton] = useState(false)
+	const normalizeDate = (date: Date) => {
+		date = new Date(date)
+		const year1 = date.getFullYear().toString()
+		const monthString1 = date.toLocaleString('en-us', { month: 'short' })
+		const day1 = date.getDate().toString()
+		let hours1 = date.getHours();
+		let minutes1 = date.getMinutes();
+		let ampm = hours1 >= 12 ? 'pm' : 'am';
+		hours1 = hours1 % 12;
+		hours1 = hours1 ? hours1 : 12; // the hour '0' should be '12'
+		let minuteString1 = minutes1 < 10 ? '0'+minutes1 : minutes1;
+		let timePeriod1 = ampm
+		let hour1 = hours1.toString()
+		let min1 = minuteString1.toString()
+		let weekDay1 = weekday[date.getDay()]
+		return `${weekDay1}, ${monthString1} ${day1}, ${year1} at ${hour1}:${min1} ${timePeriod1}`
+	}
 	useEffect(() => {
 		const parseDate = () => {
 			const date = new Date(props.data?.dateStartConference)
@@ -75,6 +92,7 @@ const DetailBanner = (props: TicketProps) => {
 			const user = {} as UserToVerify 
 			user.user_id = +props.userId
 			user.conference_id = props.data.conference_id
+			console.log(user)
 			const response = await fetch(`/api/ticket/verify-user-buy-ticket`, {
 				method: 'POST',
 				body: JSON.stringify(user)
@@ -84,6 +102,7 @@ const DetailBanner = (props: TicketProps) => {
 				setHideBuyButton(true)
 			}
 		}
+		console.log(hideBuyButton)
 		parseDate();
 		if(props.userId !== undefined) {
 			getUserDetails()
@@ -114,7 +133,7 @@ const DetailBanner = (props: TicketProps) => {
 								{!hideBuyButton ? (
 									<>
 										{new Date() < new Date(props.data.dateStartSell) &&
-											(`Conference begin to sell at ${props.data.dateStartSell}`)
+										(<Typography component="h3">Conference begin to sell at {normalizeDate(props.data.dateStartSell)}</Typography>)
 										}
 										{new Date(props.data.dateStartSell) < new Date() && new Date() < new Date(props.data.dateStartConference) &&
 											(<Button variant="contained" className={styles.button__2} onClick={props.handleToggle}>Buy ticket ({`${splitNum(props.data?.conferencePrice)} VNĐ`})</Button>)

@@ -1,3 +1,4 @@
+import { PaymentSessionWithBalanceDto } from './models/payment.dto';
 /* eslint-disable prettier/prettier */
 import { Body, Controller, Post, Req } from '@nestjs/common';
 import { from, Observable } from 'rxjs';
@@ -26,6 +27,10 @@ export class PaymentController {
   @Post('/payment-ticket-with-balance')
   paymentTicketWithBalance(@Body() paymentDto: PaymentWithBalanceDto): Observable<ResponseData> {
     return from(this.paymentService.paymentTicketWithBalance(paymentDto))
+  }
+  @Post('/payment-session-with-balance')
+  paymentSessionWithBalance(@Body() paymentDto: PaymentSessionWithBalanceDto): Observable<ResponseData> {
+    return from(this.paymentService.paymentSessionWithBalance(paymentDto))
   }
   @Post('/buy-record')
   buyRecord(@Body() paymentRecordDto: PaymentRecordDto): Observable<ResponseData> {
@@ -58,6 +63,19 @@ export class PaymentController {
         } else if (description.data.description == 'BUY TICKET') {
           // Update ticket quantity and add ticket to user database
           console.log("buy ticket")
+          const session = await this.paymentService.getInfoSession(id_session).toPromise()
+          console.log(session.data)
+          const conferenceId = (session.data.client_reference_id as string).split('|')[0]
+          const userId = (session.data.client_reference_id as string).split('|')[1]
+          const ticketDto = new BoughtTicketDto()
+          ticketDto.conferenceId = conferenceId as unknown as number
+          ticketDto.userId = userId as unknown as number
+          this.paymentService.updateTicketQuantity(ticketDto)
+          this.paymentService.createUserTicket(ticketDto)
+          // 20/8/2022
+        } else if (description.data.description == 'BUY SESSION') {
+          // Update ticket quantity and add ticket to user database
+          console.log("buy session")
           const session = await this.paymentService.getInfoSession(id_session).toPromise()
           console.log(session.data)
           const conferenceId = (session.data.client_reference_id as string).split('|')[0]
