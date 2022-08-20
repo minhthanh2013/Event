@@ -58,6 +58,8 @@ interface CategoryProps {
 export const BasicInfo: React.FC<CreateEventProps> = ({ data, setData, setValue }) => {
   const [categoryList, setCategoryList] = useState<CategoryProps>()
   const [typeList, setTypeList] = useState<TypeProps>()
+  const [selectedType, setSelectedType] = useState()
+  const [checked, setChecked] = useState(false);
 
   useEffect(() => {
     const fetchDataCate = async () => {
@@ -80,14 +82,20 @@ export const BasicInfo: React.FC<CreateEventProps> = ({ data, setData, setValue 
     handleSubmit,
     formState: { errors },
   } = useForm();
+
+  const isRecorded = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setChecked(e.target.checked)
+  }
+
   const onSubmit = (value: any) => {
     setData({
       ...data, conferenceName: value.conferenceName, conferenceAddress: value.conferenceAddress, organizerName: value.organizerName,
-      conferenceType: value.conferenceType, conferenceCategory: value.conferenceCategory, conferenceDescription: value.conferenceDescription
+      conferenceType: value.conferenceType, conferenceCategory: value.conferenceCategory, conferenceDescription: value.conferenceDescription, isRecorded: value.isRecorded,
     });
     console.log(data)
     setValue(1);
   };
+  console.log(checked);
   return (
     <>
       <Grid
@@ -135,6 +143,10 @@ export const BasicInfo: React.FC<CreateEventProps> = ({ data, setData, setValue 
               defaultValue={data.conferenceType}
               label="Type"
               {...register("conferenceType")}
+              onChange={(e) => {
+                setSelectedType(e.target.value);
+                setChecked(false)
+              }}
             >
               {typeList?.data?.map((dataItem) => (
                 <MenuItem key={dataItem.type_id} value={dataItem.type_id}>{dataItem.type_name}</MenuItem>
@@ -164,6 +176,12 @@ export const BasicInfo: React.FC<CreateEventProps> = ({ data, setData, setValue 
             multiline
             {...register("conferenceDescription")}
           />
+          <FormControlLabel
+            control={<Checkbox disabled={selectedType === "1"} checked={checked} onChange={(e) => isRecorded(e)} />}
+            label="Record this conference"
+            {...register("isRecorded")}
+          />
+          <br />
           <Button className={styles.nextBtn} variant="contained" type="submit">
             Next
           </Button>
@@ -355,7 +373,7 @@ export const DateForm: React.FC<CreateEventProps> = ({ data, setData, setValue, 
   const onSubmit = (value: any) => {
     api({
       ...data, dateStartConference: value.dateStartConference, dateStartSell: value.dateStartSell,
-      dateEndSell: value.dateEndSell, conferencePrice: value.conferencePrice, ticketQuantity: value.ticketQuantity, isRecorded: value.isRecorded,
+      dateEndSell: value.dateEndSell, conferencePrice: value.conferencePrice, ticketQuantity: value.ticketQuantity,
       hostName: prop.tempDecode.username, host_id: prop.tempDecode.sub
     });
     console.log(`submit`);
@@ -502,12 +520,6 @@ export const DateForm: React.FC<CreateEventProps> = ({ data, setData, setValue, 
             defaultValue={data.ticketQuantity}
             {...register("ticketQuantity")}
           />
-          <FormControlLabel
-            control={<Checkbox disabled={data.conferenceType !== "2"} />}
-            label="Record this conference"
-            {...register("isRecorded")}
-          />
-          <br />
           <Button className={styles.nextBtn} variant="contained" type="submit" >
             Submit
           </Button>

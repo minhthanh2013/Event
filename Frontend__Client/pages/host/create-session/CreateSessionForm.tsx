@@ -145,6 +145,7 @@ export const Conferences: React.FC<CreateEventProps> = ({ data, setData, setValu
     const result = conferences?.data.filter(
       event => {
         if (checked.includes(event.conference_id)) {
+          console.log(event.status_ticket)
           return true;
         }
         return false;
@@ -186,29 +187,28 @@ export const Conferences: React.FC<CreateEventProps> = ({ data, setData, setValu
               </Typography>
               <Paper style={{ maxHeight: "30vw", overflow: 'auto' }}>
                 <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
-                  {conferences?.data.map((conference) => {
-                    const labelId = `checkbox-list-label-${conference.conference_id}`;
-                    return (
-                      <ListItem
-                        key={conference.conference_id}
-                        disablePadding
-                        className={styles.sketchy}
-                      >
-                        <ListItemButton role={undefined} onClick={handleToggle(conference.conference_id)} dense>
-                          <ListItemIcon>
-                            <Checkbox
-                              edge="start"
-                              checked={checked.indexOf(conference.conference_id) !== -1}
-                              tabIndex={-1}
-                              disableRipple
-                              inputProps={{ 'aria-labelledby': labelId }}
-                            />
-                          </ListItemIcon>
-                          <ListItemText id={labelId} primary={`${conference.conference_name}`} secondary={`Price: ${conference.price}`} />
-                        </ListItemButton>
-                      </ListItem>
-                    );
-                  })}
+                  {conferences?.data?.map((conference) => (
+                    <>
+                      {conference.status_ticket === 'published' &&
+                        <ListItem
+                          key={conference.conference_id}
+                          disablePadding
+                          className={styles.sketchy}
+                        >
+                          <ListItemButton role={undefined} onClick={handleToggle(conference.conference_id)} dense>
+                            <ListItemIcon>
+                              <Checkbox
+                                edge="start"
+                                checked={checked.indexOf(conference.conference_id) !== -1}
+                                tabIndex={-1}
+                                disableRipple
+                              />
+                            </ListItemIcon>
+                            <ListItemText id={conference.conference_id.toString()} primary={`${conference.conference_name}`} secondary={`Price: ${conference.price}`} />
+                          </ListItemButton>
+                        </ListItem>}
+                    </>
+                  ))}
                 </List>
               </Paper>
               <Button

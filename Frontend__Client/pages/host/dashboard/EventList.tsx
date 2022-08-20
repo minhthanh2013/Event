@@ -91,15 +91,21 @@ export const EventList = (props: EventListProps) => {
         }
         return result + a * b
     }, 0)
-    const Income = (Total * 90) / 100
+    const Income = (Total * 90) / 100;
+    const Remain = function (length: any): number {
+        if (length === undefined) {
+            return 0
+        } else { return length };
+    }
+    console.log(props.data?.length)
     return (
         <>
             <PopUp status={status} popUp={popUp} onClick={() => setPopUp("0")} />
             <Box sx={{ marginLeft: '0' }}>
-                <Typography variant='h3' component='div' sx={{ fontWeight: 'bold' }}>
+                <Typography variant='h3' component='div' sx={{ fontWeight: 'bold', marginBottom: '1rem' }}>
                     Events
                 </Typography>
-                <Box sx={{ marginRight: '5rem', float: 'right', display: "flex", flexShrink: 0 }}>
+                <Box sx={{ marginRight: '2rem', float: 'right', display: "flex", flexShrink: 0 }}>
                     <FormControl sx={{ width: '15rem', marginRight: '2rem' }}>
                         <InputLabel id='select-type'>Sort Type</InputLabel>
                         <Select
@@ -121,25 +127,30 @@ export const EventList = (props: EventListProps) => {
                         label='Total conference gross'
                         disabled
                         type='string'
-                        value={`${splitNum(Total)} VNĐ` || ''}
+                        value={`${Total !== undefined ? splitNum(Total) : 0} VNĐ` || ''}
                         sx={{ marginRight: '2rem' }}
                     />
-                    <TextField label='Total income' disabled type='string' value={`${splitNum(Income)} VNĐ` || ''} />
-                    {true ? (
+                    <TextField label='Total income' disabled type='string' value={`${Total !== undefined ? splitNum(Income) : 0} VNĐ` || ''} />
+
+
+                    {props.data?.length < 20 || props.data?.length === undefined || props.host_type === 'premium' ? (
                         <Button variant='outlined' sx={{ width: '15rem', height: '3.5rem', marginLeft: '5rem', color: 'black', borderColor: 'black' }}>
                             <Link href='/host/create-event'>
                                 <a>Create an event</a>
                             </Link>
                         </Button>
-
                     ) : (
-                        <Button variant='outlined' disabled sx={{ width: '15rem', height: '3.5rem', marginLeft: '5rem', color: 'black', borderColor: 'black' }}>
-                            <Tooltip title="Please subscribe to create more!" arrow>
-                                <Link href='/host/create-event'>
-                                    <a>Create an event</a>
-                                </Link>
+                        <>
+                            <TextField sx={{ marginLeft: '2rem', width: '10%' }} label='Remaining events' disabled type='string' value={`${Remain(props.data?.length)} / 20 events` || ''} />
+                            <Tooltip title="Please subscribe to create more events!" arrow>
+                                <span>
+                                    <Button variant='outlined' disabled sx={{ width: '15rem', height: '3.5rem', marginLeft: '5rem', color: 'black', borderColor: 'black' }}>
+                                        <a>Create an event</a>
+                                    </Button>
+                                </span>
                             </Tooltip>
-                        </Button>
+                        </>
+
                     )}
 
                 </Box>

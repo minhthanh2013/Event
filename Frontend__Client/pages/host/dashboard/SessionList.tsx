@@ -59,7 +59,6 @@ interface TotalPrice {
 }
 
 export const Sessions = (props: SessionProps) => {
-  console.log(62, props)
   const [sortType, setSortType] = useState('all');
   const [totalPrice, setTotalPrice] = useState<TotalPrice>();
 
@@ -99,14 +98,14 @@ export const Sessions = (props: SessionProps) => {
     return result + total - discountPrice;
   }, 0);
   const Income = TotalAfterDiscount * 90 / 100;
-
+  console.log(props);
   return (
     <>
       <Box sx={{ marginLeft: "0" }}>
-        <Typography variant="h3" component="div" sx={{ fontWeight: "bold" }}>
+        <Typography variant="h3" component="div" sx={{ fontWeight: "bold", marginBottom: '1rem' }}>
           Sessions
         </Typography>
-        <Box sx={{ marginRight: "5rem", float: "right", display: "flex", flexShrink: 0 }}>
+        <Box sx={{ marginRight: "2rem", float: "right", display: "flex", flexShrink: 0 }}>
           <FormControl sx={{ width: "15rem", marginRight: "2rem" }}>
             <InputLabel id="select-type">Sort Type</InputLabel>
             <Select
@@ -138,16 +137,30 @@ export const Sessions = (props: SessionProps) => {
             type="string"
             value={`${splitNum(Income)} VNĐ` || ''}
           />
-          <Button
-            variant="outlined"
-            sx={{ width: "15rem", height: "3.5rem", marginLeft: "5rem", color: "black", borderColor: "black" }}
-          >
-            <Link href="/host/create-session">
-              <a>
-                Create a session
-              </a>
-            </Link>
-          </Button>
+          {props?.data.length !== undefined ? (
+            <Button
+              variant="outlined"
+              sx={{ width: "15rem", height: "3.5rem", marginLeft: "5rem", color: "black", borderColor: "black" }}
+            >
+              <Link href="/host/create-session">
+                <a>
+                  Create a session
+                </a>
+              </Link>
+            </Button>
+          ) : (
+            <Button
+              variant="outlined"
+              sx={{ width: "15rem", height: "3.5rem", marginLeft: "5rem", color: "black", borderColor: "black" }}
+              disabled
+            >
+              <Link href="/host/create-session">
+                <a>
+                  Please create event first
+                </a>
+              </Link>
+            </Button>
+          )}
         </Box>
         <TableContainer component={Paper} sx={{ marginTop: "5rem", marginLeft: "5rem", width: "90%" }}>
           <Table >

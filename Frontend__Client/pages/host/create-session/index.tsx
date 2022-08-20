@@ -195,7 +195,7 @@ const CreateEvent = (props) => {
                 indicatorColor="primary"
               >
                 <Tab label="Basic Information" {...a11yProps(0)} />
-                <Tab label="Conference" {...a11yProps(1)} />
+                {value === 1 ? <Tab label="Conference" {...a11yProps(1)} /> : <Tab disabled label="Conference" {...a11yProps(1)} />}
               </Tabs>
               <TabPanel value={value} index={0}>
                 <BasicInfo data={data} setData={setData} setValue={setValue} api={apiCall} prop={props} />
