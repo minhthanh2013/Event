@@ -47,6 +47,7 @@ export class PaymentService {
   }
   newSubscription(subscriptionDto: SubscriptionDto): Observable<ResponseData> {
     const idHost = subscriptionDto.idHost;
+    console.log(50, idHost)
     return this.paymentClient.send({ cmd: 'SUBSCRIPTION' }, { idHost })
   }
   getInfoPayment(payment_intent_id: string): Observable<ResponseData> {

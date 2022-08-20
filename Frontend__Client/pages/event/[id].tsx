@@ -73,7 +73,7 @@ const Event = (props: any) => {
 				props?.tempDecode?.role === 'admin' ||
 				(props?.tempDecode?.sub === ticketList?.data?.host_id && props?.tempDecode?.role === 'host') ? (
 					<>
-						<Box className={styles.background__wrap} sx={{ filter: open ? 'blur(10px) ' : 'none' }}>
+						<Box className={styles.background__wrap} sx={{ filter: open && (new Date() > new Date(ticketList?.data?.dateStartSell)) ? 'blur(10px) ' : 'none' }}>
 							<Box className={styles.dot__1}></Box>
 							<Header {...props} />
 							{ticketList?.data && <DetailBanner data={ticketList.data} handleToggle={handleToggle} userId={props?.tempDecode?.sub}/>}
@@ -93,7 +93,7 @@ const Event = (props: any) => {
 				)
 			) : (
 				<>
-					<Box className={styles.background__wrap} sx={{ filter: open ? 'blur(10px) ' : 'none' }}>
+					<Box className={styles.background__wrap} sx={{ filter: open && (new Date() > new Date(ticketList?.data?.dateStartSell)) ? 'blur(10px) ' : 'none' }}>
 						<Box className={styles.dot__1}></Box>
 						<Header {...props} />
 						{ticketList?.data && <DetailBanner data={ticketList.data} handleToggle={handleToggle} userId={props?.tempDecode?.sub}/>}

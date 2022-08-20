@@ -15,9 +15,6 @@ import TableRow from '@mui/material/TableRow'
 import Paper from '@mui/material/Paper'
 import styles from '../styles/CreateEventForm.module.scss'
 import Link from 'next/link'
-import IconButton from '@mui/material/IconButton'
-import MenuIcon from '@mui/icons-material/MoreVertOutlined'
-import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import EventMenu from '../../../components/EventMenu'
 import TextField from '@mui/material/TextField'
@@ -128,8 +125,7 @@ export const EventList = (props: EventListProps) => {
                         sx={{ marginRight: '2rem' }}
                     />
                     <TextField label='Total income' disabled type='string' value={`${splitNum(Income)} VNĐ` || ''} />
-                    {props.host_type === 'premium' ? (
-
+                    {true ? (
                         <Button variant='outlined' sx={{ width: '15rem', height: '3.5rem', marginLeft: '5rem', color: 'black', borderColor: 'black' }}>
                             <Link href='/host/create-event'>
                                 <a>Create an event</a>
@@ -137,7 +133,6 @@ export const EventList = (props: EventListProps) => {
                         </Button>
 
                     ) : (
-
                         <Button variant='outlined' disabled sx={{ width: '15rem', height: '3.5rem', marginLeft: '5rem', color: 'black', borderColor: 'black' }}>
                             <Tooltip title="Please subscribe to create more!" arrow>
                                 <Link href='/host/create-event'>

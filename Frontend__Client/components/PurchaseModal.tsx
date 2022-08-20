@@ -217,14 +217,14 @@ export const TicketInModal: React.FC<TicketProps> = ({ data, setTotal, imageProp
 	return (
 		<>
 			<Box className={styles.ticketContainer}>
-				<Card elevation={0} className={styles.ticketWrap}>
+				<Card elevation={0} className={styles.ticketWrap} >
 					<CardMedia
 						component='img'
 						sx={{ width: 151, mt: '1rem', boxShadow: '0px' }}
 						image={imageProps || 'https://images.pexels.com/photos/2306281/pexels-photo-2306281.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'}
 						alt='Live from space album cover'
 					/>
-					<Box className={styles.ticketContent} sx={{width: '500px'}}>
+					<Box className={styles.ticketContent} sx={{width:'380px !important'}}>
 						<Typography component='h3' sx={{height: 'auto'}}>{data?.conferenceName}</Typography>
 						<Typography component='h4'>{splitNum(data?.conferencePrice)} VNĐ</Typography>
 					</Box>

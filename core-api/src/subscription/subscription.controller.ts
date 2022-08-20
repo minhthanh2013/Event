@@ -27,4 +27,8 @@ export class SubscriptionController {
   updateSubscription(@Body() id: number): Observable<ResponseData> {
     return from(this.subscriptionService.updateSubscription(id));
   }
+  @Get('/host/:id')
+  findByHost(@Param('id') id: number): Promise<ResponseData> {
+    return this.subscriptionService.findByHost(id);
+  }
 }

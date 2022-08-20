@@ -16,23 +16,48 @@ interface SubProps {
   hostId: number,
 }
 export const Subcriptions: React.FC<SubProps> = ({ host_type, exDate, hostId }) => {
-
+  const [expireDate, setExpireDate] = useState(new Date());
+  function parseDate(dateString: Date) {
+    const date = new Date(dateString);
+    const day = date.getDate()
+    const hour = date.getHours()
+    const weekday = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+    let weekDayString = weekday[date.getDay()]
+    let monthString = date.toLocaleString('en-us', { month: 'short' })
+    const dateFinal = `${weekDayString}, ${monthString} ${day} ${date.getFullYear()}`
+    return dateFinal
+  }
+  console.log(host_type, exDate, hostId);
+  console.log(19, exDate)
   const router = useRouter()
 
   async function navigate() {
-    const result = await fetch("/api/payment/supcription", {
+    console.log(34, hostId)
+    let temp = { idHost: hostId }
+    const result = await fetch("/api/payment/subcription/", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         "Authorization": process.env.STRIPE_TEST_KEY,
       },
-      body: JSON.stringify(hostId),
+      body: JSON.stringify(temp),
     })
+    console.log(43, result)
     const resDataJson = await result.json();
+    console.log(43, resDataJson)
     if (resDataJson.status === true) {
       router.push(resDataJson.data);
     }
   }
+  useEffect(() => {
+    const getExpireDate = async () => {
+      const result = await fetch(`/api/subscription/get-expire-date?hostId=${hostId}`)
+      const resDataJson = await result.json();
+      console.log(56, resDataJson);
+      setExpireDate(resDataJson.data)
+    }
+    getExpireDate();
+  }, [])
 
   return (
     <>
@@ -117,10 +142,10 @@ export const Subcriptions: React.FC<SubProps> = ({ host_type, exDate, hostId }) 
                     margin: "2rem 0 1rem 0",
                   }}
                 >
-                  $ 90/
+                  200.000 VND/
                 </Typography>
                 <Typography variant="h5" sx={{ margin: "2rem 0 1rem 1rem" }}>
-                  yearly
+                  monthly
                 </Typography>
               </Box>
               <Typography sx={{ margin: "1.3rem 0", fontWeight: "lighter" }}>
@@ -240,10 +265,10 @@ export const Subcriptions: React.FC<SubProps> = ({ host_type, exDate, hostId }) 
                     margin: "2rem 0 1rem 0",
                   }}
                 >
-                  $ 90/
+                  200.000 VND/
                 </Typography>
                 <Typography variant="h5" sx={{ margin: "2rem 0 1rem 1rem" }}>
-                  yearly
+                  monthly
                 </Typography>
               </Box>
               <Typography sx={{ margin: "1.3rem 0", fontWeight: "lighter" }}>
@@ -257,10 +282,9 @@ export const Subcriptions: React.FC<SubProps> = ({ host_type, exDate, hostId }) 
               >
                 ACTIVATED
               </Button>
-              <Typography variant="h5" sx={{ margin: "2rem 0 1rem 1rem" }}>
-                Expiration date:
+              <Typography variant="h6" sx={{ margin: "2rem 0 1rem 1rem" }}>
+                Expiration date: {parseDate(expireDate)}
               </Typography>
-              {exDate?.toString()}
               <Box
                 sx={{
                   display: "flex",

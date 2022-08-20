@@ -243,15 +243,15 @@ export class CombosessionService {
               if (tempCombos.data.length === 0) {
                 reject("Fail find combos by conference id: " + element.conference_id);
               }
-              tempCombos.data.forEach(async tempCombo => {
+              for (let j = 0; j < tempCombos.data.length; j++) {
+                const tempCombo = tempCombos.data[j];
                 if (isRevenue === "true") {
                   const price = await this.getComboRevenueById(tempCombo.comboSessionId);
                   tempCombo.totalPrice = price.data.totalPrice;
                   tempCombo.totalComboSell = price.data.totalComboSell;
                 }
                 comboSessionDto.push(tempCombo);
-              });
-              
+              }
             } catch (e) {
               console.log(e);
             }

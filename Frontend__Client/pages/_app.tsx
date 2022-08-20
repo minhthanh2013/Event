@@ -15,10 +15,11 @@ const clientSideEmotionCache = createEmotionCache();
 
 interface MyAppProps extends AppProps {
   emotionCache?: EmotionCache;
+  props: any;
 }
 
 
-export default function MyApp(props: MyAppProps) {
+function MyApp(props: MyAppProps) {
   const { Component, emotionCache = clientSideEmotionCache, pageProps } = props;
   return (
     <CacheProvider value={emotionCache}>
@@ -28,7 +29,7 @@ export default function MyApp(props: MyAppProps) {
       <ThemeProvider theme={theme}>
         {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
         <CssBaseline />
-        <Component {...props} />
+        <Component {...props.pageProps} />
       </ThemeProvider>
     </CacheProvider>
   );
@@ -62,3 +63,4 @@ export async function getServerSideProps(ctx: any) {
 		return { props: {} }
 	}
 }
+export default MyApp;

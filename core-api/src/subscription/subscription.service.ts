@@ -71,4 +71,14 @@ export class SubscriptionService {
     }})
     return entity
   }
+  async findByHost(id: number): Promise<ResponseData> {
+    const result = new ResponseData();
+    const data = await this.subscriptionRepository.findOneBy({host_id: id})
+    if (data !== undefined) {
+      result.data = data.expired_date
+    } else {
+      result.status = false
+    }
+    return result;
+  }
 }

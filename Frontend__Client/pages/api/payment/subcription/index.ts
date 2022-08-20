@@ -3,6 +3,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import axios from "axios";
 
 export default async function (req: NextApiRequest, res: NextApiResponse) {
+  console.log(6, "here")
   if (req.method == "POST") {
     try {
       const request =
@@ -13,14 +14,18 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
         process.env.BACKEND_PORT +
         `/payment/new-subscription`;
       // const request = "http://localhost:3000/payment/new-subscription";
+      console.log(16, request);
+      console.log(17, req.body);
       const response = await axios.post(request, req.body, {
         headers: {
           "Content-Type": "application/json",
           Authorization: process.env.STRIPE_TEST_KEY,
         },
       });
+      console.log(25, response)
       res.status(200).json(response.data);
     } catch (error) {
+      console.log(error)
       return res.status(500).send(error);
     }
   }

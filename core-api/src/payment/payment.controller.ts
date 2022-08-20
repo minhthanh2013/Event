@@ -18,6 +18,7 @@ export class PaymentController {
 
   @Post('/new-subscription')
   newSubscription(@Body() subscriptionDto: SubscriptionDto): Observable<ResponseData> {
+    console.log(21, subscriptionDto)
     return this.paymentService.newSubscription(subscriptionDto)
   }
   @Post('/add-balance')
@@ -99,9 +100,11 @@ export class PaymentController {
       } else {
         // SUBSCRIBE PREMIUM PLAN
         console.log("subscribe to premium")
+        console.log(JSON.parse(event.data.object.client_reference_id))
         const subDto = new SubscriptionDto()
         subDto.idHost = event.data.object.client_reference_id as number
         console.log(subDto)
+        console.log(subDto.idHost)
         this.paymentService.updateSubscription(subDto)
       }
     }

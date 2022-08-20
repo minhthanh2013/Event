@@ -137,6 +137,7 @@ const EventCreate = (props: any) => {
       };
       const dataResult = await fetch(`/api/host/${props.tempDecode.sub}`, config);
       const cateResult = await dataResult.json();
+      console.log(140, cateResult)
       setHostDetailsProps(cateResult);
     }
     const fetchConferences = async () => {
@@ -336,7 +337,7 @@ const EventCreate = (props: any) => {
                 </TabPanel>
                 <TabPanel value={value} index={2}>
                   <Box sx={{ marginLeft: "3rem" }}>
-                    <Subcriptions host_type={hostDetailsProps?.host_type} exDate={hostDetailsProps?.update_at} />
+                    <Subcriptions host_type={hostDetailsProps?.host_type} exDate={hostDetailsProps?.update_at} hostId={props?.tempDecode?.sub}/>
                   </Box>
                 </TabPanel>
               </>

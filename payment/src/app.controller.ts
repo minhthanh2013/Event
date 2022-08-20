@@ -18,8 +18,9 @@ export class AppController {
     return from(this.appService.paymentTicket(dataPayment));
   }
   @MessagePattern({ cmd: 'SUBSCRIPTION' })
-  subscriptNewPlan(idHost: number): Observable<ResponseData> {
-    return from(this.appService.newSubscription(idHost))
+  subscriptNewPlan(idHost: any): Observable<ResponseData> {
+    console.log(22, idHost.idHost);
+    return from(this.appService.newSubscription(idHost.idHost))
   }
   @MessagePattern({ cmd: 'DETAIL_PAYMENT'})
   paymentDetail(payment_intent_id: string): Observable<ResponseData> {

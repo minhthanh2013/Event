@@ -101,7 +101,10 @@ const PurchaseModalSession = (props: modalProps) => {
 				paymentRequest.userId = props.userId;
 				paymentRequest.sessionId = props.data.comboSessionId;
 				paymentRequest.sessionPrice = props.data.comboSessionPrice;
-				const result = await fetch("/api/payment/buy-ticket-by-balance", {
+				// userId: number;
+				// sessionId: number;
+				// sessionPrice: number;
+				const result = await fetch("/api/payment/buy-session-by-balance", {
 					method: "POST",
 					headers: {
 						"Content-Type": "application/json",
