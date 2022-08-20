@@ -91,7 +91,7 @@ const DetailBanner = (props: TicketProps) => {
 			const user = {} as UserToVerify 
 			user.user_id = +props.userId
 			user.conference_id = props.data.conference_id
-			console.log(user)
+			console.log(94, JSON.stringify(user))
 			const response = await fetch(`/api/ticket/verify-user-buy-ticket`, {
 				method: 'POST',
 				body: JSON.stringify(user)

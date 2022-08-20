@@ -14,8 +14,8 @@ export interface BuySessionDto {
   payment_id?: number;
 }
 export interface UserToVerify {
-  user_id: number;
-  conference_id: number;
+  user_id: string;
+  conference_id: string;
 }
 
 export interface UserToVerifySession {

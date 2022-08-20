@@ -7,22 +7,24 @@ import https from 'https';
 
 export default async function (req: NextApiRequest, res: NextApiResponse) {
 	const { id } = req.query;
+	const config = {
+		headers: {
+			'Content-Type': 'application/json',
+			'Authorization': req.headers.authorization,
+		},
+	}
 	try {
-		const config = {
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        }
-		const request = process.env.BACKEND_PROTOCOL+'://' + process.env.BACKEND_HOST + ':' + process.env.BACKEND_PORT + `/ticket/verify-user-buy-session`; 
+		const request = process.env.BACKEND_PROTOCOL+'://' + process.env.BACKEND_HOST + ':' + process.env.BACKEND_PORT + `/host/${id}`; 
 		// const request = `http://localhost:3000/user/${id}`;
-		const response = await axios.post(request, req.body, config);
-		if(response.data.status !== true) {
-			res.status(404).json({
-				message: 'User havent bought this session yet',
+		const response = await axios.put(request, req.body, config);
+		if(response.data.status === false) {
+			res.status(409).json({
+				message: response.data.data,
 			});
 		}
         res.status(200).json(response.data);
 	} catch (error) {
+        console.log(error)
 		res.status(404).json({
 			message: error.message,
 		});

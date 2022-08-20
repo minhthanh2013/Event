@@ -13,16 +13,12 @@ import CloseIcon from '@mui/icons-material/Close';
 import Collapse from '@mui/material/Collapse';
 import { useRouter } from 'next/router'
 import HeaderHost from '../../components/Header__Host'
-
-const schema = yup.object().shape({
-    email: yup.string().email().required(),
-    password: yup.string().min(8).max(32).required(),
-})
+import { PopUp } from '../../components/AlertPop-up'
 
 interface State {
     firstName: string
     lastName: string
-    password: string
+    host_type: string
     email: string
     showPassword: boolean
 }
@@ -32,7 +28,7 @@ const HostProfile = (props: any) => {
     const [data, setData] = useState<State>();
     const [values, setValues] = React.useState<State>({
         firstName:  '',
-        password: '',
+        host_type: '',
         lastName: '',
         email: '',
         showPassword: false,
@@ -42,6 +38,10 @@ const HostProfile = (props: any) => {
     const [isSuccess, setIsSuccess] = useState(false)
     const [isErrorEmail, setIsErrorEmail] = useState(false)
     const [openErrorEmail, setOpenErrorEmail] = React.useState(true)
+    const [popUp, setPopUp] = useState("0");
+    const [status, setStatus] = useState("0");
+    const [successMessage, setSuccessMessage] = useState<string>();
+    const [errorMessage, setErrorMessage] = useState<string>();
     const forceUpdate = React.useReducer(() => ({}), {})[1] as () => void
     useEffect(() => {
         const fetchConferences = async () => {
@@ -79,9 +79,40 @@ const HostProfile = (props: any) => {
             showPassword: !values.showPassword,
         })
     }
+    function refreshPage() {
+        window.location.reload();
+    }
 
-    const handleSubmit = () => {
-        console.log(values)
+    const handleSubmit = async () => {
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer '+props.value.toString(),
+            },
+        }
+        const dataResult = {
+            firstName: values.firstName,
+            lastName: values.lastName,
+            email: values.email,
+        }
+        const data = await fetch(`/api/host/update-host?id=${props.tempDecode.sub}`, {
+            method: 'PUT',
+            body: JSON.stringify(dataResult),
+            headers: config.headers,
+        })
+
+        const cateResult = await data.json();
+        if (cateResult.status === true) {
+            setStatus("1");
+            setPopUp("1");
+            setSuccessMessage("Update host successfully");
+            setTimeout(refreshPage, 2000);
+        } else {
+            setStatus("0");
+            setPopUp("1");
+            setErrorMessage("Email already exists");
+            setTimeout(refreshPage, 2000);
+        }
 
         //nếu trả về lỗi thì setIsErrorEmail(true)
         // setIsErrorEmail(true)
@@ -114,6 +145,7 @@ const HostProfile = (props: any) => {
     }
     return (
         <>
+         <PopUp status={status} popUp={popUp} onClick={() => setPopUp("0")} successMessage={successMessage} errorMessage={errorMessage}/>
             <HeaderHost {...props} />
             <Divider sx={{ borderColor: '#4F3398' }} />
             <Box sx={{ width: '80vw', mx: 'auto' }}>
@@ -188,25 +220,11 @@ const HostProfile = (props: any) => {
                                     )}
                                 </FormControl>
                                 <FormControl variant='standard' sx={{ width: '400px' }}>
-                                    <InputLabel sx={{ fontSize: '1.4rem' }}>Password</InputLabel>
+                                    <InputLabel sx={{ fontSize: '1.4rem' }}>Host Type</InputLabel>
                                     <Input
-                                        disabled={!isEdit}
+                                        disabled={true}
                                         id='standard-adornment-password'
-                                        type={values.showPassword && isEdit ? 'text' : 'password'}
-                                        value={values.password}
-                                        onChange={handleChange('password')}
-                                        endAdornment={
-                                            <InputAdornment position='end'>
-                                                <IconButton
-                                                    aria-label='toggle password visibility'
-                                                    onClick={handleClickShowPassword}
-                                                    onMouseDown={handleMouseDownPassword}
-                                                    disabled={!isEdit}
-                                                >
-                                                    {values.showPassword && isEdit ? <VisibilityOff /> : <Visibility />}
-                                                </IconButton>
-                                            </InputAdornment>
-                                        }
+                                        value={values.host_type.toUpperCase()}
                                     />
                                 </FormControl>
                             </Box>

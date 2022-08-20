@@ -14,6 +14,7 @@ export class UserResponseDto {
   user_id?: number;
   user_name: string;
   email: string;
+  password?: string;
   firstName: string;
   lastName: string;
   balance: number;

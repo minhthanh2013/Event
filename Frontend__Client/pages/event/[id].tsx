@@ -43,7 +43,7 @@ const Event = (props: any) => {
 	const router = useRouter()
 	const { id } = router.query
 	const {isBuy} = router.query
-	const [userId, setUserId] = useState('');
+	const [userId, setUserId] = useState(undefined);
 	const [ticketList, setTicketList] = useState<TicketProps>()
 	const [imageProp, setImageProp] = useState<string>()
 	let [open, setOpen] = useState(false || isBuy === 'true')

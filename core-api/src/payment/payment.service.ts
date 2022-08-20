@@ -122,14 +122,15 @@ export class PaymentService {
     return responseData
   }
 
-  async createUserTicket(ticketBoughtDto: BoughtTicketDto) {
+  async createUserTicket(ticketBoughtDto: BoughtTicketDto, sessionId: number) {
     try {
       await this.ticketRepository.insert(
         {
           buyer_id: ticketBoughtDto.userId,
           conference_id: ticketBoughtDto.conferenceId,
           date_buy: new Date(),
-          payment: await this.paymentRepository.findOneBy({ payment_id: 1 })
+          payment: await this.paymentRepository.findOneBy({ payment_id: 1 }),
+          session_id: sessionId,
         }
       )
     } catch (err) {

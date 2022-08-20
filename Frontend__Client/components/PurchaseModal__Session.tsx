@@ -63,8 +63,15 @@ interface PaymentBalanceDto {
 	sessionId: number;
 	sessionPrice: number;
 }
+
+interface PaymentStripeDto {
+	sessionId: number;
+	sessionName: string;
+	sessionDescription?: string;
+	sessionPrice: number;
+	userId: number;
+}
 const PurchaseModalSession = (props: modalProps) => {
-	console.log(51, props.data)
 	const [selectedValue, setSelectedValue] = useState('a')
 	const [total, setTotal] = useState(0);
 	const [normalizeDate, setNormalizeDate] = useState<string>()
@@ -81,7 +88,6 @@ const PurchaseModalSession = (props: modalProps) => {
 	const calculateTotal = () => {
 		let totalTemp = 0;
 		for (let i = 0; i < props?.data?.conferenceList.length; i++) {
-			console.log(80, props?.data?.conferenceList[i])
 			totalTemp += parseInt(props?.data?.conferenceList[i].price.toString())
 		}
 		totalTemp = totalTemp - (totalTemp * props?.data?.discount) / 100
@@ -93,7 +99,34 @@ const PurchaseModalSession = (props: modalProps) => {
 		}
 		else {
 			if (selectedValue === "b") {
-				//checkout cho Credit Card
+				const paymentStripeDto = {} as PaymentStripeDto;
+				paymentStripeDto.sessionId = props.data.comboSessionId;
+				paymentStripeDto.sessionName = props.data.comboSessionName;
+				paymentStripeDto.sessionDescription = props.data.comboSessionDescription;
+				paymentStripeDto.sessionPrice = props.data.comboSessionPrice;
+				paymentStripeDto.userId = props.userId;
+				const response = await fetch(`/api/payment/buy-session`, {
+					method: 'POST',
+					headers: {
+						"Content-Type": "application/json",
+						"Authorization": process.env.STRIPE_TEST_KEY,
+					},
+					body: JSON.stringify(paymentStripeDto)
+				})
+				const resDataJson = await response.json();
+				if (resDataJson.status === true) {
+					router.push(resDataJson.data);
+				}
+				// if (resDataJson.status === true) {
+				// 	setSuccessMessage("Buy session successfully. Your credit card will be charged " + splitNum(paymentStripeDto.sessionPrice) + " VND")
+				// 	setStatus("1");
+				// 	setPopUp("1");
+				// 	window.location.reload();
+				// } else {
+				// 	setErrorMessage("Fail to buy session, your credit balance is not met the ticket price, please try again after you addup more balance")
+				// 	setStatus("0");
+				// 	setPopUp("1");
+				// }
 
 			} else {
 				//Set Checkout cho nút Balance ở đây

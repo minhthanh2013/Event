@@ -7,9 +7,11 @@ import {
   HttpStatus,
   Param,
   Post,
+  Put,
   UseGuards,
 } from '@nestjs/common';
 import { Observable } from 'rxjs';
+import { ResponseData } from 'src/responsedata/response-data.dto';
 import { HostAuthDto } from './dto/host.auth';
 import { HostJwtGuard } from './guard/host.jwt.guard';
 import { HostService } from './host.service';
@@ -38,5 +40,10 @@ export class HostController {
   @Post('signin')
   signinUser(@Body() dto: HostAuthDto) {
     return this.hostService.signinHost(dto);
+  }
+  @Put(':id')
+  @UseGuards(HostJwtGuard)
+  updateHost(@Param('id') id: string, @Body() host: HostResponseDto): Promise<ResponseData> {
+    return this.hostService.updateHost(+id, host);
   }
 }

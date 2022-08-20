@@ -40,14 +40,13 @@ interface TicketProp {
 
 interface SessionProps {
 	data: SessionProp
-	props: any
 }
-const Session = (props: SessionProps) => {
+const Session = (props: any) => {
 	const router = useRouter()
 	const { id } = router.query
 	const [sessionProps, setSessionProps] = useState<SessionProps>()
 	const [imageProp, setImageProp] = useState<string>()
-	const [userId, setUserId] = useState('');
+	const [userId, setUserId] = useState(undefined);
 	let [open, setOpen] = useState(false)
 	const handleToggle = () => {
 		setOpen(!open)
@@ -65,14 +64,14 @@ const Session = (props: SessionProps) => {
 			setImageProp(cateResult.url)
 		}
 		const fetchUserId = async () => {
-			if(props?.props?.tempDecode.role.toString() === 'user' ) {
-				setUserId(props?.props?.tempDecode.sub);
+			if(props?.tempDecode.role.toString() === 'user' ) {
+				setUserId(props?.tempDecode.sub);
 			} else  {
 				setUserId(undefined);
 			}
 		}
 		fetchSessionProp()
-		if(props?.props?.tempDecode !== undefined) {
+		if(props?.tempDecode !== undefined) {
 			fetchUserId();
 		}
 		fetchImage()
@@ -96,7 +95,7 @@ const Session = (props: SessionProps) => {
 				)}
 				{sessionProps?.data && <DetailContentSession data={sessionProps?.data} />}
 			</Box>
-			{open && <PurchaseModalSession handleToggle={handleToggle} data={sessionProps?.data} imageProp={imageProp} />}
+			{open && <PurchaseModalSession handleToggle={handleToggle} data={sessionProps?.data} imageProp={imageProp} userId={userId}/>}
 
 			<Footer />
 		</>

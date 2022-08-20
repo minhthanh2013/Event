@@ -32,6 +32,7 @@ interface CreateEventProps {
 
 
 export const BasicInfo: React.FC<CreateEventProps> = ({ data, setData, setValue }) => {
+  console.log(35, data);
   const {
     register,
     handleSubmit,
@@ -58,7 +59,8 @@ export const BasicInfo: React.FC<CreateEventProps> = ({ data, setData, setValue 
             required
             id="standard-required"
             label="Session Name"
-            defaultValue={data.conferenceName}
+            value={data.comboSessionName}
+            // defaultValue={data.comboSessionName}
             variant="standard"
             {...register("comboSessionName")}
           />
@@ -68,7 +70,8 @@ export const BasicInfo: React.FC<CreateEventProps> = ({ data, setData, setValue 
             id="standard-required"
             label="Session Discount"
             variant="standard"
-            defaultValue={data.discount}
+            // value={data.discount || ""}
+            defaultValue={data.discount || ""}
             type="number"
             InputProps={{ inputProps: { min: 0, max: 100 } }}
             {...register("discount")}
@@ -76,6 +79,8 @@ export const BasicInfo: React.FC<CreateEventProps> = ({ data, setData, setValue 
           <TextField
             className={styles.eventFields}
             label="Description"
+            value={data.comboSessionDescription}
+            // defaultValue={data.comboSessionDescription}
             multiline
             {...register("comboSessionDescription")}
           />

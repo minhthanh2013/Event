@@ -64,14 +64,13 @@ const CreateEvent = (props) => {
   const [popUp, setPopUp] = useState("0");
   const [status, setStatus] = useState("0");
 
-  const router = useRouter();
   const redirect = () => {
     router.push("/host/dashboard")
   }
 
   useEffect(() => {
     const fetchData = async () => {
-      const res = await fetch(`/api/combo/${id}`);
+      const res = await fetch(`/api/combo/find-by-id?id=${id}`);
       const data = await res.json();
       setData(data.data);
     }

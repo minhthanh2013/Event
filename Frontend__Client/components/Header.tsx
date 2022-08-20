@@ -24,6 +24,7 @@ import InputAdornment from '@mui/material/InputAdornment'
 import { useRouter } from 'next/router'
 import { cp } from 'fs/promises'
 import { PopUp } from './AlertPop-up'
+import { splitNum } from '../GlobalFunction/SplitNumber'
 
 interface HeaderProps {
 	props: any
@@ -450,9 +451,9 @@ const Header = (props: any) => {
 											>
 												<Typography variant='body2' sx={{ fontSize: '1rem' }}>
 													{valueBalance == undefined ? (
-														userDetails?.balance
+														splitNum(userDetails?.balance)
 													) : (
-														valueBalance
+														splitNum(valueBalance)
 													)}
 												</Typography>
 
@@ -502,7 +503,7 @@ const Header = (props: any) => {
 				<Box sx={style}>
 					<form onSubmit={handleSubmit(onSubmitBalanceModal)}>
 						<TextField
-							label='Amonunt'
+							label='Amount'
 							{...register('amount')}
 							id='outlined-start-adornment'
 							sx={{ m: 1, width: '100%' }}

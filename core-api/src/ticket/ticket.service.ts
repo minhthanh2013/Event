@@ -105,8 +105,8 @@ export class TicketService {
     const response = new ResponseData();
     const ticket = await this.ticketRepository.findOne({
       where: {
-        buyer_id: user.user_id,
-        conference_id: user.conference_id,
+        buyer_id: parseInt(user.user_id),
+        conference_id: parseInt(user.conference_id),
       },
   })
   if(ticket) {

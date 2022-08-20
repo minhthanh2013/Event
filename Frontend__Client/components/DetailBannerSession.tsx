@@ -25,6 +25,7 @@ export interface UserToVerifySession {
 }
 
 const DetailBannerSession = (props: DetailBannerSessionProps) => {
+	console.log(28, props)
 	const [hideBuyButton, setHideBuyButton] = useState(false)
 	let discountPrice = props.price - (props.price * props.discount) / 100
 	useEffect(() => {
@@ -32,9 +33,11 @@ const DetailBannerSession = (props: DetailBannerSessionProps) => {
 			const user = {} as UserToVerifySession 
 			user.user_id = +props.userId
 			user.session_id = props.sessionId
-			console.log(user)
 			const response = await fetch(`/api/ticket/verify-user-buy-session`, {
 				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
 				body: JSON.stringify(user)
 			})
 			const data = await response.json()
@@ -42,7 +45,11 @@ const DetailBannerSession = (props: DetailBannerSessionProps) => {
 				setHideBuyButton(true)
 			}
 		}
-		getUserDetails()
+		if(props.userId !== undefined) {
+			console.log(47, "here")
+			getUserDetails()
+		}
+		console.log(hideBuyButton)
 	}, [])
 	return (
 		<>
@@ -88,7 +95,7 @@ const DetailBannerSession = (props: DetailBannerSessionProps) => {
 								<Typography component='h3'>
 									{props.numberOfTicket} events in <em style={{ fontStyle: 'normal', fontWeight: '700' }}>ONE</em> session
 								</Typography>
-								{hideBuyButton? (
+								{!hideBuyButton ? (
 									<Button className={styles.button__2} onClick={props.handleToggle} disabled={false}>
 										Buy
 									</Button>

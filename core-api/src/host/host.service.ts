@@ -8,6 +8,7 @@ import { Repository } from 'typeorm';
 import { HostEntity } from './models/host.entity';
 import { Host, HostResponseDto } from './models/host.interface';
 import { HostAuthDto } from './dto/host.auth';
+import { ResponseData } from 'src/responsedata/response-data.dto';
 
 @Injectable()
 export class HostService {
@@ -93,5 +94,28 @@ export class HostService {
     return {
         access_token: token,
     } 
+}
+async updateHost(id: number, host: HostResponseDto): Promise<ResponseData> {
+  const response = new ResponseData()
+  const currentHost = await this.hostRepository.findOne({where: {host_id: id}});
+  const email = currentHost.email;
+  if(email !== host.email) {
+      const checkHost = await this.hostRepository.findOne({where: {email: host.email}});
+      if(checkHost) {
+          response.status = false;
+          response.data = 'Email already exists';
+          return response;
+      }
+  }
+  const data = await this.hostRepository.createQueryBuilder()
+  .update(HostEntity)
+  .set({ email: host.email,
+      first_name: host.firstName,
+      last_name: host.lastName})
+  .where("host_id = :id", { id: id })
+  .execute()
+  response.status = data.affected === 1 || data.affected === 2 || data.affected === 3;
+  response.data = null;
+  return response;
 }
 }

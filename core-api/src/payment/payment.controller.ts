@@ -1,4 +1,3 @@
-import { PaymentSessionWithBalanceDto, SessionDto } from './models/payment.dto';
 /* eslint-disable prettier/prettier */
 import { Body, Controller, Post, Req } from '@nestjs/common';
 import { from, Observable } from 'rxjs';
@@ -6,7 +5,7 @@ import { ResponseData } from 'src/responsedata/response-data.dto';
 import { SubscriptionService } from 'src/subscription/subscription.service';
 import { AddBalanceDto, BoughtRecordDto, BoughtTicketDto, PaymentDto, PaymentRecordDto, PaymentRecordWithBalanceDto, PaymentWithBalanceDto, SubscriptionDto } from './models/payment.dto';
 import { PaymentService } from './payment.service';
-
+import { PaymentSessionWithBalanceDto, SessionDto } from './models/payment.dto';
 @Controller('payment')
 export class PaymentController {
   constructor(private paymentService: PaymentService) { }
@@ -75,7 +74,7 @@ export class PaymentController {
           ticketDto.conferenceId = conferenceId as unknown as number
           ticketDto.userId = userId as unknown as number
           this.paymentService.updateTicketQuantity(ticketDto)
-          this.paymentService.createUserTicket(ticketDto)
+          this.paymentService.createUserTicket(ticketDto, 0)
           // 20/8/2022
         } else if (description.data.description == 'BUY SESSION') {
           // Update ticket quantity and add ticket to user database
@@ -91,7 +90,7 @@ export class PaymentController {
             ticketDto.conferenceId = index
             console.log(ticketDto)
             this.paymentService.updateTicketQuantity(ticketDto)
-            this.paymentService.createUserTicket(ticketDto)
+            this.paymentService.createUserTicket(ticketDto, sessionId)
           })
         } else if (description.data.description == 'BUY RECORD') {
           console.log('buy record')
