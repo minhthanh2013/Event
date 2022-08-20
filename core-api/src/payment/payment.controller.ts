@@ -1,4 +1,4 @@
-import { PaymentSessionWithBalanceDto } from './models/payment.dto';
+import { PaymentSessionWithBalanceDto, SessionDto } from './models/payment.dto';
 /* eslint-disable prettier/prettier */
 import { Body, Controller, Post, Req } from '@nestjs/common';
 import { from, Observable } from 'rxjs';
@@ -15,15 +15,22 @@ export class PaymentController {
   createPaymentLink(@Body() paymentDto: PaymentDto): Observable<ResponseData> {
     return this.paymentService.createPaymentLink(paymentDto)
   }
-
   @Post('/new-subscription')
   newSubscription(@Body() subscriptionDto: SubscriptionDto): Observable<ResponseData> {
     console.log(21, subscriptionDto)
     return this.paymentService.newSubscription(subscriptionDto)
   }
+  @Post('/buy-record')
+  buyRecord(@Body() paymentRecordDto: PaymentRecordDto): Observable<ResponseData> {
+    return this.paymentService.buyRecordWithStripe(paymentRecordDto)
+  }
   @Post('/add-balance')
   addBalance(@Body() addBalanceDto: AddBalanceDto): Observable<ResponseData> {
     return this.paymentService.addBalanceUser(addBalanceDto)
+  }
+  @Post('/buy-session')
+  buySession(@Body() sessionDto: SessionDto): Observable<ResponseData> {
+    return from(this.paymentService.buySessionWithStripe(sessionDto))
   }
   @Post('/payment-ticket-with-balance')
   paymentTicketWithBalance(@Body() paymentDto: PaymentWithBalanceDto): Observable<ResponseData> {
@@ -32,10 +39,6 @@ export class PaymentController {
   @Post('/payment-session-with-balance')
   paymentSessionWithBalance(@Body() paymentDto: PaymentSessionWithBalanceDto): Observable<ResponseData> {
     return from(this.paymentService.paymentSessionWithBalance(paymentDto))
-  }
-  @Post('/buy-record')
-  buyRecord(@Body() paymentRecordDto: PaymentRecordDto): Observable<ResponseData> {
-    return this.paymentService.buyRecordWithStripe(paymentRecordDto)
   }
   @Post('/buy-record-wit-balance')
   buyRecordWithBalance(@Body() recordDto: PaymentRecordWithBalanceDto): Observable<ResponseData> {
@@ -79,13 +82,17 @@ export class PaymentController {
           console.log("buy session")
           const session = await this.paymentService.getInfoSession(id_session).toPromise()
           console.log(session.data)
-          const conferenceId = (session.data.client_reference_id as string).split('|')[0]
-          const userId = (session.data.client_reference_id as string).split('|')[1]
-          const ticketDto = new BoughtTicketDto()
-          ticketDto.conferenceId = conferenceId as unknown as number
-          ticketDto.userId = userId as unknown as number
-          this.paymentService.updateTicketQuantity(ticketDto)
-          this.paymentService.createUserTicket(ticketDto)
+          const sessionId = (session.data.client_reference_id as string).split('|')[0] as unknown as number
+          const userId = (session.data.client_reference_id as string).split('|')[1] as unknown as number
+          const listConferenceId = (await this.paymentService.getConferenceListBySessionId(sessionId)).data as number[]
+          listConferenceId.forEach(index => {
+            const ticketDto = new BoughtTicketDto()
+            ticketDto.userId = userId
+            ticketDto.conferenceId = index
+            console.log(ticketDto)
+            this.paymentService.updateTicketQuantity(ticketDto)
+            this.paymentService.createUserTicket(ticketDto)
+          })
         } else if (description.data.description == 'BUY RECORD') {
           console.log('buy record')
           const session = await this.paymentService.getInfoSession(id_session).toPromise()

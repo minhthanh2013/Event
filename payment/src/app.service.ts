@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectStripe } from 'nestjs-stripe';
 import Stripe from 'stripe';
-import { AddBalanceDto, PaymentDto, PaymentRecordDto, ResponseData, SubscriptionDto, TransactionInfo } from './payment/payment.dto';
+import { AddBalanceDto, PaymentDto, PaymentRecordDto, ResponseData, SessionDto, SubscriptionDto, TransactionInfo } from './payment/payment.dto';
 
 @Injectable()
 export class AppService {
@@ -191,6 +191,41 @@ export class AppService {
           description: 'BUY RECORD',
         },
         client_reference_id: record.conferenceId + '|' + record.userId
+      }
+      const data = await this.stripeClient.checkout.sessions.create(params)
+      responseData.data = data.url
+    } catch (err) {
+      responseData.status = false
+      console.log(err)
+    }
+    return responseData
+  }
+
+  async buySession(sessionDto: SessionDto): Promise<ResponseData> {
+    const responseData = new ResponseData()
+    try {
+      const params: Stripe.Checkout.SessionCreateParams = {
+        mode: 'payment',
+        payment_method_types: ['card'],
+        line_items: [
+          {
+            quantity: 1,
+            price_data: {
+              product_data: {
+                name: sessionDto.sessionName,
+                description: sessionDto.sessionDescription,
+              },
+              currency: 'vnd',
+              unit_amount: sessionDto.sessionPrice
+            },
+          }
+        ],
+        success_url: `${process.env.MOCK_URL}?role=user`,
+        cancel_url: `${process.env.CANCEL_URL}?role=user`,
+        payment_intent_data: {
+          description: 'BUY SESSION',
+        },
+        client_reference_id: sessionDto.sessionId + '|' + sessionDto.userId
       }
       const data = await this.stripeClient.checkout.sessions.create(params)
       responseData.data = data.url

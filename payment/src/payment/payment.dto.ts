@@ -37,3 +37,11 @@ export class PaymentRecordDto {
     conferenceName: string;
     conferenceDescription?: string;
 }
+
+export class SessionDto {
+    sessionId: number;
+    sessionName: string;
+    sessionDescription?: string;
+    sessionPrice: number;
+    userId: number;
+}

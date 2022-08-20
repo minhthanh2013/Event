@@ -3,7 +3,6 @@ import { ComboSessionEntity } from 'src/combosession/models/combo_session.entity
 import { Inject, Injectable } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { InjectRepository } from '@nestjs/typeorm';
-import e from 'express';
 import { Observable } from 'rxjs';
 import { ConferenceEntity } from 'src/conference/models/conference.entity';
 import { HostEntity } from 'src/host/models/host.entity';
@@ -13,9 +12,8 @@ import { SubscriptionEntity } from 'src/subscription/models/subscription.entity'
 import { SubscriptionPlanEntity } from 'src/subscriptionplan/models/subscription_plan.entity';
 import { TicketEntity } from 'src/ticket/models/ticket.entity';
 import { UserEntity } from 'src/user/models/user.entity';
-import { User } from 'src/user/models/user.interface';
 import { Repository } from 'typeorm/repository/Repository';
-import { AddBalanceDto, BoughtRecordDto, BoughtTicketDto, PaymentDto, PaymentRecordDto, PaymentRecordWithBalanceDto, PaymentSessionWithBalanceDto, PaymentWithBalanceDto, SubscriptionDto } from './models/payment.dto';
+import { AddBalanceDto, BoughtRecordDto, BoughtTicketDto, PaymentDto, PaymentRecordDto, PaymentRecordWithBalanceDto, PaymentSessionWithBalanceDto, PaymentWithBalanceDto, SessionDto, SubscriptionDto } from './models/payment.dto';
 import { PaymentEntity } from './models/payment.entity';
 
 @Injectable()
@@ -61,6 +59,15 @@ export class PaymentService {
   }
   buyRecordWithStripe(paymentRecordDto: PaymentRecordDto): Observable<ResponseData> {
     return this.paymentClient.send({ cmd: 'BUY_RECORD'}, {paymentRecordDto})
+  }
+  async buySessionWithStripe(sessionDto: SessionDto): Promise<ResponseData> {
+    const combos = await this.comboRepository.find({ where: {combo_id: sessionDto.sessionId} })
+    const tickets = await this.ticketRepository.find({ where: {buyer_id: sessionDto.userId, session_id: sessionDto.sessionId} })
+    if(tickets.length === combos.length) {
+      throw new Error('User already buy this session')
+    } else {
+      return this.paymentClient.send({ cmd: 'BUY_SESSION'}, sessionDto).toPromise()
+    }
   }
 
   async getCurrentBalance(id: number): Promise<number> {
@@ -297,6 +304,19 @@ export class PaymentService {
       .set({balance: parseInt(record.balance.toString()) - parseInt(record.price.toString())})
       .where("user_id = :id", {id: record.userId})
       .execute()
+    } catch (err) {
+      console.log(err)
+      responseData.status = false
+    }
+    return responseData
+  }
+
+  async getConferenceListBySessionId(sessionId: number): Promise<ResponseData> {
+    const responseData = new ResponseData()
+    try {
+      const list = await this.conferenceRepository.find({ where: {combo_id: sessionId}})
+      responseData.data = list.map(index => index.conference_id)
+      console.log(responseData)
     } catch (err) {
       console.log(err)
       responseData.status = false

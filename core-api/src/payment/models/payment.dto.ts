@@ -56,3 +56,11 @@ export class PaymentRecordWithBalanceDto {
   price: number;
   balance: number;
 }
+
+export class SessionDto {
+  sessionId: number;
+  sessionName: string;
+  sessionDescription?: string;
+  sessionPrice: number;
+  userId: number;
+}

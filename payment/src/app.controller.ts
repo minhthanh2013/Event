@@ -2,7 +2,7 @@ import { Controller, Get } from '@nestjs/common';
 import { MessagePattern } from '@nestjs/microservices';
 import { from, Observable } from 'rxjs';
 import { AppService } from './app.service';
-import { AddBalanceDto, PaymentDto, PaymentRecordDto, ResponseData, SubscriptionDto } from './payment/payment.dto';
+import { AddBalanceDto, PaymentDto, PaymentRecordDto, ResponseData, SessionDto, SubscriptionDto } from './payment/payment.dto';
 
 @Controller()
 export class AppController {
@@ -37,5 +37,9 @@ export class AppController {
   @MessagePattern({ cmd: 'BUY_RECORD'})
   paymentRecord(paymentRecordDto: PaymentRecordDto): Observable<ResponseData> {
     return from(this.appService.buyRecord(paymentRecordDto))
+  }
+  @MessagePattern({ cmd: 'BUY_SESSION'})
+  paymentSession(sessionDto: SessionDto): Promise<ResponseData> {
+    return this.appService.buySession(sessionDto)
   }
 }
