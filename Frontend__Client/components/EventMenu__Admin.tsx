@@ -30,7 +30,8 @@ const EventMenuAdmin: React.FC<props> = ({ id, event, props }) => {
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const [popUp, setPopUp] = useState("0");
     const [status, setStatus] = useState("0");
-
+    const [successMessage, setSuccessMessage] = useState<string>();
+    const [errorMessage, setErrorMessage] = useState<string>();
     const open = Boolean(anchorEl);
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         setAnchorEl(event.currentTarget);
@@ -49,10 +50,12 @@ const EventMenuAdmin: React.FC<props> = ({ id, event, props }) => {
         if (resData.status === 200) {
             setStatus("1");
             setPopUp("1");
+            setSuccessMessage("Conference is verified");
             setTimeout(refreshPage, 2000);
         } else {
             setStatus("0");
             setPopUp("1");
+            setErrorMessage("Conference is not verified");
         }
         setAnchorEl(null);
     }
@@ -94,7 +97,7 @@ const EventMenuAdmin: React.FC<props> = ({ id, event, props }) => {
     };
     return (
         <>
-            <PopUp status={status} popUp={popUp} onClick={() => setPopUp("0")} />
+            <PopUp status={status} popUp={popUp} onClick={() => setPopUp("0")} successMessage={successMessage} errorMessage={errorMessage}/>
             <IconButton sx={{ color: "rgba(106, 53, 242, 0.77)" }} onClick={handleClick}>
                 <MenuIcon />
             </IconButton>

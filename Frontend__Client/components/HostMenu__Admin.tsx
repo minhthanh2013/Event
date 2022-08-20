@@ -118,6 +118,8 @@ const EventMenuAdmin: React.FC<props> = ({ host, props }) => {
     const [popUp, setPopUp] = useState("0");
     const [status, setStatus] = useState("0");
     const [showPopUp, setShowPopUp] = useState("0");
+    const [successMessage, setSuccessMessage] = useState<string>();
+    const [errorMessage, setErrorMessage] = useState<string>();
 
     const open = Boolean(anchorEl);
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -139,10 +141,12 @@ const EventMenuAdmin: React.FC<props> = ({ host, props }) => {
         if (resData.status === 200) {
             setStatus("1");
             setPopUp("1");
+            setSuccessMessage("Host has been banned successfully");
             setTimeout(refreshPage, 2000);
         } else {
             setStatus("0");
             setPopUp("1");
+            setErrorMessage("Host has not been banned");
         }
         setAnchorEl(null);
     }
@@ -159,10 +163,12 @@ const EventMenuAdmin: React.FC<props> = ({ host, props }) => {
         if (resData.status === 200) {
             setStatus("1");
             setPopUp("1");
+            setSuccessMessage("Host has been unbanned successfully");
             setTimeout(refreshPage, 2000);
         } else {
             setStatus("0");
             setPopUp("1");
+            setErrorMessage("Host has not been unbanned");
         }
         setAnchorEl(null);
     }
@@ -177,7 +183,7 @@ const EventMenuAdmin: React.FC<props> = ({ host, props }) => {
     };
     return (
         <>
-            <PopUp status={status} popUp={popUp} onClick={() => setPopUp("0")} />
+            <PopUp status={status} popUp={popUp} onClick={() => setPopUp("0")} successMessage={successMessage} errorMessage={errorMessage}/>
             <Profile host={host} show={showPopUp} setShow={setShowPopUp} />
             <IconButton sx={{ color: "rgba(106, 53, 242, 0.77)" }} onClick={handleClick}>
                 <MenuIcon />

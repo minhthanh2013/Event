@@ -61,6 +61,7 @@ const CreateEvent = (props) => {
   const [popUp, setPopUp] = useState("0");
   const [status, setStatus] = useState("0");
   const [errorMessage, setErrorMessage] = useState<string>();
+  const [successMessage, setSuccessMessage] = useState<string>();
 
   const onImageChange = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
@@ -84,6 +85,7 @@ const CreateEvent = (props) => {
       if (imageFile === undefined) {
         setStatus("0");
         setPopUp("1");
+        setErrorMessage("Upload an image before hitting submit");
         return;
       }
       const resData = await fetch("/api/conference/create-new", {
@@ -111,6 +113,7 @@ const CreateEvent = (props) => {
       if (resData.status === 200) {
         setStatus("1");
         setPopUp("1");
+        setSuccessMessage("Event created successfully");
         setTimeout(redirect, 2000);
       } else {
         setStatus("0");
@@ -143,7 +146,7 @@ const CreateEvent = (props) => {
         <Box className={styles.dot__2}></Box>
         <Box className={styles.dot__3}></Box>
         <HeaderHost {...props} />
-        <PopUp status={status} popUp={popUp} onClick={() => setPopUp("0")} errorMessage={errorMessage}/>
+        <PopUp status={status} popUp={popUp} onClick={() => setPopUp("0")} successMessage={successMessage} errorMessage={errorMessage}/>
 
         <Typography variant="h3" component="div" className={styles.header}>
           Event Dashboard

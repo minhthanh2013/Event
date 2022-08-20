@@ -88,6 +88,8 @@ const CreateEvent = (props) => {
 
   const [popUp, setPopUp] = useState("0");
   const [status, setStatus] = useState("0");
+  const [successMessage, setSuccessMessage] = useState<string>();
+  const [errorMessage, setErrorMessage] = useState<string>();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -137,10 +139,12 @@ const CreateEvent = (props) => {
     if (resData.status === 200) {
       setStatus("1");
       setPopUp("1");
+      setSuccessMessage("Update conference successfully");
       setTimeout(redirect, 2000);
     } else {
       setStatus("0");
       setPopUp("1");
+      setErrorMessage("Update conference failed");
     }
   }
 
@@ -167,7 +171,7 @@ const CreateEvent = (props) => {
         <Typography variant="h3" component="div" className={styles.header}>
           Edit event {id}
         </Typography>
-        <PopUp status={status} popUp={popUp} onClick={() => setPopUp("0")} />
+        <PopUp status={status} popUp={popUp} onClick={() => setPopUp("0")} successMessage={successMessage} errorMessage={errorMessage}/>
         <Grid container spacing={0} direction="column" alignItems="center">
           <Card className={styles.imageInput}>
             {image ? (

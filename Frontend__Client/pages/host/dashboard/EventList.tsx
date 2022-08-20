@@ -48,6 +48,8 @@ interface EventListProps {
 export const EventList = (props: EventListProps) => {
     const [popUp, setPopUp] = useState("0");
     const [status, setStatus] = useState("0");
+    const [successMessage, setSuccessMessage] = useState<string>();
+    const [errorMessage, setErrorMessage] = useState<string>();
     const [sortType, setSortType] = useState('all')
 
     function refreshPage() {
@@ -60,10 +62,12 @@ export const EventList = (props: EventListProps) => {
         if (cateResult.status === true) {
             setStatus("1");
             setPopUp("1");
+            setSuccessMessage("End conference successfully")
             setTimeout(refreshPage, 2000);
         } else {
             setStatus("0");
             setPopUp("1");
+            setErrorMessage("End conference failed")
         }
     }
     function parseDate(dateString: Date) {
@@ -100,7 +104,7 @@ export const EventList = (props: EventListProps) => {
     console.log(props.data?.length)
     return (
         <>
-            <PopUp status={status} popUp={popUp} onClick={() => setPopUp("0")} />
+            <PopUp status={status} popUp={popUp} onClick={() => setPopUp("0")} successMessage={successMessage} errorMessage={errorMessage}/>
             <Box sx={{ marginLeft: '0' }}>
                 <Typography variant='h3' component='div' sx={{ fontWeight: 'bold', marginBottom: '1rem' }}>
                     Events

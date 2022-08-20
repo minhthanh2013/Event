@@ -43,21 +43,6 @@ export const SessionMenu: React.FC<props> = ({ event }) => {
         window.location.reload();
     }
 
-    const handleDeleteSession = async (comboId: number) => {
-        const resData = await fetch(`/api/combo/delete-combo/${comboId}`, {
-            method: "DELETE",
-        });
-        if (resData.status === 200) {
-            setStatus("1");
-            setPopUp("1");
-            setTimeout(refreshPage, 2000);
-        } else {
-            setStatus("0");
-            setPopUp("1");
-        }
-        setAnchorEl(null);
-    };
-
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         setAnchorEl(event.currentTarget);
     };
@@ -80,7 +65,6 @@ export const SessionMenu: React.FC<props> = ({ event }) => {
                 <Link href={`/session/${event.comboSessionId}`} passHref>
                     <MenuItem onClick={handleClose}>View</MenuItem>
                 </Link>
-                {/* <MenuItem onClick={() => { handleDeleteSession(event.comboSessionId) }}>Delete</MenuItem> */}
             </Menu>
         </>
     )

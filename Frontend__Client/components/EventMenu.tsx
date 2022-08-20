@@ -29,6 +29,8 @@ const EventMenu: React.FC<props> = ({ id, hostId, event }) => {
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const [popUp, setPopUp] = useState("0");
     const [status, setStatus] = useState("0");
+    const [successMessage, setSuccessMessage] = useState<string>();
+    const [errorMessage, setErrorMessage] = useState<string>();
     function refreshPage() {
         window.location.reload();
     }
@@ -68,10 +70,12 @@ const EventMenu: React.FC<props> = ({ id, hostId, event }) => {
         if (resData.status === 200) {
             setStatus("1");
             setPopUp("1");
+            setSuccessMessage("Delete conference successfully");
             setTimeout(refreshPage, 2000);
         } else {
             setStatus("0");
             setPopUp("1");
+            setErrorMessage("Fail to delete conference");
         }
         setAnchorEl(null);
     }
@@ -80,7 +84,7 @@ const EventMenu: React.FC<props> = ({ id, hostId, event }) => {
     };
     return (
         <>
-        <PopUp status={status} popUp={popUp} onClick={() => setPopUp("0")}/>
+        <PopUp status={status} popUp={popUp} onClick={() => setPopUp("0")} successMessage={successMessage} errorMessage={errorMessage}/>
             <IconButton sx={{ color: "rgba(106, 53, 242, 0.77)" }} onClick={handleClick}>
                 <MenuIcon />
             </IconButton>

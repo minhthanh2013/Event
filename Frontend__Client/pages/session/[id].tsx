@@ -47,6 +47,7 @@ const Session = (props: SessionProps) => {
 	const { id } = router.query
 	const [sessionProps, setSessionProps] = useState<SessionProps>()
 	const [imageProp, setImageProp] = useState<string>()
+	const [userId, setUserId] = useState('');
 	let [open, setOpen] = useState(false)
 	const handleToggle = () => {
 		setOpen(!open)
@@ -63,7 +64,17 @@ const Session = (props: SessionProps) => {
 			const cateResult = await dataResult.json()
 			setImageProp(cateResult.url)
 		}
+		const fetchUserId = async () => {
+			if(props?.props?.tempDecode.role.toString() === 'user' ) {
+				setUserId(props?.props?.tempDecode.sub);
+			} else  {
+				setUserId(undefined);
+			}
+		}
 		fetchSessionProp()
+		if(props?.props?.tempDecode !== undefined) {
+			fetchUserId();
+		}
 		fetchImage()
 	}, [id])
 	return (
@@ -80,7 +91,7 @@ const Session = (props: SessionProps) => {
 						numberOfTicket={sessionProps?.data?.conferenceList.length}
 						discount={sessionProps?.data?.discount}
 						sessionId={id}
-						userId={props.props.userId}
+						userId={userId}
 					/>
 				)}
 				{sessionProps?.data && <DetailContentSession data={sessionProps?.data} />}

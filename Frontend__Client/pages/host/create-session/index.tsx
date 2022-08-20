@@ -86,6 +86,7 @@ const CreateEvent = (props) => {
     if (imageFile === undefined) {
       setStatus("0");
       setPopUp("1");
+      setErrorMessage("Upload an session before hitting submit");
       return;
     }
     const res = await fetch("/api/combo/create-new", {
@@ -108,10 +109,12 @@ const CreateEvent = (props) => {
     if (res.status === 200) {
       setStatus("1");
       setPopUp("1");
+      setSuccessMessage("Session created successfully");
       setTimeout(redirect, 2000);
     } else {
       setStatus("0");
       setPopUp("1");
+      setErrorMessage("Session creation failed");
     }
   }
   //change tabs; value = tabs value

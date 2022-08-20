@@ -43,6 +43,7 @@ const Event = (props: any) => {
 	const router = useRouter()
 	const { id } = router.query
 	const {isBuy} = router.query
+	const [userId, setUserId] = useState('');
 	const [ticketList, setTicketList] = useState<TicketProps>()
 	const [imageProp, setImageProp] = useState<string>()
 	let [open, setOpen] = useState(false || isBuy === 'true')
@@ -61,9 +62,19 @@ const Event = (props: any) => {
 			const cateResult = await dataResult.json()
 			setImageProp(cateResult.url)
 		}
+		const fetchUserId = async () => {
+			if(props?.tempDecode.role.toString() === 'user' ) {
+				setUserId(props?.tempDecode.sub);
+			} else  {
+				setUserId(undefined);
+			}
+		}
 		fetchTicketList().catch(() => {
 			//
 		})
+		if(props?.tempDecode !== undefined) {
+			fetchUserId();
+		}
 		fetchImage();
 	}, [id])
 
@@ -76,10 +87,10 @@ const Event = (props: any) => {
 						<Box className={styles.background__wrap} sx={{ filter: open && (new Date() > new Date(ticketList?.data?.dateStartSell)) ? 'blur(10px) ' : 'none' }}>
 							<Box className={styles.dot__1}></Box>
 							<Header {...props} />
-							{ticketList?.data && <DetailBanner data={ticketList.data} handleToggle={handleToggle} userId={props?.tempDecode?.sub}/>}
+							{ticketList?.data && <DetailBanner data={ticketList.data} handleToggle={handleToggle} userId={userId}/>}
 							{ticketList?.data && <DetailContent data={ticketList.data} />}
 						</Box>
-						{(new Date() > new Date(ticketList?.data?.dateStartSell)) && open && <PurchaseModal handleToggle={handleToggle} data={ticketList.data} imageProp={imageProp} userId={props?.tempDecode?.sub}/>}
+						{(new Date() > new Date(ticketList?.data?.dateStartSell)) && open && <PurchaseModal handleToggle={handleToggle} data={ticketList.data} imageProp={imageProp} userId={userId}/>}
 						<Footer />
 					</>
 				) : (
@@ -96,12 +107,12 @@ const Event = (props: any) => {
 					<Box className={styles.background__wrap} sx={{ filter: open && (new Date() > new Date(ticketList?.data?.dateStartSell)) ? 'blur(10px) ' : 'none' }}>
 						<Box className={styles.dot__1}></Box>
 						<Header {...props} />
-						{ticketList?.data && <DetailBanner data={ticketList.data} handleToggle={handleToggle} userId={props?.tempDecode?.sub}/>}
+						{ticketList?.data && <DetailBanner data={ticketList.data} handleToggle={handleToggle} userId={userId}/>}
 						{ticketList?.data && <DetailContent data={ticketList.data} />}
 						{/* <DetailBanner data={ticketList.data}/>
 						<DetailContent data={ticketList.data}/> */}
 					</Box>
-					{(new Date() > new Date(ticketList?.data?.dateStartSell))  && open && <PurchaseModal handleToggle={handleToggle} data={ticketList.data} imageProp={imageProp} userId={props?.tempDecode?.sub}/>}
+					{(new Date() > new Date(ticketList?.data?.dateStartSell))  && open && <PurchaseModal handleToggle={handleToggle} data={ticketList.data} imageProp={imageProp} userId={userId}/>}
 					<Footer />
 				</>
 			)}

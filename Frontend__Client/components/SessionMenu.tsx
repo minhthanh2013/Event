@@ -35,6 +35,8 @@ interface props {
 export const SessionMenu: React.FC<props> = ({ event }) => {
     const [popUp, setPopUp] = useState("0");
     const [status, setStatus] = useState("0");
+    const [successMessage, setSuccessMessage] = useState<string>();
+    const [errorMessage, setErrorMessage] = useState<string>();
 
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
@@ -51,10 +53,12 @@ export const SessionMenu: React.FC<props> = ({ event }) => {
             if (resData.status === 200) {
                 setStatus("1");
                 setPopUp("1");
+                setSuccessMessage("Session is deleted");
                 setTimeout(refreshPage, 2000);
             } else {
                 setStatus("0");
                 setPopUp("1");
+                setErrorMessage("Session is not deleted");
             }
         }
         setAnchorEl(null);
@@ -69,7 +73,7 @@ export const SessionMenu: React.FC<props> = ({ event }) => {
 
     return (
         <>
-            <PopUp status={status} popUp={popUp} onClick={() => setPopUp("0")} />
+            <PopUp status={status} popUp={popUp} onClick={() => setPopUp("0")} successMessage={successMessage} errorMessage={errorMessage}/>
             <IconButton sx={{ color: "rgba(106, 53, 242, 0.77)", marginLeft: "2rem" }} onClick={handleClick}>
                 <MenuIcon />
             </IconButton>
