@@ -96,7 +96,7 @@ const CreateEvent = (props) => {
         body: JSON.stringify(data),
       });
       const resDataJson = await resData.json();
-      if(resDataJson.statusCode === 400) {
+      if (resDataJson.statusCode === 400) {
         setStatus("0");
         setPopUp("1");
         setErrorMessage(resDataJson.message);
@@ -146,7 +146,7 @@ const CreateEvent = (props) => {
         <Box className={styles.dot__2}></Box>
         <Box className={styles.dot__3}></Box>
         <HeaderHost {...props} />
-        <PopUp status={status} popUp={popUp} onClick={() => setPopUp("0")} successMessage={successMessage} errorMessage={errorMessage}/>
+        <PopUp status={status} popUp={popUp} onClick={() => setPopUp("0")} successMessage={successMessage} errorMessage={errorMessage} />
 
         <Typography variant="h3" component="div" className={styles.header}>
           Event Dashboard
@@ -211,10 +211,10 @@ const CreateEvent = (props) => {
                 {value === 2 ? (<Tab label="Date and time" {...a11yProps(2)} />) : (<Tab disabled label="Date and time" {...a11yProps(2)} />)}
               </Tabs>
               <TabPanel value={value} index={0}>
-                <BasicInfo data={data} setData={setData} setValue={setValue} api={apiCall} prop={props} />
+                <BasicInfo data={data} setData={setData} setValue={setValue} />
               </TabPanel>
               <TabPanel value={value} index={1}>
-                <Speakers data={data} setData={setData} setValue={setValue} api={apiCall} prop={props} />
+                <Speakers data={data} setData={setData} setValue={setValue} />
               </TabPanel>
               <TabPanel value={value} index={2}>
                 <DateForm data={data} setData={setData} setValue={setValue} api={apiCall} prop={props} />

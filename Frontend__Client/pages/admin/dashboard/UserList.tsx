@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Grid from "@material-ui/core/Grid";
@@ -27,8 +27,13 @@ interface host {
     create_at: Date,
     update_at: Date,
     host_type: string
+    subscriptions: Sub[],
 }
 
+interface Sub {
+    expired_date: Date,
+    host_id: string,
+}
 interface EventListProps {
     data: host[];
     propss: any;
@@ -45,7 +50,7 @@ export const UserList = (props: EventListProps) => {
         const weekday = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
         let weekDayString = weekday[date.getDay()]
         let monthString = date.toLocaleString('en-us', { month: 'short' })
-        const dateFinal = `${weekDayString}, ${monthString} ${day}`
+        const dateFinal = `${weekDayString}, ${monthString} ${day}, ${date.getFullYear()}`
         return dateFinal
     }
 
@@ -87,7 +92,7 @@ export const UserList = (props: EventListProps) => {
                                 <TableRow key={row.host_id} sx={{ width: "100%" }}>
                                     <TableCell align="left">{row?.user_name}</TableCell>
                                     <TableCell align="right">{row?.host_type.toUpperCase()}</TableCell>
-                                    <TableCell align="right">{parseDate(row?.update_at)}</TableCell>
+                                    <TableCell align="right">{row?.subscriptions.length ? parseDate(row?.subscriptions[0]?.expired_date) : "NULL"}</TableCell>
                                     <TableCell align="right">{row?.host_id}</TableCell>
                                     <TableCell sx={{ width: "2rem" }}>
                                         <HostMenu host={row} props={props.propss} />

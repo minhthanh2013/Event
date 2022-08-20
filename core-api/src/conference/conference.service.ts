@@ -7,9 +7,13 @@ import {
   SubmitConferenceRequestDto,
   ConferenceRequestDto,
   SpeakerRequestDto,
-  SpeakerList
+  SpeakerList,
 } from './models/conference.dto';
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectDataSource, InjectRepository } from '@nestjs/typeorm';
 import { ConferenceCategoryEntity } from 'src/conferencecategory/models/conference_category.entity';
 import { ConferenceTypeEntity } from 'src/conferencetype/models/conference_type.entity';
@@ -20,7 +24,7 @@ import { ZoomService } from 'src/zoom/zoom.service';
 import { DataSource, Repository } from 'typeorm';
 import { ConferenceEntity } from './models/conference.entity';
 import { ScheduleZoomDto } from './models/create.zoom.dto';
-import {v4 as uuidv4} from 'uuid';
+import { v4 as uuidv4 } from 'uuid';
 import {
   paginate,
   Pagination,
@@ -63,38 +67,44 @@ export class ConferenceService {
   }
   findAllByUserId(userId: number): Promise<ResponseData> {
     const result = new ResponseData();
-    result.data  = [];
+    result.data = [];
     return new Promise(async (resolve, reject) => {
-    this.ticketRepository.find({
-      where: {
-        buyer_id: userId,
-      },
-    }).then(async (tickets) => {
-        for (let index = 0; index < tickets.length; index++) {
-          const ticket = tickets[index];
-          const conference = await this.conferenceRepository.findOne({
-            where: {
-              conference_id: ticket.conference_id
+      this.ticketRepository
+        .find({
+          where: {
+            buyer_id: userId,
+          },
+        })
+        .then(async (tickets) => {
+          for (let index = 0; index < tickets.length; index++) {
+            const ticket = tickets[index];
+            const conference = await this.conferenceRepository.findOne({
+              where: {
+                conference_id: ticket.conference_id,
+              },
+            });
+            if (conference) {
+              result.data.push(conference);
             }
-          });
-          if (conference) {
-            result.data.push(conference);
           }
-        }
-        const sortedAsc = result.data.sort(
-          (objA, objB) => objA.date_start_conference.getTime() - objB.date_start_conference.getTime(),
-        );
-        result.data = sortedAsc;
-        result.status = result.data.length > 0;
-        resolve(result);
-      
-    }).catch(e => {
-      reject(e);
-    }).finally(() => {
-      return result; });
+          const sortedAsc = result.data.sort(
+            (objA, objB) =>
+              objA.date_start_conference.getTime() -
+              objB.date_start_conference.getTime(),
+          );
+          result.data = sortedAsc;
+          result.status = result.data.length > 0;
+          resolve(result);
+        })
+        .catch((e) => {
+          reject(e);
+        })
+        .finally(() => {
+          return result;
+        });
     });
   }
-  
+
   async getHostDataByConferenceId(id: number): Promise<ResponseData> {
     return new Promise(async (resolve, reject) => {
       await this.findOne(id)
@@ -139,10 +149,12 @@ export class ConferenceService {
   async createConference(
     conference: ConferenceRequestDto,
   ): Promise<ResponseData> {
-    if(parseInt(conference.conferencePrice.toString()) < 30000) {
-      throw new BadRequestException('Event price must be greater than 30.000 VNĐ');
+    if (parseInt(conference.conferencePrice.toString()) < 30000) {
+      throw new BadRequestException(
+        'Event price must be greater than 30.000 VNĐ',
+      );
     }
-    if(conference.host_id !== undefined) {
+    if (conference.host_id !== undefined) {
       const host = await this.hostRepository.findOne({
         where: {
           host_id: conference.host_id,
@@ -151,14 +163,16 @@ export class ConferenceService {
       if (!host) {
         throw new NotFoundException('Host not found');
       }
-      if(host.host_type === 'free') {
+      if (host.host_type === 'free') {
         const conferencesOwned = await this.conferenceRepository.count({
           where: {
             host_id: conference.host_id,
           },
         });
         if (conferencesOwned >= 20) {
-          throw new BadRequestException('You can not create more than 20 event');
+          throw new BadRequestException(
+            'You can not create more than 20 event',
+          );
         }
       }
     }
@@ -181,7 +195,15 @@ export class ConferenceService {
         const myuuid = uuidv4();
         speaker.uuid = myuuid;
         await this.speakerRepository.save(speaker);
-        this.emailService.sendEmailToSpeakerAfterConferenceIsSchedule(speaker.speaker_name, speaker.speaker_email, data.conference_name, data.date_start_conference, `http://localhost:8080/zoom/join-by-uuid?uuid=${myuuid}`, data.address, data.conference_type == 1);
+        this.emailService.sendEmailToSpeakerAfterConferenceIsSchedule(
+          speaker.speaker_name,
+          speaker.speaker_email,
+          data.conference_name,
+          data.date_start_conference,
+          `http://localhost:8080/zoom/join-by-uuid?uuid=${myuuid}`,
+          data.address,
+          data.conference_type == 1,
+        );
       }
       return result;
     });
@@ -231,14 +253,16 @@ export class ConferenceService {
         },
       },
     });
-    if (data2 !== undefined && data2.length >=1) {
+    if (data2 !== undefined && data2.length >= 1) {
       result.data = data2;
     } else {
       result.status = false;
     }
     return result;
   }
-  async convertEntityToDto(entity: ConferenceEntity): Promise<ConferenceRequestDto> {
+  async convertEntityToDto(
+    entity: ConferenceEntity,
+  ): Promise<ConferenceRequestDto> {
     const dto = new ConferenceRequestDto();
     dto.conferenceName = entity.conference_name;
     dto.conferenceAddress = entity.address;
@@ -247,15 +271,17 @@ export class ConferenceService {
     dto.conferenceCategory = entity.conference_category;
     dto.conferenceDescription = entity.description;
     dto.status_ticket = entity.status_ticket;
-    dto.host_id = entity.host_id
-    dto.conference_id = entity.conference_id
-    dto.address = entity.address
-    dto.date_start_conference = entity.date_start_conference
+    dto.host_id = entity.host_id;
+    dto.conference_id = entity.conference_id;
+    dto.address = entity.address;
+    dto.date_start_conference = entity.date_start_conference;
     dto.isRecorded = entity.isRecorded;
     dto.isValidated = entity.isValidated;
     dto.speakerList = [];
-    const speakers = await this.speakerRepository.find({where: {conference_id: entity.conference_id}});
-    (speakers).forEach(element => {
+    const speakers = await this.speakerRepository.find({
+      where: { conference_id: entity.conference_id },
+    });
+    speakers.forEach((element) => {
       const speaker = new SpeakerList();
       speaker.name = element.speaker_name;
       speaker.email = element.speaker_email;
@@ -313,7 +339,7 @@ export class ConferenceService {
       .createQueryBuilder()
       .select('conference')
       .from(ConferenceEntity, 'conference')
-      .where ({ status_ticket: "published"})
+      .where({ status_ticket: 'published' })
       // .where ({ order: {create_at: "DESC"}})
       .orderBy('conference.create_at', 'DESC')
       .getMany();
@@ -333,8 +359,8 @@ export class ConferenceService {
   async findAllByHostId(id: number, status: string) {
     const result = new ResponseData();
     let tempResult: ConferenceEntity[] = [];
-    if(status !== '' ) {
-    tempResult = await this.conferenceRepository.find({
+    if (status !== '') {
+      tempResult = await this.conferenceRepository.find({
         where: {
           host_id: id,
           status_ticket: status,
@@ -355,40 +381,54 @@ export class ConferenceService {
     return result;
   }
 
-  async paginate(options: IPaginationOptions, search: string, onlyPublish: string): Promise<Pagination<ConferenceEntity>> {
-    const queryBuilder = this.conferenceRepository.createQueryBuilder('conference');
-    queryBuilder.orderBy('conference.create_at', 'DESC') // Or whatever you need to do
+  async paginate(
+    options: IPaginationOptions,
+    search: string,
+    onlyPublish: string,
+  ): Promise<Pagination<ConferenceEntity>> {
+    const queryBuilder =
+      this.conferenceRepository.createQueryBuilder('conference');
+    queryBuilder.orderBy('conference.create_at', 'DESC'); // Or whatever you need to do
     if (search !== '') {
       queryBuilder.where('conference.conference_name LIKE :search', {
         search: `%${search}%`,
-    });
+      });
     }
-    if(onlyPublish === 'true') {
+    if (onlyPublish === 'true') {
       queryBuilder.andWhere('conference.status_ticket = :status', {
         status: 'published',
-    });
+      });
     }
- 
+
     return paginate<ConferenceEntity>(queryBuilder, options);
   }
-  async submitConference(conferenceSubmitDto: SubmitConferenceRequestDto): Promise<ResponseData> {
+  async submitConference(
+    conferenceSubmitDto: SubmitConferenceRequestDto,
+  ): Promise<ResponseData> {
     const conference = await this.conferenceRepository.findOne({
-      where: { 
+      where: {
         conference_id: conferenceSubmitDto.conferenceId,
         host_id: conferenceSubmitDto.hostId,
-        status_ticket: "draft"
-      }
-    })
-    if(!conference) {
-      throw new NotFoundException('Conference not found with conference id: ' + conferenceSubmitDto.conferenceId + " and host id: " + conferenceSubmitDto.hostId);
+        status_ticket: 'draft',
+      },
+    });
+    if (!conference) {
+      throw new NotFoundException(
+        'Conference not found with conference id: ' +
+          conferenceSubmitDto.conferenceId +
+          ' and host id: ' +
+          conferenceSubmitDto.hostId,
+      );
     }
-    conference.status_ticket = "pending";
+    conference.status_ticket = 'pending';
     const result = new ResponseData();
     const newConference = await this.conferenceRepository.save(conference);
-    if(newConference) {
+    if (newConference) {
       result.status = true;
       result.data = newConference;
-      const host = await this.hostRepository.findOne({where: {host_id: conferenceSubmitDto.hostId}});
+      const host = await this.hostRepository.findOne({
+        where: { host_id: conferenceSubmitDto.hostId },
+      });
       this.emailService.sendEmailToHostAfterSubmitConference(host.email);
       return result;
     }
@@ -396,18 +436,20 @@ export class ConferenceService {
 
   async cancelConference(id: number): Promise<ResponseData> {
     const conference = await this.conferenceRepository.findOne({
-      where: { 
+      where: {
         conference_id: id,
-        status_ticket: "pending"
-      }
-    })
-    if(!conference) {
-      throw new NotFoundException('Conference not found with conference id: ' + id);
+        status_ticket: 'pending',
+      },
+    });
+    if (!conference) {
+      throw new NotFoundException(
+        'Conference not found with conference id: ' + id,
+      );
     }
-    conference.status_ticket = "draft";
+    conference.status_ticket = 'draft';
     const result = new ResponseData();
     const newConference = await this.conferenceRepository.save(conference);
-    if(newConference) {
+    if (newConference) {
       result.status = true;
       result.data = newConference;
       return result;
@@ -415,7 +457,9 @@ export class ConferenceService {
   }
 
   async scheduleZoomMeeting(conferenceId: number) {
-    const conference = await this.conferenceRepository.findOne({where:{conference_id: conferenceId}});
+    const conference = await this.conferenceRepository.findOne({
+      where: { conference_id: conferenceId },
+    });
     if (conference.conference_type == 2) {
       // TODO only schedule when admin is submit.
       const zoomDto: ScheduleZoomDto = new ScheduleZoomDto();
@@ -437,41 +481,52 @@ export class ConferenceService {
     }
   }
   findMeetingByZoomMeetingId(meetingId: string) {
-    const conference =  this.conferenceRepository.findOne({
+    const conference = this.conferenceRepository.findOne({
       where: {
         zoom_meeting_id: meetingId,
-      }
+      },
     });
-    if(conference) {
+    if (conference) {
       return conference;
     } else {
-      throw new NotFoundException('Conference not found with meeting id: ' + meetingId);
+      throw new NotFoundException(
+        'Conference not found with meeting id: ' + meetingId,
+      );
     }
   }
-  async findConferenceByUserAndZoomMeetingId(userId: number, meetingId: string) {
+  async findConferenceByUserAndZoomMeetingId(
+    userId: number,
+    meetingId: string,
+  ) {
     const conference = await this.conferenceRepository.findOne({
       where: {
         zoom_meeting_id: meetingId,
-      }
+      },
     });
-    if (!conference)  {
-      throw new NotFoundException('Conference not found with meeting id: ' + meetingId);
+    if (!conference) {
+      throw new NotFoundException(
+        'Conference not found with meeting id: ' + meetingId,
+      );
     }
     const confId = conference.conference_id;
     const ticket = await this.ticketRepository.find({
       where: {
         conference_id: confId,
         buyer_id: userId,
-      }
-    })
+      },
+    });
     return ticket;
   }
   async getAllHost(): Promise<ResponseData> {
     const result = new ResponseData();
-    const host = await this.hostRepository.find();
-    result.status = host != undefined;
+    const host = await this.hostRepository.find({
+      relations: ['subscriptions'],
+    });
+
     if (host !== undefined && host.length >= 1) {
       result.data = host;
+    } else {
+      result.status = false;
     }
     return result;
   }
@@ -485,27 +540,43 @@ export class ConferenceService {
     return result;
   }
   async deleteConference(id: number): Promise<ResponseData> {
-    const conference = this.conferenceRepository.findOne({where: {conference_id: id}});
-    if(!conference) {
-      throw new NotFoundException('Conference not found with conference id: ' + id);
+    const conference = this.conferenceRepository.findOne({
+      where: { conference_id: id },
+    });
+    if (!conference) {
+      throw new NotFoundException(
+        'Conference not found with conference id: ' + id,
+      );
     }
-    if((await conference).status_ticket === 'draft') {
+    if ((await conference).status_ticket === 'draft') {
       const result = new ResponseData();
-      await this.conferenceRepository.delete({conference_id: id});
+      await this.conferenceRepository.delete({ conference_id: id });
       result.status = true;
       return result;
     } else {
-      throw new BadRequestException('Can not delete conference with status: ' + (await conference).status_ticket);
+      throw new BadRequestException(
+        'Can not delete conference with status: ' +
+          (await conference).status_ticket,
+      );
     }
   }
   async getConferenceRecord(id: number): Promise<ResponseData> {
-    const conference = await this.conferenceRepository.findOne({where: {conference_id: id}});
-    console.log(conference)
-    if(!conference) {
-      throw new NotFoundException('Conference not found with conference id: ' + id);
+    const conference = await this.conferenceRepository.findOne({
+      where: { conference_id: id },
+    });
+    console.log(conference);
+    if (!conference) {
+      throw new NotFoundException(
+        'Conference not found with conference id: ' + id,
+      );
     }
-    if(conference.conference_type.toString() !== '2' || conference.zoom_meeting_id === undefined) {
-      throw new NotFoundException('Conference not found with conference id: ' + id);
+    if (
+      conference.conference_type.toString() !== '2' ||
+      conference.zoom_meeting_id === undefined
+    ) {
+      throw new NotFoundException(
+        'Conference not found with conference id: ' + id,
+      );
     }
     const result = new ResponseData();
     result.status = true;
@@ -514,12 +585,16 @@ export class ConferenceService {
   }
   async endConference(id: number): Promise<ResponseData> {
     const result = new ResponseData();
-    const conference = await this.conferenceRepository.findOne({where: {conference_id: id}});
-    if(!conference) {
-      throw new NotFoundException('Conference not found with conference id: ' + id);
+    const conference = await this.conferenceRepository.findOne({
+      where: { conference_id: id },
+    });
+    if (!conference) {
+      throw new NotFoundException(
+        'Conference not found with conference id: ' + id,
+      );
     }
-    if(conference.isValidated) {
-      await this.conferenceRepository.update(id, {isValidated: false});
+    if (conference.isValidated) {
+      await this.conferenceRepository.update(id, { isValidated: false });
       result.status = true;
       return result;
     } else {

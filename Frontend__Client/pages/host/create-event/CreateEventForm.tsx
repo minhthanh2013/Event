@@ -29,10 +29,10 @@ type Data = {
 }
 interface CreateEventProps {
   data: Data;
-  setData: (data: object) => void;
-  setValue: (value: number) => void;
-  api: (data: object) => void;
-  prop: any;
+  setData?: (data: object) => void;
+  setValue?: (value: number) => void;
+  api?: (data: object) => void;
+  prop?: any;
 }
 
 interface TypeProps {
@@ -42,7 +42,7 @@ interface TypeProps {
 
 interface CategoryProps {
   status: boolean;
-  data: CategoryProps[];
+  data: CategoryProp[];
 }
 
 interface TypeProps {
@@ -50,7 +50,7 @@ interface TypeProps {
   type_name: string;
 }
 
-interface CategoryProps {
+interface CategoryProp {
   category_id: number;
   category_name: string;
 }
@@ -92,10 +92,8 @@ export const BasicInfo: React.FC<CreateEventProps> = ({ data, setData, setValue 
       ...data, conferenceName: value.conferenceName, conferenceAddress: value.conferenceAddress, organizerName: value.organizerName,
       conferenceType: value.conferenceType, conferenceCategory: value.conferenceCategory, conferenceDescription: value.conferenceDescription, isRecorded: value.isRecorded,
     });
-    console.log(data)
     setValue(1);
   };
-  console.log(checked);
   return (
     <>
       <Grid

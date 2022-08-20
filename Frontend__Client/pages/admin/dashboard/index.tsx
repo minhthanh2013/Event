@@ -94,6 +94,7 @@ interface SessionListProp {
     discount: number;
 }
 
+// Host props
 interface HostList {
     status: boolean;
     data: HostListProp[];
@@ -107,6 +108,10 @@ interface HostListProp {
     create_at: Date,
     update_at: Date,
     host_type: string,
+    subscriptions: Sub,
+}
+interface Sub {
+    expired_date: Date,
 }
 
 //

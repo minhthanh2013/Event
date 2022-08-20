@@ -66,7 +66,7 @@ export const EventList = (props: EventListProps) => {
     const weekday = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
     let weekDayString = weekday[date.getDay()]
     let monthString = date.toLocaleString('en-us', { month: 'short' })
-    const dateFinal = `${weekDayString}, ${monthString} ${day}`
+    const dateFinal = `${weekDayString}, ${monthString} ${day}, ${date.getFullYear()}`
     return dateFinal
   }
 
