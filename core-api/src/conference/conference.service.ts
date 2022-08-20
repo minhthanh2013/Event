@@ -127,7 +127,6 @@ export class ConferenceService {
     });
   }
   async findOne(id: number): Promise<ResponseData> {
-    console.log(132, id);
     const result = new ResponseData();
     const data = await this.conferenceRepository.findOne({
       where: { conference_id: id },
@@ -143,7 +142,26 @@ export class ConferenceService {
     if(parseInt(conference.conferencePrice.toString()) < 30000) {
       throw new BadRequestException('Event price must be greater than 30.000 VNĐ');
     }
-
+    if(conference.host_id !== undefined) {
+      const host = await this.hostRepository.findOne({
+        where: {
+          host_id: conference.host_id,
+        },
+      });
+      if (!host) {
+        throw new NotFoundException('Host not found');
+      }
+      if(host.host_type === 'free') {
+        const conferencesOwned = await this.conferenceRepository.count({
+          where: {
+            host_id: conference.host_id,
+          },
+        });
+        if (conferencesOwned >= 20) {
+          throw new BadRequestException('You can not create more than 20 event');
+        }
+      }
+    }
     return this.getLatestIndex().then(async (latestIndex) => {
       const indexNumber: number = +latestIndex;
       const result = new ResponseData();

@@ -39,12 +39,11 @@ interface TicketProps {
 export interface UserToVerify {
 	user_id: number;
 	conference_id: number;
-  }
+}
 
 const weekday = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
 
 const DetailBanner = (props: TicketProps) => {
-    const [imageProp, setImageProp] = useState<string>()
 	const [year, setYear] = useState<string>()
 	const [month,  ] = useState<string>()
 	const [monthString, setMonthString] = useState<string>()
@@ -129,6 +128,7 @@ const DetailBanner = (props: TicketProps) => {
                             <Box>
                                 <Typography component="h2">Date & Time</Typography>
                                 <Typography component="h3">{weekDay}, {monthString} {day}, {year} at {hour}:{min} {timePeriod}</Typography>
+								{new Date() > new Date(props.data.dateStartConference) && <Typography component="h3">This conference has ended. But you can still buy the record.</Typography>}
                                 <Button variant="text" className={styles.button__1}><AddIcon/>Add to calendar</Button>
 								{!hideBuyButton ? (
 									<>

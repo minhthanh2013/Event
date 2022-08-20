@@ -27,12 +27,9 @@ export const Subcriptions: React.FC<SubProps> = ({ host_type, exDate, hostId }) 
     const dateFinal = `${weekDayString}, ${monthString} ${day} ${date.getFullYear()}`
     return dateFinal
   }
-  console.log(host_type, exDate, hostId);
-  console.log(19, exDate)
   const router = useRouter()
 
   async function navigate() {
-    console.log(34, hostId)
     let temp = { idHost: hostId }
     const result = await fetch("/api/payment/subcription/", {
       method: "POST",
@@ -42,9 +39,7 @@ export const Subcriptions: React.FC<SubProps> = ({ host_type, exDate, hostId }) 
       },
       body: JSON.stringify(temp),
     })
-    console.log(43, result)
     const resDataJson = await result.json();
-    console.log(43, resDataJson)
     if (resDataJson.status === true) {
       router.push(resDataJson.data);
     }
@@ -53,7 +48,6 @@ export const Subcriptions: React.FC<SubProps> = ({ host_type, exDate, hostId }) 
     const getExpireDate = async () => {
       const result = await fetch(`/api/subscription/get-expire-date?hostId=${hostId}`)
       const resDataJson = await result.json();
-      console.log(56, resDataJson);
       setExpireDate(resDataJson.data)
     }
     getExpireDate();
@@ -109,7 +103,7 @@ export const Subcriptions: React.FC<SubProps> = ({ host_type, exDate, hostId }) 
                 <Typography
                   sx={{ margin: "1rem 0 1rem 0.5rem", fontStyle: "italic" }}
                 >
-                  Create 10 Events
+                  Create 20 Events
                 </Typography>
               </Box>
             </Box>
@@ -232,7 +226,7 @@ export const Subcriptions: React.FC<SubProps> = ({ host_type, exDate, hostId }) 
                 <Typography
                   sx={{ margin: "1rem 0 1rem 0.5rem", fontStyle: "italic" }}
                 >
-                  Create 10 Events
+                  Create 20 Events
                 </Typography>
               </Box>
             </Box>

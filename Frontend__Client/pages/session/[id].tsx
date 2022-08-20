@@ -79,6 +79,8 @@ const Session = (props: SessionProps) => {
 						price={sessionProps?.data?.comboSessionPrice}
 						numberOfTicket={sessionProps?.data?.conferenceList.length}
 						discount={sessionProps?.data?.discount}
+						sessionId={id}
+						userId={props.props.userId}
 					/>
 				)}
 				{sessionProps?.data && <DetailContentSession data={sessionProps?.data} />}

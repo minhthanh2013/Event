@@ -173,15 +173,16 @@ export class AdminService {
           await this.comboRepository.remove(combo).then(async () => {
           // await this.conferenceRepository.remove(conference).then(async () => {
             const resultDeleteSpeakers = await this.speakerRepository.find({where: {conference_id: conferenceId}});
-            // await this.speakerRepository.remove(resultDeleteSpeakers);
-            resultDeleteSpeakers.forEach(async (speaker) => {
+            for (let index = 0; index < resultDeleteSpeakers.length; index++) {
+              const speaker = resultDeleteSpeakers[index];
               await this.speakerRepository.remove(speaker);
               this.emailService.sendEmailToSpeakersAfterDeleteConference(speaker.speaker_email, conference.conference_name)
-            })
+              
+            }
+            // await this.speakerRepository.remove(resultDeleteSpeakers);
             this.conferenceRepository.remove(conference)
             resolve(true)
-          })
-;
+          });
           // })
         } else {
           reject(false);

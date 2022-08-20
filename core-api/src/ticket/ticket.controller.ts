@@ -4,7 +4,7 @@ import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/commo
 import { Queue } from 'bull';
 import { Observable } from 'rxjs';
 import { UpdateResult, DeleteResult } from 'typeorm';
-import { BuySessionDto, Ticket, UserToVerify } from './models/ticket.interface';
+import { BuySessionDto, Ticket, UserToVerify, UserToVerifySession } from './models/ticket.interface';
 import { TicketService } from './ticket.service';
 
 @Controller('ticket')
@@ -48,5 +48,9 @@ export class TicketController {
   @Post("verify-user-buy-ticket")
   async verifyUserBuyTicket(@Body() user: UserToVerify) {
     return this.ticketService.verifyUserBuyTickets(user);
+  }
+  @Post("verify-user-buy-session")
+  async verifyUserBuySession(@Body() user: UserToVerifySession) {
+    return this.ticketService.verifyUserBuySession(user);
   }
 }

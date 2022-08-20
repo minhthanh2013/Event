@@ -50,7 +50,7 @@ import { EmailModule } from './email/email.module';
         migrations: ['src/migrations/**/*{.ts,.js}'],
         synchronize: false,
         // Turn logging to true to see all the SQL queries
-        logging: true,
+        // logging: true,
         // migrations: [
         //   'dist/src/evenity/migrations/*.js'
         // ], 

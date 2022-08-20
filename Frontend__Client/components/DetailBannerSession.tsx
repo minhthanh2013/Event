@@ -2,11 +2,10 @@ import styles from '../styles/DetailBannerSession.module.scss'
 import { Box, Typography } from '@mui/material'
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace'
 import IconButton from '@mui/material/IconButton'
-import Image from 'next/image'
-import AddIcon from '@mui/icons-material/Add'
 import Button from '@mui/material/Button'
 import Link from 'next/link'
 import { splitNum } from '../GlobalFunction/SplitNumber'
+import { useEffect, useState } from 'react'
 const imageURL = 'https://images.pexels.com/photos/2306281/pexels-photo-2306281.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'
 interface DetailBannerSessionProps {
 	nameProp: string
@@ -15,11 +14,36 @@ interface DetailBannerSessionProps {
 	numberOfTicket: number
 	discount: number
 	handleToggle: any
+	sessionId?: string
+	userId?: string
 	// props: any;
 }
+
+export interface UserToVerifySession {
+	user_id: number;
+	session_id: number;
+}
+
 const DetailBannerSession = (props: DetailBannerSessionProps) => {
+	const [hideBuyButton, setHideBuyButton] = useState(false)
 	let discountPrice = props.price - (props.price * props.discount) / 100
-	const test = 1
+	useEffect(() => {
+		const getUserDetails = async () => {
+			const user = {} as UserToVerifySession 
+			user.user_id = +props.userId
+			user.session_id = props.sessionId
+			console.log(user)
+			const response = await fetch(`/api/ticket/verify-user-buy-session`, {
+				method: 'POST',
+				body: JSON.stringify(user)
+			})
+			const data = await response.json()
+			if(data.status === true) {
+				setHideBuyButton(true)
+			}
+		}
+		getUserDetails()
+	}, [])
 	return (
 		<>
 			<Box className={styles.container}>
@@ -64,9 +88,14 @@ const DetailBannerSession = (props: DetailBannerSessionProps) => {
 								<Typography component='h3'>
 									{props.numberOfTicket} events in <em style={{ fontStyle: 'normal', fontWeight: '700' }}>ONE</em> session
 								</Typography>
-								<Button className={styles.button__2} onClick={props.handleToggle} disabled={false}>
-									Buy
-								</Button>
+								{hideBuyButton? (
+									<Button className={styles.button__2} onClick={props.handleToggle} disabled={false}>
+										Buy
+									</Button>
+								) : (
+									<Typography component="h3">You have already bought this session</Typography>
+								)}
+
 							</Box>
 						</Box>
 					</Box>
