@@ -1,5 +1,3 @@
-import { ResponseData } from './../responsedata/response-data.dto';
-import { BuySessionDto, UserToVerify } from './models/ticket.interface';
 /* eslint-disable prettier/prettier */
 import { Injectable, NotFoundException, ConflictException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -12,6 +10,8 @@ import { UserEntity } from 'src/user/models/user.entity';
 import { DeleteResult, Repository, UpdateResult } from 'typeorm';
 import { TicketEntity } from './models/ticket.entity';
 import { Ticket } from './models/ticket.interface';
+import { ResponseData } from './../responsedata/response-data.dto';
+import { BuySessionDto, UserToVerify, UserToVerifySession } from './models/ticket.interface';
 
 @Injectable()
 export class TicketService {
@@ -118,5 +118,23 @@ export class TicketService {
     response.data = 'User has not bought tickets';
   }
   return response;
+}
+async verifyUserBuySession(user: UserToVerifySession): Promise<ResponseData> {
+  const combos = await this.comboRepository.countBy({
+    combo_id: user.session_id,
+  });
+  const tickets = await this.ticketRepository.countBy({
+    session_id: user.session_id,
+    buyer_id: user.user_id,
+  });
+  const response = new ResponseData();
+  if(combos === tickets) {
+    response.status = true;
+    response.data = 'User has bought sessions';
+  } else {
+    response.status = false;
+    response.data = 'User has not bought sessions';
+  }
+return response;
 }
 }

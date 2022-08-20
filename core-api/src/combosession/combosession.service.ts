@@ -68,11 +68,12 @@ export class CombosessionService {
   remove(id: number): ResponseData {
     this.comboSessionRepository.find({where: {combo_id: id}})
     .then(results => {
-      results.forEach(result => {
+      for (let index = 0; index < results.length; index++) {
+        const result = results[index];
         this.comboSessionRepository.remove(result).catch((err1) => {
           throw err1;
         });
-      });
+      }
     }).catch(err => {
       throw new NotFoundException("Cannot find combo sessions with id: " + id, err);
     });
@@ -85,14 +86,15 @@ export class CombosessionService {
   async findAllComoIds(): Promise<ComboIdDateDto[]> {
     return this.comboSessionRepository.find({
         select: ['combo_id', "create_at"]
-      }).then(result => {
+      }).then(results => {
         const tempJson: any[] = [];
-        result.forEach(combo => {
+        for (let index = 0; index < results.length; index++) {
+          const combo = results[index];
           const comboTemp = new ComboIdDateDto();
           comboTemp.combo_id = combo.combo_id;
           comboTemp.create_at = combo.create_at;
           tempJson.push(JSON.parse(JSON.stringify(comboTemp)));
-        })
+        }
         const arrayUniqueByKey = [...new Map(tempJson.map(item =>
           [item["combo_id"], item])).values()];
         return arrayUniqueByKey;
@@ -161,9 +163,10 @@ export class CombosessionService {
     comboSessionDto.comboSessionName = comboEntities[0].combo_name;
     comboSessionDto.comboSessionPrice = 0;
     comboSessionDto.discount = comboEntities[0].discount;
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
       const conferences: ConferenceEntity[] = [];
-      comboEntities.forEach(async comboEntity => {
+      for (let index = 0; index < comboEntities.length; index++) {
+        const comboEntity = comboEntities[index];
         await this.conferenceRepository.findOne({
           where: {
             conference_id: comboEntity.conference_id
@@ -179,7 +182,7 @@ export class CombosessionService {
             resolve(resultDto)
           }
         })
-      })
+      }
     });
   }
 
@@ -204,6 +207,7 @@ export class CombosessionService {
             if(index === tempResults.length - 1) {
               const update = new ResponseData();
               const tempMap = new Map();
+
               result.data.forEach(element => {
                 tempMap.set(element.comboSessionId, element);
               });

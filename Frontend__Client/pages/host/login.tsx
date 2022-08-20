@@ -36,7 +36,13 @@ const Login = (props: Props) => {
             try {
                 host = await axios.post("/api/auth/host/login", values);
             } catch (error) {
-                console.log(error)
+                if(error.response.status === 403) {
+                    setErrorMessage("You are banned from this service");
+                } else {
+                    setErrorMessage("Invalid username or password");
+                }
+
+                return;
             }
             // const user = await axios.post("http://"+"localhost"+":"+"3000"+"/user/signin", values);
             

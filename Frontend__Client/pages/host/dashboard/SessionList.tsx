@@ -168,7 +168,7 @@ export const Sessions = (props: SessionProps) => {
                     <Typography sx={{ fontWeight: "bold" }}>{row?.comboSessionName}</Typography>
                   </TableCell>
                   <TableCell align="right">{row?.totalComboSell}</TableCell>
-                  <TableCell align="right">{row?.totalPrice} VNĐ</TableCell>
+                  <TableCell align="right">{splitNum(row?.totalPrice)} VNĐ</TableCell>
                   <TableCell align="right">{splitNum(getTotalPrice(row?.conferenceList))} VNĐ</TableCell>
                   <TableCell align="right">{row?.discount}%</TableCell>
                   <TableCell align="right" sx={{ width: "15rem" }}>

@@ -66,14 +66,14 @@ export const EventList = (props: EventListProps) => {
             setPopUp("1");
         }
     }
-    function parseDate(dateString: String) {
+    function parseDate(dateString: Date) {
         const date = new Date(dateString)
         const day = date.getDate()
         const hour = date.getHours()
         const weekday = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
         let weekDayString = weekday[date.getDay()]
         let monthString = date.toLocaleString('en-us', { month: 'short' })
-        const dateFinal = `${weekDayString}, ${monthString} ${day}`
+        const dateFinal = `${weekDayString}, ${monthString} ${day}, ${date.getFullYear()} ${hour}:${date.getMinutes()}:${date.getSeconds()}`
         return dateFinal
     }
 
@@ -174,7 +174,7 @@ export const EventList = (props: EventListProps) => {
                                         <>
                                             <Typography sx={{ fontWeight: 'bold' }}>{row.conference_name}</Typography>
                                             {row?.conference_type?.toString() === '1' ? 'Offline' : 'Online'} event <br />
-                                            {row.date_start_conference}
+                                            {parseDate(row.date_start_conference)}
                                         </>
                                     </TableCell>
                                     <TableCell align='right'>

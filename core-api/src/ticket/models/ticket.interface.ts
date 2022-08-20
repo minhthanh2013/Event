@@ -17,3 +17,8 @@ export interface UserToVerify {
   user_id: number;
   conference_id: number;
 }
+
+export interface UserToVerifySession {
+  user_id: number;
+  session_id: number;
+}
