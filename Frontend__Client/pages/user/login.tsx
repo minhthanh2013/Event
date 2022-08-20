@@ -13,8 +13,18 @@ import axios from 'axios'
 import { useRouter } from 'next/router'
 
 const validationSchema = yup.object({
-	username: yup.string().required('Username is required').trim().min(8, 'Username must be at least 8 characters').max(20, 'Username must be less than 20 characters'),
-	password: yup.string().required('Password is required').trim().min(8, 'Password must be at least 8 characters').max(20, 'Password must be less than 20 characters'),
+	username: yup
+		.string()
+		.required('Username is required')
+		.trim()
+		.min(8, 'Username must be at least 8 characters')
+		.max(20, 'Username must be less than 20 characters'),
+	password: yup
+		.string()
+		.required('Password is required')
+		.trim()
+		.min(8, 'Password must be at least 8 characters')
+		.max(20, 'Password must be less than 20 characters'),
 })
 const Login = (props: any) => {
 	const [errorMessage, setErrorMessage] = useState<string>('')
@@ -54,7 +64,7 @@ const Login = (props: any) => {
 							<form onSubmit={formik.handleSubmit} className={styles.mainForm}>
 								<TextField
 									fullWidth
-									sx={{ '& div > input': { pl: '-30px'} , padding: '16.5px -7px'}}
+									sx={{ '& div > input': { marginLeft: '30px' } }}
 									id='username'
 									name='username'
 									label='username'
