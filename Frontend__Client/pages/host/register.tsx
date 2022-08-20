@@ -9,24 +9,44 @@ import { withFormik, FormikProps, FormikErrors, Form, Field, useFormik } from 'f
 import { margin, padding } from '@mui/system'
 import Firework from '../../components/Firework'
 import Link from 'next/link'
-import axios from 'axios';
+import axios from 'axios'
 import Image from 'next/image'
 import { Props } from 'next/script'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 
 const validationSchema = yup.object({
-	email: yup.string().email('Enter a valid email').required('Email is required'),
-	password: yup.string().min(8, 'Password must be at least 8 characters').max(20, 'Your password is too long').required('Password is required'),
-	first_name: yup.string().required('firstname is required'),
-	last_name: yup.string().required('lastname is required'),
-	user_name: yup.string().min(6, 'User name must be at least 8 characters').max(20, 'Your User name is too long').required('username is required'),
+	email: yup.string().email('Enter a valid email').required('Email is required').trim(),
+	password: yup
+		.string()
+		.required('Password is required')
+		.min(8, 'Password must be at least 8 characters')
+		.max(20, 'Password must be less than 20 characters')
+		.trim(),
+	first_name: yup
+		.string()
+		.required('firstname is required')
+		.min(8, 'Password must be at least 8 characters')
+		.max(20, 'Password must be less than 20 characters')
+		.trim(),
+	last_name: yup
+		.string()
+		.required('lastname is required')
+		.min(8, 'Password must be at least 8 characters')
+		.max(20, 'Password must be less than 20 characters')
+		.trim(),
+	user_name: yup
+		.string()
+		.required('username is required')
+		.min(8, 'Password must be at least 8 characters')
+		.max(20, 'Password must be less than 20 characters')
+		.trim(),
 })
 
 const Register = (props: Props) => {
-	const [errorMessage, setErrorMessage] = useState<string>('');
+	const [errorMessage, setErrorMessage] = useState<string>('')
 
-	const router = useRouter();
+	const router = useRouter()
 
 	const formik = useFormik({
 		initialValues: {
@@ -38,20 +58,19 @@ const Register = (props: Props) => {
 		},
 		validationSchema: validationSchema,
 		onSubmit: async (values: any) => {
+			let host = null
+			try {
+				host = await axios.post('/api/auth/host/register', values)
+			} catch (error) {
+				console.log(error)
+			}
+			// const user = await axios.post("http://"+"localhost"+":"+"3000"+"/user/signin", values);
 
-			let host = null;
-            try {
-                host = await axios.post("/api/auth/host/register", values);
-            } catch (error) {
-                console.log(error)
-            }
-            // const user = await axios.post("http://"+"localhost"+":"+"3000"+"/user/signin", values);
-            
-            if(host !== null && host.status === 200) {
-                router.push('/host/dashboard');
-            } else {
-                setErrorMessage("Username or email already exists");
-            }
+			if (host !== null && host.status === 200) {
+				router.push('/host/dashboard')
+			} else {
+				setErrorMessage('Username or email already exists')
+			}
 		},
 	})
 	return (
@@ -72,7 +91,7 @@ const Register = (props: Props) => {
 				<Box className={styles.left}>
 					<Box className={styles.container__left}>
 						<Typography component='h2'>Sign Up Host</Typography>
-						{(errorMessage !=='') && <Typography component='h4'>{errorMessage}</Typography>}
+						{errorMessage !== '' && <Typography component='h4'>{errorMessage}</Typography>}
 						<Box className={styles.form__section}>
 							<form onSubmit={formik.handleSubmit} className={styles.mainForm}>
 								<TextField
@@ -91,7 +110,7 @@ const Register = (props: Props) => {
 									id='password'
 									name='password'
 									label='Password'
-									type="password"
+									type='password'
 									value={formik.values.password}
 									onChange={formik.handleChange}
 									error={formik.touched.password && Boolean(formik.errors.password)}
@@ -129,7 +148,7 @@ const Register = (props: Props) => {
 									onChange={formik.handleChange}
 									error={formik.touched.last_name && Boolean(formik.errors.last_name)}
 									helperText={formik.touched.last_name && formik.errors.last_name}
-									sx={{ mb: '1.5rem', '& input': {marginLeft:'1.5rem'}}}
+									sx={{ mb: '1.5rem', '& input': { marginLeft: '1.5rem' } }}
 								/>
 
 								<Button variant='contained' size='medium' type='submit'>
