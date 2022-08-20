@@ -54,36 +54,33 @@ export const BasicInfo: React.FC<CreateEventProps> = ({ data, setData, setValue 
         alignItems="center"
       >
         <form onSubmit={handleSubmit(onSubmit)}>
-          <TextField
+          {data.comboSessionName && <TextField
             className={styles.eventFields}
             required
             id="standard-required"
             label="Session Name"
-            value={data.comboSessionName}
-            // defaultValue={data.comboSessionName}
+            defaultValue={data.comboSessionName}
             variant="standard"
             {...register("comboSessionName")}
-          />
-          <TextField
+          />}
+          {data.discount && <TextField
             className={styles.eventFields}
             required
             id="standard-required"
             label="Session Discount"
             variant="standard"
-            // value={data.discount || ""}
-            defaultValue={data.discount || ""}
+            defaultValue={data.discount}
             type="number"
             InputProps={{ inputProps: { min: 0, max: 100 } }}
             {...register("discount")}
-          />
-          <TextField
+          />}
+          {data.comboSessionDescription && <TextField
             className={styles.eventFields}
             label="Description"
-            value={data.comboSessionDescription}
-            // defaultValue={data.comboSessionDescription}
+            defaultValue={data.comboSessionDescription}
             multiline
             {...register("comboSessionDescription")}
-          />
+          />}
           <Button className={styles.nextBtn} variant="contained" type="submit">
             Next
           </Button>
@@ -191,27 +188,27 @@ export const Conferences: React.FC<CreateEventProps> = ({ data, setData, setValu
               </Typography>
               <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
                 {conferences?.data.map((conference) => {
-                  const labelId = `checkbox-list-label-${conference.conference_id}`;
-
                   return (
-                    <ListItem
-                      key={conference.conference_id}
-                      disablePadding
-                      className={styles.sketchy}
-                    >
-                      <ListItemButton role={undefined} onClick={handleToggle(conference.conference_id)} dense>
-                        <ListItemIcon>
-                          <Checkbox
-                            edge="start"
-                            checked={checked.indexOf(conference.conference_id) !== -1}
-                            tabIndex={-1}
-                            disableRipple
-                            inputProps={{ 'aria-labelledby': labelId }}
-                          />
-                        </ListItemIcon>
-                        <ListItemText id={labelId} primary={`${conference.conference_name}`} secondary={`Price: ${conference.price}`} />
-                      </ListItemButton>
-                    </ListItem>
+                    <>
+                      {conference.status_ticket === 'published' &&
+                        <ListItem
+                          key={conference.conference_id}
+                          disablePadding
+                          className={styles.sketchy}
+                        >
+                          <ListItemButton role={undefined} onClick={handleToggle(conference.conference_id)} dense>
+                            <ListItemIcon>
+                              <Checkbox
+                                edge="start"
+                                checked={checked.indexOf(conference.conference_id) !== -1}
+                                tabIndex={-1}
+                                disableRipple
+                              />
+                            </ListItemIcon>
+                            <ListItemText id={conference.conference_id.toString()} primary={`${conference.conference_name}`} secondary={`Price: ${conference.price}`} />
+                          </ListItemButton>
+                        </ListItem>}
+                    </>
                   );
                 })}
               </List>
@@ -286,12 +283,12 @@ export const Conferences: React.FC<CreateEventProps> = ({ data, setData, setValu
             value={Total}
             className={styles.totalPrice}
           />
-            <TextField
-              label="After discount price"
-              disabled
-              value={Discount}
-              className={styles.totalPrice}
-            />
+          <TextField
+            label="After discount price"
+            disabled
+            value={Discount}
+            className={styles.totalPrice}
+          />
           <Box sx={{ marginTop: "2px", width: "80%", alignSelf: "center" }}>
             <Button
               sx={{ width: "12rem" }}

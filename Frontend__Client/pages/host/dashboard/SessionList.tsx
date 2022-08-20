@@ -137,7 +137,7 @@ export const Sessions = (props: SessionProps) => {
             type="string"
             value={`${splitNum(Income)} VNĐ` || ''}
           />
-          {props?.data.length !== undefined ? (
+          {props?.data?.length !== undefined ? (
             <Button
               variant="outlined"
               sx={{ width: "15rem", height: "3.5rem", marginLeft: "5rem", color: "black", borderColor: "black" }}
