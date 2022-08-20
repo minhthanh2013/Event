@@ -92,7 +92,7 @@ export const UserList = (props: EventListProps) => {
                                 <TableRow key={row.host_id} sx={{ width: "100%" }}>
                                     <TableCell align="left">{row?.user_name}</TableCell>
                                     <TableCell align="right">{row?.host_type.toUpperCase()}</TableCell>
-                                    <TableCell align="right">{row?.subscriptions.length ? parseDate(row?.subscriptions[0]?.expired_date) : "NULL"}</TableCell>
+                                    <TableCell align="right">{row?.host_type === "ban" || row?.host_type === "free" ? "NULL" : parseDate(row?.subscriptions[0]?.expired_date)}</TableCell>
                                     <TableCell align="right">{row?.host_id}</TableCell>
                                     <TableCell sx={{ width: "2rem" }}>
                                         <HostMenu host={row} props={props.propss} />

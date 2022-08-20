@@ -13,6 +13,7 @@ import { ConferenceEntity } from './../conference/models/conference.entity';
 import { HttpModule } from '@nestjs/axios';
 import { EmailService } from 'src/email/email.service';
 import { ComboSessionEntity } from 'src/combosession/models/combo_session.entity';
+import { SubscriptionEntity } from 'src/subscription/models/subscription.entity';
 
 @Module({
   imports: [
@@ -26,7 +27,7 @@ import { ComboSessionEntity } from 'src/combosession/models/combo_session.entity
         signOptions: { expiresIn: '10000s' },
       }),
     }),
-    TypeOrmModule.forFeature([AdminEntity, ConferenceEntity, SpeakerEntity, ComboSessionEntity, HostEntity])
+    TypeOrmModule.forFeature([AdminEntity, ConferenceEntity, SpeakerEntity, ComboSessionEntity, HostEntity, SubscriptionEntity])
   ],
   controllers: [AdminController],
   providers: [AdminService, AdminJwtStrategy, EmailService],

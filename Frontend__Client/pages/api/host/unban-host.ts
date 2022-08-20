@@ -17,7 +17,9 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
         }
 		const request = process.env.BACKEND_PROTOCOL+'://' + process.env.BACKEND_HOST + ':' + process.env.BACKEND_PORT + `/admin/unban-host/${id}`; 
         // const request = "http://localhost:3000/admin/unban-host/"+id; 
+        console.log(`request: ${request}`);
         const response = await axios.post(request, req.body, config);
+        console.log(response);
         if(response.data.status === false) {
             res.status(404).json({
 				message: 'Not Found',
