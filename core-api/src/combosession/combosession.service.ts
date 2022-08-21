@@ -1,6 +1,6 @@
 import { Conference } from './../conference/models/conference.interface';
 /* eslint-disable prettier/prettier */
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import e from 'express';
 import { IPaginationOptions, Pagination, paginate } from 'nestjs-typeorm-paginate';
@@ -62,8 +62,21 @@ export class CombosessionService {
     
 
   }
-  update(id: number, comboSession: ComboSession): Observable<UpdateResult> {
-    return from(this.comboSessionRepository.update(id, comboSession));
+  async update(comboSession: ComboSessionDto): Promise<ResponseData> {
+    // console.log(66, comboSession)
+    const result = new ResponseData();
+    const combo = new ComboSessionEntity();
+    combo.combo_description = comboSession.comboSessionDescription;
+    combo.combo_name = comboSession.comboSessionName;
+    combo.discount = comboSession.discount;
+    const oldCombos = await this.comboSessionRepository.find({where: {combo_id: comboSession.comboSessionId}});
+    for (let index = 0; index < oldCombos.length; index++) {
+      const element = oldCombos[index];
+      this.comboSessionRepository.update(element.id, combo);
+    }
+    result.status = true;
+    result.data = null;
+    return result;
   }
   remove(id: number): ResponseData {
     this.comboSessionRepository.find({where: {combo_id: id}})

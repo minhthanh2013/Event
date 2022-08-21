@@ -7,7 +7,7 @@ import { ResponseData } from 'src/responsedata/response-data.dto';
 import { DeleteResult, UpdateResult } from 'typeorm';
 import { CombosessionService } from './combosession.service';
 import { ComboSession } from './models/combo_session.interface';
-import { ComboSessionRequestDto } from './models/combo_session.dto';
+import { ComboSessionDto, ComboSessionRequestDto } from './models/combo_session.dto';
 
 @Controller('combosession')
 export class CombosessionController {
@@ -30,9 +30,9 @@ export class CombosessionController {
     return this.comboSessionService.createSession(comboRequestDto);
   }
 
-  @Patch('id')
-  update(@Param('id') id: number, @Body() comboSession: ComboSession): Observable<UpdateResult> {
-    return this.comboSessionService.update(+id, comboSession);
+  @Patch()
+  update(@Body() comboSession: ComboSessionDto): Promise<ResponseData> {
+    return this.comboSessionService.update(comboSession);
   }
 
   @Delete(':id')

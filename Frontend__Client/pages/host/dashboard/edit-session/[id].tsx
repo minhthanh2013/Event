@@ -63,6 +63,8 @@ const CreateEvent = (props) => {
   const [imageFile, setImageFile] = useState<Multer.File | null>();
   const [popUp, setPopUp] = useState("0");
   const [status, setStatus] = useState("0");
+  const [successMessage, setSuccessMessage] = useState<string>();
+  const [errorMessage, setErrorMessage] = useState<string>();
 
   const redirect = () => {
     router.push("/host/dashboard")
@@ -92,7 +94,8 @@ const CreateEvent = (props) => {
   const [value, setValue] = React.useState(0);
 
   const apiCall = async (data) => {
-    const res = await fetch(`/api/combo/update/${id}`, {
+    console.log(data);
+    const res = await fetch(`/api/combo/update`, {
       method: "PATCH",
       body: JSON.stringify(data),
       headers: {
@@ -101,18 +104,14 @@ const CreateEvent = (props) => {
     });
     const result = await res.json();
     if (res.status === 200) {
-      let body = new FormData()
-      body.append('file', imageFile)
-      await fetch(`/api/cloudinary/update-image-session/${props?.tempDecode?.sub}`, {
-        method: "POST",
-        body,
-      });
       setStatus("1");
       setPopUp("1");
+      setSuccessMessage("Edit session successfully")
       setTimeout(redirect, 2000);
     } else {
       setStatus("0");
       setPopUp("1");
+      setErrorMessage("Fail to edit session")
     }
 
   }
@@ -140,7 +139,7 @@ const CreateEvent = (props) => {
         <Typography variant="h3" component="div" className={styles.header}>
           Session Dashboard
         </Typography>
-        <PopUp status={status} popUp={popUp} onClick={() => setPopUp("0")} />
+        <PopUp status={status} popUp={popUp} onClick={() => setPopUp("0")} errorMessage={errorMessage} successMessage={successMessage}/>
         <Grid container spacing={0} direction="column" alignItems="center">
           <Card className={styles.imageInput}>
             {image ? (
