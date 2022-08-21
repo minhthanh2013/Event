@@ -61,8 +61,9 @@ const CreateEvent = (props) => {
   const [imageFile, setImageFile] = useState<Multer.File | null>();
   const [popUp, setPopUp] = useState("0");
   const [status, setStatus] = useState("0");
+  const [errorMessage, setErrorMessage] = useState<string>();
+  const [successMessage, setSuccessMessage] = useState<string>();
 
-  console.log(data);
   const onImageChange = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
       let reader = new FileReader();
@@ -141,7 +142,7 @@ const CreateEvent = (props) => {
         <Typography variant="h3" component="div" className={styles.header}>
           Session Dashboard
         </Typography>
-        <PopUp status={status} popUp={popUp} onClick={() => setPopUp("0")} />
+        <PopUp status={status} popUp={popUp} onClick={() => setPopUp("0")} successMessage={successMessage} errorMessage={errorMessage} />
         <Grid container spacing={0} direction="column" alignItems="center">
           <Card className={styles.imageInput}>
             {image ? (

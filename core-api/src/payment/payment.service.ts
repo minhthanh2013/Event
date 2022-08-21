@@ -80,11 +80,14 @@ export class PaymentService {
   }
 
   async updateBalance(addBalanceDto: AddBalanceDto): Promise<ResponseData> {
+    console.log(addBalanceDto)
     const responseData = new ResponseData()
     try {
+      const currentUserbalance = await this.getCurrentBalance(addBalanceDto.idUser);
+      const temp = parseInt(currentUserbalance.toString()) + parseInt(addBalanceDto.balance.toString());
       const data = await this.userRepository.createQueryBuilder()
         .update(UserEntity)
-        .set({ balance: parseInt((await this.getCurrentBalance(addBalanceDto.idUser)).toString()) + parseInt(addBalanceDto.balance.toString()) })
+        .set({ balance: temp})
         .where("user_id = :id", { id: addBalanceDto.idUser })
         .execute()
       if (data.affected == 1) {

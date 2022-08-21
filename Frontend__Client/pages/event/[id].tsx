@@ -38,6 +38,8 @@ interface TicketProps {
 }
 
 const Event = (props: any) => {
+	console.log(props)
+	
 	const router = useRouter()
 	const { id } = router.query
 	const {isBuy} = router.query
@@ -58,6 +60,9 @@ const Event = (props: any) => {
 		const fetchImage = async () => {
 			const dataResult = await fetch(`/api/conference/get-conference-image/${id}`)
 			const cateResult = await dataResult.json()
+			const dataResult1 = await fetch(cateResult.url)
+			// const cateResult1 = await dataResult1.json()
+			console.log(65, dataResult1);
 			setImageProp(cateResult.url)
 		}
 		const fetchUserId = async () => {
@@ -74,7 +79,7 @@ const Event = (props: any) => {
 			fetchUserId();
 		}
 		fetchImage();
-	}, [id])
+	}, [id, props?.tempDecode])
 
 	return (
 		<>

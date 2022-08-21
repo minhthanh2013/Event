@@ -26,20 +26,16 @@ const validationSchema = yup.object({
 	first_name: yup
 		.string()
 		.required('firstname is required')
-		.min(8, 'Password must be at least 8 characters')
-		.max(20, 'Password must be less than 20 characters')
 		.trim(),
 	last_name: yup
 		.string()
 		.required('lastname is required')
-		.min(8, 'Password must be at least 8 characters')
-		.max(20, 'Password must be less than 20 characters')
 		.trim(),
 	user_name: yup
 		.string()
 		.required('username is required')
-		.min(8, 'Password must be at least 8 characters')
-		.max(20, 'Password must be less than 20 characters')
+		.min(8, 'Username must be at least 8 characters')
+		.max(20, 'Username must be less than 20 characters')
 		.trim(),
 })
 

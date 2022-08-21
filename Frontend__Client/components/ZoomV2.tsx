@@ -28,6 +28,7 @@ interface ZoomProp {
   password: string;
 }
 const ZoomV2 = (props: ZoomProps) => {
+  console.log(31, props)
   const [meetingNumber, setMeetingNumber] = React.useState('');
   const [role, setRole] = React.useState(0);
   const [userName, setUserName] = React.useState('');
@@ -43,11 +44,11 @@ const ZoomV2 = (props: ZoomProps) => {
   }, [getSignature, props]);
 
   // var signatureEndpoint = process.env.BACKEND_PROTOCOL + "://" + process.env.BACKEND_HOST + ":" + process.env.BACKEND_PORT + "/zoom/create-signature";
-  var signatureEndpoint = "https://api.evenity.page:8443/zoom/create-signature";
-  // var signatureEndpoint = "http://localhost:3000/zoom/create-signature";
+  // var signatureEndpoint = "https://api.evenity.page:8443/zoom/create-signature";
+  var signatureEndpoint = "http://localhost:3000/zoom/create-signature";
   var sdkKey = "OWYLmd5UiEI0RchfL8tCFQapDQ7lqOzjNAi6"
-  // var leaveUrl = 'http://localhost:8080/'
-  var leaveUrl = 'https://evenity.page/'
+  var leaveUrl = 'http://localhost:8080/'
+  // var leaveUrl = 'https://evenity.page/'
   // var meetingNumber = props.data.meetingNumber.toString();
   // var role = props.data.role;
 
@@ -72,7 +73,7 @@ const ZoomV2 = (props: ZoomProps) => {
     })
     .then(res => res.json())
     .then(response => {
-      // console.log(response)
+      console.log(76, response)
       startMeeting(response.signature)
     }).catch(error => {
       console.error(error)
@@ -92,10 +93,10 @@ const ZoomV2 = (props: ZoomProps) => {
           passWord: passWord,
           tk: registrantToken,
           success: (success: any) => {
-            console.log(success)
+            console.log(103, success)
           },
           error: (error: any) => {
-            console.log(error)
+            console.log(106, error)
           }
         })
 

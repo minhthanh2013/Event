@@ -43,7 +43,14 @@ const Ticket = (props: TicketProps) => {
 		const fetchImage = async () => {
 			const dataResult = await fetch(`/api/conference/get-conference-image/${props.data.conference_id}`);
 			const cateResult = await dataResult.json();
-			setImageProp(cateResult.url)
+			const dataResult1 = await fetch(cateResult.url)
+			// const cateResult1 = await dataResult1.json()
+			if(dataResult1.status === 200){
+				setImageProp(cateResult.url)
+			} else {
+				setImageProp(undefined)
+			}
+
 		}
 		const parseDate = () => {
 			const date = new Date(props.data.date_start_conference)

@@ -99,12 +99,6 @@ export class ZoomService {
       "settings": {
           "allow_multiple_devices": true,
           "approval_type": 2,
-          "authentication_exception": [
-            {
-              "email": "suthaydoi2017@gmail.com",
-              "name": "No need to invite"
-            }
-          ],
           "auto_recording": "cloud",
           "calendar_type": 2,
           "close_registration": true,
@@ -116,7 +110,7 @@ export class ZoomService {
           "host_video": false,
           "jbh_time": 0,
           "join_before_host": false,
-          "meeting_authentication": true,
+          "meeting_authentication": false,
           "mute_upon_entry": true,
           "participant_video": false,
           "private_meeting": false,
@@ -125,7 +119,7 @@ export class ZoomService {
           "registration_type": 1,
           "show_share_button": false,
           "use_pmi": false,
-          "waiting_room": false,
+          "waiting_room": true,
           "watermark": false
         },
         "start_time": scheduleZoomDto.dateStartConference,

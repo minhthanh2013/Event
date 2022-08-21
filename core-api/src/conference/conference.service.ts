@@ -318,7 +318,10 @@ export class ConferenceService {
     entity.date_start_sell = dto.dateStartSell;
     entity.date_end_sell = dto.dateEndSell;
     entity.date_end_conference = dto.dateStartConference;
+    entity.conference_type = dto.conferenceType;
+    entity.conference_category = dto.conferenceCategory;
     entity.ticket_quantity = dto.ticketQuantity;
+    entity.current_quantity = dto.ticketQuantity;
     entity.price = dto.conferencePrice;
     entity.description = dto.conferenceDescription;
     entity.organizer_name = dto.organizerName;
@@ -511,7 +514,7 @@ export class ConferenceService {
       );
     }
     const confId = conference.conference_id;
-    const ticket = await this.ticketRepository.find({
+    const ticket = await this.ticketRepository.findOne({
       where: {
         conference_id: confId,
         buyer_id: userId,
