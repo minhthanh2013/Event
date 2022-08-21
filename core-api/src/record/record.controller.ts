@@ -1,3 +1,4 @@
+import { HostRecordRequest } from './models/retcord.interface';
 /* eslint-disable prettier/prettier */
 import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
 import { Observable } from 'rxjs';
@@ -32,5 +33,9 @@ export class RecordController {
   @Post('check-valid-user-buy-record') 
   checkValidUserBuyRecord(@Body() body: UserRecordRequest): Promise<ResponseData> {
     return this.recordService.checkValidUserBuyRecord(body);
+  }
+  @Post('check-valid-host-own-record') 
+  checkValidHostBuyRecord(@Body() body: HostRecordRequest): Promise<ResponseData> {
+    return this.recordService.checkValidHostBuyRecord(body);
   }
 }

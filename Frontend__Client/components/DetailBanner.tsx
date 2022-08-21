@@ -44,6 +44,7 @@ export interface UserToVerify {
 const weekday = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
 
 const DetailBanner = (props: TicketProps) => {
+	console.log(47, props);
 	const [year, setYear] = useState<string>()
 	const [month,  ] = useState<string>()
 	const [monthString, setMonthString] = useState<string>()
@@ -128,8 +129,9 @@ const DetailBanner = (props: TicketProps) => {
                             <Box>
                                 <Typography component="h2">Date & Time</Typography>
                                 <Typography component="h3">{weekDay}, {monthString} {day}, {year} at {hour}:{min} {timePeriod}</Typography>
-								{new Date() > new Date(props.data.dateStartConference) && <Typography component="h3">This conference has ended. But you can still buy the record.</Typography>}
-                                <Button variant="text" className={styles.button__1}><AddIcon/>Add to calendar</Button>
+								{new Date() > new Date(props.data.dateStartConference) && <Typography component="h3">This conference has ended.</Typography>} 
+								{new Date() > new Date(props.data.dateStartConference) && props.data.isRecorded && <Typography component="h3">But you can still buy the record.</Typography>}
+                                 <Button variant="text" className={styles.button__1}><AddIcon/>Add to calendar</Button>
 								{!hideBuyButton ? (
 									<>
 										{new Date() < new Date(props.data.dateStartSell) &&

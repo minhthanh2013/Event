@@ -15,6 +15,7 @@ import { UserEntity } from 'src/user/models/user.entity';
 import { Repository } from 'typeorm/repository/Repository';
 import { AddBalanceDto, BoughtRecordDto, BoughtTicketDto, PaymentDto, PaymentRecordDto, PaymentRecordWithBalanceDto, PaymentSessionWithBalanceDto, PaymentWithBalanceDto, SessionDto, SubscriptionDto } from './models/payment.dto';
 import { PaymentEntity } from './models/payment.entity';
+import { EmailService } from 'src/email/email.service';
 
 @Injectable()
 export class PaymentService {
@@ -38,6 +39,7 @@ export class PaymentService {
     private readonly recordRepository: Repository<RecordEntity>,
     @InjectRepository(ComboSessionEntity)
     private readonly comboRepository: Repository<ComboSessionEntity>,
+    private readonly emailService: EmailService,
   ) { }
 
   createPaymentLink(paymentDto: PaymentDto): Observable<ResponseData> {
@@ -45,7 +47,6 @@ export class PaymentService {
   }
   newSubscription(subscriptionDto: SubscriptionDto): Observable<ResponseData> {
     const idHost = subscriptionDto.idHost;
-    console.log(50, idHost)
     return this.paymentClient.send({ cmd: 'SUBSCRIPTION' }, { idHost })
   }
   getInfoPayment(payment_intent_id: string): Observable<ResponseData> {
@@ -123,6 +124,8 @@ export class PaymentService {
   }
 
   async createUserTicket(ticketBoughtDto: BoughtTicketDto, sessionId: number) {
+    console.log(ticketBoughtDto)
+    console.log(sessionId)
     try {
       await this.ticketRepository.insert(
         {
@@ -148,6 +151,8 @@ export class PaymentService {
           payment: await this.paymentRepository.findOneBy({ payment_id: 1 }),
           subscriptionPlan: await this.subPlanRepository.findOneBy({ plan_id: 1 })
         })
+        const host = await this.hostRepository.findOneBy({ host_id: subDto.idHost })
+        this.emailService.sendBuySubscription(host.email);
       } catch (err) {
         console.log(err)
         return
@@ -164,6 +169,8 @@ export class PaymentService {
           .set({ expired_date: new Date(date) })
           .where("host_id = :id", { id: subDto.idHost })
           .execute()
+          const host = await this.hostRepository.findOneBy({ host_id: subDto.idHost })
+          this.emailService.sendBuySubscription(host.email);
       } catch (err) {
         console.log(err)
         return
@@ -212,6 +219,7 @@ export class PaymentService {
         } catch (err) {
           console.log(err)
         }
+        this.emailService.sendConfirmTicket(user.email, paymentDto.ticketPrice.toString(), true);
       responseData.status = res.affected == data.affected
     } catch (err) {
       responseData.status = false;
@@ -262,6 +270,7 @@ export class PaymentService {
               session_id: paymentDto.sessionId
             }
           )
+          this.emailService.sendConfirmTicket(user.email, paymentDto.sessionPrice.toString(), true);
         } catch (err) {
           throw err;
         }
@@ -315,13 +324,30 @@ export class PaymentService {
   async getConferenceListBySessionId(sessionId: number): Promise<ResponseData> {
     const responseData = new ResponseData()
     try {
-      const list = await this.conferenceRepository.find({ where: {combo_id: sessionId}})
-      responseData.data = list.map(index => index.conference_id)
-      console.log(responseData)
+      const combos = await this.comboRepository.find({ where: {combo_id: sessionId} })
+      responseData.data = combos.map(index => index.conference_id)
     } catch (err) {
       console.log(err)
       responseData.status = false
     }
     return responseData
+  }
+  async sendEmail(ticket: BoughtTicketDto) {
+    const user = await this.userRepository.findOne({ where: {user_id: ticket.userId} })
+    const conference = await this.conferenceRepository.findOne({ where: {conference_id: ticket.conferenceId} })
+    this.emailService.sendConfirmTicket(user.email, conference.price.toString(), false);
+  }
+  async sendEmailOfSession(userId: number, sessionId: number) {
+    const user = await this.userRepository.findOne({ where: {user_id: userId} })
+    const session = await this.comboRepository.find({ where: {combo_id: sessionId} })
+    const discount = session[0].discount;
+    let totalPrice = 0;
+    for (let index = 0; index < session.length; index++) {
+      const element = session[index];
+      const conference = await this.conferenceRepository.findOne({ where: {conference_id: element.conference_id} })
+      totalPrice += conference.price;
+    }
+    totalPrice = totalPrice * (100 - discount) / 100;
+    this.emailService.sendConfirmSession(user.email, totalPrice.toString() + " VND", session[0].combo_name, false);
   }
 }

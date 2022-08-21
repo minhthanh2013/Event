@@ -234,7 +234,9 @@ const HeaderHost = (props: any) => {
 													{ticket?.conference_type === '2' && ticket?.isValidated === false && (
 														<IconButton sx={{ display: 'flex', gap: '0.5rem', color: '#C64EFF' }}>
 															<ReplayOutlinedIcon />
-															<Typography>Record</Typography>
+															<Link href={`/zoom/record?conferenceId=${ticket?.conference_id}`} passHref>
+																<Typography>Record</Typography>
+															</Link>
 														</IconButton>
 													)}
 

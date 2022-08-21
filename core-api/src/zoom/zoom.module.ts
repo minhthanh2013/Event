@@ -24,7 +24,7 @@ import { ZoomService } from './zoom.service';
           name: 'ZOOM',
           transport: Transport.TCP,
           options: {
-            host: 'zoom',
+            // host: 'zoom',
             port: 3001,
           }
         }

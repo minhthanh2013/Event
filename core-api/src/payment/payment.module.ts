@@ -13,6 +13,7 @@ import { SubscriptionEntity } from 'src/subscription/models/subscription.entity'
 import { HostEntity } from 'src/host/models/host.entity';
 import { SubscriptionPlanEntity } from 'src/subscriptionplan/models/subscription_plan.entity';
 import { RecordEntity } from 'src/record/models/record.entity';
+import { EmailService } from 'src/email/email.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([PaymentEntity, UserEntity, ConferenceEntity, TicketEntity, SubscriptionEntity, HostEntity, SubscriptionPlanEntity, RecordEntity, ComboSessionEntity]),
@@ -26,7 +27,7 @@ import { RecordEntity } from 'src/record/models/record.entity';
     }
   }
 ])],
-  providers: [PaymentService],
+  providers: [PaymentService, EmailService],
   controllers: [PaymentController],
 })
 export class PaymentModule {}

@@ -251,7 +251,7 @@ export default async function middleware(req: NextRequest) {
                     const data = new URLSearchParams();
                     data.append('user_id', `${userId}`);
                     data.append('conference_id', `${conferenceId}`);
-                    let dataResult = await fetch(`https://evenity.page/api/record/get-by-conference-id?conferenceId=${conferenceId}`, {
+                    let dataResult = await fetch(`https://evenity.page/api/record/get-by-conference-id`, {
                       method: 'POST',
                       headers: {
                         'Content-Type': 'application/x-www-form-urlencoded',
@@ -270,8 +270,30 @@ export default async function middleware(req: NextRequest) {
                     return NextResponse.redirect(req.nextUrl);
                 }
             } else {
+             // HOST
+             try {
+              verify(jwt, hostSecret);
+              const data = new URLSearchParams();
+              data.append('host_id', `${userId}`);
+              data.append('conference_id', `${conferenceId}`);
+              let dataResult = await fetch(`http://localhost:8080/api/record/get-host-own-record`, {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: data,
+              });
+              let cateResult = await dataResult.json();
+              if(cateResult.status !== undefined && cateResult.status === true) {
+                  return NextResponse.next();
+              } else {
+                  req.nextUrl.pathname = "/";
+                  return NextResponse.redirect(req.nextUrl);
+              }
+          } catch (error) {
               req.nextUrl.pathname = "/";
               return NextResponse.redirect(req.nextUrl);
+          }
             }
         } catch (error) {
             req.nextUrl.pathname = "/";

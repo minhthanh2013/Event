@@ -41,7 +41,11 @@ const DetailBannerSession = (props: DetailBannerSessionProps) => {
 				body: JSON.stringify(user)
 			})
 			const data = await response.json()
-			if(data.status === true) {
+			console.log(data)
+			console.log(response)
+			if(response.status !== 404) {
+				setHideBuyButton(false)
+			} else {
 				setHideBuyButton(true)
 			}
 		}
@@ -95,7 +99,7 @@ const DetailBannerSession = (props: DetailBannerSessionProps) => {
 								<Typography component='h3'>
 									{props.numberOfTicket} events in <em style={{ fontStyle: 'normal', fontWeight: '700' }}>ONE</em> session
 								</Typography>
-								{!hideBuyButton ? (
+								{hideBuyButton ? (
 									<Button className={styles.button__2} onClick={props.handleToggle} disabled={false}>
 										Buy
 									</Button>

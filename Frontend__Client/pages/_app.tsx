@@ -29,38 +29,9 @@ function MyApp(props: MyAppProps) {
       <ThemeProvider theme={theme}>
         {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
         <CssBaseline />
-        <Component {...props.pageProps} />
+        <Component {...pageProps} />
       </ThemeProvider>
     </CacheProvider>
   );
-}
-
-
-export async function getServerSideProps(ctx: any) {
-	// Fetch data from external API
-	// Pass data to the page via props
-	let raw = null
-	try {
-		raw = ctx.req.cookies
-	} catch (e) {
-		return { props: {} }
-	}
-	try {
-		if (raw.OursiteJWT.toString()) {
-			let token = 'OursiteJWT'
-			let value = raw.OursiteJWT.toString()
-			let tempDecode = JSON.parse(Buffer.from(value.split('.')[1], 'base64').toString())
-			return {
-				props: {
-					token,
-					value,
-					tempDecode,
-				},
-			}
-		}
-		return { props: {} }
-	} catch (error) {
-		return { props: {} }
-	}
 }
 export default MyApp;

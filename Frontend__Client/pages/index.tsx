@@ -8,13 +8,10 @@ import { useEffect, useState } from 'react'
 import PurchaseModal from '../components/PurchaseModal'
 export { default as buildStore } from '../shared/redux/buildStore'
 import dynamic from 'next/dynamic'
-
-
-
-const CarouselSlide = dynamic(() => import('../components/CarouselSlide'), { ssr: false })
-const SessionList = dynamic(() => import('../components/SessionList'), { ssr: false })
-const TicketList = dynamic(() => import('../components/TicketList'), { ssr: false })
-const Header = dynamic(() => import('../components/Header'), { ssr: false })
+import CarouselSlide from '../components/CarouselSlide'
+import Header from '../components/Header'
+import SessionList from '../components/SessionList'
+import TicketList from '../components/TicketList'
 
 const Home: NextPage = (props) => {
 	console.log(20, props)

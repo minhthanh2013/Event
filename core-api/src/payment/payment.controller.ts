@@ -1,3 +1,4 @@
+import { EmailService } from 'src/email/email.service';
 /* eslint-disable prettier/prettier */
 import { Body, Controller, Post, Req } from '@nestjs/common';
 import { from, Observable } from 'rxjs';
@@ -8,7 +9,8 @@ import { PaymentService } from './payment.service';
 import { PaymentSessionWithBalanceDto, SessionDto } from './models/payment.dto';
 @Controller('payment')
 export class PaymentController {
-  constructor(private paymentService: PaymentService) { }
+  constructor(
+    private paymentService: PaymentService) { }
 
   @Post('/create-payment-link')
   createPaymentLink(@Body() paymentDto: PaymentDto): Observable<ResponseData> {
@@ -75,23 +77,27 @@ export class PaymentController {
           ticketDto.userId = userId as unknown as number
           this.paymentService.updateTicketQuantity(ticketDto)
           this.paymentService.createUserTicket(ticketDto, 0)
+          this.paymentService.sendEmail(ticketDto)
           // 20/8/2022
         } else if (description.data.description == 'BUY SESSION') {
           // Update ticket quantity and add ticket to user database
           console.log("buy session")
           const session = await this.paymentService.getInfoSession(id_session).toPromise()
-          console.log(session.data)
+          // console.log(session.data)
           const sessionId = (session.data.client_reference_id as string).split('|')[0] as unknown as number
           const userId = (session.data.client_reference_id as string).split('|')[1] as unknown as number
-          const listConferenceId = (await this.paymentService.getConferenceListBySessionId(sessionId)).data as number[]
-          listConferenceId.forEach(index => {
+          const listConference = (await this.paymentService.getConferenceListBySessionId(sessionId))
+          const listConferenceId = listConference.data as number[]
+          for (let index = 0; index < listConferenceId.length; index++) {
+            const element = listConferenceId[index];
             const ticketDto = new BoughtTicketDto()
             ticketDto.userId = userId
-            ticketDto.conferenceId = index
+            ticketDto.conferenceId = element
             console.log(ticketDto)
             this.paymentService.updateTicketQuantity(ticketDto)
             this.paymentService.createUserTicket(ticketDto, sessionId)
-          })
+          }
+          this.paymentService.sendEmailOfSession(userId, sessionId)
         } else if (description.data.description == 'BUY RECORD') {
           console.log('buy record')
           const session = await this.paymentService.getInfoSession(id_session).toPromise()

@@ -9,9 +9,7 @@ import DetailBanner from '../../components/DetailBanner'
 import Typography from '@mui/material/Typography'
 import PurchaseModal from '../../components/PurchaseModal'
 import dynamic from 'next/dynamic'
-
-
-const DetailContent = dynamic (() => import('../../components/DetailContent'), { ssr: false })
+import DetailContent from '../../components/DetailContent'
 
 interface TicketProp {
 	conferenceAddress: string

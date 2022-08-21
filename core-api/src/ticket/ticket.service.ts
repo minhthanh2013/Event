@@ -75,7 +75,7 @@ export class TicketService {
       throw error;
     }
     const resultTicket = this.ticketRepository.save(newTicket);
-    this.emailService.sendConfirmTicket(buyer.email);
+    // this.emailService.sendConfirmTicket(buyer.email);
     return resultTicket;
   }
   update(id: number, ticket: Ticket): Observable<UpdateResult> {
