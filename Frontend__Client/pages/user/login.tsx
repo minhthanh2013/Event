@@ -61,7 +61,11 @@ const Login = (props: any) => {
 						<Typography component='h2'>Sign in to Evenity</Typography>
 						{errorMessage !== '' && <Typography component='h4'>{errorMessage}</Typography>}
 						<Box className={styles.form__section}>
-							<form onSubmit={formik.handleSubmit} className={styles.mainForm}>
+							<form
+								onSubmit={formik.handleSubmit}
+								onKeyPress={(e) => e.key === 'Enter' && formik.handleSubmit()}
+								className={styles.mainForm}
+							>
 								<TextField
 									fullWidth
 									sx={{ '& div > input': { marginLeft: '30px' } }}
@@ -98,7 +102,20 @@ const Login = (props: any) => {
 						<Typography component='h3'>Welcome Back!</Typography>
 						<Typography component='h4'>To keep connected with us please log in with your personal info.</Typography>
 						<Link href='/user/register' passHref>
-							<Button variant='contained' size='medium' type='button'>
+							<Button
+								variant='contained'
+								size='medium'
+								type='button'
+								sx={{
+									bgcolor: 'hwb(257 27% 1%)',
+									width: '25s0px',
+									height: '50px',
+									borderRadius: '20px',
+									boxShadow:
+										'0px 2px 4px -1px rgb(0 0 0 / 20%), 0px 4px 5px 0px rgb(0 0 0 / 14%), 0px 1px 10px 0px rgb(0 0 0 / 12%)',
+									'&:hover': { backgroundColor: 'hwb(257 27% 30%)' },
+								}}
+							>
 								Create New Account
 							</Button>
 						</Link>

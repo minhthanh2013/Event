@@ -82,7 +82,20 @@ const Register = (props: Props) => {
 						<Typography component='h3'>Hi, Friend!</Typography>
 						<Typography component='h4'>Enter your personal details and start your journey with us.</Typography>
 						<Link href='/host/login' passHref>
-							<Button variant='contained' size='medium' type='button'>
+							<Button
+								variant='contained'
+								size='medium'
+								type='button'
+								sx={{
+									bgcolor: 'hwb(257 27% 1%)',
+									width: '25s0px',
+									height: '50px',
+									borderRadius: '20px',
+									boxShadow:
+										'0px 2px 4px -1px rgb(0 0 0 / 20%), 0px 4px 5px 0px rgb(0 0 0 / 14%), 0px 1px 10px 0px rgb(0 0 0 / 12%)',
+									'&:hover': { backgroundColor: 'hwb(257 27% 30%)' },
+								}}
+							>
 								Go To Sign in
 							</Button>
 						</Link>
@@ -93,7 +106,11 @@ const Register = (props: Props) => {
 						<Typography component='h2'>Sign Up Host</Typography>
 						{errorMessage !== '' && <Typography component='h4'>{errorMessage}</Typography>}
 						<Box className={styles.form__section}>
-							<form onSubmit={formik.handleSubmit} className={styles.mainForm}>
+							<form
+								onSubmit={formik.handleSubmit}
+								className={styles.mainForm}
+								onKeyPress={(e) => e.key === 'Enter' && formik.handleSubmit()}
+							>
 								<TextField
 									fullWidth
 									id='user_name'
