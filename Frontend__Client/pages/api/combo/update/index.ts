@@ -6,13 +6,19 @@ import https from 'https';
 
 export default async function (req: NextApiRequest, res: NextApiResponse) {
 	const { id } = req.query;
+	console.log(id);
 	try {
-		const request = process.env.BACKEND_PROTOCOL+'://' + process.env.BACKEND_HOST + ':' + process.env.BACKEND_PORT + `/combosession/${id}`; 
+		console.log(10)
+		const request = process.env.BACKEND_PROTOCOL+'://' + process.env.BACKEND_HOST + ':' + process.env.BACKEND_PORT + `/combosession`; 
         // const request = `http://localhost:3000/combosession/${id}`; 
-		console.log(12, req.body);
         const response = await axios.patch(request, req.body);
-        res.status(200).json(response.data);
+		if(response.data.status === true) {
+			res.status(200).json(response.data);
+		} else {
+			res.status(404).json(response.data);
+		}
+        
 	} catch (error) {
-		// console.log(error);
+		console.log(error);
 	}
 }

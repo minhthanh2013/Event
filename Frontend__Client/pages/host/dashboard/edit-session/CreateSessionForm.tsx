@@ -289,16 +289,16 @@ export const Conferences: React.FC<CreateEventProps> = ({ data, setData, setValu
             value={Discount}
             className={styles.totalPrice}
           />
-          <Box sx={{ marginTop: "2px", width: "80%", alignSelf: "center" }}>
-            <Button
+          <Box sx={{ marginTop: "2px", alignSelf: "center" }}>
+            {/* <Button
               sx={{ width: "12rem" }}
               variant="outlined"
               onClick={handleOpen}
             >
               Select Conference
-            </Button>
+            </Button> */}
             <Button
-              sx={{ width: "12rem", float: "right" }}
+              sx={{ width: "12rem" , alignSelf: "center"}}
               variant="contained"
               onClick={onFinish}
             >
