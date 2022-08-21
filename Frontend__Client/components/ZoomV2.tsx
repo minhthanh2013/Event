@@ -3,7 +3,7 @@
 import React, { useEffect } from 'react';
 import { ZoomMtg } from '@zoomus/websdk';
 import styles from '../styles/Zoom.module.scss';
-ZoomMtg.setZoomJSLib('https://source.zoom.us/2.4.5/lib', '/av');
+ZoomMtg.setZoomJSLib('https://source.zoom.us/2.6.0/lib', '/av');
 
 ZoomMtg.preLoadWasm();
 ZoomMtg.prepareWebSDK();
@@ -47,7 +47,7 @@ const ZoomV2 = (props: ZoomProps) => {
   // var signatureEndpoint = "http://localhost:3000/zoom/create-signature";
   var sdkKey = "OWYLmd5UiEI0RchfL8tCFQapDQ7lqOzjNAi6"
   // var leaveUrl = 'http://localhost:8080/'
-  var leaveUrl = 'https://api.evenity.page/'
+  var leaveUrl = 'https://evenity.page/'
   // var meetingNumber = props.data.meetingNumber.toString();
   // var role = props.data.role;
 
@@ -109,15 +109,8 @@ const ZoomV2 = (props: ZoomProps) => {
   return (
     <div>
       <main>
-        <h1>Zoom Meeting SDK Sample React</h1>
-        {/* <button onClick={() => getSignature}>Join Meeting</button> */}
+        <h1>Zoom Meeting Evenity</h1>
       </main>
-
-      {/* <style global jsx>{`
-        .zmmtg-root{
-          display: none !important;
-        }
-      `}</style> */}
     </div>
   );
 }
