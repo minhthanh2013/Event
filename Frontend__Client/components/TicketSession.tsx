@@ -39,10 +39,13 @@ const TicketSession = (props: TicketSessionProps) => {
 		const fetchImage = async () => {
 			const dataResult = await fetch(`/api/combo/get-combo-image/${props.data.comboSessionId}`);
 			const cateResult = await dataResult.json();
+			// console.log(cateResult)
+			// setImageProp(cateResult.url)
+			console.log(44, cateResult)
 			setImageProp(cateResult.url)
 		}
 		fetchImage();
-	})
+	}, [])
 	const getPrice = ( session: SessionProp) => {
 		// 9:00 PM – Saturday, Dec 10,{" "}
 		let totalPrice = 0;

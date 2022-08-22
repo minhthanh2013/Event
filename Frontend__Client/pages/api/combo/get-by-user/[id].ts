@@ -1,4 +1,3 @@
-import { HttpCode } from '@nestjs/common';
 /* eslint-disable import/no-anonymous-default-export */
 import { serialize } from 'cookie'
 import { NextApiResponse, NextApiRequest } from 'next'

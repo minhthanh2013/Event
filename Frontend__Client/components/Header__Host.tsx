@@ -223,7 +223,7 @@ const HeaderHost = (props: any) => {
 													</Box>
 												</Link>
 												<Box display='flex' flexDirection='column' sx={{ width: '25%', alignItems: 'flex-start' }}>
-													{ticket?.conference_type === '2' && ticket?.zoom_meeting_id !== null && (
+													{ticket?.conference_type === '2' && ticket?.zoom_meeting_id !== null && ticket?.isValidated === true &&(
 														<IconButton sx={{ display: 'flex', gap: '0.5rem', color: '#C64EFF' }}>
 															<PlayCircleOutlineOutlinedIcon />
 															<Link href={`/zoom/join-by-zoom-id?id=${ticket?.zoom_meeting_id}`} passHref>

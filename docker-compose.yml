@@ -137,6 +137,12 @@ services:
     command: certonly --webroot --webroot-path=/var/www/html --email sammy@api.evenity.page --agree-tos --no-eff-email --force-renewal -d api.evenity.page  -d www.api.evenity.page
     # command: certonly --webroot --webroot-path=/var/www/html --email sammy@example.com --agree-tos --no-eff-email --staging -d example.com  -d www.example.com
     # command: certonly --webroot --webroot-path=/var/www/html --email sammy@evenity.page --agree-tos --no-eff-email --force-renewal -d evenity.page  -d www.evenity.page
+  stripe-cli:
+    image: stripe/stripe-cli
+    container_name: stripe-cli
+    command: "listen --api-key sk_test_51L7fYzLHHzSNpGj2Kz5EPBXSvLoo3X91GkEVQkVE5HxEmdhfVBJbhy0oktu0n8qS1J6SsoE76HiECVbehIYRZy5h00SJxqFfLa --forward-to core-api:3000/payment/webhook/"
+    networks:
+      - doan2022 
 networks:
   doan2022:
     driver: bridge

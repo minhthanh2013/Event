@@ -42,7 +42,7 @@ interface TicketProp {
 	address: string
 	conference_type: string
 	zoom_meeting_id: string
-	isValiated: boolean
+	isValidated: boolean
 	// conferenceOrganizer: string;
 }
 interface UserDetailProp {
@@ -157,7 +157,9 @@ const Header = (props: any) => {
 			const fetchTicketList = async () => {
 				const dataResult = await fetch(`/api/conference/get-conference-by-user-id/${props?.tempDecode?.sub}`)
 				const cateResult = await dataResult.json()
-				setTicketList(cateResult)
+				if(cateResult.status === true) {
+					setTicketList(cateResult)
+				}
 			}
 			const fetchUser = async () => {
 				const config = {
@@ -175,8 +177,9 @@ const Header = (props: any) => {
 				const cateResult = await dataResult.json();
 				setUserDetails(cateResult)
 			}
-			fetchTicketList()
+
 			if (props !== undefined && props.tempDecode !== undefined) {
+				fetchTicketList()
 				fetchUser();
 			}
 		}
@@ -279,27 +282,20 @@ const Header = (props: any) => {
 								open={Boolean(anchorElUser)}
 								onClose={handleCloseUserMenu}
 							>
-								{ticketList?.data.length === 0 ||
-									(ticketList === undefined && (
-										<>
-											<MenuItem key={0} onClick={handleCloseUserMenu} sx={{ mb: '0.5rem', userSelect: 'none' }}>
-												<Box
-													sx={{
-														width: '400px',
-														height: '75px',
-														display: 'flex',
-														gap: '2rem',
-														alignItems: 'center',
-													}}
-												>
-													<Typography component='h3'>You dont have any tickets</Typography>
-												</Box>
-											</MenuItem>
-											<Divider variant='inset' component='li' sx={{ width: '100%', mx: '0 !important' }} />
-										</>
-									))}
+								{ticketList?.data.length === 0 || ticketList === undefined && (
+									<>
+									<MenuItem key={0} onClick={handleCloseUserMenu} sx={{ mb: '0.5rem', userSelect: 'none' }}>
+										<Box
+											sx={{ width: '400px', height: '75px', display: 'flex', gap: '2rem', alignItems: 'center' }}
+										>
+											<Typography component='h3'>You dont have any tickets</Typography>
+										</Box>
+									</MenuItem>
+									<Divider variant='inset' component='li' sx={{ width: '100%', mx: '0 !important' }} />
+								</>
+								)}
 
-								{ticketList?.data?.map((ticket) => (
+								{ticketList !== undefined && ticketList?.data?.map((ticket) => (
 									<>
 										{' '}
 										<MenuItem
@@ -332,7 +328,7 @@ const Header = (props: any) => {
 														</Box>
 												</Link>
 												<Box display='flex' flexDirection='column' sx={{ width: '25%', alignItems: 'flex-start' }}>
-													{ticket?.conference_type === '2' && ticket?.zoom_meeting_id !== null && (
+													{ticket?.conference_type === '2' && ticket?.zoom_meeting_id !== null && ticket?.isValidated === true && (
 														<IconButton sx={{ display: 'flex', gap: '0.5rem', color: '#C64EFF' }}>
 															<PlayCircleOutlineOutlinedIcon />
 															<Link href={`/zoom/join-by-zoom-id?id=${ticket?.zoom_meeting_id}`} passHref>
@@ -340,7 +336,7 @@ const Header = (props: any) => {
 															</Link>
 														</IconButton>
 													)}
-													{ticket?.conference_type === '2' && ticket?.isValiated === false && (
+													{ticket?.conference_type === '2' && ticket?.isValidated === false && (
 														<IconButton sx={{ display: 'flex', gap: '0.5rem', color: '#C64EFF' }}>
 															<ReplayOutlinedIcon />
 															<Link href={`/zoom/record?conferenceId=${ticket?.conference_id}`} passHref>

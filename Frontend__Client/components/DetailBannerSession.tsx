@@ -25,14 +25,14 @@ export interface UserToVerifySession {
 }
 
 const DetailBannerSession = (props: DetailBannerSessionProps) => {
-	console.log(28, props)
 	const [hideBuyButton, setHideBuyButton] = useState(false)
+	const [reasonToHide, setReasonToHide] = useState("You have already bought this session")
 	let discountPrice = props.price - (props.price * props.discount) / 100
 	useEffect(() => {
 		const getUserDetails = async () => {
 			const user = {} as UserToVerifySession 
 			user.user_id = +props.userId
-			user.session_id = props.sessionId
+			user.session_id = +props.sessionId
 			const response = await fetch(`/api/ticket/verify-user-buy-session`, {
 				method: 'POST',
 				headers: {
@@ -41,19 +41,29 @@ const DetailBannerSession = (props: DetailBannerSessionProps) => {
 				body: JSON.stringify(user)
 			})
 			const data = await response.json()
-			console.log(44, data)
-			console.log(45, response)
+			const response2 = await fetch(`/api/ticket/verify-user-own-ticket-in-session`, {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify(user)
+			})
+			const data2 = await response2.json()
 			if(response.status === 404) {
-				setHideBuyButton(false)
+				if(data2.status === false) {
+					setHideBuyButton(true)
+					setReasonToHide(data2.data)
+				} else {
+					setHideBuyButton(false)
+				}	
 			} else {
 				setHideBuyButton(true)
+				setReasonToHide(data2.data)
 			}
 		}
 		if(props.userId !== undefined) {
-			console.log(47, "here")
 			getUserDetails()
 		}
-		console.log(hideBuyButton)
 	}, [hideBuyButton, props.sessionId, props.userId])
 	return (
 		<>
@@ -104,7 +114,7 @@ const DetailBannerSession = (props: DetailBannerSessionProps) => {
 										Buy
 									</Button>
 								) : (
-									<Typography component="h3">You have already bought this session</Typography>
+									<Typography component="h3">{reasonToHide}</Typography>
 								)}
 
 							</Box>

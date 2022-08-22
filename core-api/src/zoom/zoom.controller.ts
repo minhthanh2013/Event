@@ -4,7 +4,7 @@ import { Body, Controller, Get, Param, Post } from "@nestjs/common";
 import { Queue } from "bull";
 import { ZoomDto } from "./dto/zoom.dto";
 import { ZoomService } from "./zoom.service";
-import fs from 'fs';
+import * as fs from 'fs';
 import { ScheduleZoomDto } from "./dto/create.zoom.dto";
 import { CreateSignature } from "./dto/create.signature";
 
@@ -45,7 +45,6 @@ export class ZoomController {
           } catch(err) {
             console.error(err)
           }
-    
         }
 
         @Post('schedule-meeting')

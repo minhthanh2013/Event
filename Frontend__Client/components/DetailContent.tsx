@@ -52,7 +52,7 @@ const DetailContent = (props: TicketProps) => {
             setHost(cateResult)
         }
         const parseDate = () => {
-            const date = new Date(props.data?.date_start_conference)
+            const date = new Date(props.data?.dateStartConference)
             setYear(date.getFullYear().toString())
             setMonthString(date.toLocaleString('en-us', { month: 'short' }))
             setDay(date.getDate().toString())

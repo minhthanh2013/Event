@@ -59,10 +59,7 @@ const Event = (props: any) => {
 		}
 		const fetchImage = async () => {
 			const dataResult = await fetch(`/api/conference/get-conference-image/${id}`)
-			const cateResult = await dataResult.json()
-			const dataResult1 = await fetch(cateResult.url)
-			// const cateResult1 = await dataResult1.json()
-			console.log(65, dataResult1);
+			const cateResult = await dataResult.json();
 			setImageProp(cateResult.url)
 		}
 		const fetchUserId = async () => {
