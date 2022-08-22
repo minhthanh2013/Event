@@ -606,4 +606,20 @@ export class ConferenceService {
       throw new BadRequestException('Can not end conference with status');
     }
   }
+
+  async updateViewConference(id: number): Promise<ResponseData> {
+    const response = new ResponseData()
+    try {
+      const res = await this.conferenceRepository.increment({conference_id: id}, 'viewed', 1)
+      if (res.affected == 1) {
+        response.data = true
+      } else {
+        response.status = false
+      }
+    } catch (err) {
+      response.status = false
+      console.log(err)
+    }
+    return response
+  }
 }

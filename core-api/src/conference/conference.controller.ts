@@ -133,4 +133,8 @@ export class ConferenceController {
   endConference(@Param("id") id: number): Promise<ResponseData> {
     return this.conferenceService.endConference(id);
   }
+  @Post('/viewed/:id')
+  updateViewConference(@Param("id") id: number): Observable<ResponseData> {
+    return from(this.conferenceService.updateViewConference(id))
+  }
 }

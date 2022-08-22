@@ -133,4 +133,8 @@ export class ConferenceEntity {
   zoom_meeting_id: string;
   @Column()
   isRecorded: boolean;
+  @Column({type: 'int', default: 0})
+  viewed: number;
+  @Column({type: 'float', default: 0})
+  popularity: number;
 }
