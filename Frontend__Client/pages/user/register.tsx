@@ -14,6 +14,30 @@ import Image from 'next/image'
 import { Props } from 'next/script'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
+import { Theme, useTheme } from '@mui/material/styles';
+import OutlinedInput from '@mui/material/OutlinedInput';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
+
+const names = [
+	'Khoa học',
+	'Y tế',
+	'Sinh học',
+	'Cơ khí',
+	'Vật lý',
+	'Hàng không vũ trụ'
+];
+const ITEM_HEIGHT = 35;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+	PaperProps: {
+		style: {
+			maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+			width: 250,
+		},
+	},
+};
 
 const validationSchema = yup.object({
 	email: yup.string().email('Enter a valid email').required('Email is required').trim(),
@@ -40,7 +64,19 @@ const validationSchema = yup.object({
 })
 
 const Register = (props: Props) => {
-	const [errorMessage, setErrorMessage] = useState<string>('')
+	const [errorMessage, setErrorMessage] = useState<string>('');
+	const [personName, setPersonName] = useState<string[]>([]);
+
+	const handleChange = (event: SelectChangeEvent<typeof personName>) => {
+		const { target: { value }, } = event;
+		if (value.length <= 3) {
+			setPersonName(
+				typeof value === 'string' ? value.split(',') : value,
+			);
+		} else {
+			setErrorMessage('Plesse choose maximum 3 categories you prefer!')
+		}
+	};
 
 	const router = useRouter()
 
@@ -100,7 +136,7 @@ const Register = (props: Props) => {
 				<Box className={styles.left}>
 					<Box className={styles.container__left}>
 						<Typography component='h2'>Sign Up User</Typography>
-						{errorMessage !== '' && <Typography component='h4'>{errorMessage}</Typography>}
+						{errorMessage !== '' && <Typography component='h4' sx={{ color: 'red', marginTop: '2rem' }}>{errorMessage}</Typography>}
 						<Box className={styles.form__section}>
 							<form
 								onSubmit={formik.handleSubmit}
@@ -163,6 +199,26 @@ const Register = (props: Props) => {
 									helperText={formik.touched.last_name && formik.errors.last_name}
 									sx={{ mb: '1.5rem', '& input': { marginLeft: '1.5rem' } }}
 								/>
+
+								<InputLabel id="demo-multiple-chip-label">What are you interesting at?</InputLabel>
+								<Select
+									sx={{ marginBottom: '1rem', paddingLeft: '1.5rem' }}
+									multiple
+									value={personName}
+									onChange={handleChange}
+									input={<OutlinedInput id="select-multiple-items" label="Tag" />}
+									renderValue={(selected) => selected.join(', ')}
+									MenuProps={MenuProps}
+								>
+									{names.map((name) => (
+										<MenuItem
+											key={name}
+											value={name}
+										>
+											{name}
+										</MenuItem>
+									))}
+								</Select>
 
 								<Button variant='contained' size='medium' type='submit'>
 									Sign up
