@@ -13,21 +13,14 @@ import axios from 'axios'
 import Image from 'next/image'
 import { Props } from 'next/script'
 import { useRouter } from 'next/router'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Theme, useTheme } from '@mui/material/styles';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 
-const names = [
-	'Khoa học',
-	'Y tế',
-	'Sinh học',
-	'Cơ khí',
-	'Vật lý',
-	'Hàng không vũ trụ'
-];
 const ITEM_HEIGHT = 35;
 const ITEM_PADDING_TOP = 8;
 const MenuProps = {
@@ -61,23 +54,33 @@ const validationSchema = yup.object({
 		.min(8, 'Username must be at least 8 characters')
 		.max(20, 'Username must be less than 20 characters')
 		.trim(),
+	category: yup
+		.array()
+		.max(3, 'Please select maximum 3 categories!'),
 })
+interface CategoryProps {
+	status: boolean;
+	data: CategoryProp[];
+}
+
+interface CategoryProp {
+	category_id: number;
+	category_name: string;
+}
 
 const Register = (props: Props) => {
 	const [errorMessage, setErrorMessage] = useState<string>('');
-	const [personName, setPersonName] = useState<string[]>([]);
+	const [categoryList, setCategoryList] = useState<CategoryProps>()
 
-	const handleChange = (event: SelectChangeEvent<typeof personName>) => {
-		const { target: { value }, } = event;
-		if (value.length <= 3) {
-			setPersonName(
-				typeof value === 'string' ? value.split(',') : value,
-			);
-		} else {
-			setErrorMessage('Plesse choose maximum 3 categories you prefer!')
+	useEffect(() => {
+		const fetchDataCate = async () => {
+			const dataResult = await fetch("/api/conference-category/get-all");
+			const cateResult = await dataResult.json();
+			setCategoryList(cateResult)
 		}
-	};
 
+		fetchDataCate();
+	}, [])
 	const router = useRouter()
 
 	const formik = useFormik({
@@ -87,6 +90,7 @@ const Register = (props: Props) => {
 			email: '',
 			password: '',
 			user_name: '',
+			category: [],
 		},
 		validationSchema: validationSchema,
 		onSubmit: async (values: any) => {
@@ -163,7 +167,7 @@ const Register = (props: Props) => {
 									value={formik.values.password}
 									onChange={formik.handleChange}
 									error={formik.touched.password && Boolean(formik.errors.password)}
-									helperText={formik.touched.password && formik.errors.email}
+									helperText={formik.touched.password && formik.errors.password}
 									sx={{ my: '2rem', '& input': { marginLeft: '1.5rem' } }}
 								/>
 								<TextField
@@ -199,26 +203,33 @@ const Register = (props: Props) => {
 									helperText={formik.touched.last_name && formik.errors.last_name}
 									sx={{ mb: '1.5rem', '& input': { marginLeft: '1.5rem' } }}
 								/>
+								<InputLabel sx={{ mb: '0.5rem' }}>What are you interesting at? (maximum 3 items)</InputLabel>
+								<FormControl sx={{ mb: '1.5rem' }}>
+									<InputLabel id="category-label">Category</InputLabel>
+									<Select
+										sx={{ marginBottom: '1rem', paddingLeft: '1.5rem' }}
+										multiple
+										label="Category"
+										name="category"
+										id="category"
+										value={formik.values.category}
+										onChange={formik.handleChange}
+										input={<OutlinedInput id="select-multiple-items" label="Tag" />}
+										renderValue={(selected) => selected.join(', ')}
+										error={formik.touched.category && Boolean(formik.errors.category)}
+										helperText={formik.touched.category && formik.errors.category}
+										MenuProps={MenuProps}
+									>
+										{categoryList?.data.map((dataItem) => (
+											<MenuItem
+												key={dataItem.category_id} value={dataItem.category_name}
+											>
+												{dataItem.category_name}
+											</MenuItem>
+										))}
+									</Select>
+								</FormControl>
 
-								<InputLabel id="demo-multiple-chip-label">What are you interesting at?</InputLabel>
-								<Select
-									sx={{ marginBottom: '1rem', paddingLeft: '1.5rem' }}
-									multiple
-									value={personName}
-									onChange={handleChange}
-									input={<OutlinedInput id="select-multiple-items" label="Tag" />}
-									renderValue={(selected) => selected.join(', ')}
-									MenuProps={MenuProps}
-								>
-									{names.map((name) => (
-										<MenuItem
-											key={name}
-											value={name}
-										>
-											{name}
-										</MenuItem>
-									))}
-								</Select>
 
 								<Button variant='contained' size='medium' type='submit'>
 									Sign up
