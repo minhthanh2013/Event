@@ -58,7 +58,7 @@ interface CategoryProp {
 export const BasicInfo: React.FC<CreateEventProps> = ({ data, setData, setValue }) => {
   const [categoryList, setCategoryList] = useState<CategoryProps>()
   const [typeList, setTypeList] = useState<TypeProps>()
-  const [selectedType, setSelectedType] = useState()
+  const [selectedType, setSelectedType] = useState("1")
   const [checked, setChecked] = useState(false);
 
   useEffect(() => {
@@ -394,148 +394,151 @@ export const DateForm: React.FC<CreateEventProps> = ({ data, setData, setValue, 
         direction="column"
         alignItems="center"
       >
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <LocalizationProvider dateAdapter={AdapterDateFns}>
-            <Stack spacing={3}>
-              <Controller
-                name="dateStartConference"
-                control={control}
-                render={({ field: { ...rest } }) => (
-                  <DateTimePicker
-                    label="Event start date"
-                    value={eventStart}
-                    disablePast
-                    renderInput={(params) => (
-                      <TextField
-                        className={styles.dateFields}
-                        {...params}
-                      />
-                    )}
-                    {...rest}
-                  />
-                )}
-                rules={{
-                  required: true,
-                  onChange: (newValue) => { setEventStart(newValue.target.value) },
-                  validate: {
-                    minDate: value => {
-                      const today = new Date();
-                      const dateValue = new Date(value.toString());
-                      return dateValue.getTime() >= today.getTime();
-                    },
-                  }
-                }}
-              />
-              <ErrorMessage errors={errors} name="dateStartConference" message="**You can't host an event from the past!" />
-
-              <Controller
-                name="dateStartSell"
-                control={control}
-                render={({ field: { ...rest } }) => (
-                  <DateTimePicker
-                    label="Ticket sales start"
-                    value={ticketStart}
-                    disablePast
-                    maxDate={eventStart ? eventStart : undefined}
-                    renderInput={(params) => (
-                      <TextField
-                        className={styles.dateFields}
-                        required
-                        {...params}
-                      />
-                    )}
-                    {...rest}
-                  />
-                )}
-                rules={{
-                  required: true,
-                  onChange: (newValue) => { setTicketStart(newValue.target.value) },
-                  validate: {
-                    maxDate: value => {
-                      const dateValue = new Date(value.toString());
-                      return dateValue.getTime() <= eventStart.getTime();
-                    },
-                    minDate: value => {
-                      const today = new Date();
-                      const dateValue = new Date(value.toString());
-                      return dateValue.getTime() >= today.getTime();
-                    },
-                  }
-                }}
-              />
-              <ErrorMessage errors={errors} name="dateStartSell" message="**You must sell Ticket before event start!" />
-
-              <Controller
-                name="dateEndSell"
-                control={control}
-                render={({ field: { ...rest } }) => (
-                  <DateTimePicker
-                    label="Ticket sales end"
-                    value={ticketEnd}
-                    disablePast
-                    minDate={ticketStart ? ticketStart : undefined}
-                    maxDate={eventStart ? eventStart : undefined}
-                    renderInput={(params) => (
-                      <TextField
-                        className={styles.dateFields}
-                        required
-                        {...params}
-                      />
-                    )}
-                    {...rest}
-                  />
-                )}
-                rules={{
-                  required: true,
-                  onChange: (newValue) => { setTicketEnd(newValue.target.value) },
-                  validate: {
-                    minDate: value => {
-                      const dateValue = new Date(value.toString());
-                      return dateValue.getTime() >= ticketStart.getTime();
-                    },
-                    maxDate: value => {
-                      const dateValue = new Date(value.toString());
-                      return dateValue.getTime() <= eventStart.getTime();
+        <Box sx={{ width: "60%" }}>
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <LocalizationProvider dateAdapter={AdapterDateFns}>
+              <Stack spacing={3}>
+                <Controller
+                  name="dateStartConference"
+                  control={control}
+                  render={({ field: { ...rest } }) => (
+                    <DateTimePicker
+                      label="Event start date"
+                      value={eventStart}
+                      disablePast
+                      renderInput={(params) => (
+                        <TextField
+                          className={styles.dateFields}
+                          {...params}
+                        />
+                      )}
+                      {...rest}
+                    />
+                  )}
+                  rules={{
+                    required: true,
+                    onChange: (newValue) => { setEventStart(newValue.target.value) },
+                    validate: {
+                      minDate: value => {
+                        const today = new Date();
+                        const dateValue = new Date(value.toString());
+                        return dateValue.getTime() >= today.getTime();
+                      },
                     }
-                  }
-                }}
-              />
-              <ErrorMessage errors={errors} name="dateEndSell" message="**You must stop selling Ticket before event starts!" />
-            </Stack>
-          </LocalizationProvider>
+                  }}
+                />
+                <ErrorMessage errors={errors} name="dateStartConference" message="**You can't host an event from the past!" />
 
-          {!checked && <TextField
-            className={styles.eventFields}
-            required
-            id="standard-required"
-            label="Ticket price"
-            variant="standard"
-            defaultValue={data.conferencePrice}
-            type="number"
-            InputProps={{ inputProps: { min: 30000 } }}
-            {...register("conferencePrice")}
-          />}
-          <FormControlLabel
-            control={<Checkbox onChange={(e) => setChecked(e.target.checked)} />}
-            label="Free Ticket"
-          />
-          <br />
-          <TextField
-            fullWidth
-            className={styles.eventFields}
-            required
-            id="standard-required"
-            label="Ticket quantity"
-            variant="standard"
-            type="number"
-            InputProps={{ inputProps: { min: 10 } }}
-            defaultValue={data.ticketQuantity}
-            {...register("ticketQuantity")}
-          />
-          <Button className={styles.nextBtn} variant="contained" type="submit" >
-            Submit
-          </Button>
-        </form>
+                <Controller
+                  name="dateStartSell"
+                  control={control}
+                  render={({ field: { ...rest } }) => (
+                    <DateTimePicker
+                      label="Ticket sales start"
+                      value={ticketStart}
+                      disablePast
+                      maxDate={eventStart ? eventStart : undefined}
+                      renderInput={(params) => (
+                        <TextField
+                          className={styles.dateFields}
+                          required
+                          {...params}
+                        />
+                      )}
+                      {...rest}
+                    />
+                  )}
+                  rules={{
+                    required: true,
+                    onChange: (newValue) => { setTicketStart(newValue.target.value) },
+                    validate: {
+                      maxDate: value => {
+                        const dateValue = new Date(value.toString());
+                        return dateValue.getTime() <= eventStart.getTime();
+                      },
+                      minDate: value => {
+                        const today = new Date();
+                        const dateValue = new Date(value.toString());
+                        return dateValue.getTime() >= today.getTime();
+                      },
+                    }
+                  }}
+                />
+                <ErrorMessage errors={errors} name="dateStartSell" message="**You must sell Ticket before event start!" />
+
+                <Controller
+                  name="dateEndSell"
+                  control={control}
+                  render={({ field: { ...rest } }) => (
+                    <DateTimePicker
+                      label="Ticket sales end"
+                      value={ticketEnd}
+                      disablePast
+                      minDate={ticketStart ? ticketStart : undefined}
+                      maxDate={eventStart ? eventStart : undefined}
+                      renderInput={(params) => (
+                        <TextField
+                          className={styles.dateFields}
+                          required
+                          {...params}
+                        />
+                      )}
+                      {...rest}
+                    />
+                  )}
+                  rules={{
+                    required: true,
+                    onChange: (newValue) => { setTicketEnd(newValue.target.value) },
+                    validate: {
+                      minDate: value => {
+                        const dateValue = new Date(value.toString());
+                        return dateValue.getTime() >= ticketStart.getTime();
+                      },
+                      maxDate: value => {
+                        const dateValue = new Date(value.toString());
+                        return dateValue.getTime() <= eventStart.getTime();
+                      }
+                    }
+                  }}
+                />
+                <ErrorMessage errors={errors} name="dateEndSell" message="**You must stop selling Ticket before event starts!" />
+              </Stack>
+            </LocalizationProvider>
+
+            {!checked && <TextField
+              className={styles.eventFields}
+              required
+              id="standard-required"
+              label="Ticket price"
+              variant="standard"
+              defaultValue={data.conferencePrice}
+              type="number"
+              InputProps={{ inputProps: { min: 30000 } }}
+              {...register("conferencePrice")}
+            />}
+            <FormControlLabel
+              control={<Checkbox onChange={(e) => setChecked(e.target.checked)} />}
+              label="Free Ticket"
+            />
+            <br />
+            <TextField
+              fullWidth
+              className={styles.eventFields}
+              required
+              id="standard-required"
+              label="Ticket quantity"
+              variant="standard"
+              type="number"
+              InputProps={{ inputProps: { min: 10 } }}
+              defaultValue={data.ticketQuantity}
+              {...register("ticketQuantity")}
+            />
+            <Button className={styles.nextBtn} variant="contained" type="submit" >
+              Submit
+            </Button>
+          </form>
+        </Box>
+
       </Grid>
     </>
   );
