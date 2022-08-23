@@ -1,5 +1,6 @@
 /* eslint-disable prettier/prettier */
 import { IsEmail } from 'class-validator';
+import { PopularityEntity } from 'src/popularity/Model/popularity.entity';
 import { TicketEntity } from 'src/ticket/models/ticket.entity';
 import { Column, Entity, JoinColumn, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
@@ -30,4 +31,13 @@ export class UserEntity {
   tickets: TicketEntity[];
   @Column()
   balance: number;
+
+  @OneToMany(() => PopularityEntity, (popular) => popular.viewer)
+  @JoinColumn({
+    name: 'user_id',
+    referencedColumnName: 'user_id'
+  })
+  popularity: PopularityEntity[];
+  @Column("text", {array: true})
+  category: string[];
 }

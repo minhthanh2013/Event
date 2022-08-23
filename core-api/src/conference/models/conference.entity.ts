@@ -5,6 +5,7 @@ import { ComboSessionEntity } from 'src/combosession/models/combo_session.entity
 import { ConferenceCategoryEntity } from 'src/conferencecategory/models/conference_category.entity';
 import { ConferenceTypeEntity } from 'src/conferencetype/models/conference_type.entity';
 import { HostEntity } from 'src/host/models/host.entity';
+import { PopularityEntity } from 'src/popularity/Model/popularity.entity';
 import { SpeakerEntity } from 'src/speaker/models/speaker.entity';
 import {
   Column,
@@ -12,6 +13,7 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
@@ -119,6 +121,12 @@ export class ConferenceEntity {
     referencedColumnName: "host_id"
   })
   host: HostEntity;
+  @OneToMany(() => PopularityEntity, (popular) => popular.conference)
+  @JoinColumn({
+    name: 'conference_id',
+    referencedColumnName: 'conference_id'
+  })
+  popular: PopularityEntity[];
   @Column({type: 'float', default: 0})
   price: number;
   @Column({type: 'int'})
@@ -138,3 +146,4 @@ export class ConferenceEntity {
   @Column({type: 'float', default: 0})
   popularity: number;
 }
+

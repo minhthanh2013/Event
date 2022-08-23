@@ -23,6 +23,7 @@ import { RecordModule } from './record/record.module';
 import { CloudinaryModule } from './cloudinary/cloudinary.module';
 import { ZoomModule } from './zoom/zoom.module';
 import { EmailModule } from './email/email.module';
+import { PopularityModule } from './popularity/popularity.module';
 
 @Module({
   imports: [
@@ -101,7 +102,8 @@ import { EmailModule } from './email/email.module';
           port: 3002,
         }
       }
-    ])
+    ]),
+    PopularityModule
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -72,47 +72,33 @@ const Event = (props: any) => {
 	}
 
 	useEffect(() => {
+		let data = {userId: 0, conferenceId: 0}
 		if (props?.tempDecode?.role === 'user' && props?.tempDecode?.sub !== undefined) {
-			const data = { userId: userId, conferenceId: id }
-			const fetchPopularity = async () => {
-				// Change API here
-				await fetch("", {
-					method: "POST",
-					headers: {
-						"Content-Type": "application/json",
-					},
-					body: JSON.stringify(data),
-				});
-			}
-			fetchPopularity();
+			data = { userId: userId, conferenceId: parseInt(id as string) }
 		} else {
-			const data = { userId: 0, conferenceId: id }
-			const fetchPopularity = async () => {
-				// Change API here
-				await fetch("      ", {
-					method: "POST",
-					headers: {
-						"Content-Type": "application/json",
-					},
-					body: JSON.stringify(data),
-				});
-			}
-			fetchPopularity();
+			data = { userId: 0, conferenceId: parseInt(id as string) }
 		}
-
-		if (!(ticketList.data?.host_id !== props?.tempDecode?.sub && props?.tempDecode?.role === 'host')) {
-			const fetchView = async () => {
-				// Change API here
-				const viewCount = ticketList.data?.viewed + 1;
-				await fetch("     " + viewCount, {
-					method: "POST",
-					headers: {
-						"Content-Type": "application/json",
-					},
-				});
-			}
-			fetchView();
+		const fetchPopularity = async () => {
+			// Change API here
+			await fetch("/api/popularity", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify(data),
+			});
 		}
+		fetchPopularity();
+		const fetchView = async () => {
+			// Change API here
+			await fetch(`/api/viewed/${id}`, {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+			});
+		}
+		fetchView();
 
 		const fetchTicketList = async () => {
 			const dataResult = await fetch(`/api/conference/${id}`)
