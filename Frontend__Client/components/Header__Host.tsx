@@ -34,6 +34,7 @@ interface TicketProp {
 	isValidated: boolean;
 	conference_type: string;
 	zoom_meeting_id: string;
+	isRecorded: boolean;
 	// conferenceOrganizer: string;
 }
 const HeaderHost = (props: any) => {
@@ -233,7 +234,7 @@ const HeaderHost = (props: any) => {
 															</Link>
 														</IconButton>
 													)}
-													{ticket?.conference_type === '2' && ticket?.isValidated === false && (
+													{ticket?.conference_type === '2' && ticket?.isValidated === false && ticket?.isRecorded === true && ticket.zoom_meeting_id !== null && (
 														<IconButton sx={{ display: 'flex', gap: '0.5rem', color: '#C64EFF' }}>
 															<ReplayOutlinedIcon />
 															<Link href={`/zoom/record?conferenceId=${ticket?.conference_id}`} passHref>

@@ -183,7 +183,7 @@ export default async function middleware(req: NextRequest) {
       if(param.has("id") && pathname === `/zoom/join-by-zoom-id`) {
         console.log("184")
         if (jwt === undefined) {
-            req.nextUrl.pathname = "/";
+            req.nextUrl.pathname = "/deny_access";
             return NextResponse.redirect(req.nextUrl);
         }
         console.log(189)
@@ -204,11 +204,11 @@ export default async function middleware(req: NextRequest) {
                     if(await cateResult.conference_id !== undefined) {
                         return NextResponse.next();
                     } else {
-                        req.nextUrl.pathname = "/";
+                        req.nextUrl.pathname = "/deny_access";
                         return NextResponse.redirect(req.nextUrl);
                     }
                 } catch (error) {
-                    req.nextUrl.pathname = "/";
+                    req.nextUrl.pathname = "/deny_access";
                     return NextResponse.redirect(req.nextUrl);
                 }
             } else if (role === "user") {
@@ -222,23 +222,23 @@ export default async function middleware(req: NextRequest) {
                     if(cateResult.ticket_id !== undefined) {
                         return NextResponse.next();
                     } else {
-                        req.nextUrl.pathname = "/";
+                        req.nextUrl.pathname = "/deny_access";
                         return NextResponse.redirect(req.nextUrl);
                     }
                 } catch (error) {
-                    req.nextUrl.pathname = "/";
+                    req.nextUrl.pathname = "/deny_access";
                     return NextResponse.redirect(req.nextUrl);
                 }
             }
         } catch (error) {
-            req.nextUrl.pathname = "/";
+            req.nextUrl.pathname = "/deny_access";
             return NextResponse.redirect(req.nextUrl);
          }
       }
       // req.page.params.id
       if(pathname.startsWith(`/zoom/record`) && param.has("conferenceId") ){
         if (jwt === undefined) {
-            req.nextUrl.pathname = "/";
+            req.nextUrl.pathname = "/deny_access";
             return NextResponse.redirect(req.nextUrl);
         }
         try {
@@ -265,11 +265,11 @@ export default async function middleware(req: NextRequest) {
                     if(cateResult.status !== undefined && cateResult.status === true) {
                         return NextResponse.next();
                     } else {
-                        req.nextUrl.pathname = "/";
+                        req.nextUrl.pathname = "/deny_access";
                         return NextResponse.redirect(req.nextUrl);
                     }
                 } catch (error) {
-                    req.nextUrl.pathname = "/";
+                    req.nextUrl.pathname = "/deny_access";
                     return NextResponse.redirect(req.nextUrl);
                 }
             } else {
@@ -290,16 +290,16 @@ export default async function middleware(req: NextRequest) {
               if(cateResult.status !== undefined && cateResult.status === true) {
                   return NextResponse.next();
               } else {
-                  req.nextUrl.pathname = "/";
+                  req.nextUrl.pathname = "/deny_access";
                   return NextResponse.redirect(req.nextUrl);
               }
           } catch (error) {
-              req.nextUrl.pathname = "/";
+              req.nextUrl.pathname = "/deny_access";
               return NextResponse.redirect(req.nextUrl);
           }
             }
         } catch (error) {
-            req.nextUrl.pathname = "/";
+            req.nextUrl.pathname = "/deny_access";
             return NextResponse.redirect(req.nextUrl);
          }
       }
@@ -314,20 +314,19 @@ export default async function middleware(req: NextRequest) {
                     let dataResult = await fetch('https://evenity.page/api/speaker/' + uuid);
                     let cateResult = await dataResult.json();
                 } catch (error) {
-                    req.nextUrl.pathname = "/";
+                    req.nextUrl.pathname = "/deny_access";
                     return NextResponse.redirect(req.nextUrl);
                 }
                 if(cateResult.length === 0) {
-                    req.nextUrl.pathname = "/";
+                    req.nextUrl.pathname = "/deny_access";
                     return NextResponse.redirect(req.nextUrl);
                 }
-            console.log("324, reach here")
             return NextResponse.next();
         } catch (error) {
           console.log(error)
-            // req.nextUrl.pathname = "/";
-            // return NextResponse.redirect(req.nextUrl);
-         }
+          req.nextUrl.pathname = "/deny_access";
+          return NextResponse.redirect(req.nextUrl);
+        }
       }
 
       // Else

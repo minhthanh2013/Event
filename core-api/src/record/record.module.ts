@@ -1,3 +1,4 @@
+import { TicketEntity } from 'src/ticket/models/ticket.entity';
 /* eslint-disable prettier/prettier */
 import { Module } from '@nestjs/common';
 import { RecordService } from './record.service';
@@ -7,7 +8,7 @@ import { RecordEntity } from './models/record.entity';
 import { ConferenceEntity } from 'src/conference/models/conference.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([RecordEntity, ConferenceEntity])],
+  imports: [TypeOrmModule.forFeature([RecordEntity, ConferenceEntity, TicketEntity])],
   providers: [RecordService],
   controllers: [RecordController],
 })

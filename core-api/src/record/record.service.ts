@@ -1,3 +1,4 @@
+import { TicketEntity } from './../ticket/models/ticket.entity';
 /* eslint-disable prettier/prettier */
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -15,6 +16,8 @@ export class RecordService {
     private readonly recordRepository: Repository<RecordEntity>,
     @InjectRepository(ConferenceEntity)
     private readonly confenreRepository: Repository<ConferenceEntity>,
+    @InjectRepository(TicketEntity)
+    private readonly ticketRepository: Repository<TicketEntity>,
   ) {}
   findAllRecords(): Observable<Record[]> {
     return from(this.recordRepository.find());
@@ -33,27 +36,43 @@ export class RecordService {
   }
   async checkValidUserBuyRecord(body: UserRecordRequest): Promise<ResponseData> {
     const response = new ResponseData();
-    const record = await this.recordRepository.findOne({where: {buyer_id: parseInt(body.user_id), conference_id: body.conference_id}});
-    if (record) {
-      response.data = record;
-      response.status = true;
-    } else {
+    const ticket = await this.ticketRepository.findOne({where: {buyer_id: parseInt(body.user_id), conference_id: body.conference_id}});
+    if(!ticket) {
+      response.data = null;
       response.status = false;
-      response.data = 'Record not found';
+      return response;
     }
+    const conference = await this.confenreRepository.findOne({where: {conference_id: body.conference_id}});
+    if(!conference) {
+      response.data = null;
+      response.status = false;
+      return response;
+    }
+    if(conference.conference_type.toString() === '2' && !conference.isValidated && conference.isRecorded && conference.zoom_meeting_id !== null) {
+      response.data = null;
+      response.status = true;
+      return response;
+    } 
+    response.data = null;
+    response.status = false;
     return response;
   }
 
   async checkValidHostBuyRecord(body: HostRecordRequest): Promise<ResponseData> {
     const response = new ResponseData();
-    const record = await this.confenreRepository.findOne({where: {host_id: parseInt(body.host_id), conference_id: body.conference_id}});
-    if (record) {
-      response.data = record;
-      response.status = true;
-    } else {
+    const conference = await this.confenreRepository.findOne({where: {conference_id: body.conference_id, host_id: parseInt(body.host_id)}});
+    if(!conference) {
+      response.data = null;
       response.status = false;
-      response.data = 'Record not found';
+      return response;
     }
+    if(conference.conference_type.toString() === '2' && !conference.isValidated && conference.isRecorded && conference.zoom_meeting_id !== null) {
+      response.data = null;
+      response.status = true;
+      return response;
+    }
+    response.data = null;
+    response.status = false;
     return response;
   }
 }

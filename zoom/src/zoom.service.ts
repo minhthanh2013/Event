@@ -119,7 +119,7 @@ export class ZoomService {
           "registration_type": 1,
           "show_share_button": false,
           "use_pmi": false,
-          "waiting_room": true,
+          "waiting_room": false,
           "watermark": false
         },
         "start_time": scheduleZoomDto.dateStartConference,
