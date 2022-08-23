@@ -45,9 +45,9 @@ const ZoomV2 = (props: ZoomProps) => {
 
   // var signatureEndpoint = process.env.BACKEND_PROTOCOL + "://" + process.env.BACKEND_HOST + ":" + process.env.BACKEND_PORT + "/zoom/create-signature";
   // var signatureEndpoint = "https://api.evenity.page:8443/zoom/create-signature";
-  var signatureEndpoint = "http://localhost:3000/zoom/create-signature";
+  var signatureEndpoint = "https://evenity.page/api/zoom/create-signature";
   var sdkKey = "OWYLmd5UiEI0RchfL8tCFQapDQ7lqOzjNAi6"
-  var leaveUrl = 'http://localhost:8080/'
+  var leaveUrl = 'https://evenity.page/'
   // var leaveUrl = 'https://evenity.page/'
   // var meetingNumber = props.data.meetingNumber.toString();
   // var role = props.data.role;
@@ -73,7 +73,6 @@ const ZoomV2 = (props: ZoomProps) => {
     })
     .then(res => res.json())
     .then(response => {
-      console.log(76, response)
       startMeeting(response.signature)
     }).catch(error => {
       console.error(error)
