@@ -16,6 +16,7 @@ import ListItemIcon from '@mui/material/ListItemIcon'
 import LogoutIcon from '@mui/icons-material/Logout'
 
 import ConfirmationNumberIcon from '@mui/icons-material/ConfirmationNumber'
+import Image from 'next/image'
 interface HeaderProps {
 	props: any
 }
@@ -185,12 +186,13 @@ const HeaderAdmin = (props: any) => {
 											sx={{ mb: '0.5rem', userSelect: 'none' }}
 										>
 											<Box sx={{ width: '450px', height: '90px', display: 'flex', gap: '0.5rem' }}>
-												<img
+												<Image
 													width='25%'
 													height='100%'
 													src={
 														'https://images.pexels.com/photos/10402422/pexels-photo-10402422.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'
 													}
+													alt=""
 												/>
 
 												<Box

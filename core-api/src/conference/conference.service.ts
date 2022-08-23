@@ -151,7 +151,8 @@ export class ConferenceService {
   async createConference(
     conference: ConferenceRequestDto,
   ): Promise<ResponseData> {
-    if (parseInt(conference.conferencePrice.toString()) < 30000) {
+    const intPrice = parseInt(conference.conferencePrice.toString()) ;
+    if (intPrice != 0 && intPrice < 30000) {
       throw new BadRequestException(
         'Event price must be greater than 30.000 VNĐ',
       );
@@ -279,6 +280,8 @@ export class ConferenceService {
     dto.date_start_conference = entity.date_start_conference;
     dto.isRecorded = entity.isRecorded;
     dto.isValidated = entity.isValidated;
+    dto.viewed = entity.viewed;
+    dto.popularity = entity.popularity;
     dto.speakerList = [];
     const speakers = await this.speakerRepository.find({
       where: { conference_id: entity.conference_id },

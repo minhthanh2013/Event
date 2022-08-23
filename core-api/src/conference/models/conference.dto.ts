@@ -30,6 +30,8 @@ export class ConferenceRequestDto {
     date_start_conference?: Date;
     isRecorded?: boolean;
     isValidated?: boolean;
+    viewed: number;
+    popularity: number;
 }
 
 export class SpeakerList {

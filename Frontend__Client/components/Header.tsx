@@ -25,6 +25,7 @@ import { useRouter } from 'next/router'
 import { cp } from 'fs/promises'
 import { PopUp } from './AlertPop-up'
 import { splitNum } from '../GlobalFunction/SplitNumber'
+import Image from 'next/image'
 
 interface HeaderProps {
 	props: any
@@ -304,12 +305,13 @@ const Header = (props: any) => {
 											sx={{ mb: '0.5rem', userSelect: 'none' }}
 										>
 											<Box sx={{ width: '450px', height: '90px', display: 'flex', gap: '0.5rem' }}>
-												<img
+												<Image
 													width='25%'
 													height='100%'
 													src={
 														'https://images.pexels.com/photos/10402422/pexels-photo-10402422.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'
 													}
+													alt=""
 												/>
 												<Link href={`/event/${ticket?.conference_id}`}>
 														<Box
