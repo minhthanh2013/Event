@@ -10,6 +10,12 @@ import Typography from '@mui/material/Typography'
 import PurchaseModal from '../../components/PurchaseModal'
 import dynamic from 'next/dynamic'
 import DetailContent from '../../components/DetailContent'
+import IconButton from '@mui/material/IconButton';
+import ClickAwayListener from '@mui/material/ClickAwayListener';
+import Grid from '@mui/material/Grid';
+import Tooltip from '@mui/material/Tooltip';
+import InfoIcon from '@mui/icons-material/InfoRounded';
+import { Draggable } from 'drag-react';
 
 interface TicketProp {
 	conferenceAddress: string
@@ -45,13 +51,23 @@ const Event = (props: any) => {
 	const [userId, setUserId] = useState(undefined);
 	const [ticketList, setTicketList] = useState<TicketProps>()
 	const [imageProp, setImageProp] = useState<string>()
+	const [openInfo, setOpenInfo] = React.useState(false);
 	let [open, setOpen] = useState(false || isBuy === 'true')
+
+	const handleTooltipClose = () => {
+		setOpenInfo(false);
+	};
+
+	const handleTooltipOpen = () => {
+		setOpenInfo(true);
+	};
+
+
 	const handleToggle = () => {
 		setOpen(!open)
 		// check cookie hiện tại xem người dùng đã đăng nhập chưa, nếu chưa thì redirect
 	}
 
-	console.log(ticketList.data)
 	useEffect(() => {
 		const fetchTicketList = async () => {
 			const dataResult = await fetch(`/api/conference/${id}`)
@@ -78,7 +94,6 @@ const Event = (props: any) => {
 		}
 		fetchImage();
 	}, [id, props?.tempDecode])
-
 	return (
 		<>
 			{ticketList?.data?.status_ticket !== 'published' ? (
@@ -88,6 +103,21 @@ const Event = (props: any) => {
 						<Box className={styles.background__wrap} sx={{ filter: open && (new Date() > new Date(ticketList?.data?.dateStartSell)) ? 'blur(10px) ' : 'none' }}>
 							<Box className={styles.dot__1}></Box>
 							<Header {...props} />
+							<Draggable>
+								<ClickAwayListener onClickAway={handleTooltipClose}>
+									<div>
+										<Tooltip
+											onClose={handleTooltipClose}
+											open={openInfo}
+											title="Info"
+										>
+											<IconButton onClick={handleTooltipOpen} size="large" color='info'>
+												<InfoIcon fontSize="inherit" />
+											</IconButton>
+										</Tooltip>
+									</div>
+								</ClickAwayListener>
+							</Draggable>
 							{ticketList?.data && <DetailBanner data={ticketList.data} handleToggle={handleToggle} userId={userId} />}
 							{ticketList?.data && <DetailContent data={ticketList.data} />}
 						</Box>
@@ -108,6 +138,40 @@ const Event = (props: any) => {
 					<Box className={styles.background__wrap} sx={{ filter: open && (new Date() > new Date(ticketList?.data?.dateStartSell)) ? 'blur(10px) ' : 'none' }}>
 						<Box className={styles.dot__1}></Box>
 						<Header {...props} />
+						<Draggable>
+							<ClickAwayListener onClickAway={handleTooltipClose}>
+								<div>
+									<Tooltip
+										arrow
+										placement="right"
+										PopperProps={{
+											sx: {
+												"& .MuiTooltip-tooltip": {
+													m: "0",
+													fontWeight: "bold",
+													fontSize: "0.8rem",
+												},
+											}
+										}}
+										onClose={handleTooltipClose}
+										open={openInfo}
+										title={<>
+											Views: ${ticketList.data.viewed}
+											<br />
+											Popularity: ${ticketList.data.popularity}
+										</>}
+										disableFocusListener
+										disableHoverListener
+										disableTouchListener
+									>
+										<IconButton onClick={handleTooltipOpen} color='info'
+											sx={{ width: '2.7rem', height: '5rem', m: '5rem 0 0 2rem' }}>
+											<InfoIcon fontSize="inherit" sx={{ width: '2.5rem', height: '2.5rem' }} />
+										</IconButton>
+									</Tooltip>
+								</div>
+							</ClickAwayListener>
+						</Draggable>
 						{ticketList?.data && <DetailBanner data={ticketList.data} handleToggle={handleToggle} userId={userId} />}
 						{ticketList?.data && <DetailContent data={ticketList.data} />}
 						{/* <DetailBanner data={ticketList.data}/>
@@ -116,7 +180,8 @@ const Event = (props: any) => {
 					{(new Date() > new Date(ticketList?.data?.dateStartSell)) && open && <PurchaseModal handleToggle={handleToggle} data={ticketList.data} imageProp={imageProp} userId={userId} />}
 					<Footer />
 				</>
-			)}
+			)
+			}
 		</>
 	)
 }

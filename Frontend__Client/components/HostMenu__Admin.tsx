@@ -68,9 +68,6 @@ interface CategoryProp {
 
 const Profile: React.FC<hostProfile> = ({ host, show, setShow, conferences, category }) => {
     console.log(conferences)
-    const getCateById = (id: number) => {
-        category.find(c => c.category_id === id)
-    };
     const mostViewed = conferences?.reduce(function (prev, current) { return prev.viewed > current.viewed ? prev : current })
     const hotest = conferences?.reduce(function (prev, current) { return prev.popularity > current.popularity ? prev : current })
     const sortByCategory = category?.map(c => (
@@ -123,10 +120,14 @@ const Profile: React.FC<hostProfile> = ({ host, show, setShow, conferences, cate
                             </FormControl>
                         </Box>
                         <Box>
+                            {!conferences &&
+                                <Typography variant="h6" gutterBottom sx={{ ml: '3rem' }}>
+                                    This host haven't create any event yet</Typography>
+                            }
                             <Typography variant="h6" gutterBottom sx={{ ml: '3rem' }}>
-                                Most viewed event: {mostViewed?.conference_name} ({mostViewed?.viewed} views)</Typography>
+                                Most viewed event: {conferences ? mostViewed?.conference_name : "None"} ({conferences ? mostViewed?.viewed : 0} views)</Typography>
                             <Typography variant="h6" gutterBottom sx={{ ml: '3rem' }}>
-                                Hotest event: {hotest?.conference_name} ({mostViewed?.popularity} people concern)</Typography>
+                                Hotest event: {conferences ? hotest?.conference_name : "None"} ({conferences ? hotest?.popularity : 0} people concern)</Typography>
                         </Box>
                         <TableContainer component={Paper} sx={{ marginTop: "1rem", marginLeft: "5rem", width: "70%" }} style={{ maxHeight: "15vw", overflow: 'auto' }}>
                             <Table >
@@ -139,8 +140,8 @@ const Profile: React.FC<hostProfile> = ({ host, show, setShow, conferences, cate
                                 <TableBody>
                                     {sortByCategory?.map((row) => (
                                         <TableRow key={row.cateName} sx={{ width: "100%" }}>
-                                            <TableCell align="center">{row?.total}</TableCell>
-                                            <TableCell align="center">{row?.cateName}</TableCell>
+                                            <TableCell align="center">{conferences ? row?.total : 0}</TableCell>
+                                            <TableCell align="center">{conferences ? row?.cateName : 0}</TableCell>
                                         </TableRow>
                                     ))}
                                 </TableBody>
