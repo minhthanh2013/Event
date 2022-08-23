@@ -76,7 +76,7 @@ export const UserList = (props: EventListProps) => {
                         </Select>
                     </FormControl>
                 </Box>
-                <TableContainer component={Paper} sx={{ marginTop: "5rem", marginLeft: "5rem", width: "90%" }}>
+                <TableContainer component={Paper} sx={{ marginTop: "5rem", marginLeft: "5rem", width: "90%" }} style={{ maxHeight: "30vw", overflow: 'auto' }}>
                     <Table >
                         <TableHead sx={{ backgroundColor: "#4F3398" }}>
                             <TableRow>

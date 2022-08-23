@@ -29,7 +29,8 @@ interface TicketProp {
 	dateEndSell: Date;
 	isRecorded?: boolean;
 	isValidated?: boolean;
-
+	viewed: number;
+	popularity: number;
 	// conferenceOrganizer: string;
 }
 interface TicketProps {
@@ -38,11 +39,9 @@ interface TicketProps {
 }
 
 const Event = (props: any) => {
-	console.log(props)
-	
 	const router = useRouter()
 	const { id } = router.query
-	const {isBuy} = router.query
+	const { isBuy } = router.query
 	const [userId, setUserId] = useState(undefined);
 	const [ticketList, setTicketList] = useState<TicketProps>()
 	const [imageProp, setImageProp] = useState<string>()
@@ -51,6 +50,8 @@ const Event = (props: any) => {
 		setOpen(!open)
 		// check cookie hiện tại xem người dùng đã đăng nhập chưa, nếu chưa thì redirect
 	}
+
+	console.log(ticketList.data)
 	useEffect(() => {
 		const fetchTicketList = async () => {
 			const dataResult = await fetch(`/api/conference/${id}`)
@@ -63,16 +64,16 @@ const Event = (props: any) => {
 			setImageProp(cateResult.url)
 		}
 		const fetchUserId = async () => {
-			if(props?.tempDecode.role.toString() === 'user' ) {
+			if (props?.tempDecode.role.toString() === 'user') {
 				setUserId(props?.tempDecode.sub);
-			} else  {
+			} else {
 				setUserId(undefined);
 			}
 		}
 		fetchTicketList().catch(() => {
 			//
 		})
-		if(props?.tempDecode !== undefined) {
+		if (props?.tempDecode !== undefined) {
 			fetchUserId();
 		}
 		fetchImage();
@@ -82,15 +83,15 @@ const Event = (props: any) => {
 		<>
 			{ticketList?.data?.status_ticket !== 'published' ? (
 				props?.tempDecode?.role === 'admin' ||
-				(props?.tempDecode?.sub === ticketList?.data?.host_id && props?.tempDecode?.role === 'host') ? (
+					(props?.tempDecode?.sub === ticketList?.data?.host_id && props?.tempDecode?.role === 'host') ? (
 					<>
 						<Box className={styles.background__wrap} sx={{ filter: open && (new Date() > new Date(ticketList?.data?.dateStartSell)) ? 'blur(10px) ' : 'none' }}>
 							<Box className={styles.dot__1}></Box>
 							<Header {...props} />
-							{ticketList?.data && <DetailBanner data={ticketList.data} handleToggle={handleToggle} userId={userId}/>}
+							{ticketList?.data && <DetailBanner data={ticketList.data} handleToggle={handleToggle} userId={userId} />}
 							{ticketList?.data && <DetailContent data={ticketList.data} />}
 						</Box>
-						{(new Date() > new Date(ticketList?.data?.dateStartSell)) && open && <PurchaseModal handleToggle={handleToggle} data={ticketList.data} imageProp={imageProp} userId={userId}/>}
+						{(new Date() > new Date(ticketList?.data?.dateStartSell)) && open && <PurchaseModal handleToggle={handleToggle} data={ticketList.data} imageProp={imageProp} userId={userId} />}
 						<Footer />
 					</>
 				) : (
@@ -107,12 +108,12 @@ const Event = (props: any) => {
 					<Box className={styles.background__wrap} sx={{ filter: open && (new Date() > new Date(ticketList?.data?.dateStartSell)) ? 'blur(10px) ' : 'none' }}>
 						<Box className={styles.dot__1}></Box>
 						<Header {...props} />
-						{ticketList?.data && <DetailBanner data={ticketList.data} handleToggle={handleToggle} userId={userId}/>}
+						{ticketList?.data && <DetailBanner data={ticketList.data} handleToggle={handleToggle} userId={userId} />}
 						{ticketList?.data && <DetailContent data={ticketList.data} />}
 						{/* <DetailBanner data={ticketList.data}/>
 						<DetailContent data={ticketList.data}/> */}
 					</Box>
-					{(new Date() > new Date(ticketList?.data?.dateStartSell))  && open && <PurchaseModal handleToggle={handleToggle} data={ticketList.data} imageProp={imageProp} userId={userId}/>}
+					{(new Date() > new Date(ticketList?.data?.dateStartSell)) && open && <PurchaseModal handleToggle={handleToggle} data={ticketList.data} imageProp={imageProp} userId={userId} />}
 					<Footer />
 				</>
 			)}

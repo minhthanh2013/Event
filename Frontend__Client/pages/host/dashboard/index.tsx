@@ -106,7 +106,8 @@ interface ConferenceProp {
   current_quantity: number;
   status_ticket: string;
   conference_type: string;
-
+  viewed: number;
+  popularity: number;
   // conferenceOrganizer: string;
 }
 interface HostDetailsProps {
@@ -337,7 +338,7 @@ const EventCreate = (props: any) => {
                 </TabPanel>
                 <TabPanel value={value} index={2}>
                   <Box sx={{ marginLeft: "3rem" }}>
-                    <Subcriptions host_type={hostDetailsProps?.host_type} exDate={hostDetailsProps?.update_at} hostId={props?.tempDecode?.sub}/>
+                    <Subcriptions host_type={hostDetailsProps?.host_type} exDate={hostDetailsProps?.update_at} hostId={props?.tempDecode?.sub} />
                   </Box>
                 </TabPanel>
               </>

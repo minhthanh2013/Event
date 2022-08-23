@@ -1,31 +1,16 @@
 .container {
   width: 80vw;
+  max-height: 40vw;
   position: absolute;
-  top: 40%;
+  top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   background-color: #ffffff;
   padding-bottom: 10vw;
 
-  background-clip: padding-box;
+  z-index: 9999;
 
-  font-size: 1.6rem;
-  display: grid;
-  place-items: center;
-  min-height: 200px;
-  border: solid 8px transparent;
   border-radius: 0.8rem;
-
-  &:before {
-    content: "";
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    z-index: -1;
-    margin: -8px; /* same as border width */
-    border-radius: inherit; /* inherit container box's radius */
-    background: linear-gradient(to right, #743ad5, #d53a9d);
-  }
+  border-radius: 25px;
+  border: 2px solid #4f3398;
 }
