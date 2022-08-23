@@ -393,6 +393,7 @@ export class ConferenceService {
     options: IPaginationOptions,
     search: string,
     onlyPublish: string,
+    category: string,
   ): Promise<Pagination<ConferenceEntity>> {
     const queryBuilder =
       this.conferenceRepository.createQueryBuilder('conference');
@@ -406,6 +407,11 @@ export class ConferenceService {
       queryBuilder.andWhere('conference.status_ticket = :status', {
         status: 'published',
       });
+    if (category !== '') {
+      queryBuilder.andWhere('conference.conference_category = :cate', {
+        cate: category,
+      }); 
+    }
     }
 
     return paginate<ConferenceEntity>(queryBuilder, options);

@@ -31,6 +31,7 @@ export class ConferenceController {
     @Query('page', new DefaultValuePipe(1), ParseIntPipe) page = 1,
     @Query('limit', new DefaultValuePipe(12), ParseIntPipe) limit = 12,
     @Query('search', new DefaultValuePipe('')) search = '',
+    @Query('category', new DefaultValuePipe('')) category = '',
     @Query('onlyPublish', new DefaultValuePipe('false')) onlyPublish = 'false',
   ): Promise<Pagination<ConferenceEntity>> {
     limit = limit > 100 ? 100 : limit;
@@ -38,7 +39,7 @@ export class ConferenceController {
       page,
       limit,
       route: '/conference/filter',
-    }, search, onlyPublish);
+    }, search, onlyPublish, category);
   }
   @Get(':id')
   findOne(@Param('id') id: number): Observable<ResponseData> {

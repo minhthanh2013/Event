@@ -305,9 +305,9 @@ const Header = (props: any) => {
 											onClick={handleCloseUserMenu}
 											sx={{ mb: '0.5rem', userSelect: 'none' }}
 										>
-											<Box sx={{ width: '450px', height: '90px', display: 'flex', gap: '0.5rem' }}>
+											<Box sx={{ width: '450px', height: '90px', display: 'flex', gap: '0.5rem'}}>
 												<Image
-													width='25%'
+													width='100px'
 													height='100%'
 													src={
 														'https://images.pexels.com/photos/10402422/pexels-photo-10402422.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'
@@ -318,7 +318,7 @@ const Header = (props: any) => {
 														<Box
 															className={styles.notification_Content}
 															sx={{
-																width: '50%',
+																width: '200px',
 																height: '100%',
 																display: 'flex',
 																alignContent: 'center',
@@ -330,7 +330,7 @@ const Header = (props: any) => {
 															<Typography component='h4'>{parseDate(ticket?.date_start_conference)}</Typography>
 														</Box>
 												</Link>
-												<Box display='flex' flexDirection='column' sx={{ width: '25%', alignItems: 'flex-start' }}>
+												<Box display='flex' flexDirection='column' sx={{ width: '100px', alignItems: 'flex-start' }}>
 													{ticket?.conference_type === '2' && ticket?.zoom_meeting_id !== null && ticket?.isValidated === true && (
 														<IconButton sx={{ display: 'flex', gap: '0.5rem', color: '#C64EFF' }}>
 															<PlayCircleOutlineOutlinedIcon />

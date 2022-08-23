@@ -31,7 +31,7 @@ interface TicketProp {
 function SearchResult(props: any) {
 	const router = useRouter()
 	const temp = 'Vinh Duong Quang'
-	const [filter, setFilter] = useState('0');
+	const [filter, setFilter] = useState('');
 
 	const typeRef = useRef(null)
 
@@ -45,9 +45,23 @@ function SearchResult(props: any) {
 	const [data, setData] = useState({})
 	const [tempProps, setTempProps] = useState<tempProps>()
 	const [page, setPage] = useState(1)
+	const [category, setCategory] = useState([])
+
+	
+	
+	useEffect (() => {
+		const fetchDataCate = async () => {
+			const dataResult = await fetch('/api/conference-category/get-all')
+			const cateResult = await dataResult.json()
+			// console.log(cateResult.data, 'meow')
+			setCategory(cateResult.data)
+		}
+		fetchDataCate()
+	}, [])
 
 	const handleChange = (event: any) => {
 		setFilter(event.target.value)
+		// alert(event.target.value)
 	}
 
 	const handlePaginationChange = async (event, value) => {
@@ -83,7 +97,7 @@ function SearchResult(props: any) {
 			} else fetchSession()
 		
 	
-	}, [page, inputSearch, type])
+	}, [page, inputSearch, type, filter])
 
 	return (
 		<>
@@ -116,9 +130,11 @@ function SearchResult(props: any) {
 								'& *': { borderColor: '#6A35F2 !important', color: '#6A35F2 !important' },
 							}}
 						>
-							<MenuItem value={0} sx={{ display: 'flex', gap: '1rem' }}>
-								Latest
-							</MenuItem>
+							{category.map((item, i) => (
+								<MenuItem key={i} value={item.category_id} sx={{ display: 'flex', gap: '1rem' }}>
+									{item.category_name}
+								</MenuItem>
+							))}
 						</Select>
 					</FormControl>
 				</Box>
@@ -140,7 +156,7 @@ function SearchResult(props: any) {
 					)}
 					{type == '1' && (
 						<Typography component='h4' sx={{ fontWeight: '500', lineHeight: '2rem', fontSize: '1rem' }}>
-							{data.data?.data?.length} results on Evenity
+							{data?.data?.data?.length} results on Evenity
 						</Typography>
 					)}
 				</Box>

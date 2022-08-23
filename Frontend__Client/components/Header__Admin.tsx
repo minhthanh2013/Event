@@ -187,7 +187,7 @@ const HeaderAdmin = (props: any) => {
 										>
 											<Box sx={{ width: '450px', height: '90px', display: 'flex', gap: '0.5rem' }}>
 												<Image
-													width='25%'
+													width='100px'
 													height='100%'
 													src={
 														'https://images.pexels.com/photos/10402422/pexels-photo-10402422.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'
@@ -198,7 +198,7 @@ const HeaderAdmin = (props: any) => {
 												<Box
 													className={styles.notification_Content}
 													sx={{
-														width: '50%',
+														width: '200px',
 														height: '100%',
 														display: 'flex',
 														alignContent: 'center',
@@ -210,7 +210,7 @@ const HeaderAdmin = (props: any) => {
 													<Typography component='h3'>{ticket?.conference_name}</Typography>
 													<Typography component='h4'>{parseDate(ticket?.date_start_conference)}</Typography>
 												</Box>
-												<Box display='flex' flexDirection='column' sx={{ width: '25%', alignItems: 'flex-start' }}>
+												<Box display='flex' flexDirection='column' sx={{ width: '100px', alignItems: 'flex-start' }}>
 													<IconButton sx={{ display: 'flex', gap: '0.5rem', color: '#C64EFF' }}>
 														<PlayCircleOutlineOutlinedIcon />
 														<Typography>Join</Typography>
