@@ -370,7 +370,7 @@ export const DateForm: React.FC<CreateEventProps> = ({ data, setData, setValue, 
   const [checked, setChecked] = useState(false);
 
   const onSubmit = (value: any) => {
-    if (checked === true) {
+    if (checked === false) {
       api({
         ...data, dateStartConference: value.dateStartConference, dateStartSell: value.dateStartSell,
         dateEndSell: value.dateEndSell, conferencePrice: value.conferencePrice, ticketQuantity: value.ticketQuantity,

@@ -43,7 +43,10 @@ interface TicketProps {
 	data: TicketProp
 	// conferenceOrganizer: string;
 }
-
+interface PopularityProps {
+	userId: number;
+	conferenceId: number;
+}
 const Event = (props: any) => {
 	const router = useRouter()
 	const { id } = router.query
@@ -69,6 +72,48 @@ const Event = (props: any) => {
 	}
 
 	useEffect(() => {
+		if (props?.tempDecode?.role === 'user' && props?.tempDecode?.sub !== undefined) {
+			const data = { userId: userId, conferenceId: id }
+			const fetchPopularity = async () => {
+				// Change API here
+				await fetch("", {
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+					},
+					body: JSON.stringify(data),
+				});
+			}
+			fetchPopularity();
+		} else {
+			const data = { userId: 0, conferenceId: id }
+			const fetchPopularity = async () => {
+				// Change API here
+				await fetch("      ", {
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+					},
+					body: JSON.stringify(data),
+				});
+			}
+			fetchPopularity();
+		}
+
+		if (!(ticketList.data?.host_id !== props?.tempDecode?.sub && props?.tempDecode?.role === 'host')) {
+			const fetchView = async () => {
+				// Change API here
+				const viewCount = ticketList.data?.viewed + 1;
+				await fetch("     " + viewCount, {
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+					},
+				});
+			}
+			fetchView();
+		}
+
 		const fetchTicketList = async () => {
 			const dataResult = await fetch(`/api/conference/${id}`)
 			const cateResult = await dataResult.json()
@@ -94,93 +139,84 @@ const Event = (props: any) => {
 		}
 		fetchImage();
 	}, [id, props?.tempDecode])
+
+
+
 	return (
 		<>
-			{ticketList?.data?.status_ticket !== 'published' ? (
-				props?.tempDecode?.role === 'admin' ||
-					(props?.tempDecode?.sub === ticketList?.data?.host_id && props?.tempDecode?.role === 'host') ? (
+			{ticketList?.data?.status_ticket === 'published' &&
+				((props?.tempDecode?.role !== 'admin' && props?.tempDecode?.role !== 'host') || (props?.tempDecode?.role === 'host' && props?.tempDecode?.sub !== ticketList?.data?.host_id))
+				?
+				(
 					<>
 						<Box className={styles.background__wrap} sx={{ filter: open && (new Date() > new Date(ticketList?.data?.dateStartSell)) ? 'blur(10px) ' : 'none' }}>
 							<Box className={styles.dot__1}></Box>
 							<Header {...props} />
-							<Draggable>
-								<ClickAwayListener onClickAway={handleTooltipClose}>
-									<div>
-										<Tooltip
-											onClose={handleTooltipClose}
-											open={openInfo}
-											title="Info"
-										>
-											<IconButton onClick={handleTooltipOpen} size="large" color='info'>
-												<InfoIcon fontSize="inherit" />
-											</IconButton>
-										</Tooltip>
-									</div>
-								</ClickAwayListener>
-							</Draggable>
 							{ticketList?.data && <DetailBanner data={ticketList.data} handleToggle={handleToggle} userId={userId} />}
 							{ticketList?.data && <DetailContent data={ticketList.data} />}
+							{/* <DetailBanner data={ticketList.data}/>
+								<DetailContent data={ticketList.data}/> */}
 						</Box>
 						{(new Date() > new Date(ticketList?.data?.dateStartSell)) && open && <PurchaseModal handleToggle={handleToggle} data={ticketList.data} imageProp={imageProp} userId={userId} />}
 						<Footer />
 					</>
 				) : (
-					<>
-						<Header {...props} />
-						<Typography variant='h1' component='div' gutterBottom className={styles.sketchy}>
-							Sorry, this conference have not been published yet.
-						</Typography>
-						<Footer />
-					</>
+					ticketList?.data?.status_ticket !== 'published' &&
+						((props?.tempDecode?.role === 'host' && props?.tempDecode?.sub !== ticketList?.data?.host_id) ||
+							(props?.tempDecode?.role !== 'admin' && props?.tempDecode?.role !== 'host'))
+						? (
+							<>
+
+								<Header {...props} />
+								<Typography variant='h1' component='div' gutterBottom className={styles.sketchy}>
+									Sorry, this conference have not been published yet.
+								</Typography>
+								<Footer />
+							</>
+						) : (
+							<>
+								<Box className={styles.background__wrap} sx={{ filter: open && (new Date() > new Date(ticketList?.data?.dateStartSell)) ? 'blur(10px) ' : 'none' }}>
+									<Box className={styles.dot__1}></Box>
+									<Header {...props} />
+									<Draggable>
+										<ClickAwayListener onClickAway={handleTooltipClose}>
+											<div>
+												<Tooltip
+													arrow
+													placement="right"
+													PopperProps={{
+														sx: {
+															"& .MuiTooltip-tooltip": {
+																m: "0",
+																fontWeight: "bold",
+																fontSize: "0.8rem",
+															},
+														}
+													}}
+													onClose={handleTooltipClose}
+													open={openInfo}
+													title={<>
+														Views: {ticketList?.data?.viewed} view
+														<br />
+														Popularity: {ticketList?.data?.popularity}%
+													</>}
+												>
+													<IconButton onClick={handleTooltipOpen} color='info'
+														sx={{ width: '2.7rem', height: '5rem', m: '5rem 0 0 2rem' }}>
+														<InfoIcon fontSize="inherit" sx={{ width: '2.5rem', height: '2.5rem' }} />
+													</IconButton>
+												</Tooltip>
+											</div>
+										</ClickAwayListener>
+									</Draggable>
+									{ticketList?.data && <DetailBanner data={ticketList.data} handleToggle={handleToggle} userId={userId} />}
+									{ticketList?.data && <DetailContent data={ticketList.data} />}
+								</Box>
+								{(new Date() > new Date(ticketList?.data?.dateStartSell)) && open && <PurchaseModal handleToggle={handleToggle} data={ticketList.data} imageProp={imageProp} userId={userId} />}
+								<Footer />
+							</>
+						)
 				)
-			) : (
-				<>
-					<Box className={styles.background__wrap} sx={{ filter: open && (new Date() > new Date(ticketList?.data?.dateStartSell)) ? 'blur(10px) ' : 'none' }}>
-						<Box className={styles.dot__1}></Box>
-						<Header {...props} />
-						<Draggable>
-							<ClickAwayListener onClickAway={handleTooltipClose}>
-								<div>
-									<Tooltip
-										arrow
-										placement="right"
-										PopperProps={{
-											sx: {
-												"& .MuiTooltip-tooltip": {
-													m: "0",
-													fontWeight: "bold",
-													fontSize: "0.8rem",
-												},
-											}
-										}}
-										onClose={handleTooltipClose}
-										open={openInfo}
-										title={<>
-											Views: ${ticketList.data.viewed}
-											<br />
-											Popularity: ${ticketList.data.popularity}
-										</>}
-										disableFocusListener
-										disableHoverListener
-										disableTouchListener
-									>
-										<IconButton onClick={handleTooltipOpen} color='info'
-											sx={{ width: '2.7rem', height: '5rem', m: '5rem 0 0 2rem' }}>
-											<InfoIcon fontSize="inherit" sx={{ width: '2.5rem', height: '2.5rem' }} />
-										</IconButton>
-									</Tooltip>
-								</div>
-							</ClickAwayListener>
-						</Draggable>
-						{ticketList?.data && <DetailBanner data={ticketList.data} handleToggle={handleToggle} userId={userId} />}
-						{ticketList?.data && <DetailContent data={ticketList.data} />}
-						{/* <DetailBanner data={ticketList.data}/>
-						<DetailContent data={ticketList.data}/> */}
-					</Box>
-					{(new Date() > new Date(ticketList?.data?.dateStartSell)) && open && <PurchaseModal handleToggle={handleToggle} data={ticketList.data} imageProp={imageProp} userId={userId} />}
-					<Footer />
-				</>
-			)
 			}
 		</>
 	)
