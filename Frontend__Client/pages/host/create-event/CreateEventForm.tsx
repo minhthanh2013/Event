@@ -367,14 +367,22 @@ export const DateForm: React.FC<CreateEventProps> = ({ data, setData, setValue, 
   const [eventStart, setEventStart] = useState<Date | null>(null);
   const [ticketStart, setTicketStart] = useState<Date | null>(null);
   const [ticketEnd, setTicketEnd] = useState<Date | null>(null);
+  const [checked, setChecked] = useState(false);
 
   const onSubmit = (value: any) => {
-    api({
-      ...data, dateStartConference: value.dateStartConference, dateStartSell: value.dateStartSell,
-      dateEndSell: value.dateEndSell, conferencePrice: value.conferencePrice, ticketQuantity: value.ticketQuantity,
-      hostName: prop.tempDecode.username, host_id: prop.tempDecode.sub
-    });
-    console.log(`submit`);
+    if (checked === true) {
+      api({
+        ...data, dateStartConference: value.dateStartConference, dateStartSell: value.dateStartSell,
+        dateEndSell: value.dateEndSell, conferencePrice: value.conferencePrice, ticketQuantity: value.ticketQuantity,
+        hostName: prop.tempDecode.username, host_id: prop.tempDecode.sub
+      });
+    } else {
+      api({
+        ...data, dateStartConference: value.dateStartConference, dateStartSell: value.dateStartSell,
+        dateEndSell: value.dateEndSell, conferencePrice: 0, ticketQuantity: value.ticketQuantity,
+        hostName: prop.tempDecode.username, host_id: prop.tempDecode.sub
+      });
+    }
   };
 
   return (
@@ -496,7 +504,7 @@ export const DateForm: React.FC<CreateEventProps> = ({ data, setData, setValue, 
             </Stack>
           </LocalizationProvider>
 
-          <TextField
+          {!checked && <TextField
             className={styles.eventFields}
             required
             id="standard-required"
@@ -506,8 +514,14 @@ export const DateForm: React.FC<CreateEventProps> = ({ data, setData, setValue, 
             type="number"
             InputProps={{ inputProps: { min: 30000 } }}
             {...register("conferencePrice")}
+          />}
+          <FormControlLabel
+            control={<Checkbox onChange={(e) => setChecked(e.target.checked)} />}
+            label="Free Ticket"
           />
+          <br />
           <TextField
+            fullWidth
             className={styles.eventFields}
             required
             id="standard-required"
