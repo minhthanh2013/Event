@@ -203,7 +203,7 @@ const EventMenuAdmin: React.FC<props> = ({ host, props }) => {
             setStatus("1");
             setPopUp("1");
             setSuccessMessage("Host has been banned successfully");
-            setTimeout(refreshPage, 2000);
+            setTimeout(refreshPage, 1000);
         } else {
             setStatus("0");
             setPopUp("1");
@@ -225,7 +225,7 @@ const EventMenuAdmin: React.FC<props> = ({ host, props }) => {
             setStatus("1");
             setPopUp("1");
             setSuccessMessage("Host has been unbanned successfully");
-            setTimeout(refreshPage, 2000);
+            setTimeout(refreshPage, 1000);
         } else {
             setStatus("0");
             setPopUp("1");

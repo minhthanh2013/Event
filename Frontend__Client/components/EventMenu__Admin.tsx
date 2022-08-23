@@ -51,7 +51,7 @@ const EventMenuAdmin: React.FC<props> = ({ id, event, props }) => {
             setStatus("1");
             setPopUp("1");
             setSuccessMessage("Conference is verified");
-            setTimeout(refreshPage, 2000);
+            setTimeout(refreshPage, 1000);
         } else {
             setStatus("0");
             setPopUp("1");
@@ -70,7 +70,7 @@ const EventMenuAdmin: React.FC<props> = ({ id, event, props }) => {
         if (resData.status === 200) {
             setStatus("1");
             setPopUp("1");
-            setTimeout(refreshPage, 2000);
+            setTimeout(refreshPage, 1000);
         } else {
             setStatus("0");
             setPopUp("1");
@@ -84,7 +84,7 @@ const EventMenuAdmin: React.FC<props> = ({ id, event, props }) => {
         if (resData.status === 200) {
             setStatus("1");
             setPopUp("1");
-            setTimeout(refreshPage, 2000);
+            setTimeout(refreshPage, 1000);
         } else {
             setStatus("0");
             setPopUp("1");

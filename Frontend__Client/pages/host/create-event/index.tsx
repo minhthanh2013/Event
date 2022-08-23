@@ -114,7 +114,7 @@ const CreateEvent = (props) => {
         setStatus("1");
         setPopUp("1");
         setSuccessMessage("Event created successfully");
-        setTimeout(redirect, 2000);
+        setTimeout(redirect, 1000);
       } else {
         setStatus("0");
         setPopUp("1");

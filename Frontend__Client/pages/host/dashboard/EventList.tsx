@@ -63,7 +63,7 @@ export const EventList = (props: EventListProps) => {
             setStatus("1");
             setPopUp("1");
             setSuccessMessage("End conference successfully")
-            setTimeout(refreshPage, 2000);
+            setTimeout(refreshPage, 1000);
         } else {
             setStatus("0");
             setPopUp("1");

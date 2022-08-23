@@ -97,12 +97,12 @@ const UserProfile = (props: any) => {
             setStatus("1");
             setPopUp("1");
             setSuccessMessage("Update user successfully");
-            setTimeout(refreshPage, 2000);
+            setTimeout(refreshPage, 1000);
         } else {
             setStatus("0");
             setPopUp("1");
             setErrorMessage("Email already exists");
-            setTimeout(refreshPage, 2000);
+            setTimeout(refreshPage, 1000);
         }
 
         //nếu trả về lỗi thì setIsErrorEmail(true)

@@ -16,7 +16,7 @@ const Confirmation = (props: any) => {
     }
   }
 
-  setTimeout(redirect, 2000);
+  setTimeout(redirect, 1000);
 
   return (
     <>

@@ -15,7 +15,7 @@ const Confirmation = (prop: any) => {
   useEffect(() => {
     const logout = async () => {
       await fetch('/api/auth/user/logout')
-      setTimeout(redirect,2000);
+      setTimeout(redirect,1000);
     }
     logout()
   }, []);
