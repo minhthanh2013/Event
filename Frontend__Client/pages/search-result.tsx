@@ -31,14 +31,14 @@ interface TicketProp {
 function SearchResult(props: any) {
 	const router = useRouter()
 	const temp = 'Vinh Duong Quang'
-	const [filter, setFilter] = useState('');
+	const [filter, setFilter] = useState('')
 
 	const typeRef = useRef(null)
 
 	// inside SearchBar__SearchResult
 	const [inputSearch, setInputSearch] = useState(router?.query?.search?.toString() || '')
 	const [inputSearchTemp, setInputSearchTemp] = useState('')
-	const [type, setType] = useState(router?.query?.type?.toString()  || '0')
+	const [type, setType] = useState(router?.query?.type?.toString() || '0')
 	const [typeTemp, setTypeTemp] = useState(router?.query?.type?.toString() || '0')
 
 	const [number, setNumber] = useState(-1)
@@ -47,9 +47,7 @@ function SearchResult(props: any) {
 	const [page, setPage] = useState(1)
 	const [category, setCategory] = useState([])
 
-	
-	
-	useEffect (() => {
+	useEffect(() => {
 		const fetchDataCate = async () => {
 			const dataResult = await fetch('/api/conference-category/get-all')
 			const cateResult = await dataResult.json()
@@ -73,6 +71,10 @@ function SearchResult(props: any) {
 			if (inputSearch !== '') {
 				request = `/api/conference/filter?page=${page}&search=${inputSearch}`
 			}
+			if (filter != '' ) {
+				request = `/api/conference/filter?page=${page}&category=${filter}`
+				console.log(request, 'Meo Pho')
+			}
 			const response = await fetch(request)
 			const setTemp = await response.json()
 
@@ -92,11 +94,9 @@ function SearchResult(props: any) {
 		}
 	}
 	useEffect(() => {
-			if (type == '0') {
-				fetchTicket()
-			} else fetchSession()
-		
-	
+		if (type == '0') {
+			fetchTicket()
+		} else fetchSession()
 	}, [page, inputSearch, type, filter])
 
 	return (
