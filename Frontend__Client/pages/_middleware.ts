@@ -197,7 +197,6 @@ export default async function middleware(req: NextRequest) {
             if(role === 'host') {
                 try {
                     verify(jwt, hostSecret);
-                    // const request = `http://localhost:8080/api/conference/get-conference-by-zoom-meeting-id/${meetingId}`
                     const request = `http://frontend:8080/api/conference/get-conference-by-zoom-meeting-id/${meetingId}`
                     let dataResult = await fetch(request);
                     let cateResult = await dataResult.json();
@@ -214,7 +213,6 @@ export default async function middleware(req: NextRequest) {
             } else if (role === "user") {
                 try {
                     verify(jwt, userSecret);
-                    // const request = `http://localhost:8080/api/conference/get-conference-by-user-zoom-meeting-id?userId=${userId}&zoomId=${meetingId}`
                     const request = `http://frontend:8080/api/conference/get-conference-by-user-zoom-meeting-id?userId=${userId}&zoomId=${meetingId}`
                     let dataResult = await fetch(request);
                     let cateResult = await dataResult.json();

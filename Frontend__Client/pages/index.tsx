@@ -14,27 +14,6 @@ import SessionList from '../components/SessionList'
 import TicketList from '../components/TicketList'
 
 const Home: NextPage = (props) => {
-	console.log(20, props)
-	// const [cookies, setCookie] = useCookies(['OursiteJWT'])
-	// const [result, setResult] = useState({
-	// 	token: '',
-	// 	value: '',
-	// 	tempDecode: '',
-	// })
-	// useEffect(() => {
-	// 	if(cookies.OursiteJWT !== undefined) {
-	// 		let token = 'OursiteJWT'
-	// 		let value = cookies?.OursiteJWT;
-	// 		let tempDecode = JSON.parse(Buffer.from(value.split('.')[1], 'base64').toString())
-	// 		setResult({token: token , value: value, tempDecode:tempDecode})
-	// 	}
-	// },[cookies.OursiteJWT])
-	
-	// const pageProps = props.pageProps;
-	// const result = pageProps.props;
-	// console.log(result);
-	console.log(40, props)
-
 	const [open, setOpen] = useState(false)
 	return (
 		<>

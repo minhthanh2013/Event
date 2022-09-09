@@ -30,7 +30,6 @@ interface TicketProp {
 
 function SearchResult(props: any) {
 	const router = useRouter()
-	const temp = 'Vinh Duong Quang'
 	const [filter, setFilter] = useState('')
 
 	const typeRef = useRef(null)
