@@ -1,0 +1,32 @@
+.notification_Content {
+    h3 {
+        background: linear-gradient(
+            90deg,
+            #c64eff 55.78%,
+            rgba(184, 64, 233, 0.665587) 88.26%,
+            rgba(207, 77, 247, 0) 125.43%
+        );
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        font-size: 1.1rem;
+        font-weight: 700;
+        letter-spacing: 0.0938em;
+
+        white-space: nowrap;
+        width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    h4 {
+        font-size: 0.8rem;
+        font-weight: 500;
+        display: "-webkit-box";
+        -webkit-line-clamp: 2;
+        line-clamp: 2;
+        -webkit-box-orient: horizontal;
+        white-space: nowrap;
+        width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+}

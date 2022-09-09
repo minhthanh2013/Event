@@ -1,8 +1,19 @@
-# compiled output
-/dist
-/node_modules
-.next
+#mp4,jpg,png files
+*.mp4
+*.jpg
+*.png
 
+# compiled output
+/core-api/dist
+/core-api/node_modules
+/payment/node_modules
+/payment/dist
+/redis/node_modules 
+/redis/dist
+/zoom/node_modules
+/zoom/dist
+/Frontend__Client/node_modules
+/Frontend__Client/.next
 # Logs
 logs
 *.log
@@ -34,3 +45,4 @@ lerna-debug.log*
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
+node_modules

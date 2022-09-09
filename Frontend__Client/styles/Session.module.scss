@@ -1,0 +1,17 @@
+.background__wrap {
+    background: #F1EFEF;
+    width: 100%;
+    min-height: 1920px;
+    overflow: hidden;
+    position: relative;
+}
+
+.dot__1 {
+    position: absolute;
+    top: -360px;
+    left: -220px;
+    width: 500px;
+    height: 700px;
+    background: radial-gradient(50% 50% at 50% 50%, rgba(106, 53, 242, 0.77) 0%, rgba(151, 125, 219, 0.385) 50%, rgba(151, 125, 219, 0.385) 50.01%, rgba(196, 196, 196, 0) 100%);
+    border-radius: 50%;
+}

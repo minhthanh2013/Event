@@ -1,0 +1,89 @@
+.background__wrap {
+    background: #F1EFEF;
+    width: 100%;
+    min-height: 1920px;
+    overflow: hidden;
+    position: relative;
+}
+
+.dot__1 {
+    position: absolute;
+    top: -360px;
+    left: -220px;
+    width: 500px;
+    height: 700px;
+    background: radial-gradient(50% 50% at 50% 50%, rgba(106, 53, 242, 0.77) 0%, rgba(151, 125, 219, 0.385) 50%, rgba(151, 125, 219, 0.385) 50.01%, rgba(196, 196, 196, 0) 100%);
+    border-radius: 50%;
+}
+
+.dot__2 {
+    position: absolute;
+    top: 40%;
+    right: -320px;
+    width: 500px;
+    height: 700px;
+    background: radial-gradient(50% 50% at 50% 50%, rgba(106, 53, 242, 0.77) 0%, rgba(151, 125, 219, 0.385) 50%, rgba(151, 125, 219, 0.385) 50.01%, rgba(196, 196, 196, 0) 100%);
+    border-radius: 50%;
+}
+
+.dot__3 {
+    position: absolute;
+    left: -340px;
+    bottom: -220px;
+    width: 833px;
+    height: 700px;
+    background: radial-gradient(50% 50% at 50% 50%, rgba(106, 53, 242, 0.77) 0%, rgba(151, 125, 219, 0.385) 50%, rgba(151, 125, 219, 0.385) 50.01%, rgba(196, 196, 196, 0) 100%);
+    border-radius: 50%;
+}
+
+.sketchy {
+    margin-top: 1rem;
+    display: inline-block;
+    border: 3px solid #333333;
+    font-size: 2.5rem;
+    border-radius: 2% 6% 5% 4% / 1% 1% 2% 4%;
+    text-transform: uppercase;
+    letter-spacing: 0.3ch;
+    background: #ffffff;
+    position: relative;
+  
+    &::before {
+        content: '';
+        border: 2px solid #C64EFF;
+        display: block;
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate3d(-50%, -50%, 0) scale(1.015) rotate(0.5deg);
+        border-radius: 1% 1% 2% 4% / 2% 6% 5% 4%;
+    }
+  }
+
+.confirmation {
+    margin-top: 1rem;
+    display: inline-block;
+    border: 3px solid #333333;
+    font-size: 2rem;
+    border-radius: 2% 6% 5% 4% / 1% 1% 2% 4%;
+    text-transform: uppercase;
+    letter-spacing: 0.3ch;
+    background: #ffffff;
+    position: relative;
+    padding:2rem 2rem 2rem 3rem;
+    margin: 10vw;
+
+    &::before {
+        content: '';
+        border: 2px solid #C64EFF;
+        display: block;
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate3d(-50%, -50%, 0) scale(1.015) rotate(0.5deg);
+        border-radius: 1% 1% 2% 4% / 2% 6% 5% 4%;
+    }
+}
