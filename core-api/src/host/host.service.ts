@@ -23,7 +23,6 @@ export class HostService {
   }
   async findOne(id: number): Promise<HostResponseDto> {
     const host = await this.hostRepository.findOne({where: {host_id: id}});
-    console.log(host);
     delete host.password;
     const response: HostResponseDto =  {} as HostResponseDto;
     response.host_id = host.host_id;

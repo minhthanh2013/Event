@@ -8,7 +8,14 @@ import { SubscriptionController } from './subscription.controller';
 import { SubscriptionService } from './subscription.service';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([SubscriptionEntity, HostEntity, SubscriptionPlanEntity, PaymentEntity])],
+  imports: [
+    TypeOrmModule.forFeature([
+      SubscriptionEntity,
+      HostEntity,
+      SubscriptionPlanEntity,
+      PaymentEntity,
+    ]),
+  ],
   controllers: [SubscriptionController],
   providers: [SubscriptionService],
 })

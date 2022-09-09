@@ -18,7 +18,6 @@ export class PaymentController {
   }
   @Post('/new-subscription')
   newSubscription(@Body() subscriptionDto: SubscriptionDto): Observable<ResponseData> {
-    console.log(21, subscriptionDto)
     return this.paymentService.newSubscription(subscriptionDto)
   }
   @Post('/buy-record')

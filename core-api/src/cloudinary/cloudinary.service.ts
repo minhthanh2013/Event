@@ -34,7 +34,7 @@ export class CloudinaryService {
   async uploadVideoByPath(path: string, videoName: string): Promise<UploadApiResponse | UploadApiErrorResponse> {
     return v2.uploader.upload(path, 
       {resource_type: "video", public_id: videoName,
-      overwrite: true, notification_url: "https://evenity.page/zoom/notification/finish-upload-record"},
+      overwrite: true, notification_url: "https://api.evenity.page:8443/zoom/notification/finish-upload-record"},
   function(error, result) {console.log(result, error)});
   }
 

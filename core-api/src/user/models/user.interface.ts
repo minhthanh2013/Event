@@ -8,6 +8,7 @@ export class User {
   last_name: string;
   create_at?: Date;
   update_at?: Date;
+  category?: string[];
 }
 /* eslint-disable prettier/prettier */
 export class UserResponseDto {

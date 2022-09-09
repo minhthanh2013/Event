@@ -66,6 +66,15 @@ export class UserService {
     }
 
     async signupUser(dto: User) {
+        console.log(dto.category)
+        const myString = dto.category
+        const temp = myString.toString().split(",")
+        dto.category = temp
+        console.log(typeof(temp))
+        // for (let index = 0; index < dto.category.length; index++) {
+        //     const element = dto.category[index];
+            
+        // }
         if (await this.userRepository.findOne({where: {user_name: dto.user_name}})) {
             throw new ConflictException('Username already exists');
         }

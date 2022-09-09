@@ -99,6 +99,7 @@ import { PopularityModule } from './popularity/popularity.module';
         name: 'PAYMENT',
         transport: Transport.TCP,
         options: {
+          host: 'payment',
           port: 3002,
         }
       }

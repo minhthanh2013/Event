@@ -39,12 +39,17 @@ const CarouselSlide = (props: any) => {
     // 'conference-1-avatar '
     useEffect(() => {
         const fetchTicketList = async () => {
-            const dataResult = await fetch('/api/conference/get-latest-x')
+            let request = '/api/conference/get-latest-x';
+            if (props?.tempDecode !== undefined && props?.tempDecode.sub !== undefined) {
+                request = `/api/conference/get-latest-x?userId=${props.tempDecode?.sub}`
+            }
+            const dataResult = await fetch(request)
             const cateResult = await dataResult.json()
+            console.log(cateResult)
             setTicketList(cateResult)
         }
         fetchTicketList()
-    }, [])
+    }, [props?.tempDecode])
 
     const test = (date: Date) => {
         // 9:00 PM – Saturday, Dec 10,{" "}

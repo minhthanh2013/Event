@@ -62,13 +62,11 @@ export class AdminService {
 
   async signinAdmin(dto: AdminAuthDto) {
     // find the user by email
-    console.log(58, dto);
     const admin = await this.adminRepository.findOne({
       where: {
         user_name: dto.username,
       },
     });
-    console.log(64, admin);
     // if user does not exist throw exception
     if (!admin) throw new ForbiddenException('Creadentials incorrect');
     // compare password
@@ -151,7 +149,6 @@ export class AdminService {
                     newConference.conference_id;
                   const a = this.httpService.post(request, headersRequest);
                   a.subscribe(async (data) => {
-                    console.log(data);
                     resolve(data);
                   }).add(() => {
                     console.log('done');

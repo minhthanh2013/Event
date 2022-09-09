@@ -22,7 +22,7 @@ import { EmailService } from 'src/email/email.service';
     name: 'PAYMENT',
     transport: Transport.TCP,
     options: {
-      // host: 'payment', 19/8/2022
+      host: 'payment',
       port: 3002,
     }
   }

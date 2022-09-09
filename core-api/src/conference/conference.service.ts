@@ -137,12 +137,10 @@ export class ConferenceService {
     });
   }
   async findOne(id: number): Promise<ResponseData> {
-    console.log(id)
     const result = new ResponseData();
     const data = await this.conferenceRepository.findOne({
       where: { conference_id: id },
     });
-    console.log(data)
     const dto = await this.convertEntityToDto(data);
     result.status = data !== undefined;
     result.data = dto;
@@ -203,7 +201,7 @@ export class ConferenceService {
           speaker.speaker_email,
           data.conference_name,
           data.date_start_conference,
-          `http://localhost:8080/zoom/join-by-uuid?uuid=${myuuid}`,
+          `https://evenity.page/zoom/join-by-uuid?uuid=${myuuid}`,
           data.address,
           data.conference_type == 1,
         );
@@ -342,7 +340,7 @@ export class ConferenceService {
       .then((value) => (entity.conference_type = value.type_id));
     return entity;
   }
-  async getLatestXConferences(limit: number): Promise<ResponseData> {
+  async getLatestXConferences(limit: number, userId: string): Promise<ResponseData> {
     const conferences = await this.conferenceRepository
       .createQueryBuilder()
       .select('conference')
@@ -351,17 +349,42 @@ export class ConferenceService {
       // .where ({ order: {create_at: "DESC"}})
       .orderBy('conference.create_at', 'DESC')
       .getMany();
+    const resultConferences: ConferenceEntity[] = [];
+    if(userId !== '') {
+      const user = await this.userRepository.findOne({where: {user_id: parseInt(userId)}});
+      if(user) {
+        const favorites = user.category;
+        if(favorites !== null && favorites.length !== 0) {
+          for (let index = 0; index < favorites.length; index++) {
+            const favorite = favorites[index];
+            if(favorite === "") { 
+              break;
+            }
+            console.log(favorite)
+            const category = await this.conferenceCategoryRepository.findOne({where: {category_name: favorite}});
+            const categoryId = category.category_id;
+            for (let j = 0; j < conferences.length; j++) {
+              const element = conferences[j];
+              if(element.conference_category.toString() === categoryId.toString()) {
+                resultConferences.push(element);
+              }
+            }
+          }
+        }
+      }
+    }
+    const temp  = resultConferences.length === 0 ? conferences : resultConferences;
     const result = new ResponseData();
     const conferenceResult: ConferenceEntity[] = [];
     for (let index = 0; index < limit; index++) {
-      if (index > conferences.length - 1) {
+      if (index > temp.length - 1) {
         break;
       }
-      const conferenceTemp = conferences[index];
+      const conferenceTemp = temp[index];
       conferenceResult.push(conferenceTemp);
     }
     result.data = conferenceResult;
-    result.status = conferences.length >= 1;
+    result.status = conferenceResult.length >= 1;
     return result;
   }
   async findAllByHostId(id: number, status: string) {
@@ -380,7 +403,6 @@ export class ConferenceService {
           host_id: id,
         },
       });
-      // console.log(360, tempResult)
     }
     result.status = tempResult !== undefined;
     if (tempResult !== undefined && tempResult.length >= 1) {
@@ -578,7 +600,6 @@ export class ConferenceService {
     const conference = await this.conferenceRepository.findOne({
       where: { conference_id: id },
     });
-    console.log(conference);
     if (!conference) {
       throw new NotFoundException(
         'Conference not found with conference id: ' + id,

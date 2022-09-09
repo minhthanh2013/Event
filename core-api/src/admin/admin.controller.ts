@@ -59,7 +59,6 @@ export class AdminController {
   @HttpCode(HttpStatus.OK)
   @Post("signin")
   signinAdmin(@Body() dto: AdminAuthDto) {
-    console.log(dto)
     return this.adminService.signinAdmin(dto);
   }
 

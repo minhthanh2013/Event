@@ -9,9 +9,14 @@ import { ConferenceCategoryEntity } from 'src/conferencecategory/models/conferen
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([UserEntity, ConferenceEntity, PopularityEntity, ConferenceCategoryEntity]),
+    TypeOrmModule.forFeature([
+      UserEntity,
+      ConferenceEntity,
+      PopularityEntity,
+      ConferenceCategoryEntity,
+    ]),
   ],
   controllers: [PopularityController],
-  providers: [PopularityService]
+  providers: [PopularityService],
 })
 export class PopularityModule {}

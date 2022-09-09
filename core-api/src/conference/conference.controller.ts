@@ -73,8 +73,9 @@ export class ConferenceController {
   @Get('/get-x-conferences/:limit')
   findLatestXConferences(
     @Param('limit') limit: number,
+    @Query('userId', new DefaultValuePipe('')) userId = '',
   ): Observable<ResponseData> {
-    return from(this.conferenceService.getLatestXConferences(+limit));
+    return from(this.conferenceService.getLatestXConferences(+limit, userId));
   }
   @Get('/find-all-by-host-id/:id')
   getAllByHostId(

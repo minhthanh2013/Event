@@ -198,7 +198,7 @@ export default async function middleware(req: NextRequest) {
                 try {
                     verify(jwt, hostSecret);
                     // const request = `http://localhost:8080/api/conference/get-conference-by-zoom-meeting-id/${meetingId}`
-                    const request = `https://evenity.page/api/conference/get-conference-by-zoom-meeting-id/${meetingId}`
+                    const request = `http://frontend:8080/api/conference/get-conference-by-zoom-meeting-id/${meetingId}`
                     let dataResult = await fetch(request);
                     let cateResult = await dataResult.json();
                     if(await cateResult.conference_id !== undefined) {
@@ -215,7 +215,7 @@ export default async function middleware(req: NextRequest) {
                 try {
                     verify(jwt, userSecret);
                     // const request = `http://localhost:8080/api/conference/get-conference-by-user-zoom-meeting-id?userId=${userId}&zoomId=${meetingId}`
-                    const request = `https://evenity.page/api/conference/get-conference-by-user-zoom-meeting-id?userId=${userId}&zoomId=${meetingId}`
+                    const request = `http://frontend:8080/api/conference/get-conference-by-user-zoom-meeting-id?userId=${userId}&zoomId=${meetingId}`
                     let dataResult = await fetch(request);
                     let cateResult = await dataResult.json();
                     console.log(221, cateResult)
@@ -254,7 +254,7 @@ export default async function middleware(req: NextRequest) {
                     const data = new URLSearchParams();
                     data.append('user_id', `${userId}`);
                     data.append('conference_id', `${conferenceId}`);
-                    let dataResult = await fetch(`https://evenity.page/api/record/get-by-conference-id`, {
+                    let dataResult = await fetch(`http://frontend:8080/api/record/get-by-conference-id`, {
                       method: 'POST',
                       headers: {
                         'Content-Type': 'application/x-www-form-urlencoded',
@@ -279,7 +279,7 @@ export default async function middleware(req: NextRequest) {
               const data = new URLSearchParams();
               data.append('host_id', `${userId}`);
               data.append('conference_id', `${conferenceId}`);
-              let dataResult = await fetch(`https://evenity.page/api/record/get-host-own-record`, {
+              let dataResult = await fetch(`http://frontend:8080/api/record/get-host-own-record`, {
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/x-www-form-urlencoded',
@@ -311,13 +311,13 @@ export default async function middleware(req: NextRequest) {
             let cateResult = null;
             
                 try {
-                    let dataResult = await fetch('https://evenity.page/api/speaker/' + uuid);
+                    let dataResult = await fetch('http://frontend:8080/api/speaker/' + uuid);
                     let cateResult = await dataResult.json();
                 } catch (error) {
                     req.nextUrl.pathname = "/deny_access";
                     return NextResponse.redirect(req.nextUrl);
                 }
-                if(cateResult.length === 0) {
+                if(cateResult === undefined) {
                     req.nextUrl.pathname = "/deny_access";
                     return NextResponse.redirect(req.nextUrl);
                 }

@@ -1,20 +1,15 @@
-import React, { useState, ChangeEvent, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import HeaderHost from "../../../components/Header__Host";
 import Box from "@mui/material/Box";
 import Footer from "../../../components/Footer";
 import Typography from "@mui/material/Typography";
 import styles from "../../../styles/EventDashboard.module.scss";
-import Card from "@mui/material/Card";
-import CardActionArea from "@mui/material/CardActionArea";
-import CardContent from "@mui/material/CardContent";
 import Grid from "@material-ui/core/Grid";
-import Button from "@mui/material/Button";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import EventIcon from "@mui/icons-material/Event";
 import SessionsIcon from "@mui/icons-material/EmojiEvents";
 import SubscriptionsIcon from "@mui/icons-material/ShopTwo";
-import { BasicInfo, Speakers, Date } from "../../host/create-event/CreateEventForm";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Subcriptions } from "./Subcriptions";
 import { EventList } from "./EventList";
@@ -100,7 +95,7 @@ interface ConferenceProp {
   description: string;
   price: number;
   conference_name: number;
-  date_start_conference: string;
+  date_start_conference: Date;
   address: string;
   ticket_quantity: number;
   current_quantity: number;
@@ -158,7 +153,6 @@ const EventCreate = (props: any) => {
     const fetchSessions = async () => {
       const dataResult = await fetch(`/api/combo/get-by-host/${props.tempDecode.sub}?revenue=true`);
       const cateResult = await dataResult.json();
-      console.log(159, cateResult)
       setSessions(cateResult)
       setSessionsAfterFilter(cateResult);
     }

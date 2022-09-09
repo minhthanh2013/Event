@@ -1,20 +1,15 @@
-import { Conference } from './../conference/models/conference.interface';
 /* eslint-disable prettier/prettier */
-import { ConflictException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import e from 'express';
-import { IPaginationOptions, Pagination, paginate } from 'nestjs-typeorm-paginate';
-import { resolve } from 'path';
 import { Observable, from } from 'rxjs';
 import { ConferenceEntity } from 'src/conference/models/conference.entity';
 import { ResponseData } from 'src/responsedata/response-data.dto';
-import { DeleteResult, Like, Repository, UpdateResult } from 'typeorm';
+import { Repository } from 'typeorm';
 import { ComboSessionDto, ComboSessionRequestDto } from './models/combo_session.dto';
 import { ComboSessionEntity } from './models/combo_session.entity';
 import { ComboSession } from './models/combo_session.interface';
 import { ComboIdDateDto } from './models/combo_session_id_create_at';
 import { NotFoundException } from '@nestjs/common';
-import { ResponseError } from '@sendgrid/mail';
 import { TicketEntity } from './../ticket/models/ticket.entity';
 @Injectable()
 export class CombosessionService {
@@ -270,7 +265,7 @@ export class CombosessionService {
                 comboSessionDto.push(tempCombo);
               }
             } catch (e) {
-              console.log(e);
+              // console.log(e);
             }
           }
           if (comboSessionDto.length !== 0) {
@@ -323,7 +318,7 @@ export class CombosessionService {
                 response.data = comboSessionDtos;
               });
           } catch (error) {
-            console.log(295, error);
+            // console.log(295, error);
           }
         }
       }

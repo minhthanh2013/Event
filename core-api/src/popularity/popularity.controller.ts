@@ -10,6 +10,6 @@ export class PopularityController {
 
   @Post('/add-popular')
     checkAddPopular(@Body() dto: PopularityDto): Observable<ResponseData> {
-      return from(this.popularityService.checkUnique(dto))
+    return from(this.popularityService.checkUnique(dto));
   }
 }
