@@ -30,5 +30,19 @@
        <p>The application consists of several services, including a PostgreSQL database (<code>postgres</code>), a Redis cache (<code>redis</code>), a frontend client (<code>frontend</code>), a core API (<code>core-api</code>), a payment service (<code>payment</code>), a Zoom integration service (<code>zoom</code>), and a web server (<code>webserver</code>). The <code>certbot</code> service is used for managing SSL/TLS certificates for the application.</p>
     <p>The web application is built using NextJS and NestJS, and is served using Nginx. The database is Postgres, and the application is hosted on Digital Ocean. Cloudinary is used for storing and serving media, and Sendgrid is used for sending emails. The application is containerized using Docker.</p>
     <p>To start the application, run <code>docker-compose up</code> in the root directory of the project. This will build and start all of the necessary services. The frontend client will be available on port 8080, and the core API will be available on port 3000. The web server will be available on ports 80 and 443, and will serve the frontend client and proxy requests to the core API.</p>
+    <h2> Handling Zoom Record</h2>
+      <code>
+      Event -> Zoom Cloud: Record event
+      Zoom Cloud -> Zoom Webhook: Send notification to API domain
+      Zoom Webhook -> API Domain: Send notification (with TLS certificate)
+      API Domain -> Zoom Module: Request to download event
+      Zoom Module -> API Domain: Download event
+      API Domain -> Cloudinary Module: Send notification (TCP) to upload event
+      Cloudinary Module -> Cloudinary: Upload event
+      Cloudinary -> Cloudinary Webhook: Send notification to server
+      Cloudinary Webhook -> Server: Send notification
+      Server -> Zoom Module: Request to delete event
+      Zoom Module -> Server: Delete event
+      </code>
   </body>
 </html>
